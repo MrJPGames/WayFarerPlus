@@ -27,7 +27,8 @@ function applyPublicStyle(){
 	.niantic-loader__logo {filter: none !important;} \
 	.switch-label {filter: invert();} \
 	.sidebar .sidebar-item.--selected, .sidebar .sidebar-item:hover {background: #1F1F1F !important; border-left: #20B8E3 5px solid !important;} \
-	.sidebar {background: #0C0C0C !important;}';
+	.sidebar {background: #0C0C0C !important;} \
+	.star-red-orange, .selected>.star-gray {color: #20B8E3 !important;}';
 
 	var style=document.createElement('style');
 	style.type='text/css';
