@@ -1,0 +1,33 @@
+{
+  "manifest_version": 2,
+
+  "name": "WayFarer+",
+  "description": "Adds functionality and style to NianticLabs Wayfarer",
+  "version": "1.0",
+
+  "browser_action": {
+    "default_icon": "icons/icon48.png",
+    "default_popup": "settings/popup.html",
+    "default_title": "WayFarer+"
+  },
+  "icons": {
+    "128": "icons/icon128.png",
+    "48": "icons/icon48.png",
+    "16": "icons/icon16.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://wayfarer.nianticlabs.com/*"],
+      "js": ["lib/jq/jquery-2.1.1.min.js", "lib/ga/ga.js", "js/options.js", "js/hml_site.js", "main.js"],
+      "run_at": "document_start"
+    }
+  ],
+
+  "permissions": [
+    "activeTab",
+    "storage",
+    "https://ajax.googleapis.com/"
+  ],
+  "web_accessible_resources": [
+  ]
+}
