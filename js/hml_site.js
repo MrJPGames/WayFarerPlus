@@ -2,7 +2,7 @@ function applyPublicStyle(){
 	//var ballenimgURL = chrome.extension.getURL("/assets/ballen.png");
 	//var spriteimgURL = chrome.extension.getURL("/assets/custom_sprite.7.png");
 
-	var cssInject='body{background:black;} \
+	var cssInject = 'body{background:black;} \
 	h1,h2,h3,h4,h5,h6,h7,h8,h9{color:white !important;} \
 	#gallery-info{background: #0F0F0F;} \
 	.niantic-wayfarer-logo img{filter: invert(1);} \
@@ -24,7 +24,9 @@ function applyPublicStyle(){
 	#nom-search-title {background: black; color: white;} \
 	.supporting-statement-central-field p, .item-text, .supporting-statement-central-field {color: white !important;} \
 	#nom-options-button {filter: invert(1);} \
-	.gm-style .gm-style-iw-c, .gm-style .gm-style-iw-d, .duplicate-map-popup-title {color:black !important;}';
+	.gm-style .gm-style-iw-c, .gm-style .gm-style-iw-d, .duplicate-map-popup-title {color:black !important;} \ 
+	.showcase-container {background: black;} \
+	.niantic-loader__logo, niantic-loader__shadow {filter: invert(1);}';
 
 	var style=document.createElement('style');
 	style.type='text/css';
