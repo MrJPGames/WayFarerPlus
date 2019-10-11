@@ -24,7 +24,10 @@ function applyPublicStyle(){
 	#nom-options-button {filter: invert(1) !important;} \
 	.gm-style .gm-style-iw-c, .gm-style .gm-style-iw-d, .duplicate-map-popup-title {color:black !important;} \
 	.showcase-container, .niantic-loader {background: black !important;} \
-	.niantic-loader__logo {filter: none !important;}';
+	.niantic-loader__logo {filter: none !important;} \
+	.switch-label {filter: invert();} \
+	.sidebar .sidebar-item.--selected, .sidebar .sidebar-item:hover {background: #1F1F1F !important; border-left: #20B8E3 5px solid !important;} \
+	.sidebar {background: #0C0C0C !important;}';
 
 	var style=document.createElement('style');
 	style.type='text/css';
