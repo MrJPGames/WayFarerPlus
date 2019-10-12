@@ -1,6 +1,6 @@
 function applyPublicStyle(){
 
-	var cssInject='body{background:black !important;} \
+	var cssInject='body{background:black !important; color: grey !important; } \
 	h1,h2,h3,h4,h5,h6,h7,h8,h9{color:white !important;} \
 	#gallery-info{background: #0F0F0F !important;} \
 	.niantic-wayfarer-logo img{filter: invert(1) !important;} \
@@ -33,7 +33,11 @@ function applyPublicStyle(){
 		from,to {background: rgba(255,255,255,.4); filter: blur(4px); } \
         55% {background: rgba(255,255,255,.2); filter: blur(6px); } \
     } \
-    .niantic-loader__shadow {animation: shadow2 2.2s ease-in-out infinite !important;}';
+    .niantic-loader__shadow {animation: shadow2 2.2s ease-in-out infinite !important;} \
+    .nomination-status--next-upgrade, .nomination-status--upgrade {color: #6200EE !important;} \
+    p {color: #C0C0C0 !important;} \
+    #WhatIsItController .categories-display .categories-display-result::before {filter: invert() !important;} \
+    #WhatIsItController .categories-display .categories-display-result {color: white !important;}';
 
 	var style=document.createElement('style');
 	style.type='text/css';
