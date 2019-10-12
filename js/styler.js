@@ -4,11 +4,11 @@ function applyPublicStyle(){
 	h1,h2,h3,h4,h5,h6,h7,h8,h9{color:white !important;} \
 	#gallery-info{background: #0F0F0F !important;} \
 	.niantic-wayfarer-logo img{filter: invert(1) !important;} \
-	.header{background:black !important;} \
+	.header{background: black !important;} \
 	.card{background: black !important;} \
-	.card-header__title{color:white !important;} \
+	.card-header__title{color: white !important;} \
 	.supporting-central-field{background: black !important;} \
-	.title-description{color:white !important;} \
+	.title-description{color: white !important;} \
 	#WhatIsItController .categories-display .categories-display-container ul li .categories-display-name{color: white !important;} \
 	textarea{color: white !important;} \
 	.modal-content, .modal-body{background:black !important;color:white !important;} \
@@ -28,7 +28,12 @@ function applyPublicStyle(){
 	.switch-label {filter: invert();} \
 	.sidebar .sidebar-item.--selected, .sidebar .sidebar-item:hover {background: #1F1F1F !important; border-left: #20B8E3 5px solid !important;} \
 	.sidebar {background: #0C0C0C !important;} \
-	.star-red-orange, .selected>.star-gray {color: #20B8E3 !important;}';
+	.star-red-orange, .selected>.star-gray {color: #20B8E3 !important;} \
+	@keyframes shadow2 {  \
+		from,to {background: rgba(255,255,255,.4); filter: blur(4px); } \
+        55% {background: rgba(255,255,255,.2); filter: blur(6px); } \
+    } \
+    .niantic-loader__shadow {animation: shadow2 2.2s ease-in-out infinite !important;}';
 
 	var style=document.createElement('style');
 	style.type='text/css';
@@ -37,5 +42,6 @@ function applyPublicStyle(){
 	}else{
 	    style.appendChild(document.createTextNode(cssInject));
 	}
-	(document.body || document.head || document.documentElement).appendChild(style);
+	var insertBefore = (document.body || document.head || document.documentElement).getElementsByTagName("style")[0];
+	(document.body || document.head || document.documentElement).insertBefore(style, insertBefore);
 }
