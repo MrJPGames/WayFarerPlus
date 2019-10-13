@@ -37,7 +37,8 @@ function applyPublicStyle(){
     .nomination-status--next-upgrade, .nomination-status--upgrade {color: #6200EE !important;} \
     p {color: #C0C0C0 !important;} \
     #WhatIsItController .categories-display .categories-display-result::before {filter: invert() !important;} \
-    #WhatIsItController .categories-display .categories-display-result {color: white !important;}';
+    #WhatIsItController .categories-display .categories-display-result {color: white !important;} \
+    #portalReviewTimer {display: inline-block;}';
 
 	var style=document.createElement('style');
 	style.type='text/css';

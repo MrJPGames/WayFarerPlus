@@ -1,8 +1,16 @@
-var nomCtrlDiv = document.getElementsByClassName("nominations-controller")[0];
-var nomCtrl = angular.element(nomCtrlDiv).scope().nomCtrl;
+var nomCtrl;
 
+setupPage();
+
+function setupPage(){
+    var nomCtrlDiv = document.getElementsByClassName("nominations-controller")[0];
+    nomCtrl = angular.element(nomCtrlDiv).scope().nomCtrl;
+    if (nomCtrl == undefined){
+        //Retry until page is loaded far enough to grab nomination controller
+        setTimeout(setupPage, 250);
+    }
+}
 function setStreetView(){ 
-	console.log("[WayFarer+] Setting Nomination Streetview image"); 
 	var lat = nomCtrl.currentNomination.lat; 
 	var lng = nomCtrl.currentNomination.lng;
 
@@ -49,4 +57,7 @@ function setStreetView(){
     });
     panorama = panorama;
     map = map;
+
+
+    console.log("[WayFarer+] Setting Nomination Streetview image"); 
 };

@@ -10,8 +10,14 @@ console.log(getOption("options_set"));
 
 applyPublicStyle();
 
-$(window).load(function (){
-	if (window.location.pathname == "/nominations"){
-		modNominationPage();
+$(document).ready(function(){
+	switch (window.location.pathname){
+		case "/nominations":
+			modNominationPage();
+			break;
+		case "/review":
+		case "/review#":
+			modReviewPage();
+			break;
 	}
 });
