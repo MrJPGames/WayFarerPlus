@@ -1,4 +1,4 @@
-# WayFarer-
+# WayFarer+
 A Chrome extension to add more functionality to NianticLab's Wayfarer
 
 Changelog
