@@ -5,6 +5,7 @@ Changelog
 ---
 1.1.1:
 - Added review timer to review page. Let's the user know how much time they have left before Wayfarer no longer allows you to review the nomination.
+
 1.1:
 - Added StreetView review preview to Nominations page. 
 
