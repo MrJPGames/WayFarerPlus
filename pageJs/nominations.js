@@ -8,6 +8,8 @@ function setupPage(){
     if (nomCtrl == undefined){
         //Retry until page is loaded far enough to grab nomination controller
         setTimeout(setupPage, 250);
+    }else{
+        console.log("[WayFarer+] Hooked NominationsController to nomCtrl");
     }
 }
 function setStreetView(){ 
