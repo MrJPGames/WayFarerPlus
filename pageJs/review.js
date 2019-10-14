@@ -10,7 +10,9 @@ function setupPage(){
 	}else{
 		console.log("[WayFarer+] NewSubmissionController was hooked to nSubCtrl")
 		//Do page setup
-		updateTimer();
+		if (settings["revExpireTimer"])
+			updateTimer();
+		
 		if (nSubCtrl.reviewType == "NEW"){
 			if (nSubCtrl.pageData.nearbyPortals[0] != undefined)
 				checkNearby();
@@ -41,11 +43,14 @@ function checkNearby(){
 	if (d < 20){
 		console.log("[WayFarer+] WARNING: Portal nomination too close, will not go live!");
 
-		var warningDiv = document.createElement("div");
-		warningDiv.style = "color: red; font-size: 3em; font-weight: bold;";
-		warningDiv.innerText = "WARNING: Wayspot TOO CLOSE to go online in ANY current Niantic game!";
+		if (settings["revTooCloseWarn"]){
+			var warningDiv = document.createElement("div");
+			warningDiv.style = "color: red; font-size: 1em; display: block; font-weight: bold;";
+			warningDiv.innerText = "NOTE: Wayspot TOO CLOSE to go online in ANY current Niantic game!";
 
-		var ansHeader = document.getElementsByClassName("answer-header")[0];
+			var ansHeader = document.getElementsByClassName("answer-header")[0];
+			ansHeader.parentNode.insertBefore(warningDiv, ansHeader);
+		}
 	}
 }
 

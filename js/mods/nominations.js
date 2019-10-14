@@ -1,10 +1,17 @@
-function modNominationPage(){
+function modNominationPage(settings){
 	var newScript = document.createElement("script");
 	newScript.src = chrome.extension.getURL("pageJs/nominations.js");
 	document.getElementsByTagName("head")[0].appendChild(newScript);
 
 	console.log("[WayFarer+] Nominations page mod loaded!");
 
+	//In separate function for future readability if more mods are added
+	if (settings["nomStreetView"]){
+		addStreetView();
+	}
+}
+
+function addStreetView(){
 	//Get map elem, and add custom StreetView element
 	var newMapElem = document.createElement("div");
 	newMapElem.setAttribute("id", "pano");
