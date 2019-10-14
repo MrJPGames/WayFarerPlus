@@ -12,7 +12,8 @@ function setupPage(){
 		//Do page setup
 		updateTimer();
 		if (nSubCtrl.reviewType == "NEW"){
-			checkNearby();
+			if (nSubCtrl.pageData.nearbyPortals[0] != undefined)
+				checkNearby();
 		}
 	}
 }
