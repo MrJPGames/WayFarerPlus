@@ -39,7 +39,9 @@ function applyPublicStyle(){
     #WhatIsItController .categories-display .categories-display-result::before {filter: invert() !important;} \
     #WhatIsItController .categories-display .categories-display-result {color: white !important;} \
     #portalReviewTimer {display: inline-block;} \
-    .reset-map-icon {filter: invert();}';
+    .reset-map-icon {filter: invert();} \
+    .hydrated {background: black; color: white;} \
+    button {color: black;}';
 
 	var style=document.createElement('style');
 	style.type='text/css';
