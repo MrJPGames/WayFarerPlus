@@ -10,7 +10,7 @@ function applyPublicStyle(){
 	.supporting-central-field{background: black !important;} \
 	.title-description{color: white !important;} \
 	#WhatIsItController .categories-display .categories-display-container ul li .categories-display-name{color: white !important;} \
-	textarea{color: white !important;} \
+	textarea{color: white !important; background: #0F0F0F !important;} \
 	.modal-content, .modal-body{background:black !important;color:white !important;} \
 	.supporting-statement-central-field{background: black !important; color: white !important;} \
 	.known-information-need-edit {background: black !important;} \
@@ -41,7 +41,9 @@ function applyPublicStyle(){
     #portalReviewTimer {display: inline-block;} \
     .reset-map-icon {filter: invert();} \
     .hydrated {background: black; color: white;} \
-    button {color: black;}';
+    button {color: black;} \
+    .select-menu {background: #0F0F0F !important;} \
+    .arrow-element {filter: invert();}';
 
 	var style=document.createElement('style');
 	style.type='text/css';
