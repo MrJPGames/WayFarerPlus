@@ -43,7 +43,10 @@ function applyPublicStyle(){
     .hydrated {background: black; color: white;} \
     button {color: black;} \
     .select-menu {background: #0F0F0F !important;} \
-    .arrow-element {filter: invert();}';
+    .arrow-element {filter: invert();} \
+    .lbl-toggle {background: #20B8E3 !important; color: black;} \
+    .collapsible-content .content-inner {color: white !important; border-bottom: 1px solid white !important; border-left: 1px solid white !important; border-right: 1px solid white !important;} \
+    #nom-table-title--arrow::before {filter: invert();}';
 
 	var style=document.createElement('style');
 	style.type='text/css';

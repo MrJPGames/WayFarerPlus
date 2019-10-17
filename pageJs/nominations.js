@@ -10,8 +10,12 @@ function setupPage(){
         setTimeout(setupPage, 250);
     }else{
         console.log("[WayFarer+] Hooked NominationsController to nomCtrl");
+        if (settings["nomStats"]){
+            loadStats();
+        }
     }
 }
+
 function setStreetView(){ 
 	var lat = nomCtrl.currentNomination.lat; 
 	var lng = nomCtrl.currentNomination.lng;
@@ -63,3 +67,86 @@ function setStreetView(){
 
     console.log("[WayFarer+] Setting Nomination Streetview image"); 
 };
+
+function loadStats(){
+    if (!nomCtrl.loaded){
+        setTimeout(loadStats, 100);
+        return;
+    }
+
+    var elem = document.getElementById("nomStats");
+
+    var nomCount = nomCtrl.nomList.length;
+
+    var acceptedCount = 0;
+    var deniedCount = 0;
+    var inVoteCount = 0;
+    var inQueueCount = 0;
+    var dupeCount = 0;
+    var withdrawnCount = 0;
+    var availableNominations = 14;
+
+    var oldestRecentNomination = -1;
+
+    for(var i = 0; i < nomCount; i++){
+        //Keep track of basic counting stats
+        switch (nomCtrl.nomList[i].status){
+            case "NOMINATED":
+                inQueueCount++;
+                break;
+            case "VOTING":
+                inVoteCount++;
+                break;
+            case "REJECTED":
+                deniedCount++;
+                break;
+            case "ACCEPTED":
+                acceptedCount++;
+                break;
+            case "DUPLICATE":
+                dupeCount++;
+                break;
+            case "WITHDRAWN":
+                withdrawnCount++;
+                break;
+            default:
+                console.log(nomCtrl.nomList[i].status);
+                break;
+        }
+
+        //Available nomination determinations
+        var nomAge = daysSince(nomCtrl.nomList[i].day);
+        if (nomAge < 14){
+            availableNominations--;
+
+            if (nomAge > oldestRecentNomination){
+                oldestRecentNomination = nomAge;
+            }
+        }
+    }
+
+    console.log(oldestRecentNomination);
+
+    
+
+    elem.innerHTML = "Total Nominations: " + nomCount +
+                     "<br/>Accepted: " + acceptedCount +
+                     "<br/>Rejected: " + deniedCount +
+                     "<br/>Withdrawn: " + withdrawnCount +
+                     "<br/>Duplicates: " + dupeCount +
+                     "<br/>In Voting: " + inVoteCount +
+                     "<br/>In Queue: " + inQueueCount +
+                     "<br/><br/>Nominations available: " + availableNominations;
+
+    if (oldestRecentNomination != -1){
+        elem.innerHTML += "<br/>Day(s) until new nomination unlocks: " + (13-oldestRecentNomination);
+    }
+}
+
+function daysSince(date2){
+    var date1 = Date.now();
+    date2 = new Date(date2);
+    var diffTime = Math.abs(date2 - date1);
+    var diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+}
