@@ -3,7 +3,7 @@
 
   "name": "WayFarer+",
   "description": "Adds functionality and style to NianticLabs Wayfarer",
-  "version": "1.4",
+  "version": "1.4.1",
 
   "browser_action": {
     "default_icon": "icons/icon48.png",
@@ -18,15 +18,13 @@
   "content_scripts": [
     {
       "matches": ["*://wayfarer.nianticlabs.com/*"],
-      "js": ["lib/jq/jquery-3.4.1.min.js", "lib/ga/ga.js", "js/options.js", "js/styler.js","js/mods/nominations.js", "js/mods/review.js","js/mods/profile.js", "main.js"],
+      "js": ["lib/jq/jquery-3.4.1.min.js", "js/options.js", "js/styler.js","js/mods/nominations.js", "js/mods/review.js","js/mods/profile.js", "main.js"],
       "run_at": "document_start"
     }
   ],
 
   "permissions": [
-    "activeTab",
-    "storage",
-    "https://ajax.googleapis.com/"
+    "storage"
   ],
   "web_accessible_resources": [
     "pageJs/*.js",

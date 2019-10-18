@@ -1,17 +1,25 @@
 chrome.storage.local.get("options_set", function (data){
 	if (data["options_set"] == undefined || data["options_set"] < 1){
 		console.log("[WayFarer+] Settings have not been set before. Starting configuration...");
-		setOption("options_set", 2);
+		setOption("options_set", 3);
 		setOption("darkMode", true);
 		setOption("nomStreetView", true);
 		setOption("revTooCloseWarn", true);
 		setOption("revExpireTimer", true);
 		setOption("nomStats", true);
+		setOption("accPoGo", false);
+		setOption("accIngress", true);
 		console.log("[WayFarer+] Setup finished!");
 	}else if (data["options_set"] < 2){
 		console.log("[WayFarer+] Some new settings seem to be missing. Adding them now...");
-		setOption("options_set", 2);
+		setOption("options_set", 3);
 		setOption("nomStats", true);
+		setOption("accPoGo", false);
+		setOption("accIngress", true);
+	}else if (data["options_set"] < 3){
+		setOption("options_set", 3);
+		setOption("accPoGo", false);
+		setOption("accIngress", true);
 	}
 });
 

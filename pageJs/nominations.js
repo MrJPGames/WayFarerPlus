@@ -84,7 +84,14 @@ function loadStats(){
     var inQueueCount = 0;
     var dupeCount = 0;
     var withdrawnCount = 0;
-    var availableNominations = 14;
+
+    var availableNominations = 0;
+    if (settings["accIngress"])
+        availableNominations += 14;
+    if (settings["accPoGo"])
+        availableNominations += 7;
+
+    console.log(availableNominations);
 
     var oldestRecentNomination = -1;
 
