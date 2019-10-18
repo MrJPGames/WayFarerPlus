@@ -123,23 +123,19 @@ function loadStats(){
                 oldestRecentNomination = nomAge;
             }
         }
-    }
+    }    
 
-    console.log(oldestRecentNomination);
-
-    
-
-    elem.innerHTML = "Total Nominations: " + nomCount +
-                     "<br/>Accepted: " + acceptedCount +
-                     "<br/>Rejected: " + deniedCount +
-                     "<br/>Withdrawn: " + withdrawnCount +
-                     "<br/>Duplicates: " + dupeCount +
-                     "<br/>In Voting: " + inVoteCount +
-                     "<br/>In Queue: " + inQueueCount +
-                     "<br/><br/>Nominations available: " + availableNominations;
+    elem.innerHTML = "Total Nominations: " + parseInt(nomCount) +
+                     "<br/>Accepted: " + parseInt(acceptedCount) +
+                     "<br/>Rejected: " + parseInt(deniedCount) +
+                     "<br/>Withdrawn: " + parseInt(withdrawnCount) +
+                     "<br/>Duplicates: " + parseInt(dupeCount) +
+                     "<br/>In Voting: " + parseInt(inVoteCount) +
+                     "<br/>In Queue: " + parseInt(inQueueCount) +
+                     "<br/><br/>Nominations available: " + parseInt(availableNominations);
 
     if (oldestRecentNomination != -1){
-        elem.innerHTML += "<br/>Day(s) until new nomination unlocks: " + (13-oldestRecentNomination);
+        elem.innerHTML += "<br/>Day(s) until new nomination unlocks: " + (13-parseInt(oldestRecentNomination));
     }
 }
 
