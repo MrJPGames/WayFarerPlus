@@ -52,7 +52,9 @@ function applyPublicStyle(){
     p.ng-binding {background: black;} \
     .translateImg {filter: invert(1);} \
     .revExprTimer { color: white; } \
-    .nom-edit-input {background-color: #0F0F0F !important; border-bottom: 2px solid #20B8E3 !important;}';
+    .nom-edit-input {background-color: #0F0F0F !important; border-bottom: 2px solid #20B8E3 !important;} \
+    .category__display-name {color: white !important;} \
+    .category__arrow-element {filter: invert();}';
 
 	var style=document.createElement('style');
 	style.type='text/css';
