@@ -81,7 +81,9 @@ function loadStats(){
     var acceptedCount = 0;
     var deniedCount = 0;
     var inVoteCount = 0;
+        var inVoteUpgradeCount = 0;
     var inQueueCount = 0;
+        var inQueueUpgradeCount = 0;
     var dupeCount = 0;
     var withdrawnCount = 0;
 
@@ -100,9 +102,13 @@ function loadStats(){
         switch (nomCtrl.nomList[i].status){
             case "NOMINATED":
                 inQueueCount++;
+                if (nomCtrl.nomList[i].upgraded)
+                    inQueueUpgradeCount++;
                 break;
             case "VOTING":
                 inVoteCount++;
+                if (nomCtrl.nomList[i].upgraded)
+                    inVoteUpgradeCount++;
                 break;
             case "REJECTED":
                 deniedCount++;
@@ -137,8 +143,8 @@ function loadStats(){
                      "<br/>Rejected: " + parseInt(deniedCount) +
                      "<br/>Withdrawn: " + parseInt(withdrawnCount) +
                      "<br/>Duplicates: " + parseInt(dupeCount) +
-                     "<br/>In Voting: " + parseInt(inVoteCount) +
-                     "<br/>In Queue: " + parseInt(inQueueCount) +
+                     "<br/>In Voting: " + parseInt(inVoteCount) + " (" + parseInt(inVoteUpgradeCount) + " upgraded)" +
+                     "<br/>In Queue: " + parseInt(inQueueCount) + " (" + parseInt(inQueueUpgradeCount) + " upgraded)" +
                      "<br/><br/>Nominations available: " + parseInt(availableNominations);
 
     if (oldestRecentNomination != -1){
