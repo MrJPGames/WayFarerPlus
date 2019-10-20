@@ -14,6 +14,8 @@ chrome.storage.local.get("options_set", function (data){
 		case 3:
 			setOption("revTranslate", true);
 			setOption("profExtendedStats", true);
+			setOption("revLowestDistCircle", true);
+			setOption("revAccessDistCircle", true);
 		default:
 			setOption("options_set", 4);
 	}
