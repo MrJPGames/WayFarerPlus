@@ -7,7 +7,7 @@ function setupPage(){
     nomCtrl = angular.element(nomCtrlDiv).scope().nomCtrl;
     if (nomCtrl == undefined){
         //Retry until page is loaded far enough to grab nomination controller
-        setTimeout(setupPage, 250);
+        setTimeout(setupPage, 100);
     }else{
         console.log("[WayFarer+] Hooked NominationsController to nomCtrl");
         if (settings["nomStats"]){
