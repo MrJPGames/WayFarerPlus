@@ -13,6 +13,7 @@ chrome.storage.local.get("options_set", function (data){
 			setOption("accIngress", true);
 		case 3:
 			setOption("revTranslate", true);
+			setOption("profExtendedStats", true);
 		default:
 			setOption("options_set", 4);
 	}

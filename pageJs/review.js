@@ -6,7 +6,7 @@ function setupPage(){
 	nSubCtrl = angular.element(document.getElementById("NewSubmissionController")).scope().subCtrl;
 	if (nSubCtrl == undefined || nSubCtrl.pageData == undefined ||  nSubCtrl.pageData.expires == undefined){
 		//Retry setup later
-		setTimeout(setupPage, 250);
+		setTimeout(setupPage, 100);
 	}else{
 		console.log("[WayFarer+] NewSubmissionController was hooked to nSubCtrl")
 		//Do page setup
