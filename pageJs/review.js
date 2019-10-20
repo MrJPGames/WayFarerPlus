@@ -1,4 +1,4 @@
-var nSubCtrl;
+var nSubCtrl, lowDistCircle, longDistCirle, nSubDS;
 
 setupPage();
 
@@ -10,16 +10,87 @@ function setupPage(){
 	}else{
 		console.log("[WayFarer+] NewSubmissionController was hooked to nSubCtrl")
 		//Do page setup
+		angular.element(document.getElementsByTagName("html")[0]).injector().invoke(["NewSubmissionDataService", function (nSF) {nSubDS = nSF;}]);
 		if (settings["revExpireTimer"])
 			updateTimer();
-		if (nSubCtrl.reviewType == "NEW"){
+		if (nSubCtrl.reviewType == "NEW")
 			if (nSubCtrl.pageData.nearbyPortals[0] != undefined)
 				checkNearby();
-		}
-		if (settings["revTranslate"]){
+		if (settings["revTranslate"])
 			addTranslationButtons();
-		}
+		if (settings["revLowestDistCircle"])
+			addLowestDistCircle();
+		if (settings["revAccessDistCircle"])
+			addAccessDistCircle();
 	}
+}
+
+function addLowestDistCircle(){
+	new google.maps.Circle({
+        map: nSubCtrl.map,
+        center: nSubCtrl.map.center,
+        radius: 20,
+        strokeColor: 'red',
+        fillColor: 'red',
+        strokeOpacity: 0.8,
+        strokeWeight: 1,
+        fillOpacity: 0.2
+  	});
+	lowDistCircle = new google.maps.Circle({
+        map: nSubCtrl.map2,
+        center: nSubCtrl.map2.center,
+        radius: 20,
+        strokeColor: 'red',
+        fillColor: 'red',
+        strokeOpacity: 0.8,
+        strokeWeight: 1,
+        fillOpacity: 0.2
+  	});
+
+  	hookLowestDistLocEdit();
+}
+
+function hookLowestDistLocEdit(){
+	if (nSubDS.getNewLocationMarker() == undefined || nSubDS.getNewLocationMarker() ==  null){
+		setTimeout(hookLowestDistLocEdit, 500);
+		return;
+	}
+	google.maps.event.addListener(nSubDS.getNewLocationMarker(), 'dragend', function () {
+    	lowDistCircle.setCenter(nSubDS.getNewLocationMarker().position)
+    });
+}
+
+
+function addAccessDistCircle(){
+	new google.maps.Circle({
+        map: nSubCtrl.map,
+        center: nSubCtrl.map.center,
+        radius: 40,
+        strokeColor: 'green',
+        strokeOpacity: 1,
+        strokeWeight: 2,
+        fillOpacity: 0
+  	});
+	longDistCirle = new google.maps.Circle({
+        map: nSubCtrl.map2,
+        center: nSubCtrl.map2.center,
+        radius: 40,
+        strokeColor: 'green',
+        strokeOpacity: 1,
+        strokeWeight: 2,
+        fillOpacity: 0
+  	});
+  	hookLongDistLocEdit();
+}
+
+function hookLongDistLocEdit(){
+	if (nSubDS.getNewLocationMarker() == undefined || nSubDS.getNewLocationMarker() ==  null){
+		setTimeout(hookLongDistLocEdit, 500);
+		return;
+	}
+	google.maps.event.addListener(nSubDS.getNewLocationMarker(), 'dragend', function () {
+    	longDistCirle.setCenter(nSubDS.getNewLocationMarker().position)
+    });
 }
 
 function addTranslationButtons(){
