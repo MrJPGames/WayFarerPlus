@@ -9,7 +9,6 @@ function setupPage(){
         setTimeout(setupPage, 100);
     }else{
         console.log("[WayFarer+] Hooked ProfileController to pCtrl");
-        console.log(pCtrl.rewards);
         if (settings["profExtendedStats"])
         	init();
     }

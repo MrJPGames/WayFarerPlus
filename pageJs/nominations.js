@@ -93,8 +93,6 @@ function loadStats(){
     if (settings["accPoGo"])
         availableNominations += 7;
 
-    console.log(availableNominations);
-
     var oldestRecentNomination = -1;
 
     for(var i = 0; i < nomCount; i++){
@@ -123,7 +121,7 @@ function loadStats(){
                 withdrawnCount++;
                 break;
             default:
-                console.log(nomCtrl.nomList[i].status);
+                console.log("[WayFarer+] Encountered unknown status: " + nomCtrl.nomList[i].status);
                 break;
         }
 

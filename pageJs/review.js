@@ -4,7 +4,7 @@ setupPage();
 
 function setupPage(){
 	nSubCtrl = angular.element(document.getElementById("NewSubmissionController")).scope().subCtrl;
-	if (nSubCtrl == undefined || nSubCtrl.pageData == undefined ||  nSubCtrl.pageData.expires == undefined){
+	if (nSubCtrl == undefined || nSubCtrl.pageData == undefined || nSubCtrl.pageData.expires == undefined || nSubCtrl.loaded == false){
 		//Retry setup later
 		setTimeout(setupPage, 100);
 	}else{
