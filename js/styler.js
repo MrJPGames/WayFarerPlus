@@ -46,7 +46,13 @@ function applyPublicStyle(){
     .arrow-element {filter: invert();} \
     .lbl-toggle {background: #20B8E3 !important; color: black;} \
     .collapsible-content .content-inner {color: white !important; border-bottom: 1px solid white !important; border-left: 1px solid white !important; border-right: 1px solid white !important;} \
-    #nom-table-title--arrow::before {filter: invert();}';
+    #nom-table-title--arrow::before {filter: invert();} \
+    .cancel-btn::before {background: url(\'/img/cancel.svg\') white !important; filter: invert();} \
+    .modal-body .modal-close {background-color: black !important;} \
+    p.ng-binding {background: black;} \
+    .translateImg {filter: invert(1);} \
+    .revExprTimer { color: white; } \
+    .nom-edit-input {background-color: #0F0F0F !important; border-bottom: 2px solid #20B8E3 !important;}';
 
 	var style=document.createElement('style');
 	style.type='text/css';
