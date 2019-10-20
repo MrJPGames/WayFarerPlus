@@ -3,6 +3,12 @@ A Chrome extension to add more functionality to NianticLab's Wayfarer
 
 Changelog
 ---
+1.5:
+- Added 20m and 40m circles to both map views on the review page. These allow you to see if other portals are too close, and from what area players of Ingress, Wizards Unite and Pokemon Go can access the PoI (if it were to appear in those games)
+- Extended profile stats have been added. Now adds total agreement count and edit agreement count.
+- Added translation buttons to review page. Allows you to quickly go to Google Translate and translate the Title, Description or supporting statement of a nomination.
+- Some more Dark Theme fixes were implemented.
+
 1.4:
 - Added nomination page stats widget. See how many nominations you have accepted, rejected, in queue, in voting etc. This widget also allows you to see how many nominations you can still make (in Ingress Prime ONLY currently) and how many days until new nominations become available to you.
 - Fixed Dark Theme issue in nominations page (sort order arrow was invisable)
