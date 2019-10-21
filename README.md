@@ -3,6 +3,13 @@ A Chrome extension to add more functionality to NianticLab's Wayfarer
 
 Changelog
 ---
+1.6:
+- Ctrl-less zooming on maps (review, nominations)
+- Made translation buttons less ambiguous. Should no longer be confused with emoji in description or title! Fixes #5
+- Settings pop-up now looks in style with settings from Wayfarer (Dark Mode)
+- Map circles improvements. Map resets now retain the circles!
+- Small general code improvements
+
 1.5:
 - Added 20m and 40m circles to both map views on the review page. These allow you to see if other portals are too close, and from what area players of Ingress, Wizards Unite and Pokemon Go can access the PoI (if it were to appear in those games)
 - Extended profile stats have been added. Now adds total agreement count and edit agreement count.
