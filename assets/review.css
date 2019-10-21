@@ -1,4 +1,12 @@
-.translateImg {
-	width: 25pt;
-	margin-left: 2pt;
+.translateButton{
+	border: 3pt solid white;
+    border-radius: 2pt;
+    width: 30pt;
+    background-color: white;
+    display: block;
+    height: 30pt;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-bottom: 5pt;
 }

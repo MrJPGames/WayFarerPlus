@@ -4,7 +4,7 @@ setupPage();
 
 function setupPage(){
 	nSubCtrl = angular.element(document.getElementById("NewSubmissionController")).scope().subCtrl;
-	if (nSubCtrl == undefined || nSubCtrl.pageData == undefined ||  nSubCtrl.pageData.expires == undefined){
+	if (nSubCtrl == undefined || nSubCtrl.pageData == undefined || nSubCtrl.pageData.expires == undefined || nSubCtrl.loaded == false){
 		//Retry setup later
 		setTimeout(setupPage, 100);
 	}else{
@@ -18,36 +18,56 @@ function setupPage(){
 				checkNearby();
 		if (settings["revTranslate"])
 			addTranslationButtons();
-		if (settings["revLowestDistCircle"])
-			addLowestDistCircle();
-		if (settings["revAccessDistCircle"])
-			addAccessDistCircle();
+		if (settings["revLowestDistCircle"]){
+			addLowestDistCircle(nSubCtrl.map);
+			addLowestDistCircle(nSubCtrl.map2, true);
+  			hookLowestDistLocEdit();
+		}
+		if (settings["revAccessDistCircle"]){
+			addAccessDistCircle(nSubCtrl.map);
+			addAccessDistCircle(nSubCtrl.map2, true);
+  			hookLongDistLocEdit();
+		}
+		if (settings["revLowestDistCircle"] || settings["revAccessDistCircle"])
+			hookResetMapFuncs();
+		if (settings["ctrlessZoom"])
+			mapsRemoveCtrlToZoom();
 	}
 }
 
-function addLowestDistCircle(){
-	new google.maps.Circle({
-        map: nSubCtrl.map,
-        center: nSubCtrl.map.center,
-        radius: 20,
-        strokeColor: 'red',
-        fillColor: 'red',
-        strokeOpacity: 0.8,
-        strokeWeight: 1,
-        fillOpacity: 0.2
-  	});
-	lowDistCircle = new google.maps.Circle({
-        map: nSubCtrl.map2,
-        center: nSubCtrl.map2.center,
-        radius: 20,
-        strokeColor: 'red',
-        fillColor: 'red',
-        strokeOpacity: 0.8,
-        strokeWeight: 1,
-        fillOpacity: 0.2
-  	});
+function hookResetMapFuncs(){
+	let originalResetStreetView = nSubCtrl.resetStreetView
+    nSubCtrl.resetStreetView = function() {
+		originalResetStreetView()
+		if (settings["revLowestDistCircle"])
+			addLowestDistCircle(nSubCtrl.map2, true);
+		if (settings["revAccessDistCircle"])
+			addAccessDistCircle(nSubCtrl.map2, true);
+    }
+}
 
-  	hookLowestDistLocEdit();
+function mapsRemoveCtrlToZoom(){
+	var options = {
+		scrollwheel: true,
+		gestureHandling: 'greedy'
+	};
+	nSubCtrl.map.setOptions(options);
+	nSubCtrl.map2.setOptions(options);
+}
+
+function addLowestDistCircle(gMap, hook = false){
+	var c = new google.maps.Circle({
+        map: gMap,
+        center: gMap.center,
+        radius: 20,
+        strokeColor: 'red',
+        fillColor: 'red',
+        strokeOpacity: 0.8,
+        strokeWeight: 1,
+        fillOpacity: 0.2
+  	});
+	if (hook)
+		lowDistCircle = c;
 }
 
 function hookLowestDistLocEdit(){
@@ -61,26 +81,18 @@ function hookLowestDistLocEdit(){
 }
 
 
-function addAccessDistCircle(){
-	new google.maps.Circle({
-        map: nSubCtrl.map,
-        center: nSubCtrl.map.center,
+function addAccessDistCircle(gMap, hook = false){
+	var c = new google.maps.Circle({
+        map: gMap,
+        center: gMap.center,
         radius: 40,
         strokeColor: 'green',
         strokeOpacity: 1,
         strokeWeight: 2,
         fillOpacity: 0
   	});
-	longDistCirle = new google.maps.Circle({
-        map: nSubCtrl.map2,
-        center: nSubCtrl.map2.center,
-        radius: 40,
-        strokeColor: 'green',
-        strokeOpacity: 1,
-        strokeWeight: 2,
-        fillOpacity: 0
-  	});
-  	hookLongDistLocEdit();
+  	if (hook)
+  		longDistCirle = c;
 }
 
 function hookLongDistLocEdit(){
@@ -96,16 +108,14 @@ function hookLongDistLocEdit(){
 function addTranslationButtons(){
 	var elems = document.getElementsByClassName("title-description");
 
+	var style = "background-image: url(" + extURL + "assets/translate.svg);"
+
 	for (i = 0; i < elems.length; i++){
 		var translateButton = document.createElement("a");
 		translateButton.setAttribute("target", "_BLANK");
+		translateButton.setAttribute("class", "translateButton");
+		translateButton.setAttribute("style", style);
 		translateButton.href = "https://translate.google.com/?sl=auto&q=" + encodeURI(elems[i].innerText);
-
-		var translateImage = document.createElement("img");
-		translateImage.src = extURL + "assets/translate.svg";
-		translateImage.setAttribute("class", "translateImg");
-
-		translateButton.appendChild(translateImage);
 
 		elems[i].appendChild(translateButton);
 	}
@@ -115,13 +125,9 @@ function addTranslationButtons(){
 
 		var translateButton = document.createElement("a");
 		translateButton.setAttribute("target", "_BLANK");
+		translateButton.setAttribute("class", "translateButton");
+		translateButton.setAttribute("style", style);
 		translateButton.href = "https://translate.google.com/?sl=auto&q=" + encodeURI(elem.innerText);
-
-		var translateImage = document.createElement("img");
-		translateImage.src = extURL + "assets/translate.svg";
-		translateImage.setAttribute("class", "translateImg");
-
-		translateButton.appendChild(translateImage);
 
 		elem.children[0].appendChild(translateButton);
 	}
