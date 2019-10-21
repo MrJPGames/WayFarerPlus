@@ -1,6 +1,13 @@
-chrome.storage.local.get(null, function (data){
-	init(data);
-});
+getData();
+
+function getData(){
+	chrome.storage.local.get(null, function (data){
+		if (data["options_set"] == undefined)
+			setTimeout(getData, 20); //Really fast but not instant
+		else
+			init(data);
+	});
+}
 
 function init(settings){
 	if (settings["darkMode"] == true){
