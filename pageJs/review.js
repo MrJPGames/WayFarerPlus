@@ -22,7 +22,18 @@ function setupPage(){
 			addLowestDistCircle();
 		if (settings["revAccessDistCircle"])
 			addAccessDistCircle();
+		if (settings["ctrlessZoom"])
+			mapsRemoveCtrlToZoom();
 	}
+}
+
+function mapsRemoveCtrlToZoom(){
+	var options = {
+		scrollwheel: true,
+		gestureHandling: 'greedy'
+	};
+	nSubCtrl.map.setOptions(options);
+	nSubCtrl.map2.setOptions(options);
 }
 
 function addLowestDistCircle(){

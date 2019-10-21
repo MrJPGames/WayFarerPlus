@@ -16,7 +16,9 @@ chrome.storage.local.get("options_set", function (data){
 			setOption("profExtendedStats", true);
 			setOption("revLowestDistCircle", true);
 			setOption("revAccessDistCircle", true);
-			setOption("options_set", 4);
+		case 4:
+			setOption("ctrlessZoom", false);
+			setOption("options_set", 5);
 	}
 });
 

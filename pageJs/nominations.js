@@ -1,4 +1,5 @@
-var nomCtrl;
+var nomCtrl, SVMap;
+//StreetViewMap
 
 setupPage();
 
@@ -10,9 +11,8 @@ function setupPage(){
         setTimeout(setupPage, 100);
     }else{
         console.log("[WayFarer+] Hooked NominationsController to nomCtrl");
-        if (settings["nomStats"]){
+        if (settings["nomStats"])
             loadStats();
-        }
     }
 }
 
@@ -20,7 +20,7 @@ function setStreetView(){
 	var lat = nomCtrl.currentNomination.lat; 
 	var lng = nomCtrl.currentNomination.lng;
 
-	var map = new google.maps.Map(document.getElementById("pano"),{
+	SVMap = new google.maps.Map(document.getElementById("pano"),{
         center: {
             lat: lat,
             lng: lng
@@ -28,17 +28,19 @@ function setStreetView(){
         mapTypeId: "hybrid",
         zoom: 17,
         scaleControl: true,
+        scrollwheel: true,
+        gestureHandling: 'greedy',
         mapTypeControl: false
     });
     var marker = new google.maps.Marker({
-        map: map,
+        map: SVMap,
         position: {
             lat: parseFloat(lat),
             lng: parseFloat(lng)
         },
         title: nomCtrl.currentNomination.title
     });
-    var panorama = map.getStreetView();
+    var panorama = SVMap.getStreetView();
     var client = new google.maps.StreetViewService;
     client.getPanoramaByLocation({
         lat: lat,
@@ -57,16 +59,23 @@ function setStreetView(){
             });
             panorama.setMotionTracking(false);
             panorama.setVisible(true);
-            //imageDate = result.imageDate;
-            //$scope.$apply
         }
     });
-    panorama = panorama;
-    map = map;
 
+    if (settings["ctrlessZoom"])
+        mapsRemoveCtrlToZoom();
 
     console.log("[WayFarer+] Setting Nomination Streetview image"); 
-};
+}
+
+function mapsRemoveCtrlToZoom(){
+    var options = {
+        scrollwheel: true,
+        gestureHandling: 'greedy'
+    };
+    nomCtrl.map.setOptions(options);
+    SVMap.setOptions(options);
+}
 
 function loadStats(){
     if (!nomCtrl.loaded){
