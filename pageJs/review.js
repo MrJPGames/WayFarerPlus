@@ -96,16 +96,14 @@ function hookLongDistLocEdit(){
 function addTranslationButtons(){
 	var elems = document.getElementsByClassName("title-description");
 
+	var style = "background-image: url(" + extURL + "assets/translate.svg);"
+
 	for (i = 0; i < elems.length; i++){
 		var translateButton = document.createElement("a");
 		translateButton.setAttribute("target", "_BLANK");
+		translateButton.setAttribute("class", "translateButton");
+		translateButton.setAttribute("style", style);
 		translateButton.href = "https://translate.google.com/?sl=auto&q=" + encodeURI(elems[i].innerText);
-
-		var translateImage = document.createElement("img");
-		translateImage.src = extURL + "assets/translate.svg";
-		translateImage.setAttribute("class", "translateImg");
-
-		translateButton.appendChild(translateImage);
 
 		elems[i].appendChild(translateButton);
 	}
@@ -115,13 +113,9 @@ function addTranslationButtons(){
 
 		var translateButton = document.createElement("a");
 		translateButton.setAttribute("target", "_BLANK");
+		translateButton.setAttribute("class", "translateButton");
+		translateButton.setAttribute("style", style);
 		translateButton.href = "https://translate.google.com/?sl=auto&q=" + encodeURI(elem.innerText);
-
-		var translateImage = document.createElement("img");
-		translateImage.src = extURL + "assets/translate.svg";
-		translateImage.setAttribute("class", "translateImg");
-
-		translateButton.appendChild(translateImage);
 
 		elem.children[0].appendChild(translateButton);
 	}
