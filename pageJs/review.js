@@ -18,13 +18,32 @@ function setupPage(){
 				checkNearby();
 		if (settings["revTranslate"])
 			addTranslationButtons();
-		if (settings["revLowestDistCircle"])
-			addLowestDistCircle();
-		if (settings["revAccessDistCircle"])
-			addAccessDistCircle();
+		if (settings["revLowestDistCircle"]){
+			addLowestDistCircle(nSubCtrl.map);
+			addLowestDistCircle(nSubCtrl.map2, true);
+  			hookLowestDistLocEdit();
+		}
+		if (settings["revAccessDistCircle"]){
+			addAccessDistCircle(nSubCtrl.map);
+			addAccessDistCircle(nSubCtrl.map2, true);
+  			hookLongDistLocEdit();
+		}
+		if (settings["revLowestDistCircle"] || settings["revAccessDistCircle"])
+			hookResetMapFuncs();
 		if (settings["ctrlessZoom"])
 			mapsRemoveCtrlToZoom();
 	}
+}
+
+function hookResetMapFuncs(){
+	let originalResetStreetView = nSubCtrl.resetStreetView
+    nSubCtrl.resetStreetView = function() {
+		originalResetStreetView()
+		if (settings["revLowestDistCircle"])
+			addLowestDistCircle(nSubCtrl.map2, true);
+		if (settings["revAccessDistCircle"])
+			addAccessDistCircle(nSubCtrl.map2, true);
+    }
 }
 
 function mapsRemoveCtrlToZoom(){
@@ -36,10 +55,10 @@ function mapsRemoveCtrlToZoom(){
 	nSubCtrl.map2.setOptions(options);
 }
 
-function addLowestDistCircle(){
-	new google.maps.Circle({
-        map: nSubCtrl.map,
-        center: nSubCtrl.map.center,
+function addLowestDistCircle(gMap, hook = false){
+	var c = new google.maps.Circle({
+        map: gMap,
+        center: gMap.center,
         radius: 20,
         strokeColor: 'red',
         fillColor: 'red',
@@ -47,18 +66,8 @@ function addLowestDistCircle(){
         strokeWeight: 1,
         fillOpacity: 0.2
   	});
-	lowDistCircle = new google.maps.Circle({
-        map: nSubCtrl.map2,
-        center: nSubCtrl.map2.center,
-        radius: 20,
-        strokeColor: 'red',
-        fillColor: 'red',
-        strokeOpacity: 0.8,
-        strokeWeight: 1,
-        fillOpacity: 0.2
-  	});
-
-  	hookLowestDistLocEdit();
+	if (hook)
+		lowDistCircle = c;
 }
 
 function hookLowestDistLocEdit(){
@@ -72,26 +81,18 @@ function hookLowestDistLocEdit(){
 }
 
 
-function addAccessDistCircle(){
-	new google.maps.Circle({
-        map: nSubCtrl.map,
-        center: nSubCtrl.map.center,
+function addAccessDistCircle(gMap, hook = false){
+	var c = new google.maps.Circle({
+        map: gMap,
+        center: gMap.center,
         radius: 40,
         strokeColor: 'green',
         strokeOpacity: 1,
         strokeWeight: 2,
         fillOpacity: 0
   	});
-	longDistCirle = new google.maps.Circle({
-        map: nSubCtrl.map2,
-        center: nSubCtrl.map2.center,
-        radius: 40,
-        strokeColor: 'green',
-        strokeOpacity: 1,
-        strokeWeight: 2,
-        fillOpacity: 0
-  	});
-  	hookLongDistLocEdit();
+  	if (hook)
+  		longDistCirle = c;
 }
 
 function hookLongDistLocEdit(){
