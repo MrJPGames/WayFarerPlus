@@ -38,7 +38,6 @@ function applyPublicStyle(){
     p {color: #C0C0C0 !important;} \
     #WhatIsItController .categories-display .categories-display-result::before {filter: invert() !important;} \
     #WhatIsItController .categories-display .categories-display-result {color: white !important;} \
-    #portalReviewTimer {display: inline-block;} \
     .reset-map-icon {filter: invert();} \
     .hydrated {background: black; color: white;} \
     button {color: black;} \
