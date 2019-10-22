@@ -3,7 +3,7 @@
 
   "name": "WayFarer+",
   "description": "Adds functionality and style to NianticLabs Wayfarer",
-  "version": "1.7",
+  "version": "1.6.1",
 
   "browser_action": {
     "default_icon": "icons/icon48.png",

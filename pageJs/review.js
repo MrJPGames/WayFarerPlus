@@ -55,10 +55,11 @@ function mapsRemoveCtrlToZoom(){
 	nSubCtrl.map2.setOptions(options);
 }
 
-function addLowestDistCircle(gMap, hook = false){
+function addLowestDistCircle(gMap, hook = false){ 
+	var latLng = new google.maps.LatLng(nSubCtrl.pageData.lat, nSubCtrl.pageData.lng);
 	var c = new google.maps.Circle({
         map: gMap,
-        center: gMap.center,
+        center: latLng,
         radius: 20,
         strokeColor: 'red',
         fillColor: 'red',
@@ -82,9 +83,10 @@ function hookLowestDistLocEdit(){
 
 
 function addAccessDistCircle(gMap, hook = false){
+	var latLng = new google.maps.LatLng(nSubCtrl.pageData.lat, nSubCtrl.pageData.lng);
 	var c = new google.maps.Circle({
         map: gMap,
-        center: gMap.center,
+        center: latLng,
         radius: 40,
         strokeColor: 'green',
         strokeOpacity: 1,
