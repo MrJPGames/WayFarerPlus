@@ -53,7 +53,8 @@ function applyPublicStyle(){
     .revExprTimer { color: white; } \
     .nom-edit-input {background-color: #0F0F0F !important; border-bottom: 2px solid #20B8E3 !important;} \
     .category__display-name {color: white !important;} \
-    .category__arrow-element {filter: invert();}';
+    .category__arrow-element {filter: invert();} \
+    #gallery-info-not-title p {background: none !important;}';
 
 	var style=document.createElement('style');
 	style.type='text/css';
