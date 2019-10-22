@@ -9,4 +9,9 @@
     background-repeat: no-repeat;
     background-position: center;
     margin-bottom: 5pt;
+    box-shadow: 0 0 2px grey;
+}
+
+#portalReviewTimer {
+	display: inline-block;
 }

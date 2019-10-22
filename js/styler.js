@@ -38,7 +38,6 @@ function applyPublicStyle(){
     p {color: #C0C0C0 !important;} \
     #WhatIsItController .categories-display .categories-display-result::before {filter: invert() !important;} \
     #WhatIsItController .categories-display .categories-display-result {color: white !important;} \
-    #portalReviewTimer {display: inline-block;} \
     .reset-map-icon {filter: invert();} \
     .hydrated {background: black; color: white;} \
     button {color: black;} \
@@ -54,7 +53,8 @@ function applyPublicStyle(){
     .revExprTimer { color: white; } \
     .nom-edit-input {background-color: #0F0F0F !important; border-bottom: 2px solid #20B8E3 !important;} \
     .category__display-name {color: white !important;} \
-    .category__arrow-element {filter: invert();}';
+    .category__arrow-element {filter: invert();} \
+    #gallery-info-not-title p {background: none !important;}';
 
 	var style=document.createElement('style');
 	style.type='text/css';
