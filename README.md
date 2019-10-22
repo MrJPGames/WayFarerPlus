@@ -3,6 +3,11 @@ A Chromium extension to add more functionality to NianticLab's Wayfarer
 
 Changelog
 ---
+1.6.1
+- Fixes #6 #7 and #8
+- Removes any libary from being required (result: smaller file size, possibly better performace but only extremly slight)
+- Further improvements to the Dark Mode
+
 1.6:
 - Ctrl-less zooming on maps (review, nominations)
 - Made translation buttons less ambiguous. Should no longer be confused with emoji in description or title! Fixes #5
