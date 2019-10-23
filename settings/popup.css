@@ -8,6 +8,13 @@ body, html {
   color: white;
 }
 
+select{
+    padding: 1pt;
+    font-size: 20px;
+    border-radius: 2pt;
+    font-family: Roboto, sans-serif;
+}
+
 *, *:before, *:after {
   box-sizing: inherit;
 }

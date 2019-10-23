@@ -3,6 +3,12 @@ A Chromium extension to add more functionality to NianticLab's Wayfarer
 
 Changelog
 ---
+1.7:
+- Added reviewing with the keyboard (including numpad). Press the number corresponding to the star rating. Use the arrow keys to naviaget manually between the options. Press enter to submit and to continue to the next review. Use backspace to go back in rejction menus or go home after finishing a review.
+- 20m and 40m circles are now also available for the nominations page
+- Default zoom level for the "Location Accuracy" map now configurable in settings. A more zoomed in map can be useful when using the keyboard to review to avoid having to use the mouse to zoom in, which is often needed.
+- Improved settings backend, should solve a bug in previous versions when updating to a version with new settings.
+
 1.6.1
 - Fixes #6 #7 and #8
 - Removes any libary from being required (result: smaller file size, possibly better performace but only extremly slight)

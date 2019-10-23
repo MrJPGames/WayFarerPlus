@@ -16,6 +16,19 @@ function setupPage(){
     }
 }
 
+function selectNomination(){
+    if (settings["nomStreetView"])
+        setStreetView();
+    if (settings["nomLowestDistCircle"]){
+        addLowestDistCircle(nomCtrl.map);
+        addLowestDistCircle(SVMap);
+    }
+    if (settings["nomAccessDistCircle"]){
+        addAccessDistCircle(nomCtrl.map);
+        addAccessDistCircle(SVMap);
+    }
+}
+
 function setStreetView(){ 
 	var lat = nomCtrl.currentNomination.lat; 
 	var lng = nomCtrl.currentNomination.lng;
@@ -75,6 +88,33 @@ function mapsRemoveCtrlToZoom(){
     };
     nomCtrl.map.setOptions(options);
     SVMap.setOptions(options);
+}
+
+function addLowestDistCircle(gMap){ 
+    var latLng = new google.maps.LatLng(nomCtrl.currentNomination.lat, nomCtrl.currentNomination.lng);
+    var c = new google.maps.Circle({
+        map: gMap,
+        center: latLng,
+        radius: 20,
+        strokeColor: 'red',
+        fillColor: 'red',
+        strokeOpacity: 0.8,
+        strokeWeight: 1,
+        fillOpacity: 0.2
+    });
+}
+
+function addAccessDistCircle(gMap){
+    var latLng = new google.maps.LatLng(nomCtrl.currentNomination.lat, nomCtrl.currentNomination.lng);
+    var c = new google.maps.Circle({
+        map: gMap,
+        center: latLng,
+        radius: 40,
+        strokeColor: 'green',
+        strokeOpacity: 1,
+        strokeWeight: 2,
+        fillOpacity: 0
+    });
 }
 
 function loadStats(){

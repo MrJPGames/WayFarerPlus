@@ -1,4 +1,5 @@
 //Sets up default settings on first launch or upgrade
+var settingsVersion = 6;
 
 chrome.storage.local.get("options_set", function (data){
 	var opt_ver = (data["options_set"] != undefined) ? data["options_set"] : 0;
@@ -20,7 +21,12 @@ chrome.storage.local.get("options_set", function (data){
 			setOption("revAccessDistCircle", true);
 		case 4:
 			setOption("ctrlessZoom", false);
-			setOption("options_set", 5);
+		case 5:
+			setOption("revKeyboard", true);
+			setOption("nomLowestDistCircle", true);
+			setOption("nomAccessDistCircle", true);
+			setOption("revMap2ZoomLevel", -1);
+			setOption("options_set", settingsVersion);
 	}
 });
 

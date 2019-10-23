@@ -15,3 +15,11 @@
 #portalReviewTimer {
 	display: inline-block;
 }
+
+.five-stars{
+    border: rgba(0,0,0,0) dashed 2pt;
+}
+
+html {
+  scroll-behavior: smooth;
+}

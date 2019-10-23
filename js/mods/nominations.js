@@ -17,6 +17,27 @@ function modNominationPage(settings){
 	if (settings["nomStats"]){
 		addStats();
 	}
+
+	//Observe for changes to create a custom onclick event for any nomination div
+	var observer = new MutationObserver(function (mutations) {
+	    mutations.forEach(function (mutation) {
+	        if (!mutation.addedNodes) {
+	            return;
+	        }
+	        var nodes = mutation.addedNodes;
+	        nodes.forEach(function(node,i){
+	        	if (node.className == "nomination card ng-scope" || node.className == "nomination card ng-scope --selected"){
+	        		node.setAttribute("onclick", "selectNomination();");
+	        	}
+	        });
+	    });
+	});
+
+	observer.observe(document.body, {
+	    childList: true,
+	    subtree: true,
+			queries: [{element: "#map"}]
+	});
 }
 
 function addStreetView(){
@@ -36,26 +57,6 @@ function addStreetView(){
 
 	//Add title to page:
 	map.parentNode.insertBefore(svTitleElem, newMapElem);
-
-	var observer = new MutationObserver(function (mutations) {
-	    mutations.forEach(function (mutation) {
-	        if (!mutation.addedNodes) {
-	            return;
-	        }
-	        var nodes = mutation.addedNodes;
-	        nodes.forEach(function(node,i){
-	        	if (node.className == "nomination card ng-scope" || node.className == "nomination card ng-scope --selected"){
-	        		node.setAttribute("onclick", "setStreetView();");
-	        	}
-	        });
-	    });
-	});
-
-	observer.observe(document.body, {
-	    childList: true,
-	    subtree: true,
-			queries: [{element: "#map"}]
-	});
 }
 
 function addStats(){
