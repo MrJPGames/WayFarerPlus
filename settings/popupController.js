@@ -47,5 +47,6 @@ function init(settings){
 
 	for (var i = 0; i < selectInputs.length; i++){
 		selectInputs[i].onchange = function(e){changeSelectSetting(e.srcElement)};
+		selectInputs[i].value = settings[selectInputs[i].id];
 	}
 }

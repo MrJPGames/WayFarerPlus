@@ -44,16 +44,23 @@ function setupPage(){
 			addAccessDistCircle(nSubCtrl.map2, true);
   			hookLongDistLocEdit();
 		}
-		if (settings["revLowestDistCircle"] || settings["revAccessDistCircle"])
+		if (settings["revLowestDistCircle"] || settings["revAccessDistCircle"] || settings["revMap2ZoomLevel"] != -1)
 			hookResetMapFuncs();
 		if (settings["ctrlessZoom"])
 			mapsRemoveCtrlToZoom();
+		if (settings["revMap2ZoomLevel"] != -1)
+			zoomMap2();
 
 		if (!settings["darkMode"])
 			colCode = "DF471C";
 		if (settings["revKeyboard"])
 			initKeyboardControls();
 	}
+}
+
+function zoomMap2(){
+	var newZoomLevel = parseInt(settings["revMap2ZoomLevel"]);
+	nSubCtrl.map2.setZoom(newZoomLevel);
 }
 
 function initKeyboardControls(){
@@ -208,6 +215,8 @@ function hookResetMapFuncs(){
 			addLowestDistCircle(nSubCtrl.map2, true);
 		if (settings["revAccessDistCircle"])
 			addAccessDistCircle(nSubCtrl.map2, true);
+		if (settings["revMap2ZoomLevel"] != -1)
+			zoomMap2();
     }
 }
 
