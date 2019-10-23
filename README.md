@@ -9,6 +9,11 @@ Changelog
 - Default zoom level for the "Location Accuracy" map now configurable in settings. A more zoomed in map can be useful when using the keyboard to review to avoid having to use the mouse to zoom in, which is often needed.
 - Improved settings backend, should solve a bug in previous versions when updating to a version with new settings.
 
+1.6.1
+- Fixes #6 #7 and #8
+- Removes any libary from being required (result: smaller file size, possibly better performace but only extremly slight)
+- Further improvements to the Dark Mode
+
 1.6:
 - Ctrl-less zooming on maps (review, nominations)
 - Made translation buttons less ambiguous. Should no longer be confused with emoji in description or title! Fixes #5
