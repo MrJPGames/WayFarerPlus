@@ -2,7 +2,7 @@ getData();
 
 function getData(){
 	chrome.storage.local.get(null, function (data){
-		if (data["options_set"] == undefined)
+		if (data["options_set"] == undefined || data["options_set"] < settingsVersion)
 			setTimeout(getData, 20); //Really fast but not instant
 		else
 			init(data);
