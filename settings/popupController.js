@@ -2,10 +2,21 @@ function changeBoolSetting(elem){
 	var key = elem.id;
 	var value = elem.checked;
 
+	store(key, value);
+}
+
+function changeSelectSetting(elem){
+	var key = elem.id;
+	var value = elem.value;
+
+	store(key, value);
+}
+
+function store(k, v){
 	var obj = {};
-	obj[key] = value;
+	obj[k] = v;
 	chrome.storage.local.set(obj, function() {
-	    console.log('[Wayfarer+] Setting \"' + key + '\" set to \"' + value + '\"');
+	    console.log('[Wayfarer+] Setting \"' + k + '\" set to \"' + v + '\"');
 	});
 }
 
@@ -23,7 +34,7 @@ function getData(){
 function init(settings){
 	var inputs = document.getElementsByTagName("input");
 
-	for(var i = 0; i<inputs.length; i++){
+	for(var i = 0; i < inputs.length; i++){
 		if ((inputs[i]).getAttribute("type") == "checkbox"){
 			if (settings[inputs[i].id]){
 				inputs[i].checked = true;
@@ -31,4 +42,10 @@ function init(settings){
 			inputs[i].onclick = function(e){changeBoolSetting(e.srcElement)};
 		}
 	};
+
+	var selectInputs = document.getElementsByTagName("select");
+
+	for (var i = 0; i < selectInputs.length; i++){
+		selectInputs[i].onchange = function(e){changeSelectSetting(e.srcElement)};
+	}
 }

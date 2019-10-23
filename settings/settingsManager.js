@@ -23,6 +23,9 @@ chrome.storage.local.get("options_set", function (data){
 			setOption("ctrlessZoom", false);
 		case 5:
 			setOption("revKeyboard", true);
+			setOption("nomLowestDistCircle", true);
+			setOption("nomAccessDistCircle", true);
+			setOption("revMap2ZoomLevel", -1);
 			setOption("options_set", settingsVersion);
 	}
 });
