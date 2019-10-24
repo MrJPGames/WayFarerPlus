@@ -56,7 +56,7 @@
 }
 
 .toggle:checked + .lbl-toggle + .collapsible-content {
-  max-height: 350px;
+  max-height: 9999999pt;
 }
 
 .toggle:checked + .lbl-toggle {
@@ -72,4 +72,13 @@
   border-bottom-left-radius: 7px;
   border-bottom-right-radius: 7px;
   padding: .5rem 1rem;
+}
+
+.content-inner td:last-child{
+	text-align: right;
+}
+
+th, td{
+	border: white solid 1pt;
+	padding: 1pt 5pt;
 }

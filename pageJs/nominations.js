@@ -142,7 +142,8 @@ function loadStats(){
     if (settings["accPoGo"])
         availableNominations += 7;
 
-    var oldestRecentNomination = -1;
+
+    var unlocks = [0,0,0,0,0,0,0,0,0,0,0,0,0,0]; // Array that stores the amount of nomination unlocks for every day for the upcomming 14 days
 
     for(var i = 0; i < nomCount; i++){
         //Keep track of basic counting stats
@@ -174,29 +175,45 @@ function loadStats(){
                 break;
         }
 
-        //Available nomination determinations
+        //Available nomination determinations & new unlock date determinations
         var nomAge = daysSince(nomCtrl.nomList[i].day);
         if (nomAge < 14){
             availableNominations--;
 
-            if (nomAge > oldestRecentNomination){
-                oldestRecentNomination = nomAge;
-            }
+            unlocks[13-nomAge]++;
+            console.log(nomCtrl.nomList[i].title, nomAge, unlocks);
         }
-    }    
-
-    elem.innerHTML = "Total Nominations: " + parseInt(nomCount) +
-                     "<br/>Accepted: " + parseInt(acceptedCount) +
-                     "<br/>Rejected: " + parseInt(deniedCount) +
-                     "<br/>Withdrawn: " + parseInt(withdrawnCount) +
-                     "<br/>Duplicates: " + parseInt(dupeCount) +
-                     "<br/>In Voting: " + parseInt(inVoteCount) + " (" + parseInt(inVoteUpgradeCount) + " upgraded)" +
-                     "<br/>In Queue: " + parseInt(inQueueCount) + " (" + parseInt(inQueueUpgradeCount) + " upgraded)" +
-                     "<br/><br/>Nominations available: " + parseInt(availableNominations);
-
-    if (oldestRecentNomination != -1){
-        elem.innerHTML += "<br/>Day(s) until new nomination unlocks: " + (13-parseInt(oldestRecentNomination));
     }
+
+    var html =  "Total Nominations: " + parseInt(nomCount) +
+                "<br/>Accepted: " + parseInt(acceptedCount) +
+                "<br/>Rejected: " + parseInt(deniedCount) +
+                "<br/>Withdrawn: " + parseInt(withdrawnCount) +
+                "<br/>Duplicates: " + parseInt(dupeCount) +
+                "<br/>In Voting: " + parseInt(inVoteCount) + " (" + parseInt(inVoteUpgradeCount) + " upgraded)" +
+                "<br/>In Queue: " + parseInt(inQueueCount) + " (" + parseInt(inQueueUpgradeCount) + " upgraded)" +
+                "<br/><br/>Nominations available: " + parseInt(availableNominations) +
+                "<br/>Nomination unlocks:";
+
+
+    var currentDay = new Date();
+    console.log(unlocks);
+    if (unlocks != [0,0,0,0,0,0,0,0,0,0,0,0,0,0]){
+        //Start table and create header
+        html += "<table><thead><tr><th>Date (Y-M-D)</th><th># of unlocks</th></tr></thead><tbody>";
+
+        for (var i = 0; i < unlocks.length; i++){
+            if (unlocks[i] != 0){
+                html += "<tr><td>" + currentDay.toISOString().substring(0, 10) + "</td><td>" + unlocks[i] + "</td></tr>";
+            }
+            currentDay.setDate(currentDay.getDate()+1);
+        }
+        //end table
+        html += "</tbody></table>";
+    }
+
+    elem.innerHTML = html;
+
 }
 
 function daysSince(date2){
