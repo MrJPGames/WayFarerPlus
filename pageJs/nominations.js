@@ -40,26 +40,19 @@ function selectNomination(){
 }
 
 function addIntelButton(){
-    addMapButton("https://intel.ingress.com/intel?z=17&pll=" + nomCtrl.currentNomination.lat + "," + nomCtrl.currentNomination.lng,
-                 "Open in Intel");
+    setMapButtonURL("https://intel.ingress.com/intel?z=17&pll=" + nomCtrl.currentNomination.lat + "," + nomCtrl.currentNomination.lng,
+                    "IIButton");
 }
 
 function addGoogleMapsButton(){
-    addMapButton("https://maps.google.com/maps?q=" + nomCtrl.currentNomination.lat + "," + nomCtrl.currentNomination.lng + "%20(" + encodeURI(nomCtrl.currentNomination.title) + ")",
-                 "Open in Google Maps");
+    setMapButtonURL("https://maps.google.com/maps?q=" + nomCtrl.currentNomination.lat + "," + nomCtrl.currentNomination.lng + "%20(" + encodeURI(nomCtrl.currentNomination.title) + ")",
+                    "gMapButton");
 }
 
-function addMapButton(mapUrl, text){
-    console.log(mapUrl, text);
-    var mapElem = document.getElementById("map");
+function setMapButtonURL(mapUrl, id){
+    var elem = document.getElementById(id);
 
-    var button = document.createElement("a");
-    button.setAttribute("class", "customMapButton");
-    button.setAttribute("target", "_BLANK");
-    button.href = mapUrl;
-    button.innerText = text;
-
-    mapElem.parentNode.insertBefore(button, mapElem.nextSibling);
+    elem.href = mapUrl;
 }
 
 function setStreetView(){ 

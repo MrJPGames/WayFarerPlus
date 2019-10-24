@@ -11,12 +11,14 @@ function modNominationPage(settings){
 	console.log("[WayFarer+] Nominations page mod loaded!");
 
 	//In separate function for future readability if more mods are added
-	if (settings["nomStreetView"]){
+	if (settings["nomStreetView"])
 		addStreetView();
-	}
-	if (settings["nomStats"]){
+	if (settings["nomStats"])
 		addStats();
-	}
+	if (settings["nomIntelButton"])
+        addIntelButton();
+    if (settings["nomGoogleMaps"])
+        addGoogleMapsButton();
 
 	//Observe for changes to create a custom onclick event for any nomination div
 	var observer = new MutationObserver(function (mutations) {
@@ -38,6 +40,29 @@ function modNominationPage(settings){
 	    subtree: true,
 			queries: [{element: "#map"}]
 	});
+}
+
+function addIntelButton(){
+    addMapButton("https://intel.ingress.com/intel?z=17&pll=",
+                 "Open in Intel", "IIButton");
+}
+
+function addGoogleMapsButton(){
+    addMapButton("https://maps.google.com/maps?q=",
+                 "Open in Google Maps", "gMapButton");
+}
+
+function addMapButton(mapUrl, text, buttonID){
+    var mapElem = document.getElementById("map");
+
+    var button = document.createElement("a");
+    button.setAttribute("class", "customMapButton");
+    button.setAttribute("target", "_BLANK");
+    button.setAttribute("id", buttonID);
+    button.href = mapUrl;
+    button.innerText = text;
+
+    mapElem.parentNode.insertBefore(button, mapElem.nextSibling);
 }
 
 function addStreetView(){
