@@ -32,5 +32,8 @@ function init(settings){
 				modProfilePage(settings);
 				break;
 		}
+
+		//Always
+		modHeader(settings);
 	});
 }

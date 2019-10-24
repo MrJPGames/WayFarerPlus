@@ -1,5 +1,5 @@
 //Sets up default settings on first launch or upgrade
-var settingsVersion = 6;
+var settingsVersion = 7;
 
 chrome.storage.local.get("options_set", function (data){
 	var opt_ver = (data["options_set"] != undefined) ? data["options_set"] : 0;
@@ -26,6 +26,8 @@ chrome.storage.local.get("options_set", function (data){
 			setOption("nomLowestDistCircle", true);
 			setOption("nomAccessDistCircle", true);
 			setOption("revMap2ZoomLevel", -1);
+		case 6:
+			setOption("headProgress", true);
 			setOption("options_set", settingsVersion);
 	}
 });

@@ -200,7 +200,6 @@ function loadStats(){
 
 
     var currentDay = new Date();
-    console.log(unlocks);
     if (unlocks != [0,0,0,0,0,0,0,0,0,0,0,0,0,0]){
         //Start table and create header
         html += "<table><thead><tr><th>Date (Y-M-D)</th><th># of unlocks</th></tr></thead><tbody>";
