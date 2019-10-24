@@ -3,6 +3,14 @@ A Chromium extension to add more functionality to NianticLab's Wayfarer
 
 Changelog
 ---
+1.7.1:
+- More advanced Nominations stat widget. Now displays upcomming dates on which new Nominations will unlock.
+- Google Maps and Itel Map buttons added to Nominations page
+- Progress percentage next to user icon in header added
+- Description in a review can be clicked to google it like the title is by default
+- Lat Long coordinates now displayed above the map on Nominations page
+- Small fixes to the Dark Theme on the Nominations page
+
 1.7:
 - Added reviewing with the keyboard (including numpad). Press the number corresponding to the star rating. Use the arrow keys to naviaget manually between the options. Press enter to submit and to continue to the next review. Use backspace to go back in rejction menus or go home after finishing a review.
 - 20m and 40m circles are now also available for the nominations page
