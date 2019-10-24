@@ -30,7 +30,7 @@ function selectNomination(){
 
     //Add lat long to page
     var locationTitle = document.getElementById("map").parentNode.children[0];
-    locationTitle.innerText += " (" + nomCtrl.currentNomination.lat + ", " + nomCtrl.currentNomination.lng + ")";
+    locationTitle.innerText = "Location (" + nomCtrl.currentNomination.lat + ", " + nomCtrl.currentNomination.lng + "):";
 }
 
 function setStreetView(){ 
