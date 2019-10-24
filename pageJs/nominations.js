@@ -27,6 +27,10 @@ function selectNomination(){
         addAccessDistCircle(nomCtrl.map);
         addAccessDistCircle(SVMap);
     }
+
+    //Add lat long to page
+    var locationTitle = document.getElementById("map").parentNode.children[0];
+    locationTitle.innerText += " (" + nomCtrl.currentNomination.lat + ", " + nomCtrl.currentNomination.lng + ")";
 }
 
 function setStreetView(){ 
@@ -181,7 +185,6 @@ function loadStats(){
             availableNominations--;
 
             unlocks[13-nomAge]++;
-            console.log(nomCtrl.nomList[i].title, nomAge, unlocks);
         }
     }
 
