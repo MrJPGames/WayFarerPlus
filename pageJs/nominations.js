@@ -27,6 +27,32 @@ function selectNomination(){
         addAccessDistCircle(nomCtrl.map);
         addAccessDistCircle(SVMap);
     }
+    if (settings["nomIntelButton"]){
+        addIntelButton();
+    }
+    if (settings["nomGoogleMaps"]){
+        addGoogleMapsButton();
+    }
+
+    //Add lat long to page
+    var locationTitle = document.getElementById("map").parentNode.children[0];
+    locationTitle.innerText = "Location (" + nomCtrl.currentNomination.lat + ", " + nomCtrl.currentNomination.lng + "):";
+}
+
+function addIntelButton(){
+    setMapButtonURL("https://intel.ingress.com/intel?z=17&pll=" + nomCtrl.currentNomination.lat + "," + nomCtrl.currentNomination.lng,
+                    "IIButton");
+}
+
+function addGoogleMapsButton(){
+    setMapButtonURL("https://maps.google.com/maps?q=" + nomCtrl.currentNomination.lat + "," + nomCtrl.currentNomination.lng + "%20(" + encodeURI(nomCtrl.currentNomination.title) + ")",
+                    "gMapButton");
+}
+
+function setMapButtonURL(mapUrl, id){
+    var elem = document.getElementById(id);
+
+    elem.href = mapUrl;
 }
 
 function setStreetView(){ 
@@ -142,7 +168,8 @@ function loadStats(){
     if (settings["accPoGo"])
         availableNominations += 7;
 
-    var oldestRecentNomination = -1;
+
+    var unlocks = [0,0,0,0,0,0,0,0,0,0,0,0,0,0]; // Array that stores the amount of nomination unlocks for every day for the upcomming 14 days
 
     for(var i = 0; i < nomCount; i++){
         //Keep track of basic counting stats
@@ -174,29 +201,43 @@ function loadStats(){
                 break;
         }
 
-        //Available nomination determinations
+        //Available nomination determinations & new unlock date determinations
         var nomAge = daysSince(nomCtrl.nomList[i].day);
         if (nomAge < 14){
             availableNominations--;
 
-            if (nomAge > oldestRecentNomination){
-                oldestRecentNomination = nomAge;
-            }
+            unlocks[13-nomAge]++;
         }
-    }    
-
-    elem.innerHTML = "Total Nominations: " + parseInt(nomCount) +
-                     "<br/>Accepted: " + parseInt(acceptedCount) +
-                     "<br/>Rejected: " + parseInt(deniedCount) +
-                     "<br/>Withdrawn: " + parseInt(withdrawnCount) +
-                     "<br/>Duplicates: " + parseInt(dupeCount) +
-                     "<br/>In Voting: " + parseInt(inVoteCount) + " (" + parseInt(inVoteUpgradeCount) + " upgraded)" +
-                     "<br/>In Queue: " + parseInt(inQueueCount) + " (" + parseInt(inQueueUpgradeCount) + " upgraded)" +
-                     "<br/><br/>Nominations available: " + parseInt(availableNominations);
-
-    if (oldestRecentNomination != -1){
-        elem.innerHTML += "<br/>Day(s) until new nomination unlocks: " + (13-parseInt(oldestRecentNomination));
     }
+
+    var html =  "Total Nominations: " + parseInt(nomCount) +
+                "<br/>Accepted: " + parseInt(acceptedCount) +
+                "<br/>Rejected: " + parseInt(deniedCount) +
+                "<br/>Withdrawn: " + parseInt(withdrawnCount) +
+                "<br/>Duplicates: " + parseInt(dupeCount) +
+                "<br/>In Voting: " + parseInt(inVoteCount) + " (" + parseInt(inVoteUpgradeCount) + " upgraded)" +
+                "<br/>In Queue: " + parseInt(inQueueCount) + " (" + parseInt(inQueueUpgradeCount) + " upgraded)" +
+                "<br/><br/>Nominations available: " + parseInt(availableNominations) +
+                "<br/>Nomination unlocks:";
+
+
+    var currentDay = new Date();
+    if (unlocks != [0,0,0,0,0,0,0,0,0,0,0,0,0,0]){
+        //Start table and create header
+        html += "<table><thead><tr><th>Date (Y-M-D)</th><th># of unlocks</th></tr></thead><tbody>";
+
+        for (var i = 0; i < unlocks.length; i++){
+            if (unlocks[i] != 0){
+                html += "<tr><td>" + currentDay.toISOString().substring(0, 10) + "</td><td>" + unlocks[i] + "</td></tr>";
+            }
+            currentDay.setDate(currentDay.getDate()+1);
+        }
+        //end table
+        html += "</tbody></table>";
+    }
+
+    elem.innerHTML = html;
+
 }
 
 function daysSince(date2){

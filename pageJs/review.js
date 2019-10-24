@@ -55,7 +55,20 @@ function setupPage(){
 			colCode = "DF471C";
 		if (settings["revKeyboard"])
 			initKeyboardControls();
+
+		addDescriptionLink();
 	}
+}
+
+function addDescriptionLink(){
+	var description = document.getElementsByClassName("title-description")[1];
+
+	var linkElem = document.createElement("a");
+	linkElem.href = "http://www.google.com/search?q=" + encodeURI(nSubCtrl.pageData.description);
+	linkElem.setAttribute("target", "_BLANK");
+
+	linkElem.appendChild(description.cloneNode(true));
+	description.parentNode.replaceChild(linkElem, description);
 }
 
 function zoomMap2(){

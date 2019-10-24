@@ -1,3 +1,21 @@
+.customMapButton{
+    display: inline-block;
+    background: white;
+    padding: 5pt;
+    border-radius: 3pt;
+    position: relative;
+    margin: 5pt;
+    color: black;
+    box-shadow: 2pt 2pt 3pt grey;
+    transition: box-shadow 0.2s;
+}
+
+.customMapButton:hover{
+	background-color: #F0F0F0;
+	color: black;
+    box-shadow: 1pt 1pt 3pt grey;
+}
+
 .wrap-collabsible {
   margin-bottom: 1.2rem 0;
   float: right;
@@ -56,7 +74,7 @@
 }
 
 .toggle:checked + .lbl-toggle + .collapsible-content {
-  max-height: 350px;
+  max-height: 9999999pt;
 }
 
 .toggle:checked + .lbl-toggle {
@@ -72,4 +90,13 @@
   border-bottom-left-radius: 7px;
   border-bottom-right-radius: 7px;
   padding: .5rem 1rem;
+}
+
+.content-inner td:last-child{
+	text-align: right;
+}
+
+th, td{
+	border: white solid 1pt;
+	padding: 1pt 5pt;
 }

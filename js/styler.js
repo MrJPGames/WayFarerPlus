@@ -34,7 +34,7 @@ function applyPublicStyle(){
         55% {background: rgba(255,255,255,.2); filter: blur(6px); } \
     } \
     .niantic-loader__shadow {animation: shadow2 2.2s ease-in-out infinite !important;} \
-    .nomination-status--next-upgrade, .nomination-status--upgrade {color: #6200EE !important;} \
+    .nomination-status--accepted {color: #0F0F0F !important;} \
     p {color: #C0C0C0 !important;} \
     #WhatIsItController .categories-display .categories-display-result::before {filter: invert() !important;} \
     #WhatIsItController .categories-display .categories-display-result {color: white !important;} \
