@@ -27,10 +27,39 @@ function selectNomination(){
         addAccessDistCircle(nomCtrl.map);
         addAccessDistCircle(SVMap);
     }
+    if (settings["nomIntelButton"]){
+        addIntelButton();
+    }
+    if (settings["nomGoogleMaps"]){
+        addGoogleMapsButton();
+    }
 
     //Add lat long to page
     var locationTitle = document.getElementById("map").parentNode.children[0];
     locationTitle.innerText = "Location (" + nomCtrl.currentNomination.lat + ", " + nomCtrl.currentNomination.lng + "):";
+}
+
+function addIntelButton(){
+    addMapButton("https://intel.ingress.com/intel?z=17&pll=" + nomCtrl.currentNomination.lat + "," + nomCtrl.currentNomination.lng,
+                 "Open in Intel");
+}
+
+function addGoogleMapsButton(){
+    addMapButton("https://maps.google.com/maps?q=" + nomCtrl.currentNomination.lat + "," + nomCtrl.currentNomination.lng + "%20(" + encodeURI(nomCtrl.currentNomination.title) + ")",
+                 "Open in Google Maps");
+}
+
+function addMapButton(mapUrl, text){
+    console.log(mapUrl, text);
+    var mapElem = document.getElementById("map");
+
+    var button = document.createElement("a");
+    button.setAttribute("class", "customMapButton");
+    button.setAttribute("target", "_BLANK");
+    button.href = mapUrl;
+    button.innerText = text;
+
+    mapElem.parentNode.insertBefore(button, mapElem.nextSibling);
 }
 
 function setStreetView(){ 

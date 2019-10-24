@@ -28,6 +28,8 @@ chrome.storage.local.get("options_set", function (data){
 			setOption("revMap2ZoomLevel", -1);
 		case 6:
 			setOption("headProgress", true);
+			setOption("nomIntelButton", true);
+			setOption("nomGoogleMaps", true);
 			setOption("options_set", settingsVersion);
 	}
 });
