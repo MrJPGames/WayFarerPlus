@@ -76,10 +76,7 @@ function addGoogleMapsButton(){
 }
 
 function addMapButton(mapUrl, text, buttonID){
-    var cardFooterElems = document.getElementsByClassName("card__footer");
-    var cardFooterElem = cardFooterElems[cardFooterElems.length-1];
-
-
+	//Create button
     var button = document.createElement("a");
     button.setAttribute("class", "customMapButton");
     button.setAttribute("target", "_BLANK");
@@ -87,7 +84,18 @@ function addMapButton(mapUrl, text, buttonID){
     button.href = mapUrl;
     button.innerText = text;
 
-    cardFooterElem.insertBefore(button, cardFooterElem.children[0]);
+    //Add elem to page
+    switch (nSubCtrl.reviewType){
+    	case "NEW":
+		    var cardFooterElems = document.getElementsByClassName("card__footer");
+		    var cardFooterElem = cardFooterElems[cardFooterElems.length-1];
+		    cardFooterElem.insertBefore(button, cardFooterElem.children[0]);
+		    break;
+		case "EDIT":
+			var mapCard = document.getElementsByClassName("map-edit-card")[0];
+			mapCard.children[1].setAttribute("style", "display: block;");
+			mapCard.children[1].insertBefore(button, mapCard.children[1].children[2]);
+	}
 }
 
 
