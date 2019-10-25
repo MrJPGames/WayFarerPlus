@@ -34,23 +34,23 @@ function init(){
 	var profileStats = document.getElementById("profile-stats");
 	profileStats.insertBefore(agreementStatElem, profileStats.children[1]);
 
-	//Segment for "Edit Agreements"
-	var nonEditAgreements = parseInt(profileStats.children[2].children[1].innerText) + parseInt(profileStats.children[3].children[1].innerText);
+	//Segment for "Other Agreements"
+	var normalAgreements = parseInt(profileStats.children[2].children[1].innerText) + parseInt(profileStats.children[3].children[1].innerText);
 
-	var editAgreements = agreementTotal - nonEditAgreements;
+	var otherAgreements = agreementTotal - normalAgreements;
 
-	var editAgreementsElem = document.createElement("h4");
+	var otherAgreementsElem = document.createElement("h4");
 
-	var editAgreementStatLeft = document.createElement("span");
-	editAgreementStatLeft.setAttribute("class", "stats-left");
-	var editAgreementStatRight = document.createElement("span");
-	editAgreementStatRight.setAttribute("class", "stats-right");
+	var otherAgreementStatLeft = document.createElement("span");
+	otherAgreementStatLeft.setAttribute("class", "stats-left");
+	var otherAgreementStatRight = document.createElement("span");
+	otherAgreementStatRight.setAttribute("class", "stats-right");
 
-	editAgreementStatLeft.innerHTML = "Edit Agreements";
-	editAgreementStatRight.innerText = editAgreements;
+	otherAgreementStatLeft.innerHTML = "Other Agreements";
+	otherAgreementStatRight.innerText = otherAgreements;
 
-	editAgreementsElem.appendChild(editAgreementStatLeft);
-	editAgreementsElem.appendChild(editAgreementStatRight);
+	otherAgreementsElem.appendChild(otherAgreementStatLeft);
+	otherAgreementsElem.appendChild(otherAgreementStatRight);
 
-	profileStats.insertBefore(editAgreementsElem, profileStats.children[2]);
+	profileStats.insertBefore(otherAgreementsElem, profileStats.children[4]);
 }
