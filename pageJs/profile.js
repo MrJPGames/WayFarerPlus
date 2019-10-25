@@ -41,16 +41,16 @@ function init(){
 
 	var otherAgreementsElem = document.createElement("h4");
 
-	var otherAgreementsElem = document.createElement("span");
-	otherAgreementsElem.setAttribute("class", "stats-left");
+	var otherAgreementStatLeft = document.createElement("span");
+	otherAgreementStatLeft.setAttribute("class", "stats-left");
 	var otherAgreementStatRight = document.createElement("span");
 	otherAgreementStatRight.setAttribute("class", "stats-right");
 
-	otherAgreementsElem.innerHTML = "Other Agreements";
+	otherAgreementStatLeft.innerHTML = "Other Agreements";
 	otherAgreementStatRight.innerText = otherAgreements;
 
-	otherAgreementsElem.appendChild(otherAgreementsElem);
+	otherAgreementsElem.appendChild(otherAgreementStatLeft);
 	otherAgreementsElem.appendChild(otherAgreementStatRight);
 
-	profileStats.insertBefore(otherAgreementsElem, profileStats.children[2]);
+	profileStats.insertBefore(otherAgreementsElem, profileStats.children[4]);
 }
