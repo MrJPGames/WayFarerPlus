@@ -3,6 +3,10 @@ A Chromium extension to add more functionality to NianticLab's Wayfarer
 
 Changelog
 ---
+1.7.2
+- Map buttons are now an option for the review page as well
+- Edit agreements on profile has been changed to Other agreements as my assumtions seem to have been wrong, and there is no clear origin for these agreements.
+
 1.7.1:
 - More advanced Nominations stat widget. Now displays upcomming dates on which new Nominations will unlock.
 - Google Maps and Itel Map buttons added to Nominations page
