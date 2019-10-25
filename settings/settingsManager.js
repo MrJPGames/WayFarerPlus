@@ -1,5 +1,5 @@
 //Sets up default settings on first launch or upgrade
-var settingsVersion = 7;
+var settingsVersion = 8;
 
 chrome.storage.local.get("options_set", function (data){
 	var opt_ver = (data["options_set"] != undefined) ? data["options_set"] : 0;
@@ -12,8 +12,8 @@ chrome.storage.local.get("options_set", function (data){
 		case 1:
 			setOption("nomStats", true);
 		case 2:
-			setOption("accPoGo", false);
-			setOption("accIngress", true);
+			setOption("accPoGo", true);
+			setOption("accIngress", false);
 		case 3:
 			setOption("revTranslate", true);
 			setOption("profExtendedStats", true);
@@ -30,6 +30,9 @@ chrome.storage.local.get("options_set", function (data){
 			setOption("headProgress", true);
 			setOption("nomIntelButton", true);
 			setOption("nomGoogleMaps", true);
+		case 7:
+			setOption("revIntelButton", true);
+			setOption("revGoogleMaps", true);
 			setOption("options_set", settingsVersion);
 	}
 });

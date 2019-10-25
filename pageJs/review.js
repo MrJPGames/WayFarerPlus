@@ -56,9 +56,40 @@ function setupPage(){
 		if (settings["revKeyboard"])
 			initKeyboardControls();
 
+		if (settings["revGoogleMaps"])
+			addGoogleMapsButton();
+		if (settings["revIntelButton"])
+			addIntelButton();
+
 		addDescriptionLink();
 	}
 }
+
+function addIntelButton(){
+    addMapButton("https://intel.ingress.com/intel?z=17&pll=" + nSubCtrl.pageData.lat + "," + nSubCtrl.pageData.lng,
+                 "Open in Intel");
+}
+
+function addGoogleMapsButton(){
+    addMapButton("https://maps.google.com/maps?q=" + nSubCtrl.pageData.lat + "," + nSubCtrl.pageData.lng + "%20(" + encodeURI(nSubCtrl.pageData.title) + ")",
+                 "Open in Google Maps");
+}
+
+function addMapButton(mapUrl, text, buttonID){
+    var cardFooterElems = document.getElementsByClassName("card__footer");
+    var cardFooterElem = cardFooterElems[cardFooterElems.length-1];
+
+
+    var button = document.createElement("a");
+    button.setAttribute("class", "customMapButton");
+    button.setAttribute("target", "_BLANK");
+    button.setAttribute("id", buttonID);
+    button.href = mapUrl;
+    button.innerText = text;
+
+    cardFooterElem.insertBefore(button, cardFooterElem.children[0]);
+}
+
 
 function addDescriptionLink(){
 	var description = document.getElementsByClassName("title-description")[1];
