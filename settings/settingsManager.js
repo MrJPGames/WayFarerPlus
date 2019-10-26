@@ -1,5 +1,5 @@
 //Sets up default settings on first launch or upgrade
-var settingsVersion = 8;
+var settingsVersion = 9;
 
 chrome.storage.local.get("options_set", function (data){
 	var opt_ver = (data["options_set"] != undefined) ? data["options_set"] : 0;
@@ -33,6 +33,9 @@ chrome.storage.local.get("options_set", function (data){
 		case 7:
 			setOption("revIntelButton", true);
 			setOption("revGoogleMaps", true);
+		case 8:
+			setOption("nomS2Cell", 17);
+			setOption("revS2Cell", 17);
 			setOption("options_set", settingsVersion);
 	}
 });

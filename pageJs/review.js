@@ -61,8 +61,47 @@ function setupPage(){
 		if (settings["revIntelButton"])
 			addIntelButton();
 
+	    if (settings["revS2Cell"] != -1){
+		    var lat = nSubCtrl.pageData.lat;
+		    var lng = nSubCtrl.pageData.lng;
+
+	        addS2(nSubCtrl.map, lat, lng, settings["revS2Cell"]);
+	        addS2(nSubCtrl.map2, lat, lng, settings["revS2Cell"]);
+	        hookS2LocEdit();
+	    }
+
 		addDescriptionLink();
 	}
+}
+
+
+function addS2(map, lat, lng, lvl){
+    var cell = window.S2.S2Cell.FromLatLng({lat: lat, lng: lng}, lvl);
+
+    var cellCorners = cell.getCornerLatLngs();
+    cellCorners[4] = cellCorners[0]; //Loop it
+
+    var polyline = new google.maps.Polyline({
+        path: cellCorners,
+        geodesic: true,
+        fillColor: 'grey',
+        fillOpacity: 0.2,
+        strokeColor: '#00FF00',
+        strokeOpacity: 1.0,
+        strokeWeight: 1,
+        map: map
+    });
+}
+
+function hookS2LocEdit(){
+	if (nSubDS.getNewLocationMarker() == undefined || nSubDS.getNewLocationMarker().position ==  null){
+		setTimeout(hookS2LocEdit, 200);
+		return;
+	}
+	google.maps.event.addListener(nSubDS.getNewLocationMarker(), 'dragend', function () {
+		var pos = nSubDS.getNewLocationMarker().position;
+    	addS2(nSubCtrl.map2, pos.lat(), pos.lng(), settings["revS2Cell"]);
+    });
 }
 
 function addIntelButton(){
@@ -269,6 +308,8 @@ function hookResetMapFuncs(){
 			addAccessDistCircle(nSubCtrl.map2, true);
 		if (settings["revMap2ZoomLevel"] != -1)
 			zoomMap2();
+		if (settings["revS2Cell"] != -1)
+			addS2(nSubCtrl.map2, settings["revS2Cell"]);
     }
 }
 
