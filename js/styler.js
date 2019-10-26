@@ -58,9 +58,11 @@ function applyPublicStyle(){
     .nomination-status--accepted { background: #00c853; border: #FFF 1px solid; }
     .nomination-status--duplicate, .nomination-status--rejected, .nomination-status--withdrawn { background: #d50000; border: #FFF 1px solid; }
     .nomination-status--upgrade, .nomination-status--next-upgrade { background: #aa00ff; border: #FFF 1px solid; }
+    .card, .card-style {border: 1pt solid white; box-shadow: none;}
+    .nomination.card {border: none; border-bottom: 1pt solid white;}
 	`;
 
-	
+
 
 	var style=document.createElement('style');
 	style.type='text/css';
