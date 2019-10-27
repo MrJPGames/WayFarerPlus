@@ -105,7 +105,7 @@ function hookS2LocEdit(){
 }
 
 function addIntelButton(){
-    addMapButton("https://intel.ingress.com/intel?z=17&pll=" + nSubCtrl.pageData.lat + "," + nSubCtrl.pageData.lng,
+    addMapButton("https://intel.ingress.com/intel?z=17&ll=" + nSubCtrl.pageData.lat + "," + nSubCtrl.pageData.lng,
                  "Open in Intel");
 }
 
