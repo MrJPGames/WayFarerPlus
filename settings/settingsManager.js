@@ -36,6 +36,8 @@ chrome.storage.local.get("options_set", function (data){
 		case 8:
 			setOption("nomS2Cell", 17);
 			setOption("revS2Cell", 17);
+			setOption("revLowRes", true);
+			setOption("revNoTaskDesc", false);
 			setOption("options_set", settingsVersion);
 	}
 });

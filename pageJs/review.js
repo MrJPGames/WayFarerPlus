@@ -70,8 +70,80 @@ function setupPage(){
 	        hookS2LocEdit();
 	    }
 
+	    if (settings["revLowRes"])
+	    	setupLowRes();
+	    if (settings["revNoTaskDesc"] || settings["revLowRes"])
+	    	removeRedundantDescriptions();
+
 		addDescriptionLink();
 	}
+}
+
+function removeRedundantDescriptions() {
+    for (var i = document.getElementsByClassName('card-header__description').length - 1; i >= 0; i--) {
+        document.getElementsByClassName('card-header__description')[i].remove();
+    }
+}
+
+function setupLowRes() {
+	const divNames = {shouldBePortal: "photo-card", titleAndDescription: "descriptionDiv", historicOrCultural: "histcult-card", visuallyUnique: "uniqueness-card", safeAccess: "safety-card", location: "map-card"};
+
+	//TODO: replace with interaction with nSubCtrl.loaded and nSubCtrl.hasSupportingImageOrStatement
+	setTimeout(function () {
+        if (document.getElementById("supporting-card").classList.contains("ng-hide")) {
+            document.getElementById("supporting-card").classList.remove("ng-hide");
+            document.getElementById("supporting-card").getElementsByClassName("supporting-statement-central-field")[0].remove();
+            document.getElementById("supporting-card").getElementsByClassName("supporting-image")[0].remove();
+            document.getElementById("supporting-card").getElementsByClassName("card__body")[0].innerHTML = '<h4 class="ng-binding">This nomination was made using Scanner [REDACTED], which means that no Support Photo or Support Text were given.</h4>';
+        }
+    }, 1500);
+
+    var fragment = document.createDocumentFragment();
+    fragment.appendChild(document.getElementById(divNames.titleAndDescription));
+    document.getElementById('three-card-container').appendChild(fragment);
+    document.getElementById(divNames.titleAndDescription).classList.remove("card--expand");
+    document.getElementById(divNames.titleAndDescription).classList.add("small-card");
+    document.getElementById(divNames.titleAndDescription).style.height = "193pt";
+    document.getElementById(divNames.titleAndDescription).getElementsByClassName('card__body')[0].style.paddingTop = "0pt";
+    document.getElementById(divNames.titleAndDescription).getElementsByTagName("h1")[0].style.fontSize = "26pt";
+    document.getElementById(divNames.titleAndDescription).getElementsByTagName("h4")[1].style.fontSize = "16pt";
+    document.getElementById(divNames.historicOrCultural).classList.add("middle-card");
+    document.getElementById(divNames.visuallyUnique).classList.remove("middle-card");
+    document.getElementById(divNames.safeAccess).classList.add("middle-card");
+
+    document.getElementById(divNames.historicOrCultural).getElementsByClassName('card-header__title')[0].style.padding = "0pt";
+    document.getElementById(divNames.historicOrCultural).getElementsByClassName('card-header__title')[0].style.margin = "2pt 0pt -1pt";
+    document.getElementById(divNames.historicOrCultural).getElementsByClassName('card-header')[0].style.marginBottom = "-25pt";
+    document.getElementById(divNames.visuallyUnique).getElementsByClassName('card-header__title')[0].style.padding = "0pt";
+    document.getElementById(divNames.visuallyUnique).getElementsByClassName('card-header__title')[0].style.margin = "2pt 0pt -1pt";
+    document.getElementById(divNames.visuallyUnique).getElementsByClassName('card-header')[0].style.marginBottom = "-25pt";
+    document.getElementById(divNames.safeAccess).getElementsByClassName('card-header__title')[0].style.padding = "0pt";
+    document.getElementById(divNames.safeAccess).getElementsByClassName('card-header__title')[0].style.margin = "2pt 0pt -1pt";
+    document.getElementById(divNames.safeAccess).getElementsByClassName('card-header')[0].style.marginBottom = "-25pt";
+
+    document.getElementById(divNames.historicOrCultural).getElementsByClassName("card-header__title")[0].innerHTML = "Historic/Cultural";
+
+    document.getElementById("duplicates-card").classList.remove("card--double-width");
+    document.getElementById("duplicates-card").classList.add("card--expand");
+    document.getElementById("duplicates-card").style.order = 4;
+
+    document.getElementById(divNames.location).classList.remove("card--double-width");
+    document.getElementById(divNames.location).classList.add("card--expand");
+    document.getElementById(divNames.location).style.order = 6;
+
+    document.getElementById("three-card-container").style.order = 2;
+    document.getElementById(divNames.titleAndDescription).style.order = 1;
+    document.getElementById(divNames.historicOrCultural).style.order = 2;
+    document.getElementById(divNames.visuallyUnique).style.order = 3;
+    document.getElementById(divNames.safeAccess).style.order = 4;
+
+    document.getElementById("what-is-it-card").remove();
+    document.getElementsByClassName("what-is-it-card")[0].remove();
+    document.getElementById("additional-comments-card").remove();
+    document.getElementsByClassName("comments-card")[0].remove();
+
+    removeRedundantDescriptions();
+
 }
 
 
