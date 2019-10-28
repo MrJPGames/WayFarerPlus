@@ -81,7 +81,21 @@ function setupPage(){
 	    	addOrigLocation(nSubCtrl.locationEditsMap);
 
 		addDescriptionLink();
+		filmStripScroll();
 	}
+}
+
+function filmStripScroll(){
+	//Make film strip (duplicates) scrollable
+	var filmStripElem = document.getElementById("map-filmstrip");
+
+	function horizontalScroll(e){
+		filmStripElem.scrollLeft += e.deltaY;
+		e.preventDefault(); //Stop regular scroll
+	}
+
+	//Hook function to scroll event in filmstrip
+	filmStripElem.addEventListener("wheel", horizontalScroll, false);
 }
 
 function addOrigLocation(gMap){
