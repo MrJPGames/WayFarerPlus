@@ -8,6 +8,7 @@ var revPos = 0;
 var revFields = [];
 var starButtons = [];
 var inReject = false;
+var inDuplicate = false;
 var maxRevPos = 5;
 var colCode = "20B8E3";
 var rejectComplete = false;
@@ -82,6 +83,8 @@ function setupPage(){
 
 		addDescriptionLink();
 		filmStripScroll();
+		//Auto select first possible duplicate
+		nSubCtrl.displayLivePortal(0);
 	}
 }
 
@@ -298,13 +301,15 @@ function keyDownEvent(e){
 		return;
 	}
 
+	console.log(e.keyCode);
+
 	if (ansCtrl.reviewComplete){
 		if (e.keyCode == 13) //Enter Key
 			ansCtrl.reloadPage();
 		if (e.keyCode == 8) //Backspace
 			window.location.href = "/";
 	}else{
-		if (!inReject){
+		if (!inReject && !inDuplicate){
 			if (e.keyCode == 37 || e.keyCode == 8){ //Left arrow key or backspace
 				changeRevPos(-1);
 			}else if (e.keyCode == 39){ //Right arrow key
@@ -318,6 +323,27 @@ function keyDownEvent(e){
 			}else if (e.keyCode == 13){ //Enter key
 				if (ansCtrl.readyToSubmit())
 					ansCtrl.submitForm();
+			}else if (e.keyCode == 68){ // D key
+				document.getElementById("markDuplicateButton").click();
+				inDuplicate = true;
+
+				//Hook on close (including with mouse)
+				var elem = document.getElementsByClassName("modal-dialog modal-med")[0].children[0].children[0];
+				var ansCtrl2 = angular.element(elem).scope().answerCtrl2;
+				var func = ansCtrl2.resetDuplicate;
+				ansCtrl2.resetDuplicate = function(){
+					inDuplicate = false;
+					func();
+				}
+			}
+		}else if (inDuplicate){
+			var elem = document.getElementsByClassName("modal-dialog modal-med")[0].children[0].children[0];
+			var ansCtrl2 = angular.element(elem).scope().answerCtrl2;
+			if (e.keyCode == 8){
+				ansCtrl2.resetDuplicate();
+			}else if (e.keyCode == 13){
+				ansCtrl2.confirmDuplicate();
+				ansCtrl.reviewComplete = true;
 			}
 		}else{
 			//In rejection
