@@ -1,10 +1,10 @@
 .translateButton{
-	border: 3pt solid white;
+    border: 2pt solid white;
     border-radius: 2pt;
-    width: 30pt;
+    width: 17pt;
     background-color: white;
     display: block;
-    height: 30pt;
+    height: 17pt;
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
