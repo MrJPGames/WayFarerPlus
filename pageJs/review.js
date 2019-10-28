@@ -27,6 +27,11 @@ function setupPage(){
 		console.log("[WayFarer+] AnswersController was hooked to ansCtrl")
 		//Do page setup
 		angular.element(document.getElementsByTagName("html")[0]).injector().invoke(["NewSubmissionDataService", function (nSF) {nSubDS = nSF;}]);
+		if (!settings["darkMode"])
+			colCode = "DF471C";
+		if (settings["revKeyboard"])
+			initKeyboardControls();
+
 		if (settings["revExpireTimer"])
 			updateTimer();
 		if (nSubCtrl.reviewType == "NEW")
@@ -50,11 +55,6 @@ function setupPage(){
 			mapsRemoveCtrlToZoom();
 		if (settings["revMap2ZoomLevel"] != -1)
 			zoomMap2();
-
-		if (!settings["darkMode"])
-			colCode = "DF471C";
-		if (settings["revKeyboard"])
-			initKeyboardControls();
 
 		if (settings["revGoogleMaps"])
 			addGoogleMapsButton();
@@ -191,7 +191,7 @@ function hookS2LocEdit(){
 
 function addIntelButton(){
 	var latLng = nSubCtrl.pageData.lat + "," + nSubCtrl.pageData.lng;
-    addMapButton("https://intel.ingress.com/intel?z=17&pll=" + latLng + "&ll=" + latLng,
+    addMapButton("https://intel.ingress.com/intel?z=18&pll=" + latLng + "&ll=" + latLng,
                  "Open in Intel");
 }
 
@@ -217,9 +217,9 @@ function addMapButton(mapUrl, text, buttonID){
 		    cardFooterElem.insertBefore(button, cardFooterElem.children[0]);
 		    break;
 		case "EDIT":
-			var mapCard = document.getElementsByClassName("map-edit-card")[0];
-			mapCard.children[1].setAttribute("style", "display: block;");
-			mapCard.children[1].insertBefore(button, mapCard.children[1].children[2]);
+			var infoCard = document.getElementsByClassName("known-information-card")[0];
+			infoCard.style.display = "inline-block";
+			infoCard.appendChild(button);
 	}
 }
 

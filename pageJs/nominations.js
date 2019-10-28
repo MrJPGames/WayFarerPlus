@@ -63,7 +63,7 @@ function addS2(map, lvl){
 }
 
 function addIntelButton(){
-    setMapButtonURL("https://intel.ingress.com/intel?z=17&ll=" + nomCtrl.currentNomination.lat + "," + nomCtrl.currentNomination.lng,
+    setMapButtonURL("https://intel.ingress.com/intel?z=18&ll=" + nomCtrl.currentNomination.lat + "," + nomCtrl.currentNomination.lng,
                     "IIButton");
 }
 
