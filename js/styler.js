@@ -60,6 +60,13 @@ function applyPublicStyle(){
     .nomination-status--upgrade, .nomination-status--next-upgrade { background: #aa00ff; border: #FFF 1px solid; }
     .card, .card-style {border: 1pt solid white; box-shadow: none;}
     .nomination.card {border: none; border-bottom: 1pt solid white;}
+    #SettingsController .settings-content .settings-item .item-edit {filter: invert();}
+    #SettingsController h3 .breadcrumb {color: black;}
+    #SettingsController .settings-subpage .map-input-container .text-input {background: #0F0F0F;}
+    .dropdown #simple-dropdown {color: white; background: #0F0F0F;}
+    .dropdown .dropdown-menu li {background: #0F0F0F; color: white;}
+    .dropdown .dropdown-menu li:hover {background: #090909;}
+
 	`;
 
 
