@@ -38,6 +38,7 @@ chrome.storage.local.get("options_set", function (data){
 			setOption("revS2Cell", 17);
 			setOption("revLowRes", true);
 			setOption("revNoTaskDesc", false);
+			setOption("revEditOrigLoc", true);
 			setOption("options_set", settingsVersion);
 	}
 });

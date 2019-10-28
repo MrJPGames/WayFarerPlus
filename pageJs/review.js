@@ -67,6 +67,8 @@ function setupPage(){
 
 	        addS2(nSubCtrl.map, lat, lng, settings["revS2Cell"]);
 	        addS2(nSubCtrl.map2, lat, lng, settings["revS2Cell"]);
+	        if (ansCtrl.needsLocationEdit)
+	        	addS2(nSubCtrl.locationEditsMap, lat, lng, settings["revS2Cell"]);
 	        hookS2LocEdit();
 	    }
 
@@ -75,8 +77,20 @@ function setupPage(){
 	    if (settings["revNoTaskDesc"] || settings["revLowRes"])
 	    	removeRedundantDescriptions();
 
+	    if (settings["revEditOrigLoc"] && ansCtrl.needsLocationEdit)
+	    	addOrigLocation(nSubCtrl.locationEditsMap);
+
 		addDescriptionLink();
 	}
+}
+
+function addOrigLocation(gMap){
+	var latLng = new google.maps.LatLng(nSubCtrl.pageData.lat, nSubCtrl.pageData.lng);
+	var m = new google.maps.Marker({
+        map: gMap,
+        position: latLng,
+        zIndex: 100
+  	});
 }
 
 function removeRedundantDescriptions() {
@@ -146,7 +160,6 @@ function setupLowRes() {
 
 }
 
-
 function addS2(map, lat, lng, lvl){
     var cell = window.S2.S2Cell.FromLatLng({lat: lat, lng: lng}, lvl);
 
@@ -177,7 +190,8 @@ function hookS2LocEdit(){
 }
 
 function addIntelButton(){
-    addMapButton("https://intel.ingress.com/intel?z=17&ll=" + nSubCtrl.pageData.lat + "," + nSubCtrl.pageData.lng,
+	var latLng = nSubCtrl.pageData.lat + "," + nSubCtrl.pageData.lng;
+    addMapButton("https://intel.ingress.com/intel?z=17&pll=" + latLng + "&ll=" + latLng,
                  "Open in Intel");
 }
 
