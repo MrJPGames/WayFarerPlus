@@ -22,6 +22,7 @@
 		<div class="switch">
 			<input type="checkbox" class="switch__input" id="ctrlessZoom" />
 			<label for="ctrlessZoom" class="switch__label">Ctrl-less zooming</label>
+			<img title="No longer required to hold the Ctrl key to zoom in and out on maps. Might cause some issues scrolling on pages with maps." src="../assets/help.svg"/>
 		</div>
 		<h2>Review:</h2>
 		<div class="switch">
@@ -29,32 +30,58 @@
 			<label for="revKeyboard" class="switch__label">Review using keyboard</label>
 		</div><br/>
 		<div class="switch">
+			<input type="checkbox" class="switch__input" id="revLowRes" />
+			<label for="revLowRes" class="switch__label">Compact Card View</label>
+			<img title="This optimizes the card view to show more info at once. Especially useful on lower resolution or with high scalling settings." src="../assets/help.svg"/>
+		</div><br/>
+		<div class="switch">
 			<input type="checkbox" class="switch__input" id="revExpireTimer" />
 			<label for="revExpireTimer" class="switch__label">Expire timer</label>
+			<img title="Displays the amount of time left before you can no longer submit your review for a Wayspot" src="../assets/help.svg"/>
 		</div><br/>
 		<div class="switch">
 			<input type="checkbox" class="switch__input" id="revTranslate" />
 			<label for="revTranslate" class="switch__label">Translation buttons</label>
 		</div><br/>
 		<div class="switch">
-			<input type="checkbox" class="switch__input" id="nomIntelButton" />
+			<input type="checkbox" class="switch__input" id="revIntelButton" />
 			<label for="revIntelButton" class="switch__label">Open in Intel button</label>
 		</div><br/>
 		<div class="switch">
-			<input type="checkbox" class="switch__input" id="nomGoogleMaps" />
+			<input type="checkbox" class="switch__input" id="revGoogleMaps" />
 			<label for="revGoogleMaps" class="switch__label">Open in Google Maps button</label>
 		</div><br/>
 		<div class="switch">
+			<label>S2 Cell Level:</label>
+			<select id="revS2Cell">
+				<option value="-1">No S2 Cell</option>
+				<option value="14">Gym Cell (L14)</option>
+				<option value="15">L15</option>
+				<option value="16">L16</option>
+				<option value="17">Pok&eacute;stop Cell (L17)</option>
+				<option value="18">L18</option>
+				<option value="19">L19</option>
+			</select>
+		</div><br/>
+		<div class="switch">
 			<input type="checkbox" class="switch__input" id="revLowestDistCircle" />
-			<label for="revLowestDistCircle" class="switch__label">20m (too close) cirlce on maps</label>
+			<label for="revLowestDistCircle" class="switch__label">20m cirlce on maps</label>
+			<img title="This indicates the area that cannot contain any other Wayspots. If there is already a Wayspot in this circle the new Wayspot will never appear in any current game." src="../assets/help.svg"/>
 		</div><br/>
 		<div class="switch">
 			<input type="checkbox" class="switch__input" id="revAccessDistCircle" />
-			<label for="revAccessDistCircle" class="switch__label">40m (accesible from) cirlce on maps</label>
+			<label for="revAccessDistCircle" class="switch__label">40m cirlce on maps</label>
+			<img title="Shows the area from which agents, wizards and trainers will be able to access the Wayspot" src="../assets/help.svg"/>
 		</div><br/>
 		<div class="switch">
 			<input type="checkbox" class="switch__input" id="revTooCloseWarn" />
 			<label for="revTooCloseWarn" class="switch__label">Too Close warning for Wayspots</label>
+			<img title="Provides a warning if a Wayspot nomination is too close to other Wayspots to be able to appear in any game. Warning is useful as these are often duplicates of other Wayspots." src="../assets/help.svg"/>
+		</div><br/>
+		<div class="switch">
+			<input type="checkbox" class="switch__input" id="revEditOrigLoc" />
+			<label for="revEditOrigLoc" class="switch__label">Original location highlight (edits)</label>
+			<img title="Highlights the current location during a location edit review." src="../assets/help.svg"/>
 		</div><br/>
 		<div class="switch">
 			<label>Default zoom level "Location Accuracy" map:</label>
@@ -69,6 +96,7 @@
 		<div class="switch">
 			<input type="checkbox" class="switch__input" id="nomStreetView" />
 			<label for="nomStreetView" class="switch__label">StreetView preview</label>
+			<img title="Allows you to see StreetView reviewers will see for your own nominations." src="../assets/help.svg"/>
 		</div><br/>
 		<div class="switch">
 			<input type="checkbox" class="switch__input" id="nomStats" />
@@ -83,17 +111,32 @@
 			<label for="nomGoogleMaps" class="switch__label">Open in Google Maps button</label>
 		</div><br/>
 		<div class="switch">
+			<label>S2 Cell Level:</label>
+			<select id="nomS2Cell">
+				<option value="-1">No S2 Cell</option>
+				<option value="14">Gym Cell (L14)</option>
+				<option value="15">L15</option>
+				<option value="16">L16</option>
+				<option value="17">Pok&eacute;stop Cell (L17)</option>
+				<option value="18">L18</option>
+				<option value="19">L19</option>
+			</select>
+		</div><br/>
+		<div class="switch">
 			<input type="checkbox" class="switch__input" id="nomLowestDistCircle" />
-			<label for="nomLowestDistCircle" class="switch__label">20m (too close) cirlce on maps</label>
+			<label for="nomLowestDistCircle" class="switch__label">20m cirlce on maps</label>
+			<img title="This indicates the area that cannot contain any other Wayspots. If there is already a Wayspot in this circle the new Wayspot will never appear in any current game." src="../assets/help.svg"/>
 		</div><br/>
 		<div class="switch">
 			<input type="checkbox" class="switch__input" id="nomAccessDistCircle" />
-			<label for="nomAccessDistCircle" class="switch__label">40m (accesible from) cirlce on mapsw</label>
+			<label for="nomAccessDistCircle" class="switch__label">40m cirlce on mapsw</label>
+			<img title="Shows the area from which agents, wizards and trainers will be able to access the Wayspot" src="../assets/help.svg"/>
 		</div>
 		<h2>Profile</h2>
 		<div class="switch">
 			<input type="checkbox" class="switch__input" id="profExtendedStats" />
 			<label for="profExtendedStats" class="switch__label">Extended stats</label>
+			<img title="Works based on upgrade stats. If you've gotten agreements that did not count towards your upgrades this option will not work for you!" src="../assets/help.svg"/>
 		</div>
 		<h2>Header</h2>
 		<div class="switch">
@@ -104,10 +147,12 @@
 		<div class="switch">
 			<input type="checkbox" class="switch__input" id="accPoGo" />
 			<label for="accPoGo" class="switch__label">Eligable Pokemon Go L40</label>
+			<img title="Turn this on if you have a Pokemon Go account that has the ability to Nominate Wayspots" src="../assets/help.svg"/>
 		</div><br/>
 		<div class="switch">
 			<input type="checkbox" class="switch__input" id="accIngress" />
 			<label for="accIngress" class="switch__label">Ingress L10+</label>
+			<img title="Turn this on if you have a Ingress account that has the ability to Nominate Wayspots" src="../assets/help.svg"/>
 		</div><br/>
 		<a href="/pages/credits.html" target="_BLANK">Credits</a>
 	</div>

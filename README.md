@@ -3,6 +3,19 @@ A Chromium extension to add more functionality to NianticLab's Wayfarer
 
 Changelog
 ---
+1.8:
+- Added S2 Cell support to Nominations and Review (new and edit)
+- Compact Card View (for low-res devices or better overview on high-res) by @GoncaloCdM
+- Current location is marked during location edit review
+- Map buttons are always present during edit review (including edits with no location edit)
+- Made translation buttons clearer and smaller
+- First option in duplicates is autoselected
+- Duplicates can now be done with keyboard (if it's the autoselected one)
+- Made settings more understandable by adding addition info where possibly needed
+- Duplicate strip can now be scrolled through using the scroll wheel
+- Extended Nomination stats are now more accurate, taking withdrawls into account (which according to niantic should grant you a nomination back if you withdraw it in the 13 day period)
+- Improvements and fixes to Dark Mode
+
 1.7.2
 - Map buttons are now an option for the review page as well
 - Edit agreements on profile has been changed to Other agreements as my assumtions seem to have been wrong, and there is no clear origin for these agreements.

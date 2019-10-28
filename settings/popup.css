@@ -1,11 +1,15 @@
 body, html {
-  margin: 0;
-  padding: 5pt;
-  box-sizing: border-box;
-  font-family: Roboto, sans-serif;
-  width: 100%;
-  background: black;
-  color: white;
+    margin: 0;
+    padding: 5pt;
+    box-sizing: border-box;
+    font-family: Roboto, sans-serif;
+    width: 100%;
+    background: black;
+    color: white;
+}
+
+img{
+    filter: invert();
 }
 
 select{
@@ -44,7 +48,7 @@ select{
   z-index: 0;
 }
 .switch__label {
-  display: block;
+  display: inline-block;
   padding: 0 0 0 44px;
   cursor: pointer;
 }

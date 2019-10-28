@@ -1,5 +1,9 @@
 function modNominationPage(settings){
 	var newScript = document.createElement("script");
+	newScript.src = chrome.extension.getURL("pageJs/libs/S2.js");
+	document.getElementsByTagName("head")[0].appendChild(newScript);
+
+	var newScript = document.createElement("script");
 	newScript.src = chrome.extension.getURL("pageJs/nominations.js");
 	document.getElementsByTagName("head")[0].appendChild(newScript);
 

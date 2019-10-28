@@ -53,4 +53,9 @@ function init(){
 	otherAgreementsElem.appendChild(otherAgreementStatRight);
 
 	profileStats.insertBefore(otherAgreementsElem, profileStats.children[4]);
+
+	//if Ingress agent add recon badge progress to page:
+	if (settings["accIngress"]){
+		const reconBadge = { 100: 'Bronze', 750: 'Silver', 2500: 'Gold', 5000: 'Platin', 10000: 'Black' }
+	}
 }
