@@ -14,6 +14,9 @@ var colCode = "20B8E3";
 var rejectComplete = false;
 var menuPtr = null;
 
+
+	const divNames = {shouldBePortal: "photo-card", titleAndDescription: "descriptionDiv", historicOrCultural: "histcult-card", visuallyUnique: "uniqueness-card", safeAccess: "safety-card", location: "map-card", whatIsIt: "what-is-it-card", additionalComment: "additional-comments-card", locationAccuracy: "map-card"};
+
 setupPage();
 
 function setupPage(){
@@ -117,8 +120,6 @@ function removeRedundantDescriptions() {
 }
 
 function setupLowRes() {
-	const divNames = {shouldBePortal: "photo-card", titleAndDescription: "descriptionDiv", historicOrCultural: "histcult-card", visuallyUnique: "uniqueness-card", safeAccess: "safety-card", location: "map-card", whatIsIt: "what-is-it-card", additionalComment: "additional-comments-card" };
-
 	//TODO: replace with interaction with nSubCtrl.loaded and nSubCtrl.hasSupportingImageOrStatement
 	setTimeout(function () {
         if (document.getElementById("supporting-card").classList.contains("ng-hide")) {
@@ -256,12 +257,23 @@ function zoomMap2(){
 	nSubCtrl.map2.setZoom(newZoomLevel);
 }
 
+//This function initializes the revFields and starButtons variables
+//This stores the different star entries in order of keyboard flow
+//This is done by hand to make visual customizations not change the order when unintended
+function initStars(){
+	revFields[0] = document.getElementById(divNames.shouldBePortal).getElementsByClassName("five-stars")[0];
+	revFields[1] = document.getElementById(divNames.titleAndDescription).getElementsByClassName("five-stars")[0];
+	revFields[2] = document.getElementById(divNames.historicOrCultural).getElementsByClassName("five-stars")[0];
+	revFields[3] = document.getElementById(divNames.visuallyUnique).getElementsByClassName("five-stars")[0];
+	revFields[4] = document.getElementById(divNames.safeAccess).getElementsByClassName("five-stars")[0];
+	revFields[5] = document.getElementById(divNames.locationAccuracy).getElementsByClassName("five-stars")[0];
+}
+
 function initKeyboardControls(){
 	//Register to the key press event
 	document.addEventListener('keydown', keyDownEvent);
 
-	revFields = document.getElementsByClassName("five-stars");
-	starButtons = document.getElementsByClassName("button-star");
+	initStars();
 
 	revFields[0].focus();
 	revFields[0].setAttribute("style", "border-color: #" + colCode + ";");
@@ -299,8 +311,6 @@ function keyDownEvent(e){
 		}
 		return;
 	}
-
-	console.log(e.keyCode);
 
 	if (ansCtrl.reviewComplete){
 		if (e.keyCode == 13) //Enter Key
@@ -401,8 +411,8 @@ function keyDownEvent(e){
 }
 
 function setRating(pos, rate){
-	var buttonPos = pos*5+rate;
-	starButtons[buttonPos].click();
+	starButtons = revFields[pos].getElementsByClassName("button-star");
+	starButtons[rate].click();
 	if (!(rate == 0 && pos == 0))
 		changeRevPos(1);
 }

@@ -229,8 +229,6 @@ function loadStats(){
         if (nomAge < 14 && nomCtrl.nomList[i].status != "WITHDRAWN"){
             availableNominations--;
 
-            console.log(nomCtrl.nomList[i]);
-
             unlocks[13-nomAge]++;
         }
     }
