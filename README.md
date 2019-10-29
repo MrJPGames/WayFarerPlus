@@ -1,8 +1,14 @@
 # WayFarer+
 A Chromium extension to add more functionality to NianticLab's Wayfarer
 
+General discussion, GitHubless bug reporting and feature requests: https://t.me/joinchat/B1ceWQ5xy3wT03gjkq0Few
+
 Changelog
 ---
+1.8.1:
+- Typo fixes by @DragonBallZeke & @tehstone
+- Fixes issues: #21, #27 and #31
+
 1.8:
 - Added S2 Cell support to Nominations and Review (new and edit)
 - Compact Card View (for low-res devices or better overview on high-res) by @GoncaloCdM
