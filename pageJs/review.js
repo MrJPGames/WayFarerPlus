@@ -213,7 +213,7 @@ function addIntelButton(){
 }
 
 function addGoogleMapsButton(){
-    addMapButton("https://maps.google.com/maps?q=" + nSubCtrl.pageData.lat + "," + nSubCtrl.pageData.lng + "%20(" + encodeURI(nSubCtrl.pageData.title) + ")",
+    addMapButton("https://maps.google.com/maps?q=" + nSubCtrl.pageData.lat + "," + nSubCtrl.pageData.lng,
                  "Open in Google Maps");
 }
 
