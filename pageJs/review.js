@@ -117,7 +117,7 @@ function removeRedundantDescriptions() {
 }
 
 function setupLowRes() {
-	const divNames = {shouldBePortal: "photo-card", titleAndDescription: "descriptionDiv", historicOrCultural: "histcult-card", visuallyUnique: "uniqueness-card", safeAccess: "safety-card", location: "map-card"};
+	const divNames = {shouldBePortal: "photo-card", titleAndDescription: "descriptionDiv", historicOrCultural: "histcult-card", visuallyUnique: "uniqueness-card", safeAccess: "safety-card", location: "map-card", whatIsIt: "what-is-it-card", additionalComment: "additional-comments-card" };
 
 	//TODO: replace with interaction with nSubCtrl.loaded and nSubCtrl.hasSupportingImageOrStatement
 	setTimeout(function () {
@@ -167,11 +167,10 @@ function setupLowRes() {
     document.getElementById(divNames.historicOrCultural).style.order = 2;
     document.getElementById(divNames.visuallyUnique).style.order = 3;
     document.getElementById(divNames.safeAccess).style.order = 4;
-
-    document.getElementById("what-is-it-card").remove();
-    document.getElementsByClassName("what-is-it-card")[0].remove();
-    document.getElementById("additional-comments-card").remove();
-    document.getElementsByClassName("comments-card")[0].remove();
+    document.getElementById(divNames.whatIsIt).style.order = 7;
+    document.getElementById(divNames.whatIsIt).style.width = "100%";
+    document.getElementById(divNames.whatIsIt).style.minHeight = "250pt";
+    document.getElementById(divNames.additionalComment).style.width = "100%";
 
     removeRedundantDescriptions();
 
@@ -202,8 +201,8 @@ function hookS2LocEdit(){
 	}
 	google.maps.event.addListener(nSubDS.getNewLocationMarker(), 'dragend', function () {
 		var pos = nSubDS.getNewLocationMarker().position;
-    	addS2(nSubCtrl.map2, pos.lat(), pos.lng(), settings["revS2Cell"]);
-    });
+		addS2(nSubCtrl.map2, pos.lat(), pos.lng(), settings["revS2Cell"]);
+	});
 }
 
 function addIntelButton(){
