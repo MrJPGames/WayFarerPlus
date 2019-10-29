@@ -227,9 +227,9 @@ function loadStats(){
 
         //Available nomination determinations & new unlock date determinations
         var nomAge = daysSince(nomCtrl.nomList[i].day);
-        if (nomAge < 14 && nomCtrl.nomList[i].status != "WITHDRAWN"){
+        if (nomAge < 14){
             availableNominations--;
-
+          
             unlocks[13-nomAge]++;
         }
     }
