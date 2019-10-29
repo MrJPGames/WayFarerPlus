@@ -63,7 +63,8 @@ function addS2(map, lvl){
 }
 
 function addIntelButton(){
-    setMapButtonURL("https://intel.ingress.com/intel?z=18&ll=" + nomCtrl.currentNomination.lat + "," + nomCtrl.currentNomination.lng,
+    var latLng = nomCtrl.currentNomination.lat + "," + nomCtrl.currentNomination.lng;
+    setMapButtonURL("https://intel.ingress.com/intel?z=18&ll=" + latLng + "&pll=" + latLng,
                     "IIButton");
 }
 
@@ -228,7 +229,7 @@ function loadStats(){
         var nomAge = daysSince(nomCtrl.nomList[i].day);
         if (nomAge < 14){
             availableNominations--;
-            
+          
             unlocks[13-nomAge]++;
         }
     }

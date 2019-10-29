@@ -14,6 +14,9 @@ var colCode = "20B8E3";
 var rejectComplete = false;
 var menuPtr = null;
 
+
+	const divNames = {shouldBePortal: "photo-card", titleAndDescription: "descriptionDiv", historicOrCultural: "histcult-card", visuallyUnique: "uniqueness-card", safeAccess: "safety-card", location: "map-card", whatIsIt: "what-is-it-card", additionalComment: "additional-comments-card", locationAccuracy: "map-card"};
+
 setupPage();
 
 function setupPage(){
@@ -138,8 +141,6 @@ function removeRedundantDescriptions() {
 }
 
 function setupLowRes() {
-	const divNames = {shouldBePortal: "photo-card", titleAndDescription: "descriptionDiv", historicOrCultural: "histcult-card", visuallyUnique: "uniqueness-card", safeAccess: "safety-card", location: "map-card"};
-
 	//TODO: replace with interaction with nSubCtrl.loaded and nSubCtrl.hasSupportingImageOrStatement
 	setTimeout(function () {
         if (document.getElementById("supporting-card").classList.contains("ng-hide")) {
@@ -188,11 +189,10 @@ function setupLowRes() {
     document.getElementById(divNames.historicOrCultural).style.order = 2;
     document.getElementById(divNames.visuallyUnique).style.order = 3;
     document.getElementById(divNames.safeAccess).style.order = 4;
-
-    document.getElementById("what-is-it-card").remove();
-    document.getElementsByClassName("what-is-it-card")[0].remove();
-    document.getElementById("additional-comments-card").remove();
-    document.getElementsByClassName("comments-card")[0].remove();
+    document.getElementById(divNames.whatIsIt).style.order = 7;
+    document.getElementById(divNames.whatIsIt).style.width = "100%";
+    document.getElementById(divNames.whatIsIt).style.minHeight = "250pt";
+    document.getElementById(divNames.additionalComment).style.width = "100%";
 
     removeRedundantDescriptions();
 
@@ -223,8 +223,8 @@ function hookS2LocEdit(){
 	}
 	google.maps.event.addListener(nSubDS.getNewLocationMarker(), 'dragend', function () {
 		var pos = nSubDS.getNewLocationMarker().position;
-    	addS2(nSubCtrl.map2, pos.lat(), pos.lng(), settings["revS2Cell"]);
-    });
+		addS2(nSubCtrl.map2, pos.lat(), pos.lng(), settings["revS2Cell"]);
+	});
 }
 
 function addIntelButton(){
@@ -234,7 +234,7 @@ function addIntelButton(){
 }
 
 function addGoogleMapsButton(){
-    addMapButton("https://maps.google.com/maps?q=" + nSubCtrl.pageData.lat + "," + nSubCtrl.pageData.lng + "%20(" + encodeURI(nSubCtrl.pageData.title) + ")",
+    addMapButton("https://maps.google.com/maps?q=" + nSubCtrl.pageData.lat + "," + nSubCtrl.pageData.lng,
                  "Open in Google Maps");
 }
 
@@ -278,12 +278,23 @@ function zoomMap2(){
 	nSubCtrl.map2.setZoom(newZoomLevel);
 }
 
+//This function initializes the revFields and starButtons variables
+//This stores the different star entries in order of keyboard flow
+//This is done by hand to make visual customizations not change the order when unintended
+function initStars(){
+	revFields[0] = document.getElementById(divNames.shouldBePortal).getElementsByClassName("five-stars")[0];
+	revFields[1] = document.getElementById(divNames.titleAndDescription).getElementsByClassName("five-stars")[0];
+	revFields[2] = document.getElementById(divNames.historicOrCultural).getElementsByClassName("five-stars")[0];
+	revFields[3] = document.getElementById(divNames.visuallyUnique).getElementsByClassName("five-stars")[0];
+	revFields[4] = document.getElementById(divNames.safeAccess).getElementsByClassName("five-stars")[0];
+	revFields[5] = document.getElementById(divNames.locationAccuracy).getElementsByClassName("five-stars")[0];
+}
+
 function initKeyboardControls(){
 	//Register to the key press event
 	document.addEventListener('keydown', keyDownEvent);
 
-	revFields = document.getElementsByClassName("five-stars");
-	starButtons = document.getElementsByClassName("button-star");
+	initStars();
 
 	revFields[0].focus();
 	revFields[0].setAttribute("style", "border-color: #" + colCode + ";");
@@ -421,8 +432,8 @@ function keyDownEvent(e){
 }
 
 function setRating(pos, rate){
-	var buttonPos = pos*5+rate;
-	starButtons[buttonPos].click();
+	starButtons = revFields[pos].getElementsByClassName("button-star");
+	starButtons[rate].click();
 	if (!(rate == 0 && pos == 0))
 		changeRevPos(1);
 }
