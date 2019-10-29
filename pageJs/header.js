@@ -7,7 +7,8 @@ function setupHeader(){
 
     var progressElem = document.createElement("div");
     progressElem.innerText = progress + "%";
-    progressElem.setAttribute("style", "color: white;");
+    if (settings["darkMode"])
+    	progressElem.setAttribute("style", "color: white;");
 
     var profileElem = document.getElementsByClassName("inner-container")[1];
 
