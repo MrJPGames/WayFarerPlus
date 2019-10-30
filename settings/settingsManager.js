@@ -1,5 +1,5 @@
 //Sets up default settings on first launch or upgrade
-var settingsVersion = 9;
+var settingsVersion = 10;
 
 chrome.storage.local.get("options_set", function (data){
 	var opt_ver = (data["options_set"] != undefined) ? data["options_set"] : 0;
@@ -36,9 +36,11 @@ chrome.storage.local.get("options_set", function (data){
 		case 8:
 			setOption("nomS2Cell", 17);
 			setOption("revS2Cell", 17);
-			setOption("revLowRes", true);
+			setOption("revLowRes", false);
 			setOption("revNoTaskDesc", false);
 			setOption("revEditOrigLoc", true);
+		case 9:
+			setOption("revHighRes", false);
 			setOption("options_set", settingsVersion);
 	}
 });

@@ -66,9 +66,8 @@ function applyPublicStyle(){
     .dropdown #simple-dropdown {color: white; background: #0F0F0F;}
     .dropdown .dropdown-menu li {background: #0F0F0F; color: white;}
     .dropdown .dropdown-menu li:hover {background: #090909;}
-	.known-information__title>div {color: white;}
-	.known-information__description>div {color: white;}
-	`;
+	  .known-information__title>div {color: white;}
+	  .known-information__description>div {color: white;}`;
 
 
 
