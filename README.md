@@ -5,6 +5,10 @@ General discussion, GitHubless bug reporting and feature requests: https://t.me/
 
 Changelog
 ---
+1.8.2:
+- Cleaned up original location highlight during location edits as per #37
+- Fixed issues caused when using Dark Mode on the recently changes edit review page
+
 1.8.1:
 - Typo fixes by @DragonBallZeke & @tehstone
 - Fixes issues: #21, #27 and #31
