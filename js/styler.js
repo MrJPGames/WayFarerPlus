@@ -65,7 +65,9 @@ function applyPublicStyle(){
     #SettingsController .settings-subpage .map-input-container .text-input {background: #0F0F0F;}
     .dropdown #simple-dropdown {color: white; background: #0F0F0F;}
     .dropdown .dropdown-menu li {background: #0F0F0F; color: white;}
-    .dropdown .dropdown-menu li:hover {background: #090909;}`;
+    .dropdown .dropdown-menu li:hover {background: #090909;}
+	  .known-information__title>div {color: white;}
+	  .known-information__description>div {color: white;}`;
 
 
 

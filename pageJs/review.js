@@ -76,7 +76,7 @@ function setupPage(){
 	        hookS2LocEdit();
 	    }
 
-	    if (settings["revLowRes"])
+	    if (settings["revLowRes"] && nSubCtrl.reviewType == "NEW")
 	    	setupLowRes();
 	    if (settings["revNoTaskDesc"] || settings["revLowRes"] || settings["revHighRes"])
 	    	removeRedundantDescriptions();
@@ -89,7 +89,8 @@ function setupPage(){
 		addDescriptionLink();
 		filmStripScroll();
 		//Auto select first possible duplicate
-		nSubCtrl.displayLivePortal(0);
+		if (nSubCtrl.reviewType == "NEW" && nSubCtrl.activePortals.length > 0)
+			nSubCtrl.displayLivePortal(0);
 	}
 }
 
@@ -126,12 +127,17 @@ function filmStripScroll(){
 }
 
 function addOrigLocation(gMap){
-	var latLng = new google.maps.LatLng(nSubCtrl.pageData.lat, nSubCtrl.pageData.lng);
-	var m = new google.maps.Marker({
-        map: gMap,
-        position: latLng,
-        zIndex: 100
-  	});
+	var oPos = new google.maps.LatLng(nSubCtrl.pageData.lat, nSubCtrl.pageData.lng);
+	
+    var nSubCtrlScope = angular.element(document.getElementById("NewSubmissionController")).scope();
+	var editMarkers = nSubCtrlScope.getAllLocationMarkers();
+    for (var i = 0; i < editMarkers.length; i++){
+    	console.log(editMarkers[i].position.lat(), editMarkers[i].position.lng(), oPos.lat(), oPos.lng(), editMarkers[i].position.lat() == oPos.lat(), editMarkers[i].position.lng() == oPos.lng());
+    	if (editMarkers[i].position.lat() == oPos.lat() && editMarkers[i].position.lng() == oPos.lng()){
+        	editMarkers[i].setIcon(extURL + "assets/custom_map-spot.svg");
+        	console.log(editMarkers[i]);
+    	}
+    }
 }
 
 function removeRedundantDescriptions() {
@@ -474,8 +480,12 @@ function mapsRemoveCtrlToZoom(){
 		scrollwheel: true,
 		gestureHandling: 'greedy'
 	};
-	nSubCtrl.map.setOptions(options);
-	nSubCtrl.map2.setOptions(options);
+	if (nSubCtrl.reviewType == "NEW"){
+		nSubCtrl.map.setOptions(options);
+		nSubCtrl.map2.setOptions(options);
+	}
+	if (nSubCtrl.reviewType == "EDIT")
+		nSubCtrl.locationEditsMap.setOptions(options);
 }
 
 function addLowestDistCircle(gMap, hook = false){ 
