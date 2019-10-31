@@ -6,6 +6,11 @@ General discussion, GitHubless bug reporting and feature requests: https://t.me/
 [![Available for Google Chrome](https://developer.chrome.com/webstore/images/ChromeWebStore_BadgeWBorder_v2_206x58.png)](https://chrome.google.com/webstore/detail/wayfarer%20/fnhddfgebnmokicfdfgcdcdhcmgkeglc)
 [![Available for Firefox](https://addons.cdn.mozilla.net/static/img/addons-buttons/AMO-button_1.png)](https://addons.mozilla.org/en-US/firefox/addon/wayfarerplus/)
 
+Other browser support?
+- Opera's review process is VERY slow. Install via the Google Chrome Web Store instead using "Add to Opera"!
+- Edge will be supported when the Chromium builds become the official stable release
+- Safari is unsupported.
+
 Changelog
 ---
 1.8.2:
