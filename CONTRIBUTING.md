@@ -22,6 +22,8 @@ Issues are where you can report bugs and request features. If you follow these s
 
 Pull Requests:
 --
+Please make sure to always make your Pull requests to the 'dev' branch.
+
 **What will always be accepted:**
 - Correct typo fixes and gramatical corrections
 - Bug fixes
@@ -34,4 +36,5 @@ Pull Requests:
 **What will not be accepted:**
 - Features explicitly declined in Issues or previous PRs
 - Code aesthetics improvements (when not part of a refactor)
+- Any Pull Request made to Master (excluding sync after testing from dev -> master)
 - New bugs ;)
