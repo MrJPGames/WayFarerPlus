@@ -86,6 +86,8 @@ function keyDownEvent(e){
 			}else if (e.keyCode >= 49 && e.keyCode <= 53){ // 1-5 normal
 				var rating = e.keyCode - 49;
 				setRating(revPos, rating);
+			}else if (e.keyCode == 48 || e.keyCode == 96){ //0 normal/Num pad
+				setRating(0,0);
 			}else if (e.keyCode == 13){ //Enter key
 				if (ansCtrl.readyToSubmit())
 					ansCtrl.submitForm();
