@@ -30,10 +30,6 @@
     box-shadow: 1pt 1pt 3pt grey;
 }
 
-#portalReviewTimer {
-	display: inline-block;
-}
-
 .five-stars{
     border: rgba(0,0,0,0) dashed 2pt;
 }

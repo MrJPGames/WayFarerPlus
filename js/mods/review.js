@@ -1,11 +1,6 @@
 function modReviewPage(settings){
-	var newScript = document.createElement("script");
-	newScript.src = chrome.extension.getURL("pageJs/libs/S2.js");
-	document.getElementsByTagName("head")[0].appendChild(newScript);
-
-	var newScript = document.createElement("script");
-	newScript.src = chrome.extension.getURL("pageJs/review.js");
-	document.getElementsByTagName("head")[0].appendChild(newScript);
+	if (settings["revS2Cell"] != -1)
+		addPageJS("libs/S2.js");
 
 	var newCss = document.createElement("link");
 	newCss.setAttribute("rel", "stylesheet");
@@ -13,16 +8,21 @@ function modReviewPage(settings){
 	document.getElementsByTagName("head")[0].appendChild(newCss);
 
 	if (settings["revExpireTimer"]){
-		var header = document.getElementsByClassName("niantic-wayfarer-logo")[0];
-		var headerTimer = document.createElement("div");
-		headerTimer.innerText = "Time remaining: ";
-		headerTimer.setAttribute("style", "display: inline-block; margin-left: 5em;");
-		headerTimer.setAttribute("class", "revExprTimer");
-		var timerDiv = document.createElement("div");
-		timerDiv.id = "portalReviewTimer";
-		headerTimer.appendChild(timerDiv);
-		header.parentNode.appendChild(headerTimer);
+		addPageJS("review/expireTimer.js");
 	}
+
+	if (settings["revLowRes"])
+		addPageJS("review/compactCards.js");
+	if (settings["revGoogleMaps"] || settings["revIntelButton"])
+		addPageJS("review/mapButtons.js");
+	if (settings["revTranslate"])
+		addPageJS("review/translationButtons.js");
+	if (settings["revLowestDistCircle"] || settings["revAccessDistCircle"] || settings["revMap2ZoomLevel"] || settings["revS2Cell"] || settings["revEditOrigLoc"] || settings["ctrlessZoom"] || settings["revMap2ZoomLevel"] != -1)
+		addPageJS("review/mapMods.js");
+	if (settings["revKeyboard"])
+		addPageJS("review/keyboardCtrl.js");
 	
-	console.log("[WayFarer+] Review page mod loaded!");
+	addPageJS("review/main.js");
+
+	console.log("[WayFarer+] Review page injection successful!");
 }
