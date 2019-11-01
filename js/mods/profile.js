@@ -1,7 +1,8 @@
 function modProfilePage(settings){
-	var newScript = document.createElement("script");
-	newScript.src = chrome.extension.getURL("pageJs/profile.js");
-	document.getElementsByTagName("head")[0].appendChild(newScript);
+	if (settings["profExtendedStats"])
+		addPageJS("profile/extendedStats.js");
+	
+	addPageJS("profile/main.js");
 	
 	console.log("[WayFarer+] Profile page mod loaded!");
 }

@@ -1,6 +1,4 @@
-if (settings["headProgress"])
-	setupHeader();
-
+setupHeader();
 function setupHeader(){
     var upgradesProfile = document.getElementById("upgrades-profile-icon");
     var progress = upgradesProfile.getAttribute("value");

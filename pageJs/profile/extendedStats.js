@@ -1,20 +1,4 @@
-var pCtrl;
-
-setupPage();
-
-function setupPage(){
-    pCtrl = angular.element(document.getElementById("ProfileController")).scope().profileCtrl;
-    if (pCtrl == undefined || pCtrl.loaded == false){
-        //Retry until page is loaded far enough to grab nomination controller
-        setTimeout(setupPage, 100);
-    }else{
-        console.log("[WayFarer+] Hooked ProfileController to pCtrl");
-        if (settings["profExtendedStats"])
-        	init();
-    }
-}
-
-function init(){
+function addExtendedStats(){
 	//Segment for "Processed _and_ Agreement stat"
 	var agreementTotal = (pCtrl.rewards.total + pCtrl.rewards.available) * pCtrl.rewards.interval + pCtrl.rewards.progress;
 
@@ -59,3 +43,6 @@ function init(){
 		const reconBadge = { 100: 'Bronze', 750: 'Silver', 2500: 'Gold', 5000: 'Platin', 10000: 'Black' }
 	}
 }
+
+
+document.addEventListener("WFPPCtrlHooked", addExtendedStats, false);
