@@ -36,9 +36,40 @@ function selectNomination(){
     if (settings["nomS2Cell"] != -1)
         addS2(nomCtrl.map, settings["nomS2Cell"]);
 
+    if (settings["accPoGo"] && settings["accIngress"] && settings["nomStats"])
+        updateNomTypeButtons();
+
     //Add lat long to page
     var locationTitle = document.getElementById("map").parentNode.children[0];
     locationTitle.innerText = "Location (" + nomCtrl.currentNomination.lat + ", " + nomCtrl.currentNomination.lng + "):";
+}
+
+function updateNomTypeButtons(){
+    if (localStorage.wfpNominationTypes == undefined){
+        localStorage.wfpNominationTypes = "";
+    }
+    var nomType = JSON.parse(localStorage.wfpNominationTypes)[nomCtrl.currentNomination.id];
+    if (nomType == undefined){
+        document.getElementById("pogo").checked = false;
+        document.getElementById("ingress").checked = false;
+    }else if (nomType == "pogo"){
+        document.getElementById("pogo").checked = true;
+        document.getElementById("ingress").checked = false;
+    }else{
+        document.getElementById("pogo").checked = false;
+        document.getElementById("ingress").checked = true;
+    }
+}
+
+function setNomType(e){
+    //e is the ID of the element that calls the function ("pogo" or "ingress")
+
+    //Get current storage
+    var nomTypes = JSON.parse(localStorage.wfpNominationTypes);
+    //Set entry
+    nomTypes[nomCtrl.currentNomination.id] = e;
+    //Store changes
+    localStorage.wfpNominationTypes = JSON.stringify(nomTypes);
 }
 
 function addS2(map, lvl){
@@ -192,7 +223,7 @@ function loadStats(){
     if (settings["accPoGo"])
         availableNominations += 7;
 
-
+    var nomTypes = JSON.parse(localStorage.wfpNominationTypes);
     var unlocks = [0,0,0,0,0,0,0,0,0,0,0,0,0,0]; // Array that stores the amount of nomination unlocks for every day for the upcomming 14 days
 
     for(var i = 0; i < nomCount; i++){
@@ -227,10 +258,23 @@ function loadStats(){
 
         //Available nomination determinations & new unlock date determinations
         var nomAge = daysSince(nomCtrl.nomList[i].day);
-        if (nomAge < 14){
+        if (settings["accIngress"] && settings["accPoGo"]){
+            var nomType = nomTypes[nomCtrl.nomList[i].id];
+            if (nomType == "pogo"){
+                nomPeriod = 15;
+            }else{
+                //Both when Ingress is set, and otherwise this is our default assumption
+                nomPeriod = 14;
+            }
+        }else if (settings["accIngress"]){
+            nomPeriod = 14; //Only ingress noms
+        }else{
+            nomPeriod = 15; //Only pogo noms
+        }
+        if (nomAge < nomPeriod){
             availableNominations--;
-          
-            unlocks[13-nomAge]++;
+
+            unlocks[(nomPeriod-1)-nomAge]++;
         }
     }
 

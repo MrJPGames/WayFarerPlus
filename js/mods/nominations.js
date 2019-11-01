@@ -23,6 +23,8 @@ function modNominationPage(settings){
         addIntelButton();
     if (settings["nomGoogleMaps"])
         addGoogleMapsButton();
+    if (settings["accPoGo"] && settings["accIngress"] && settings["nomStats"])
+        addNomTypeButtons();
 
 	//Observe for changes to create a custom onclick event for any nomination div
 	var observer = new MutationObserver(function (mutations) {
@@ -44,6 +46,41 @@ function modNominationPage(settings){
 	    subtree: true,
 			queries: [{element: "#map"}]
 	});
+}
+
+function addNomTypeButtons(){
+	//Adds buttons for users with both Ingress and PoGo acc to mark which nomination was made where
+	var titleElem = document.getElementsByClassName("nomination-title")[0];
+	var nomTypeElem = document.createElement("div");
+	var inputPoGo = document.createElement("input");
+	inputPoGo.type = "radio";
+	inputPoGo.value = "pogo";
+	inputPoGo.id = "pogo";
+	inputPoGo.name = "nomType";
+	inputPoGo.setAttribute("onclick", "setNomType(this.id);");
+	var inputIngress = document.createElement("input");
+	inputIngress.type = "radio";
+	inputIngress.value = "ingress";
+	inputIngress.id = "ingress";
+	inputIngress.name = "nomType";
+	inputIngress.setAttribute("onclick", "setNomType(this.id);");
+	var labelPoGo = document.createElement("label");
+	labelPoGo.for = "pogo";
+	labelPoGo.innerText = "Pokémon Go";
+	var labelIngress = document.createElement("label");
+	labelIngress.for = "ingress";
+	labelIngress.innerText = "Ingress";
+
+	inputPoGo.style.marginLeft = "10pt";
+	inputIngress.style.marginLeft = "10pt";
+
+	nomTypeElem.innerText = "Nominated using: ";
+	nomTypeElem.appendChild(inputPoGo);
+	nomTypeElem.appendChild(labelPoGo);
+	nomTypeElem.appendChild(inputIngress);
+	nomTypeElem.appendChild(labelIngress);
+
+	titleElem.parentNode.insertBefore(nomTypeElem, titleElem.nextSibling);
 }
 
 function addIntelButton(){
