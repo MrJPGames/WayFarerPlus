@@ -1,4 +1,6 @@
-var nSubCtrl, ansCtrl, nSubDS, whatCtrl;
+var nSubCtrl, ansCtrl, nSubDS, whatCtrl
+
+var hooked = 0;
 
 //Global const for any mod
 const divNames = {shouldBePortal: "photo-card", titleAndDescription: "descriptionDiv", historicOrCultural: "histcult-card", visuallyUnique: "uniqueness-card", safeAccess: "safety-card", location: "map-card", whatIsIt: "what-is-it-card", additionalComment: "additional-comments-card", locationAccuracy: "map-card"};
@@ -22,7 +24,7 @@ function onHooked(){
 document.addEventListener("WFPAllRevHooked", onHooked, false);
 
 function hookedAll(){
-	if (nSubCtrl == undefined || ansCtrl == undefined || nSubDS == undefined || whatCtrl == undefined){
+	if (hooked < 4){
 		setTimeout(hookedAll, 50);
 	}else{
 		console.log("[WayFarer+] Review has hooked all relavant controllers!");
@@ -38,6 +40,7 @@ function hookSubCtrl(){
 	if (nSubCtrl == undefined || nSubCtrl.pageData == undefined || nSubCtrl.pageData.expires == undefined || nSubCtrl.loaded == false){
 		setTimeout(hookSubCtrl, 50);
 	}else{
+		hooked++;
 		console.log("[WayFarer+] NewSubmissionController was hooked to nSubCtrl");
 
 		var modEvent = new Event("WFPNSubCtrlHooked");
@@ -55,6 +58,7 @@ function hookAnsCtrl(){
 	if (ansCtrl == undefined){
 		setTimeout(hookAnsCtrl, 50);
 	}else{
+		hooked++;
 		console.log("[WayFarer+] AnswersController was hooked to ansCtrl");
 
 		var modEvent = new Event("WFPAnsCtrlHooked");
@@ -68,6 +72,7 @@ function hookWhatCtrl(){
 	if (ansCtrl == undefined){
 		setTimeout(hookWhatCtrl, 50);
 	}else{
+		hooked++;
 		console.log("[WayFarer+] WhatIsItController was hooked to whatCtrl");
 
 		var modEvent = new Event("WFPWhatCtrlHooked");
@@ -80,6 +85,7 @@ function hookDataService(){
 	if (nSubDS == undefined){
 		setTimeout(hookDataService, 50);
 	}else{
+		hooked++;
 		console.log("[WayFarer+] NewSubmissionDataService was hooked to nSubDS");
 
 		var modEvent = new Event("WFPNSubDSHooked");
