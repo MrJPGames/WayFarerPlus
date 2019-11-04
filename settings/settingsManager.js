@@ -41,6 +41,7 @@ chrome.storage.local.get("options_set", function (data){
 			setOption("revEditOrigLoc", true);
 		case 9:
 			setOption("revHighRes", false);
+			setOption("revPresets", false);
 			setOption("options_set", settingsVersion);
 	}
 });

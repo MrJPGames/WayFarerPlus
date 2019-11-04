@@ -21,6 +21,8 @@ function modReviewPage(settings){
 		addPageJS("review/mapMods.js");
 	if (settings["revKeyboard"])
 		addPageJS("review/keyboardCtrl.js");
+	if (settings["revPresets"])
+		addPageJS("review/presets.js");
 	
 	addPageJS("review/main.js");
 

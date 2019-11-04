@@ -1,4 +1,4 @@
-var nSubCtrl, ansCtrl, nSubDS;
+var nSubCtrl, ansCtrl, nSubDS, whatCtrl;
 
 //Global const for any mod
 const divNames = {shouldBePortal: "photo-card", titleAndDescription: "descriptionDiv", historicOrCultural: "histcult-card", visuallyUnique: "uniqueness-card", safeAccess: "safety-card", location: "map-card", whatIsIt: "what-is-it-card", additionalComment: "additional-comments-card", locationAccuracy: "map-card"};
@@ -8,6 +8,7 @@ function setupPage(){
 	hookSubCtrl();
 	hookAnsCtrl();
 	hookDataService();
+	hookWhatCtrl();
 	hookedAll();
 }
 
@@ -21,7 +22,7 @@ function onHooked(){
 document.addEventListener("WFPAllRevHooked", onHooked, false);
 
 function hookedAll(){
-	if (nSubCtrl == undefined || ansCtrl == undefined || nSubDS == undefined){
+	if (nSubCtrl == undefined || ansCtrl == undefined || nSubDS == undefined || whatCtrl == undefined){
 		setTimeout(hookedAll, 50);
 	}else{
 		console.log("[WayFarer+] Review has hooked all relavant controllers!");
@@ -57,6 +58,19 @@ function hookAnsCtrl(){
 		console.log("[WayFarer+] AnswersController was hooked to ansCtrl");
 
 		var modEvent = new Event("WFPAnsCtrlHooked");
+        document.dispatchEvent(modEvent);
+	}
+}
+
+function hookWhatCtrl(){
+	whatCtrl = angular.element(document.getElementById('WhatIsItController')).scope().whatCtrl;
+
+	if (ansCtrl == undefined){
+		setTimeout(hookWhatCtrl, 50);
+	}else{
+		console.log("[WayFarer+] WhatIsItController was hooked to whatCtrl");
+
+		var modEvent = new Event("WFPWhatCtrlHooked");
         document.dispatchEvent(modEvent);
 	}
 }

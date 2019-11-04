@@ -37,3 +37,27 @@
 html {
   scroll-behavior: smooth;
 }
+
+.presetBox{
+    background: white;
+    border-radius: 0.2em;
+    padding: 0.3em;
+}
+
+.presetContainer{
+	display: inline-block;
+}
+
+.presetButton{
+	margin-left: 1em;
+    background: white;
+    border-radius: 0.3em;
+    border: black solid 1px;
+}
+
+.presetAddButton{
+    border-radius: 0.3em;
+    border: black solid 1px;
+    margin-left: 0.5em;
+    margin-right: 1em;;
+}
