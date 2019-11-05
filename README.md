@@ -1,7 +1,7 @@
 # WayFarer+
 A Chromium extension to add more functionality to NianticLab's Wayfarer
 
-Adds a set of custom tools to Wayfarer that make reviewing and monitoring your nominations easier!
+Adds a set of custom tools for Wayfarer that make reviewing and monitoring your nominations easier!
 
 General discussion, GitHubless bug reporting and feature requests: https://t.me/joinchat/B1ceWQ5xy3wT03gjkq0Few
 
