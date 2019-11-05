@@ -61,3 +61,7 @@ html {
     margin-left: 0.5em;
     margin-right: 1em;;
 }
+
+.three-card-parent .small-card{
+    max-height: 10.08em;    
+}

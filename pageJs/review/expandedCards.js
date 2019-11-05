@@ -5,6 +5,9 @@ function removeRedundantDescriptions() {
 }
 
 function setupExpandedCards(){
+    if (nSubCtrl.reviewType != "NEW")
+        return; //Only works for new submissions
+    
 	var cardRowContainer = document.getElementsByClassName("card-row-container")[0];
 	cardRowContainer.style.maxWidth = "2264px"; //Maximum width current layout actually works at
 
