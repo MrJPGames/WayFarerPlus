@@ -8,11 +8,10 @@ function setupPresets(){
 		var defaultPresets = [];
 		localStorage.wfpPresets = JSON.stringify(defaultPresets);
 	}
-	var presets = JSON.parse(localStorage.wfpPresets);
-	addPresetsBar(presets);
+	addPresetsBar();
 }
 
-function addPresetsBar(presets){
+function addPresetsBar(){
 	var presetBox = document.createElement("div");
 	if (!settings["darkMode"])
 		presetBox.style.boxShadow = "grey 1px 1px 5px";
@@ -31,12 +30,17 @@ function addPresetsBar(presets){
 	presetBox.appendChild(addButton);
 	presetContainer = document.createElement("div");
 	presetContainer.setAttribute("class", "presetContainer");
-	for (var i=0; i<presets.length; i++){
-		addButtonToBar(presets[i], i);
-	}
+	addAllPresetButtons();
 	presetBox.appendChild(presetContainer);
 	var ansCtrlDiv = document.getElementById("AnswersController");
 	ansCtrlDiv.insertBefore(presetBox, ansCtrlDiv.children[0]);
+}
+
+function addAllPresetButtons(){
+	var presets = JSON.parse(localStorage.wfpPresets);
+	for (var i=0; i<presets.length; i++){
+		addButtonToBar(presets[i], i);
+	}
 }
 
 function addButtonToBar(preset, id){
@@ -45,6 +49,7 @@ function addButtonToBar(preset, id){
 	presetButton.setAttribute("class", "presetButton");
 	presetButton.innerText = preset.name;
 	presetButton.onclick = presetClick;
+	presetButton.oncontextmenu = removePreset;
 	if (preset.rng)
 		presetButton.style.fontWeight = "bold";
 	presetContainer.appendChild(presetButton);
@@ -62,6 +67,7 @@ function presetClick(e){
 	var visuallyUnique = preset.visuallyUnique;
 	var safeAccess = preset.safeAccess;
 	var locationAccuracy = preset.locationAccuracy;
+
 	if (preset.rng){
 		//These are the values we assume can be changed by 1 star up or down and still be "essentially" the same review
 		if (titleAndDescription > 0) titleAndDescription = keepInBounds(parseInt(titleAndDescription)+randomRange(-1,1));
@@ -69,6 +75,14 @@ function presetClick(e){
 		if (visuallyUnique > 0) visuallyUnique = keepInBounds(parseInt(visuallyUnique)+randomRange(-1,1));
 		if (safeAccess > 0) safeAccess = keepInBounds(parseInt(safeAccess)+randomRange(-1,1));
 	}
+
+	
+	ansCtrl.formData.quality = shouldBePortal;
+	ansCtrl.formData.description = titleAndDescription;
+	ansCtrl.formData.cultural = historicOrCultural;
+	ansCtrl.formData.uniqueness = visuallyUnique;
+	ansCtrl.formData.safety = safeAccess;
+	ansCtrl.formData.location = locationAccuracy;
 
 	if (shouldBePortal > 0) document.getElementById(divNames.shouldBePortal).getElementsByClassName("five-stars")[0].children[shouldBePortal-1].click();
 	if (titleAndDescription > 0) document.getElementById(divNames.titleAndDescription).getElementsByClassName("five-stars")[0].children[titleAndDescription-1].click();
@@ -78,6 +92,21 @@ function presetClick(e){
 	if (locationAccuracy > 0) document.getElementById(divNames.locationAccuracy).getElementsByClassName("five-stars")[0].children[locationAccuracy-1].click();
 }
 
+function removePreset(e){
+	e.preventDefault();
+
+	var pID = e.srcElement.getAttribute("presetID");
+	var presets = JSON.parse(localStorage.wfpPresets);
+	presets.splice(pID, 1); //Remove from array
+	localStorage.wfpPresets = JSON.stringify(presets); //Store removal
+
+	//Remove all "old" buttons
+	while (presetContainer.firstChild) {
+	    presetContainer.removeChild(presetContainer.firstChild);
+	}
+	//Readd buttons
+	addAllPresetButtons();
+}
 
 function keepInBounds(val){
 	if (val > 5)

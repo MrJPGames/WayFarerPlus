@@ -58,10 +58,8 @@ function addOrigLocation(gMap){
     var nSubCtrlScope = angular.element(document.getElementById("NewSubmissionController")).scope();
 	var editMarkers = nSubCtrlScope.getAllLocationMarkers();
     for (var i = 0; i < editMarkers.length; i++){
-    	console.log(editMarkers[i].position.lat(), editMarkers[i].position.lng(), oPos.lat(), oPos.lng(), editMarkers[i].position.lat() == oPos.lat(), editMarkers[i].position.lng() == oPos.lng());
     	if (editMarkers[i].position.lat() == oPos.lat() && editMarkers[i].position.lng() == oPos.lng()){
         	editMarkers[i].setIcon(extURL + "assets/custom_map-spot.svg");
-        	console.log(editMarkers[i]);
     	}
     }
 }

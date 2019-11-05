@@ -27,7 +27,7 @@ function hookedAll(){
 	if (hooked < 4){
 		setTimeout(hookedAll, 50);
 	}else{
-		console.log("[WayFarer+] Review has hooked all relavant controllers!");
+		console.log("[WayFarer+] Review has hooked all relevant controllers!");
 
 		var modEvent = new Event("WFPAllRevHooked");
         document.dispatchEvent(modEvent);
