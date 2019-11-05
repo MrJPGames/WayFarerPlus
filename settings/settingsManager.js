@@ -36,11 +36,10 @@ chrome.storage.local.get("options_set", function (data){
 		case 8:
 			setOption("nomS2Cell", 17);
 			setOption("revS2Cell", 17);
-			setOption("revLowRes", false);
 			setOption("revNoTaskDesc", false);
 			setOption("revEditOrigLoc", true);
 		case 9:
-			setOption("revHighRes", false);
+			setOption("revCardView", "normal");
 			setOption("revPresets", false);
 			setOption("options_set", settingsVersion);
 	}

@@ -8,16 +8,11 @@ function setupCompactCard() {
     if (nSubCtrl.reviewType != "NEW")
         return; //Only works for new submissions
 
-    function addDummySupportingInfo() {
-        if (!nSubCtrl.hasSupportingImageOrStatement) {
-            document.getElementById("supporting-card").classList.remove("ng-hide");
-            document.getElementById("supporting-card").getElementsByClassName("supporting-image")[0].remove();
-            document.getElementById("supporting-card").getElementsByClassName("card__body")[0].innerHTML = '<h4 class="ng-binding">This nomination was made using Scanner [REDACTED], which means that no supporting photo or supporting statement were given.</h4>';
-        }else if (!nSubCtrl.loaded){
-            setTimeout(addDummySupportingInfo, 50);
-        }
+    if (!nSubCtrl.hasSupportingImageOrStatement) {
+        document.getElementById("supporting-card").classList.remove("ng-hide");
+        document.getElementById("supporting-card").getElementsByClassName("supporting-image")[0].remove();
+        document.getElementById("supporting-card").getElementsByClassName("card__body")[0].innerHTML = '<h4 class="ng-binding">This nomination was made using Scanner [REDACTED], which means that no supporting photo or supporting statement were given.</h4>';
     }
-	setTimeout(addDummySupportingInfo, 50);
 
     var fragment = document.createDocumentFragment();
     fragment.appendChild(document.getElementById(divNames.titleAndDescription));
