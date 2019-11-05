@@ -7,7 +7,7 @@ function getData(){
 		else
 			init(data);
 	});
-}
+};
 
 function init(settings){
 	if (settings["darkMode"] == true){
@@ -36,4 +36,11 @@ function init(settings){
 		//Always
 		modHeader(settings);
 	});
+}
+
+//Helper functions
+function addPageJS(file){
+	var newScript = document.createElement("script");
+	newScript.src = chrome.extension.getURL("pageJs/" + file);
+	document.getElementsByTagName("head")[0].appendChild(newScript);
 }

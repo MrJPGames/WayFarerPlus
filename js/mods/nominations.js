@@ -1,28 +1,32 @@
 function modNominationPage(settings){
-	var newScript = document.createElement("script");
-	newScript.src = chrome.extension.getURL("pageJs/libs/S2.js");
-	document.getElementsByTagName("head")[0].appendChild(newScript);
-
-	var newScript = document.createElement("script");
-	newScript.src = chrome.extension.getURL("pageJs/nominations.js");
-	document.getElementsByTagName("head")[0].appendChild(newScript);
-
 	var newCss = document.createElement("link");
 	newCss.setAttribute("rel", "stylesheet");
 	newCss.setAttribute("href", chrome.extension.getURL("assets/nominations.css"));
 	document.getElementsByTagName("head")[0].appendChild(newCss);
 
-	console.log("[WayFarer+] Nominations page mod loaded!");
+	console.log("[WayFarer+] Nominations page injection successful!");
 
 	//In separate function for future readability if more mods are added
-	if (settings["nomStreetView"])
+	if (settings["nomStreetView"]){
 		addStreetView();
-	if (settings["nomStats"])
+		addPageJS("nominations/streetView.js");
+	}
+	if (settings["nomStats"]){
 		addStats();
-	if (settings["nomIntelButton"])
-        addIntelButton();
-    if (settings["nomGoogleMaps"])
-        addGoogleMapsButton();
+		addPageJS("nominations/statsWidget.js");
+	}
+    if (settings["nomAccessDistCircle"] || settings["nomLowestDistCircle"] || settings["ctrlessZoom"]){
+    	addPageJS("nominations/mapMods.js");
+    }
+    if (settings["nomIntelButton"] || settings["nomGoogleMaps"]){
+    	addPageJS("nominations/mapButtons.js");
+		if (settings["nomIntelButton"])
+	        addIntelButton();
+	    if (settings["nomGoogleMaps"])
+	        addGoogleMapsButton();
+	}
+    if (settings["accPoGo"] && settings["accIngress"] && settings["nomStats"])
+        addNomTypeButtons();
 
 	//Observe for changes to create a custom onclick event for any nomination div
 	var observer = new MutationObserver(function (mutations) {
@@ -44,6 +48,46 @@ function modNominationPage(settings){
 	    subtree: true,
 			queries: [{element: "#map"}]
 	});
+
+	if (settings["nomS2Cell"] != -1)
+		addPageJS("libs/S2.js");
+	
+	addPageJS("nominations/main.js");
+}
+
+function addNomTypeButtons(){
+	//Adds buttons for users with both Ingress and PoGo acc to mark which nomination was made where
+	var titleElem = document.getElementsByClassName("nomination-title")[0];
+	var nomTypeElem = document.createElement("div");
+	var inputPoGo = document.createElement("input");
+	inputPoGo.type = "radio";
+	inputPoGo.value = "pogo";
+	inputPoGo.id = "pogo";
+	inputPoGo.name = "nomType";
+	inputPoGo.setAttribute("onclick", "setNomType(this.id);");
+	var inputIngress = document.createElement("input");
+	inputIngress.type = "radio";
+	inputIngress.value = "ingress";
+	inputIngress.id = "ingress";
+	inputIngress.name = "nomType";
+	inputIngress.setAttribute("onclick", "setNomType(this.id);");
+	var labelPoGo = document.createElement("label");
+	labelPoGo.for = "pogo";
+	labelPoGo.innerText = "Pokémon Go";
+	var labelIngress = document.createElement("label");
+	labelIngress.for = "ingress";
+	labelIngress.innerText = "Ingress";
+
+	inputPoGo.style.marginLeft = "10pt";
+	inputIngress.style.marginLeft = "10pt";
+
+	nomTypeElem.innerText = "Nominated using: ";
+	nomTypeElem.appendChild(inputPoGo);
+	nomTypeElem.appendChild(labelPoGo);
+	nomTypeElem.appendChild(inputIngress);
+	nomTypeElem.appendChild(labelIngress);
+
+	titleElem.parentNode.insertBefore(nomTypeElem, titleElem.nextSibling);
 }
 
 function addIntelButton(){

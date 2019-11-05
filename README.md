@@ -13,6 +13,15 @@ Other browser support?
 
 Changelog
 ---
+1.9:
+- Added expanded card view
+- Added review presets (use at OWN RISK!)
+- Added RNG option to review presets to possibly lower pattern detection odds (still OWN RISK!)
+- Quickly get to reject reasons while using keyboard controls by pressing 0 at any point during the review.
+- Dark mode fixes needed after recent site update
+- whatCtrl is now hooked on review page and accessible to other modules. (Hooked event: WFPWhatCtrlHooked)
+- Refactor making modifcations more modular and expandable for future and 3rd party development
+
 1.8.2:
 - Cleaned up original location highlight during location edits as per #37
 - Fixed issues caused when using Dark Mode on the recently changes edit review page
