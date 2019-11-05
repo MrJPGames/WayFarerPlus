@@ -27,7 +27,7 @@ function store(k, v){
 
 function turnOnPresets(){
 	var startTime = Date.now();
-	if (confirm("WARNING! The use of presets can lead to timeouts!\nThis is due to having multiple reviews with the same responses, this can cause the system to detect 'irregular patterns'. This means using this feature is at YOUR OWN RISK.\n\n(Note if you click OK to quickly (<4 secs) the setting will not change, this is to ensure this message was read)")){
+	if (confirm("WARNING! The use of presets can lead to cooldowns!\nThis is due to having multiple reviews with the same responses, this can cause the system to detect 'irregular patterns'. This means using this feature is at YOUR OWN RISK.\n\n(Note if you click OK to quickly (<4 secs) the setting will not change, this is to ensure this message was read)")){
 		endTime = Date.now();
 		if (endTime-startTime >= 4000){
 			store("revPresets", true);
