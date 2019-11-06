@@ -1,5 +1,10 @@
 setupPage();
 function setupPage(){
+    //ALWAYS make sure wfpNominationTypes is initialized BEFORE loading any modules
+    if (localStorage.wfpNominationTypes == undefined){
+        localStorage.wfpNominationTypes = "{}";
+    }
+
     var nomCtrlDiv = document.getElementsByClassName("nominations-controller")[0];
     nomCtrl = angular.element(nomCtrlDiv).scope().nomCtrl;
     if (nomCtrl == undefined){

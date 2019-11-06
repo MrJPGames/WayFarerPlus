@@ -60,7 +60,7 @@ function initKeyboardControls(){
 
 function keyDownEvent(e){
 	//If typing in a text field ignore ALL input (except for enter to confirm rejection)
-	if (document.activeElement.nodeName == "TEXTAREA"){
+	if (document.activeElement.nodeName == "TEXTAREA" || document.activeElement.nodeName == "INPUT"){
 		if (rejectComplete && e.keyCode == 13){
 			//Stop the enter from creating a new line in the textarea
 			e.preventDefault();

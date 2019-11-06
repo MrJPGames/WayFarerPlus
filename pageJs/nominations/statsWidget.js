@@ -113,9 +113,6 @@ function loadStats(){
 }
 
 function updateNomTypeButtons(){
-    if (localStorage.wfpNominationTypes == undefined){
-        localStorage.wfpNominationTypes = "";
-    }
     var nomType = JSON.parse(localStorage.wfpNominationTypes)[nomCtrl.currentNomination.id];
     if (nomType == undefined){
         document.getElementById("pogo").checked = false;

@@ -15,6 +15,9 @@ Other browser support?
 
 Changelog
 ---
+1.9.1:
+- Fix #53 & #54, -> Nomination marking now initializes correctly and can be used! Duplicate marking no longer interferes with text entry!
+
 1.9:
 - Added expanded card view
 - Added review presets (use at OWN RISK!)
