@@ -15,6 +15,10 @@ Other browser support?
 
 Changelog
 ---
+1.9.2:
+- Fix extended profile stats (now works with updated profile page)
+- Nomination marking will now also work if it broke in 1.9 (1.9.1 only worked if you hadn't activated the function on 1.9)
+
 1.9.1:
 - Fix #53 & #54, -> Nomination marking now initializes correctly and can be used! Duplicate marking no longer interferes with text entry!
 
