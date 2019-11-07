@@ -1,7 +1,7 @@
 setupPage();
 function setupPage(){
     //ALWAYS make sure wfpNominationTypes is initialized BEFORE loading any modules
-    if (localStorage.wfpNominationTypes == undefined){
+    if (localStorage.wfpNominationTypes == undefined || localStorage.wfpNominationTypes == ""){
         localStorage.wfpNominationTypes = "{}";
     }
 
