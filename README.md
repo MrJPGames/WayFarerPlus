@@ -15,6 +15,9 @@ Other browser support?
 
 Changelog
 ---
+1.9.3:
+- Fixed compact card view (after site update) Thanks to @GoncaloCdM for notifying me about the issue!
+
 1.9.1:
 - Fix #53 & #54, -> Nomination marking now initializes correctly and can be used! Duplicate marking no longer interferes with text entry!
 
