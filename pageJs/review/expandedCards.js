@@ -8,6 +8,35 @@ function setupExpandedCards(){
     if (nSubCtrl.reviewType != "NEW")
         return; //Only works for new submissions
     
+    //Inject CSS to hide sidebar where convinient for use of this option on medium sized screens
+    var css = `@media (max-width: 1754px) {
+			            .header .hamburger {
+			                align-items: center;
+			                display: flex;
+			                justify-content: center;
+			                margin: 0 5px;
+			            }
+			            .sidebar.hide-mobile {
+			                display: none;
+			            }
+			            .sidebar {
+			                position: absolute;
+			                max-width: 100vw;
+			                width: 180px;
+			                z-index: 2;
+			            }
+			        }`;
+
+	var style=document.createElement('style');
+	style.type='text/css';
+	if(style.styleSheet){
+	    style.styleSheet.cssText=css;
+	}else{
+	    style.appendChild(document.createTextNode(css));
+	}
+	var insertBefore = (document.body || document.head || document.documentElement).getElementsByTagName("style")[0];
+	(document.body || document.head || document.documentElement).insertBefore(style, insertBefore);
+
 	var cardRowContainer = document.getElementsByClassName("card-row-container")[0];
 	cardRowContainer.style.maxWidth = "2264px"; //Maximum width current layout actually works at
 
