@@ -10,8 +10,8 @@ function initTimerMods(){
 function lockSubmitButton(){
 	var buttons = document.getElementsByClassName("button-primary");
 	var tDiff = nSubCtrl.pageData.expires - Date.now();
-	for (var i = 1; i < buttons.length; i++){
-		if(buttons[i].innerText = "Submit" || buttons[i].id == "subButton"){
+	for (var i = 0; i < buttons.length; i++){
+		if(buttons[i].innerText == "SUBMIT" || buttons[i].id == "subButton"){
 			buttons[i].setAttribute("id", "subButton"); //Mark for next itteration
 			var seconds = Math.round(tDiff/1000) - (1200-settings["revSubmitTimer"]);
 			buttons[i].innerText = seconds + "S";
@@ -21,7 +21,7 @@ function lockSubmitButton(){
 	if (tDiff/1000 < 1200-parseInt(settings["revSubmitTimer"])){
 		for (var i = 1; i < buttons.length; i++){
 			buttons[i].disabled = false;
-			buttons[i].innerText = "Submit";
+			buttons[i].innerText = "SUBMIT";
 		}
 	}else{
 		setTimeout(lockSubmitButton, 100); //Updates 10x a second to avoid other things (AnsCtrl) enabling the button too long
