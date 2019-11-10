@@ -44,7 +44,52 @@ function addExtendedStats(){
 
 	//if Ingress agent add recon badge progress to page:
 	if (settings["accIngress"]){
-		const reconBadge = { 100: 'Bronze', 750: 'Silver', 2500: 'Gold', 5000: 'Platin', 10000: 'Black' }
+		const reconBadges = [ [0, 'None'], [100, 'Bronze'], [750, 'Silver'], [2500, 'Gold'], [5000, 'Platinum'], [10000, 'Onyx'] ];
+
+		var badge = 0;
+		for (var i=1; i < reconBadges.length; i++){
+			if (normalAgreements >= reconBadges[i][0]){
+				badge = i;
+			}
+		}
+
+		var curBadgeElem = document.createElement("h4");
+
+		var curBadgeLeftElem = document.createElement("span");
+		curBadgeLeftElem.setAttribute("class", "stats-left");
+		var curBadgeRightElem = document.createElement("span");
+		curBadgeRightElem.setAttribute("class", "stats-right");
+
+		curBadgeLeftElem.innerText = "Recon Medal";
+		curBadgeRightElem.innerText = reconBadges[badge][1];
+
+		curBadgeElem.appendChild(curBadgeLeftElem);
+		curBadgeElem.appendChild(curBadgeRightElem);
+
+		profileStats.insertBefore(curBadgeElem, profileStats.children[2]);
+
+		//Check if you don't already have the highest badge
+		if (badge+1 <= reconBadges.length){
+			var diff = reconBadges[badge+1][0]-reconBadges[badge][0]; //Agreements for next tier - agreements for current tier (= diff in agreements between tiers)
+			var currDiff = normalAgreements-reconBadges[badge][0]; //User's current agreements - current badge tier agreement requirement (= agreements since last badge)
+
+			var progress = Math.round((currDiff/diff)*100); //Get Progress %
+
+			var badgeProgressElem = document.createElement("h4");
+
+			var badgeProgressLeftElem = document.createElement("span");
+			badgeProgressLeftElem.setAttribute("class", "stats-left");
+			var badgeProgressRightElem = document.createElement("span");
+			badgeProgressRightElem.setAttribute("class", "stats-right");
+
+			badgeProgressLeftElem.innerText = "Progress to " + reconBadges[badge+1][1];
+			badgeProgressRightElem.innerText = progress + "%";
+
+			badgeProgressElem.appendChild(badgeProgressLeftElem);
+			badgeProgressElem.appendChild(badgeProgressRightElem);
+
+			profileStats.insertBefore(badgeProgressElem, profileStats.children[3]);
+		}
 	}
 }
 

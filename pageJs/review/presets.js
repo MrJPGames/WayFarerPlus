@@ -17,6 +17,7 @@ function addPresetsBar(){
 		presetBox.style.boxShadow = "grey 1px 1px 5px";
 	presetBox.innerText = "Presets: ";
 	presetBox.setAttribute("class", "presetBox");
+
 	var addButton = document.createElement("button");
 	addButton.innerText = "+";
 	addButton.onclick = addPreset;
@@ -28,10 +29,11 @@ function addPresetsBar(){
 		addButton.style.color = "white";
 	}
 	presetBox.appendChild(addButton);
-	presetContainer = document.createElement("div");
-	presetContainer.setAttribute("class", "presetContainer");
+
+	presetContainer = document.createElement("container");
 	addAllPresetButtons();
 	presetBox.appendChild(presetContainer);
+
 	var ansCtrlDiv = document.getElementById("AnswersController");
 	ansCtrlDiv.insertBefore(presetBox, ansCtrlDiv.children[0]);
 }
