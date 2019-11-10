@@ -1,4 +1,8 @@
 function addExtendedStats(){
+	//Get data from page before modifying it
+	var profileStats = document.getElementById("profile-stats");
+	var normalAgreements = parseInt(profileStats.children[1].children[1].children[1].innerText) + parseInt(profileStats.children[1].children[2].children[1].innerText) + parseInt(profileStats.children[1].children[3].children[1].innerText);
+
 	//Segment for "Processed _and_ Agreement stat"
 	var agreementTotal = (pCtrl.rewards.total + pCtrl.rewards.available) * pCtrl.rewards.interval + pCtrl.rewards.progress;
 
@@ -15,13 +19,13 @@ function addExtendedStats(){
 	agreementStatElem.appendChild(agreementStatLeft);
 	agreementStatElem.appendChild(agreementStatRight);
 
-	var profileStats = document.getElementById("profile-stats");
-	profileStats.insertBefore(agreementStatElem, profileStats.children[1]);
+	profileStats.children[1].insertBefore(agreementStatElem, profileStats.children[1].children[1]);
 
 	//Segment for "Other Agreements"
-	var normalAgreements = parseInt(profileStats.children[2].children[1].innerText) + parseInt(profileStats.children[3].children[1].innerText);
+	
 
 	var otherAgreements = agreementTotal - normalAgreements;
+	console.log(normalAgreements);
 
 	var otherAgreementsElem = document.createElement("h4");
 
@@ -36,7 +40,7 @@ function addExtendedStats(){
 	otherAgreementsElem.appendChild(otherAgreementStatLeft);
 	otherAgreementsElem.appendChild(otherAgreementStatRight);
 
-	profileStats.insertBefore(otherAgreementsElem, profileStats.children[4]);
+	profileStats.children[1].appendChild(otherAgreementsElem);
 
 	//if Ingress agent add recon badge progress to page:
 	if (settings["accIngress"]){

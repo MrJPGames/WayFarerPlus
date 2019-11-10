@@ -1,6 +1,8 @@
 # WayFarer+
 A Chromium extension to add more functionality to NianticLab's Wayfarer
 
+Adds a set of custom tools for Wayfarer that make reviewing and monitoring your nominations easier!
+
 General discussion, GitHubless bug reporting and feature requests: https://t.me/joinchat/B1ceWQ5xy3wT03gjkq0Few
 
 [![Available for Google Chrome](https://developer.chrome.com/webstore/images/ChromeWebStore_BadgeWBorder_v2_206x58.png)](https://chrome.google.com/webstore/detail/wayfarer%20/fnhddfgebnmokicfdfgcdcdhcmgkeglc)
@@ -13,6 +15,15 @@ Other browser support?
 
 Changelog
 ---
+1.9.3:
+- Fixed compact card view (after site update) Thanks to @GoncaloCdM for notifying me about the issue!
+- Hide navigation bar in expanded card view when on smaller yet without navigation bar compatible screen! (Suggested by @GoncaloCdM)
+
+1.9.2:
+- Fix extended profile stats (now works with updated profile page)
+- Nomination marking will now also work if it broke in 1.9 (1.9.1 only worked if you hadn't activated the function on 1.9)
+
+
 1.9.1:
 - Fix #53 & #54, -> Nomination marking now initializes correctly and can be used! Duplicate marking no longer interferes with text entry!
 
