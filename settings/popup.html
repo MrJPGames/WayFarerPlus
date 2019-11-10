@@ -141,9 +141,13 @@
 		</div>
 		<h2>Profile</h2>
 		<div class="switch">
-			<input type="checkbox" class="switch__input" id="profExtendedStats" />
-			<label for="profExtendedStats" class="switch__label">Extended stats</label>
-			<img title="Works based on upgrade stats. If you've gotten agreements that did not count towards your upgrades this option will not work for you!" src="../assets/help.svg"/>
+			<label>Extended stats:</label>
+			<select id="profExtendedStats">
+				<option value="off">Off</option>
+				<option value="aprox">Aproximation</option>
+				<option value="truth">Facts only</option>
+			</select>
+			<img title="Aproximation works based on upgrade stats. If you've gotten agreements that did not count towards your upgrades this option will not work for you! Facts only will be less informative but always accurate." src="../assets/help.svg"/>
 		</div>
 		<h2>Header</h2>
 		<div class="switch">

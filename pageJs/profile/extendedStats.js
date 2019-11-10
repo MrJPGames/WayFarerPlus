@@ -24,31 +24,35 @@ function addExtendedStats(){
 	var agreeElem = document.createElement("span");
 	agreeElem.innerText = " Agreement";
 	agreementStatLeft.appendChild(agreeElem);
-	agreementStatRight.innerText = agreementTotal;
+	if (settings["profExtendedStats"] == "aprox")
+		agreementStatRight.innerText = agreementTotal;
+	else
+		agreementStatRight.innerText = normalAgreements;
 
 	agreementStatElem.appendChild(agreementStatLeft);
 	agreementStatElem.appendChild(agreementStatRight);
 
 	profileStats.children[1].insertBefore(agreementStatElem, profileStats.children[1].children[1]);
 
-	//Segment for "Other Agreements"
-	var otherAgreements = agreementTotal - normalAgreements;
-	console.log(normalAgreements);
+	if (settings["profExtendedStats"] == "aprox"){
+		//Segment for "Other Agreements"
+		var otherAgreements = agreementTotal - normalAgreements;
 
-	var otherAgreementsElem = document.createElement("h4");
+		var otherAgreementsElem = document.createElement("h4");
 
-	var otherAgreementStatLeft = document.createElement("span");
-	otherAgreementStatLeft.setAttribute("class", "stats-left");
-	var otherAgreementStatRight = document.createElement("span");
-	otherAgreementStatRight.setAttribute("class", "stats-right");
+		var otherAgreementStatLeft = document.createElement("span");
+		otherAgreementStatLeft.setAttribute("class", "stats-left");
+		var otherAgreementStatRight = document.createElement("span");
+		otherAgreementStatRight.setAttribute("class", "stats-right");
 
-	otherAgreementStatLeft.innerText = "Other Agreements";
-	otherAgreementStatRight.innerText = otherAgreements;
+		otherAgreementStatLeft.innerText = "Other Agreements";
+		otherAgreementStatRight.innerText = otherAgreements;
 
-	otherAgreementsElem.appendChild(otherAgreementStatLeft);
-	otherAgreementsElem.appendChild(otherAgreementStatRight);
+		otherAgreementsElem.appendChild(otherAgreementStatLeft);
+		otherAgreementsElem.appendChild(otherAgreementStatRight);
 
-	profileStats.children[1].appendChild(otherAgreementsElem);
+		profileStats.children[1].appendChild(otherAgreementsElem);
+	}
 
 	//if Ingress agent add recon badge progress to page:
 	if (settings["accIngress"]){
