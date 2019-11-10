@@ -30,6 +30,18 @@ function setupMapMods(){
 		mapsRemoveCtrlToZoom();
 	if (settings["revMap2ZoomLevel"] != -1)
 		zoomMap2();
+	if (settings["revTransparentMarker"])
+		makeMarkersTransparent();
+}
+
+function makeMarkersTransparent(){
+	nSubCtrl.originalMap2Marker.setOpacity(0.5);
+	nSubCtrl.originalMap2Marker.addListener('mouseover', function() {
+		nSubCtrl.originalMap2Marker.setOpacity(0);
+	});
+	nSubCtrl.originalMap2Marker.addListener('mouseout', function() {
+		nSubCtrl.originalMap2Marker.setOpacity(0.5);
+	});
 }
 
 function zoomMap2(){
@@ -48,7 +60,9 @@ function hookResetMapFuncs(){
 		if (settings["revMap2ZoomLevel"] != -1)
 			zoomMap2();
 		if (settings["revS2Cell"] != -1)
-			addS2(nSubCtrl.map2, settings["revS2Cell"]);
+			addS2(nSubCtrl.map2, nSubCtrl.pageData.lat, nSubCtrl.pageData.lng, settings["revS2Cell"]);
+		if (settings["revTransparentMarker"])
+			makeMarkersTransparent();
     }
 }
 
