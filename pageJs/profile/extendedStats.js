@@ -13,7 +13,17 @@ function addExtendedStats(){
 	var agreementStatRight = document.createElement("span");
 	agreementStatRight.setAttribute("class", "stats-right");
 
-	agreementStatLeft.innerHTML = "Processed <u>and</u> Agreement";
+	var underlinedText = document.createElement("span");
+	underlinedText.style.textDecoration = "underline";
+	underlinedText.innerText = "and";
+
+	var procElem = document.createElement("span");
+	procElem.innerText = "Processed ";
+	agreementStatLeft.appendChild(procElem);
+	agreementStatLeft.appendChild(underlinedText);
+	var agreeElem = document.createElement("span");
+	agreeElem.innerText = " Agreement";
+	agreementStatLeft.appendChild(agreeElem);
 	agreementStatRight.innerText = agreementTotal;
 
 	agreementStatElem.appendChild(agreementStatLeft);
@@ -22,8 +32,6 @@ function addExtendedStats(){
 	profileStats.children[1].insertBefore(agreementStatElem, profileStats.children[1].children[1]);
 
 	//Segment for "Other Agreements"
-	
-
 	var otherAgreements = agreementTotal - normalAgreements;
 	console.log(normalAgreements);
 
@@ -34,7 +42,7 @@ function addExtendedStats(){
 	var otherAgreementStatRight = document.createElement("span");
 	otherAgreementStatRight.setAttribute("class", "stats-right");
 
-	otherAgreementStatLeft.innerHTML = "Other Agreements";
+	otherAgreementStatLeft.innerText = "Other Agreements";
 	otherAgreementStatRight.innerText = otherAgreements;
 
 	otherAgreementsElem.appendChild(otherAgreementStatLeft);
@@ -47,11 +55,9 @@ function addExtendedStats(){
 		const reconBadges = [ [0, 'None'], [100, 'Bronze'], [750, 'Silver'], [2500, 'Gold'], [5000, 'Platinum'], [10000, 'Onyx'] ];
 
 		var badge = 0;
-		for (var i=1; i < reconBadges.length; i++){
-			if (normalAgreements >= reconBadges[i][0]){
+		for (var i=1; i < reconBadges.length; i++)
+			if (normalAgreements >= reconBadges[i][0])
 				badge = i;
-			}
-		}
 
 		var curBadgeElem = document.createElement("h4");
 
@@ -66,7 +72,7 @@ function addExtendedStats(){
 		curBadgeElem.appendChild(curBadgeLeftElem);
 		curBadgeElem.appendChild(curBadgeRightElem);
 
-		profileStats.insertBefore(curBadgeElem, profileStats.children[2]);
+		profileStats.children[0].appendChild(curBadgeElem);
 
 		//Check if you don't already have the highest badge
 		if (badge+1 <= reconBadges.length){
@@ -88,7 +94,7 @@ function addExtendedStats(){
 			badgeProgressElem.appendChild(badgeProgressLeftElem);
 			badgeProgressElem.appendChild(badgeProgressRightElem);
 
-			profileStats.insertBefore(badgeProgressElem, profileStats.children[3]);
+			profileStats.children[0].appendChild(badgeProgressElem);
 		}
 	}
 }

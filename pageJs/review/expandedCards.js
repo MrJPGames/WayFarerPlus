@@ -50,7 +50,12 @@ function setupExpandedCards(){
 	if (!nSubCtrl.hasSupportingImageOrStatement) {
         document.getElementById("supporting-card").classList.remove("ng-hide");
         document.getElementById("supporting-card").getElementsByClassName("supporting-image")[0].remove();
-        document.getElementById("supporting-card").getElementsByClassName("card__body")[0].innerHTML = '<h4 class="ng-binding">This nomination was made using Scanner [REDACTED], which means that no supporting photo or supporting statement were given.</h4>';
+        
+        var replaceContent = document.createElement("h4");
+        replaceContent.setAttribute("class", "ng-binding");
+        replaceContent.innerText = "This nomination was made using Scanner [REDACTED], which means that no supporting photo or supporting statement were given.";
+
+        document.getElementById("supporting-card").getElementsByClassName("card__body")[0].appendChild(replaceContent);
     }
 	var duplicatesCard = document.getElementById("duplicates-card");
 	duplicatesCard.style.order = "5";

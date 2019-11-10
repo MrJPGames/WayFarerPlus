@@ -109,7 +109,6 @@ function loadStats(){
     }
 
     elem.innerHTML = html;
-
 }
 
 function updateNomTypeButtons(){
