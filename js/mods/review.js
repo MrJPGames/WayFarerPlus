@@ -7,8 +7,8 @@ function modReviewPage(settings){
 	newCss.setAttribute("href", chrome.extension.getURL("assets/review.css"));
 	document.getElementsByTagName("head")[0].appendChild(newCss);
 
-	if (settings["revExpireTimer"])
-		addPageJS("review/expireTimer.js");
+	if (settings["revExpireTimer"] || settings["revSubmitTimer"] > 0)
+		addPageJS("review/timerMods.js");
 	if (settings["revCardView"] == "compact")
 		addPageJS("review/compactCards.js");
 	if (settings["revCardView"] == "extended")

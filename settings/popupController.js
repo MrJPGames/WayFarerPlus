@@ -17,6 +17,13 @@ function changeSelectSetting(elem){
 	store(key, value);
 }
 
+function changeNumberSetting(elem){
+	var key = elem.id;
+	var value = parseInt(elem.value);
+
+	store(key, value);
+}
+
 function store(k, v){
 	var obj = {};
 	obj[k] = v;
@@ -59,6 +66,9 @@ function init(settings){
 				inputs[i].checked = true;
 			}
 			inputs[i].onclick = function(e){changeBoolSetting(e.srcElement)};
+		}else if (inputs[i].getAttribute("type") == "number"){
+			inputs[i].value = settings[inputs[i].id];
+			inputs[i].onchange = function(e){changeNumberSetting(e.srcElement)};
 		}
 	};
 

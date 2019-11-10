@@ -1,5 +1,33 @@
 var timeElem;
 
+function initTimerMods(){
+	if (settings["revExpireTimer"])
+		createTimer();
+	if (settings["revSubmitTimer"] > 0)
+		lockSubmitButton();
+}
+
+function lockSubmitButton(){
+	var buttons = document.getElementsByClassName("button-primary");
+	var tDiff = nSubCtrl.pageData.expires - Date.now();
+	for (var i = 1; i < buttons.length; i++){
+		if(buttons[i].innerText = "Submit" || buttons[i].id == "subButton"){
+			buttons[i].setAttribute("id", "subButton"); //Mark for next itteration
+			var seconds = Math.round(tDiff/1000) - (1200-settings["revSubmitTimer"]);
+			buttons[i].innerText = seconds + "S";
+			buttons[i].disabled = true;
+		}
+	}
+	if (tDiff/1000 < 1200-parseInt(settings["revSubmitTimer"])){
+		for (var i = 1; i < buttons.length; i++){
+			buttons[i].disabled = false;
+			buttons[i].innerText = "Submit";
+		}
+	}else{
+		setTimeout(lockSubmitButton, 100); //Updates 10x a second to avoid other things (AnsCtrl) enabling the button too long
+	}
+}
+
 function createTimer(){
 	var header = document.getElementsByClassName("niantic-wayfarer-logo")[0];
 	var headerTimer = document.createElement("div");
@@ -30,7 +58,7 @@ function updateTimer(){
 	}
 }
 
-document.addEventListener("WFPNSubCtrlHooked", createTimer, false);
+document.addEventListener("WFPNSubCtrlHooked", initTimerMods, false);
 
 //Helper functions
 function pad(num, size) {
