@@ -20,8 +20,10 @@ function lockSubmitButton(){
 	}
 	if (tDiff/1000 < 1200-parseInt(settings["revSubmitTimer"])){
 		for (var i = 1; i < buttons.length; i++){
-			buttons[i].disabled = false;
-			buttons[i].innerText = "SUBMIT";
+			if(buttons[i].innerText == "SUBMIT" || buttons[i].id == "subButton"){
+				buttons[i].disabled = false;
+				buttons[i].innerText = "SUBMIT";
+			}
 		}
 	}else{
 		setTimeout(lockSubmitButton, 100); //Updates 10x a second to avoid other things (AnsCtrl) enabling the button too long
