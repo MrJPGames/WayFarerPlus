@@ -7,13 +7,13 @@ function modNominationPage(settings){
 	console.log("[WayFarer+] Nominations page injection successful!");
 
 	//In separate function for future readability if more mods are added
-	if (settings["nomStreetView"]){
-		addStreetView();
-		addPageJS("nominations/streetView.js");
-	}
 	if (settings["nomStats"]){
 		addStats();
 		addPageJS("nominations/statsWidget.js");
+	}
+	if (settings["nomStreetView"]){
+		addStreetView();
+		addPageJS("nominations/streetView.js");
 	}
     if (settings["nomAccessDistCircle"] || settings["nomLowestDistCircle"] || settings["ctrlessZoom"]){
     	addPageJS("nominations/mapMods.js");
