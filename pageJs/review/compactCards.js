@@ -24,7 +24,7 @@ function setupCompactCard() {
     document.getElementById('three-card-container').appendChild(fragment);
     document.getElementById(divNames.titleAndDescription).classList.remove("card--expand");
     document.getElementById(divNames.titleAndDescription).classList.add("small-card");
-    document.getElementById(divNames.titleAndDescription).style.maxHeight = "233pt";
+    document.getElementById(divNames.titleAndDescription).style.minHeight = "232pt";
     document.getElementById(divNames.titleAndDescription).getElementsByClassName('card__body')[0].style.paddingTop = "0pt";
     document.getElementById(divNames.titleAndDescription).getElementsByTagName("h1")[0].style.fontSize = "26pt";
     document.getElementById(divNames.titleAndDescription).getElementsByTagName("h4")[1].style.fontSize = "16pt";
