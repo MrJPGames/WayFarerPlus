@@ -15,6 +15,15 @@ Other browser support?
 
 Changelog
 ---
+1.10:
+- Submit timer, lock the submit button for X seconds so you don't review "too quick"
+- Quick Submit Button, one click to submit and continue to next review
+- Better module loading, also fixes some Firefox only bugs.
+- Transparent pin, location pin can be made transparent and will become invisable on hover. Useful to see if the Wayspot is on the satellite underneath the pin.
+- Ingress Recon Badge progress now displayed on profile (If extended profile stats are on AND ingress account is turned on)
+- Extended profile is now customizable: Off, Aproximation and Facts Only. Aproximation can only be used if you have always had your agreements count towards upgrades. Facts only uses data that is accurate even if some of your agreements did not count towards upgrades and off disables the extend stats feature.
+- Some fixes for bugs and glitches
+
 1.9.3:
 - Fixed compact card view (after site update) Thanks to @GoncaloCdM for notifying me about the issue!
 - Hide navigation bar in expanded card view when on smaller yet without navigation bar compatible screen! (Suggested by @GoncaloCdM)
