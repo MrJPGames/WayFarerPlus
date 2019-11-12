@@ -151,4 +151,4 @@ function addPreset(){
 	}
 }
 
-document.addEventListener("WFPAllRevHooked", setupPresets, false);
+document.addEventListener("WFPAllRevHooked", setupPresets);

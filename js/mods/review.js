@@ -7,8 +7,8 @@ function modReviewPage(settings){
 	newCss.setAttribute("href", chrome.extension.getURL("assets/review.css"));
 	document.getElementsByTagName("head")[0].appendChild(newCss);
 
-	if (settings["revExpireTimer"])
-		addPageJS("review/expireTimer.js");
+	if (settings["revExpireTimer"] || settings["revSubmitTimer"] > 0)
+		addPageJS("review/timerMods.js");
 	if (settings["revCardView"] == "compact")
 		addPageJS("review/compactCards.js");
 	if (settings["revCardView"] == "extended")
@@ -23,8 +23,10 @@ function modReviewPage(settings){
 		addPageJS("review/keyboardCtrl.js");
 	if (settings["revPresets"])
 		addPageJS("review/presets.js");
+	if (settings["revQuickSubmit"])
+		addPageJS("review/quickSubmit.js");
 	
-	addPageJS("review/main.js");
+	addPageJS("review/main.js", true);
 
 	console.log("[WayFarer+] Review page injection successful!");
 }

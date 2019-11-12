@@ -26,4 +26,4 @@ function addTranslationButtons(){
 	}
 }
 
-document.addEventListener("WFPNSubCtrlHooked", addTranslationButtons, false);
+document.addEventListener("WFPNSubCtrlHooked", addTranslationButtons);

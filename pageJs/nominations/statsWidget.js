@@ -109,7 +109,6 @@ function loadStats(){
     }
 
     elem.innerHTML = html;
-
 }
 
 function updateNomTypeButtons(){
@@ -137,7 +136,7 @@ function setNomType(e){
     localStorage.wfpNominationTypes = JSON.stringify(nomTypes);
 }
 
-document.addEventListener("WFPNomCtrlHooked", loadStats, false);
+document.addEventListener("WFPNomCtrlHooked", loadStats);
 
 if (settings["accIngress"] && settings["accPoGo"])
     document.addEventListener("WFPNomSelected", updateNomTypeButtons, false);

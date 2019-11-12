@@ -13,45 +13,55 @@ function addExtendedStats(){
 	var agreementStatRight = document.createElement("span");
 	agreementStatRight.setAttribute("class", "stats-right");
 
-	agreementStatLeft.innerHTML = "Processed <u>and</u> Agreement";
-	agreementStatRight.innerText = agreementTotal;
+	var underlinedText = document.createElement("span");
+	underlinedText.style.textDecoration = "underline";
+	underlinedText.innerText = "and";
+
+	var procElem = document.createElement("span");
+	procElem.innerText = "Processed ";
+	agreementStatLeft.appendChild(procElem);
+	agreementStatLeft.appendChild(underlinedText);
+	var agreeElem = document.createElement("span");
+	agreeElem.innerText = " Agreement";
+	agreementStatLeft.appendChild(agreeElem);
+	if (settings["profExtendedStats"] == "aprox")
+		agreementStatRight.innerText = agreementTotal;
+	else
+		agreementStatRight.innerText = normalAgreements;
 
 	agreementStatElem.appendChild(agreementStatLeft);
 	agreementStatElem.appendChild(agreementStatRight);
 
 	profileStats.children[1].insertBefore(agreementStatElem, profileStats.children[1].children[1]);
 
-	//Segment for "Other Agreements"
-	
+	if (settings["profExtendedStats"] == "aprox"){
+		//Segment for "Other Agreements"
+		var otherAgreements = agreementTotal - normalAgreements;
 
-	var otherAgreements = agreementTotal - normalAgreements;
-	console.log(normalAgreements);
+		var otherAgreementsElem = document.createElement("h4");
 
-	var otherAgreementsElem = document.createElement("h4");
+		var otherAgreementStatLeft = document.createElement("span");
+		otherAgreementStatLeft.setAttribute("class", "stats-left");
+		var otherAgreementStatRight = document.createElement("span");
+		otherAgreementStatRight.setAttribute("class", "stats-right");
 
-	var otherAgreementStatLeft = document.createElement("span");
-	otherAgreementStatLeft.setAttribute("class", "stats-left");
-	var otherAgreementStatRight = document.createElement("span");
-	otherAgreementStatRight.setAttribute("class", "stats-right");
+		otherAgreementStatLeft.innerText = "Other Agreements";
+		otherAgreementStatRight.innerText = otherAgreements;
 
-	otherAgreementStatLeft.innerHTML = "Other Agreements";
-	otherAgreementStatRight.innerText = otherAgreements;
+		otherAgreementsElem.appendChild(otherAgreementStatLeft);
+		otherAgreementsElem.appendChild(otherAgreementStatRight);
 
-	otherAgreementsElem.appendChild(otherAgreementStatLeft);
-	otherAgreementsElem.appendChild(otherAgreementStatRight);
-
-	profileStats.children[1].appendChild(otherAgreementsElem);
+		profileStats.children[1].appendChild(otherAgreementsElem);
+	}
 
 	//if Ingress agent add recon badge progress to page:
 	if (settings["accIngress"]){
 		const reconBadges = [ [0, 'None'], [100, 'Bronze'], [750, 'Silver'], [2500, 'Gold'], [5000, 'Platinum'], [10000, 'Onyx'] ];
 
 		var badge = 0;
-		for (var i=1; i < reconBadges.length; i++){
-			if (normalAgreements >= reconBadges[i][0]){
+		for (var i=1; i < reconBadges.length; i++)
+			if (normalAgreements >= reconBadges[i][0])
 				badge = i;
-			}
-		}
 
 		var curBadgeElem = document.createElement("h4");
 
@@ -66,7 +76,7 @@ function addExtendedStats(){
 		curBadgeElem.appendChild(curBadgeLeftElem);
 		curBadgeElem.appendChild(curBadgeRightElem);
 
-		profileStats.insertBefore(curBadgeElem, profileStats.children[2]);
+		profileStats.children[0].appendChild(curBadgeElem);
 
 		//Check if you don't already have the highest badge
 		if (badge+1 <= reconBadges.length){
@@ -88,10 +98,8 @@ function addExtendedStats(){
 			badgeProgressElem.appendChild(badgeProgressLeftElem);
 			badgeProgressElem.appendChild(badgeProgressRightElem);
 
-			profileStats.insertBefore(badgeProgressElem, profileStats.children[3]);
+			profileStats.children[0].appendChild(badgeProgressElem);
 		}
 	}
 }
-
-
-document.addEventListener("WFPPCtrlHooked", addExtendedStats, false);
+document.addEventListener("WFPPCtrlHooked", addExtendedStats);

@@ -11,7 +11,12 @@ function setupCompactCard() {
     if (!nSubCtrl.hasSupportingImageOrStatement) {
         document.getElementById("supporting-card").classList.remove("ng-hide");
         document.getElementById("supporting-card").getElementsByClassName("supporting-image")[0].remove();
-        document.getElementById("supporting-card").getElementsByClassName("card__body")[0].innerHTML = '<h4 class="ng-binding">This nomination was made using Scanner [REDACTED], which means that no supporting photo or supporting statement were given.</h4>';
+
+        var replaceContent = document.createElement("h4");
+        replaceContent.setAttribute("class", "ng-binding");
+        replaceContent.innerText = "This nomination was made using Scanner [REDACTED], which means that no supporting photo or supporting statement were given.";
+
+        document.getElementById("supporting-card").getElementsByClassName("card__body")[0].appendChild(replaceContent);
     }
 
     var fragment = document.createDocumentFragment();
@@ -19,7 +24,7 @@ function setupCompactCard() {
     document.getElementById('three-card-container').appendChild(fragment);
     document.getElementById(divNames.titleAndDescription).classList.remove("card--expand");
     document.getElementById(divNames.titleAndDescription).classList.add("small-card");
-    document.getElementById(divNames.titleAndDescription).style.maxHeight = "233pt";
+    document.getElementById(divNames.titleAndDescription).style.minHeight = "232pt";
     document.getElementById(divNames.titleAndDescription).getElementsByClassName('card__body')[0].style.paddingTop = "0pt";
     document.getElementById(divNames.titleAndDescription).getElementsByTagName("h1")[0].style.fontSize = "26pt";
     document.getElementById(divNames.titleAndDescription).getElementsByTagName("h4")[1].style.fontSize = "16pt";
@@ -45,7 +50,7 @@ function setupCompactCard() {
     document.getElementById(divNames.safeAccess).getElementsByClassName('card-header')[0].style.marginTop = "-6pt";
     document.getElementById(divNames.safeAccess).style.maxHeight = "3em";
 
-    document.getElementById(divNames.historicOrCultural).getElementsByClassName("card-header__title")[0].innerHTML = "Historic/Cultural";
+    document.getElementById(divNames.historicOrCultural).getElementsByClassName("card-header__title")[0].innerText = "Historic/Cultural";
 
     document.getElementById("duplicates-card").classList.remove("card--double-width");
     document.getElementById("duplicates-card").classList.add("card--expand");
@@ -68,5 +73,4 @@ function setupCompactCard() {
     removeRedundantDescriptions();
 }
 
-
-document.addEventListener("WFPNSubCtrlHooked", setupCompactCard, false);
+document.addEventListener("WFPNSubCtrlHooked", setupCompactCard);

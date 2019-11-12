@@ -1,5 +1,5 @@
 //Sets up default settings on first launch or upgrade
-var settingsVersion = 10;
+var settingsVersion = 11;
 
 chrome.storage.local.get("options_set", function (data){
 	var opt_ver = (data["options_set"] != undefined) ? data["options_set"] : 0;
@@ -16,7 +16,6 @@ chrome.storage.local.get("options_set", function (data){
 			setOption("accIngress", false);
 		case 3:
 			setOption("revTranslate", true);
-			setOption("profExtendedStats", true);
 			setOption("revLowestDistCircle", true);
 			setOption("revAccessDistCircle", true);
 		case 4:
@@ -41,6 +40,11 @@ chrome.storage.local.get("options_set", function (data){
 		case 9:
 			setOption("revCardView", "normal");
 			setOption("revPresets", false);
+		case 10:
+			setOption("profExtendedStats", "aprox");
+			setOption("revTransparentMarker", true);
+			setOption("revSubmitTimer", 0);
+			setOption("revQuickSubmit", true);
 			setOption("options_set", settingsVersion);
 	}
 });

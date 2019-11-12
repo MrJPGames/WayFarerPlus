@@ -59,6 +59,10 @@
 			<label for="revGoogleMaps" class="switch__label">Open in Google Maps button</label>
 		</div><br/>
 		<div class="switch">
+			<input type="checkbox" class="switch__input" id="revQuickSubmit" />
+			<label for="revQuickSubmit" class="switch__label">Quick submit button</label>
+		</div><br/>
+		<div class="switch">
 			<label>S2 Cell Level:</label>
 			<select id="revS2Cell">
 				<option value="-1">No S2 Cell</option>
@@ -98,6 +102,15 @@
 				<option value="17">Zoomed in</option>
 				<option value="19">Ultra zoomed in</option>
 			</select>
+		</div><br/>
+		<div class="switch">
+			<input type="checkbox" class="switch__input" id="revTransparentMarker" />
+			<label for="revTransparentMarker" class="switch__label">Transparent location marker.</label>
+			<img title="Makes the location marker of a submission transparent. Helpful if the Wayspot is being obsturcted by said marker. Fully disappears on hover." src="../assets/help.svg"/>
+		</div>
+		<div class="switch">
+			<label for="revSubmitTimer">Lock submit button for: </label>
+			<input type="number" id="revSubmitTimer" style="width: 4em;"> Seconds
 		</div>
 		<h2>Nominations:</h2>
 		<div class="switch">
@@ -141,9 +154,13 @@
 		</div>
 		<h2>Profile</h2>
 		<div class="switch">
-			<input type="checkbox" class="switch__input" id="profExtendedStats" />
-			<label for="profExtendedStats" class="switch__label">Extended stats</label>
-			<img title="Works based on upgrade stats. If you've gotten agreements that did not count towards your upgrades this option will not work for you!" src="../assets/help.svg"/>
+			<label>Extended stats:</label>
+			<select id="profExtendedStats">
+				<option value="off">Off</option>
+				<option value="aprox">Aproximation</option>
+				<option value="truth">Facts only</option>
+			</select>
+			<img title="Aproximation works based on upgrade stats. If you've gotten agreements that did not count towards your upgrades this option will not work for you! Facts only will be less informative but always accurate." src="../assets/help.svg"/>
 		</div>
 		<h2>Header</h2>
 		<div class="switch">

@@ -12,7 +12,7 @@ img{
     filter: invert();
 }
 
-select{
+select, input[type="number"]{
     padding: 1pt;
     font-size: 20px;
     border-radius: 2pt;
