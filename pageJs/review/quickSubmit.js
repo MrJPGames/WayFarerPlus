@@ -11,7 +11,69 @@ function initQuickSubmit(){
 	}
 
 	createObserver();
+	hookDupeModal();
+	hookLowQualityModal();
 }
+
+function hookLowQualityModal(){
+	var origFunc = ansCtrl.showLowQualityModal;
+	ansCtrl.showLowQualityModal = function(){
+		origFunc();
+		setTimeout(function (){
+			var button = createQuickModalButton();
+			var modalContent = document.getElementById("low-quality-modal");
+			var submitButton = modalContent.getElementsByClassName("button-primary")[0];
+			button.disabled = submitButton.disabled;
+			var submitButtonParent = submitButton.parentNode;
+			submitButtonParent.insertBefore(button, submitButton);
+
+			//Fix style of cancel button
+			var cancelButton = modalContent.getElementsByClassName("button-secondary")[0];
+			cancelButton.style.marginRight = "0.2em";
+
+			createRejectObserver(button);
+		}, 10); //We need to give it time to create the modal
+	}
+}
+
+function hookDupeModal(){
+	var origFunc = markDuplicatePressed;
+	markDuplicatePressed = function (guid){
+		origFunc(guid);
+		setTimeout(function (){
+			var button = createQuickModalButton();
+			button.disabled = false;
+			var modalContent = document.getElementsByClassName("modal-content")[0];
+			var submitButton = modalContent.getElementsByClassName("button-primary")[0];
+			var submitButtonParent = submitButton.parentNode;
+			submitButtonParent.insertBefore(button, submitButton);
+		}, 10);
+	}
+}
+
+function createRejectObserver(button){
+	//Used to keep disabled/enabled-ness of button in sync with official submit buttons
+	const subButtons = document.getElementById('low-quality-modal').getElementsByClassName("button-primary");
+	const subButton = subButtons[subButtons.length-1];
+
+	//We only care about attribute updates
+	const config = { attributes: true, childList: false, subtree: false };
+
+	const callback = function(mutationsList, observer) {
+	    for(let mutation of mutationsList) {
+	        if (mutation.type === 'attributes' && mutation.attributeName === 'disabled') {
+	            updateSpecificButton(button, mutation.target.disabled);
+	        }
+	    }
+	};
+	const observer = new MutationObserver(callback);
+	observer.observe(subButton, config);
+}
+
+function updateSpecificButton(elem, value){
+	elem.disabled = value;
+}
+
 
 function createObserver(){
 	//Used to keep disabled/enabled-ness of button in sync with official submit buttons
@@ -20,25 +82,18 @@ function createObserver(){
 	//We only care about attribute updates
 	const config = { attributes: true, childList: false, subtree: false };
 
-	// Callback function to execute when mutations are observed
 	const callback = function(mutationsList, observer) {
 	    for(let mutation of mutationsList) {
 	        if (mutation.type === 'attributes' && mutation.attributeName === 'disabled') {
-	            console.log('The ' + mutation.attributeName + ' attribute was modified.');
 	            updateButtonsEnabled(mutation.target.disabled);
 	        }
 	    }
 	};
-
-	// Create an observer instance linked to the callback function
 	const observer = new MutationObserver(callback);
-
-	// Start observing the target node for configured mutations
 	observer.observe(subButton, config);
 }
 
 function updateButtonsEnabled(disable){
-	console.log("test1");
 	var buttons = document.getElementsByClassName("button-primary");
 	for (var i = 0; i < buttons.length; i++){
 		if (buttons[i].id == "quickSubButton"){
@@ -65,6 +120,7 @@ function createQuickSubmitButton(){
 	button.setAttribute("class", "button-primary");
 	button.id = "quickSubButton";
 	button.style.marginRight = "1em";
+	button.style.minWidth = "2em";
 	button.disabled = true;
 
 	addQuickSubmitImages(button);
@@ -72,13 +128,13 @@ function createQuickSubmitButton(){
 	return button;
 }
 
-function createQuickDuplicateButton(){
+function createQuickModalButton(){
 	var button = document.createElement("button");
 	button.onclick = quickDuplicateSubmit;
 	button.setAttribute("class", "button-primary");
 	button.id = "quickSubButton";
-	button.style.marginRight = "1em";
-	button.disabled = true;
+	button.style.marginRight = "0.2em";
+	button.style.minWidth = "2em";
 
 	addQuickSubmitImages(button);
 

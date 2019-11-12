@@ -47,15 +47,11 @@ function lockSubmitButton(){
 				buttons[i].setAttribute("ng-disabled-temp", "");
 				buttons[i].style.color = "";
 				buttons[i].disabled = !(!ansCtrl.reviewComplete && ansCtrl.readyToSubmit());
-			}else if (buttons[i].id == "quickSubButton"){
-				//Quick submit mod is active, so we can call it's function to add the images
-				buttons[i].innerText = "";
-				addQuickSubmitImages(buttons[i]);
 			}
 		}
 	}else{
 		for (var i = 0; i < buttons.length; i++){
-			if(buttons[i].id == "subButton" || buttons[i].id == "quickSubButton"){
+			if(buttons[i].id == "subButton"){
 				var seconds = Math.round(tDiff/1000) - (1200-settings["revSubmitTimer"]);
 				buttons[i].innerText = seconds + "S";
 			}
