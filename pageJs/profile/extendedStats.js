@@ -102,6 +102,4 @@ function addExtendedStats(){
 		}
 	}
 }
-
-
-document.addEventListener("WFPPCtrlHooked", addExtendedStats, false);
+document.addEventListener("WFPPCtrlHooked", addExtendedStats);

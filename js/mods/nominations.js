@@ -52,7 +52,7 @@ function modNominationPage(settings){
 	if (settings["nomS2Cell"] != -1)
 		addPageJS("libs/S2.js");
 	
-	addPageJS("nominations/main.js");
+	addPageJS("nominations/main.js", true);
 }
 
 function addNomTypeButtons(){

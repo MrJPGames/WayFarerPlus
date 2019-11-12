@@ -21,7 +21,7 @@ function onHooked(){
 		if (nSubCtrl.pageData.nearbyPortals[0] != undefined)
 			checkNearby();
 }
-document.addEventListener("WFPAllRevHooked", onHooked, false);
+document.addEventListener("WFPAllRevHooked", onHooked);
 
 function hookedAll(){
 	if (hooked < 4){
@@ -37,7 +37,7 @@ function hookedAll(){
 function hookSubCtrl(){
 	nSubCtrl = angular.element(document.getElementById("NewSubmissionController")).scope().subCtrl;
 	
-	if (nSubCtrl == undefined || nSubCtrl.pageData == undefined || nSubCtrl.pageData.expires == undefined || nSubCtrl.loaded == false){
+	if (nSubCtrl == undefined || nSubCtrl.pageData == undefined || nSubCtrl.pageData.expires == undefined || nSubCtrl.loaded == false || nSubCtrl.pageData.description == undefined){
 		setTimeout(hookSubCtrl, 50);
 	}else{
 		hooked++;

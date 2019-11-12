@@ -135,10 +135,8 @@ function setNomType(e){
     //Store changes
     localStorage.wfpNominationTypes = JSON.stringify(nomTypes);
 }
-if (nomCtrl == null)
-    document.addEventListener("WFPNomCtrlHooked", loadStats);
-else
-    loadStats();
+
+document.addEventListener("WFPNomCtrlHooked", loadStats);
 
 if (settings["accIngress"] && settings["accPoGo"])
     document.addEventListener("WFPNomSelected", updateNomTypeButtons, false);

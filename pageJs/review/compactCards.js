@@ -73,5 +73,4 @@ function setupCompactCard() {
     removeRedundantDescriptions();
 }
 
-
-document.addEventListener("WFPNSubCtrlHooked", setupCompactCard, false);
+document.addEventListener("WFPNSubCtrlHooked", setupCompactCard);

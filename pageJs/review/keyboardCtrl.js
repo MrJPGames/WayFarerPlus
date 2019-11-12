@@ -192,5 +192,4 @@ function changeRevPos(diff){
 	revFields[revPos].scrollIntoView(false);
 }
 
-
-document.addEventListener("WFPAnsCtrlHooked", setupKeyboardControl, false);
+document.addEventListener("WFPAllRevHooked", setupKeyboardControl);

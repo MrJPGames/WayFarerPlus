@@ -23,8 +23,10 @@ function modReviewPage(settings){
 		addPageJS("review/keyboardCtrl.js");
 	if (settings["revPresets"])
 		addPageJS("review/presets.js");
+	if (settings["revQuickSubmit"])
+		addPageJS("review/quickSubmit.js");
 	
-	addPageJS("review/main.js");
+	addPageJS("review/main.js", true);
 
 	console.log("[WayFarer+] Review page injection successful!");
 }

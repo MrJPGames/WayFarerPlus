@@ -50,7 +50,7 @@ function zoomMap2(){
 }
 
 function hookResetMapFuncs(){
-	let originalResetStreetView = nSubCtrl.resetStreetView
+	let originalResetStreetView = nSubCtrl.resetStreetView;
     nSubCtrl.resetStreetView = function() {
 		originalResetStreetView()
 		if (settings["revLowestDistCircle"])
@@ -173,4 +173,4 @@ function hookLongDistLocEdit(){
     });
 }
 
-document.addEventListener("WFPAllRevHooked", setupMapMods, false);
+document.addEventListener("WFPAllRevHooked", setupMapMods);
