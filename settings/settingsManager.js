@@ -44,6 +44,7 @@ chrome.storage.local.get("options_set", function (data){
 			setOption("profExtendedStats", "aprox");
 			setOption("revTransparentMarker", true);
 			setOption("revSubmitTimer", 0);
+			setOption("revQuickSubmit", true);
 			setOption("options_set", settingsVersion);
 	}
 });
