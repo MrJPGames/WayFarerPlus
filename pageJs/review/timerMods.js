@@ -3,30 +3,64 @@ var timeElem;
 function initTimerMods(){
 	if (settings["revExpireTimer"])
 		createTimer();
-	if (settings["revSubmitTimer"] > 0)
+	if (settings["revSubmitTimer"] > 0){
+		markSubmitButtons();
 		lockSubmitButton();
+		hookSubmitFunction();
+	}
+}
+
+function hookSubmitFunction(){
+	var originalReadyToSubmit = ansCtrl.readyToSubmit;
+	ansCtrl.readyToSubmit = function(){
+		var tDiff = nSubCtrl.pageData.expires - Date.now();
+		if (tDiff/1000 < 1200-parseInt(settings["revSubmitTimer"])){
+			return originalReadyToSubmit();
+		}else{
+			return false;
+		}
+	}
+}
+
+function markSubmitButtons(){
+	var buttons = document.getElementsByClassName("button-primary");
+	for (var i = 0; i < buttons.length; i++){
+		if (buttons[i].innerText == "SUBMIT"){
+			buttons[i].id = "subButton";
+			var disableRule = buttons[i].getAttribute("ng-disabled");
+			buttons[i].setAttribute("ng-disabled-temp", disableRule);
+			buttons[i].setAttribute("ng-disabled", "");
+			buttons[i].style.color = "#666";
+		}
+	}
 }
 
 function lockSubmitButton(){
 	var buttons = document.getElementsByClassName("button-primary");
 	var tDiff = nSubCtrl.pageData.expires - Date.now();
-	for (var i = 0; i < buttons.length; i++){
-		if(buttons[i].innerText == "SUBMIT" || buttons[i].id == "subButton"){
-			buttons[i].setAttribute("id", "subButton"); //Mark for next itteration
-			var seconds = Math.round(tDiff/1000) - (1200-settings["revSubmitTimer"]);
-			buttons[i].innerText = seconds + "S";
-			buttons[i].disabled = true;
-		}
-	}
 	if (tDiff/1000 < 1200-parseInt(settings["revSubmitTimer"])){
-		for (var i = 1; i < buttons.length; i++){
-			if(buttons[i].innerText == "SUBMIT" || buttons[i].id == "subButton"){
-				buttons[i].disabled = false;
+		for (var i = 0; i < buttons.length; i++){
+			if(buttons[i].id == "subButton"){
 				buttons[i].innerText = "SUBMIT";
+				var disableRule = buttons[i].getAttribute("ng-disabled-temp");
+				buttons[i].setAttribute("ng-disabled", disableRule);
+				buttons[i].setAttribute("ng-disabled-temp", "");
+				buttons[i].style.color = "";
+				buttons[i].disabled = !(!ansCtrl.reviewComplete && ansCtrl.readyToSubmit());
+			}else if (buttons[i].id == "quickSubButton"){
+				//Quick submit mod is active, so we can call it's function to add the images
+				buttons[i].innerText = "";
+				addQuickSubmitImages(buttons[i]);
 			}
 		}
 	}else{
-		setTimeout(lockSubmitButton, 100); //Updates 10x a second to avoid other things (AnsCtrl) enabling the button too long
+		for (var i = 0; i < buttons.length; i++){
+			if(buttons[i].id == "subButton" || buttons[i].id == "quickSubButton"){
+				var seconds = Math.round(tDiff/1000) - (1200-settings["revSubmitTimer"]);
+				buttons[i].innerText = seconds + "S";
+			}
+		}
+		setTimeout(lockSubmitButton, 1000);
 	}
 }
 
@@ -60,7 +94,7 @@ function updateTimer(){
 	}
 }
 
-document.addEventListener("WFPNSubCtrlHooked", initTimerMods, false);
+document.addEventListener("WFPAllRevHooked", initTimerMods);
 
 //Helper functions
 function pad(num, size) {
