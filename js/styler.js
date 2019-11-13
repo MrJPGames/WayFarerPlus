@@ -70,7 +70,8 @@ function applyPublicStyle(){
 	.known-information__description>div {color: white;}
 	.categories-display-result span:not(:first-child)::before {color: white !important;}
 	.hamburger {filter: invert();}
-	.nom-edit-input__text-field {background-color: inherit !important;}`;
+	.nom-edit-input__text-field {background-color: inherit !important;}
+	.container {background: black !important;}`;
 
 
 
