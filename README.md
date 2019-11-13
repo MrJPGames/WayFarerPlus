@@ -18,6 +18,7 @@ Changelog
 1.10:
 - Submit timer, lock the submit button for X seconds so you don't review "too quick"
 - Quick Submit Button, one click to submit and continue to next review
+- Space bar can be used to submit review and go to next while using keyboard controls (with or without Quick Submit button on)
 - Better module loading, also fixes some Firefox only bugs.
 - Transparent pin, location pin can be made transparent and will become invisable on hover. Useful to see if the Wayspot is on the satellite underneath the pin.
 - Ingress Recon Badge progress now displayed on profile (If extended profile stats are on AND ingress account is turned on)

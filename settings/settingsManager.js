@@ -5,7 +5,7 @@ chrome.storage.local.get("options_set", function (data){
 	var opt_ver = (data["options_set"] != undefined) ? data["options_set"] : 0;
 	switch(opt_ver){
 		case 0:
-			setOption("darkMode", true);
+			setOption("darkMode", false);
 			setOption("nomStreetView", true);
 			setOption("revTooCloseWarn", true);
 			setOption("revExpireTimer", true);
