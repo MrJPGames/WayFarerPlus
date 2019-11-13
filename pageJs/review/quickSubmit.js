@@ -109,8 +109,14 @@ function quickSubmit(){
 	}
 }
 
-function quickDuplicateSubmit(){
-	ansCtrl.confirmDuplicate();
+function quickRejectModal(e){
+	var buttonDiv = e.srcElement.parentNode;
+	while (buttonDiv.getAttribute("class") != "button-container" && buttonDiv.getAttribute("class") != "text-center"){ //Find the correct container (as the spans could also be the source element)
+		buttonDiv = buttonDiv.parentNode;
+		console.log(buttonDiv);
+	}
+	console.log(buttonDiv);
+	buttonDiv.children[2].click();
 	ansCtrl.reloadPage();
 }
 
@@ -130,7 +136,7 @@ function createQuickSubmitButton(){
 
 function createQuickModalButton(){
 	var button = document.createElement("button");
-	button.onclick = quickDuplicateSubmit;
+	button.onclick = quickRejectModal;
 	button.setAttribute("class", "button-primary");
 	button.id = "quickSubButton";
 	button.style.marginRight = "0.2em";
