@@ -68,12 +68,6 @@ function keyDownEvent(e){
 			var ansCtrl2 = angular.element(ansCtrl2Elem).scope().answerCtrl2;
 			ansCtrl2.confirmLowQuality();
 			ansCtrl.reviewComplete = true;
-		}else if (rejectComplete && e.keyCode == 32){
-			e.preventDefault();
-			var ansCtrl2Elem = document.getElementById("low-quality-modal");
-			var ansCtrl2 = angular.element(ansCtrl2Elem).scope().answerCtrl2;
-			ansCtrl2.confirmLowQuality();
-			ansCtrl2.reloadPage();
 		}
 		return;
 	}
