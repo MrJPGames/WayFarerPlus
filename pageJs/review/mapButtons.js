@@ -39,7 +39,4 @@ function addMapButton(mapUrl, text, buttonID){
 	}
 }
 
-if (typeof nSubCtrl === 'undefined')
-    document.addEventListener("WFPNSubCtrlHooked", loadMapButtons);
-else
-    loadMapButtons();
+document.addEventListener("WFPNSubCtrlHooked", loadMapButtons);
