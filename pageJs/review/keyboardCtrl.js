@@ -64,11 +64,13 @@ function keyDownEvent(e){
 		if (rejectComplete && e.keyCode == 13){
 			//Stop the enter from creating a new line in the textarea
 			e.preventDefault();
-			ansCtrl.confirmLowQuality();
+			var ansCtrl2Elem = document.getElementById("low-quality-modal");
+			var ansCtrl2 = angular.element(ansCtrl2Elem).scope().answerCtrl2;
+			ansCtrl2.confirmLowQuality();
+			ansCtrl.reviewComplete = true;
 		}
 		return;
 	}
-
 	if (ansCtrl.reviewComplete){
 		if (e.keyCode == 13) //Enter Key
 			ansCtrl.reloadPage();
