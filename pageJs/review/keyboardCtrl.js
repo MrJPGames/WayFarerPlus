@@ -68,6 +68,12 @@ function keyDownEvent(e){
 			var ansCtrl2 = angular.element(ansCtrl2Elem).scope().answerCtrl2;
 			ansCtrl2.confirmLowQuality();
 			ansCtrl.reviewComplete = true;
+		}else if (rejectComplete && e.keyCode == 32){
+			e.preventDefault();
+			var ansCtrl2Elem = document.getElementById("low-quality-modal");
+			var ansCtrl2 = angular.element(ansCtrl2Elem).scope().answerCtrl2;
+			ansCtrl2.confirmLowQuality();
+			ansCtrl2.reloadPage();
 		}
 		return;
 	}
@@ -93,6 +99,11 @@ function keyDownEvent(e){
 			}else if (e.keyCode == 13){ //Enter key
 				if (ansCtrl.readyToSubmit())
 					ansCtrl.submitForm();
+			}else if (e.keyCode == 32){
+				if (ansCtrl.readyToSubmit()){
+					ansCtrl.submitForm();
+					ansCtrl.reloadPage();
+				}
 			}else if (e.keyCode == 68){ // D key
 				document.getElementById("markDuplicateButton").click();
 				inDuplicate = true;
@@ -114,6 +125,9 @@ function keyDownEvent(e){
 			}else if (e.keyCode == 13){
 				ansCtrl2.confirmDuplicate();
 				ansCtrl.reviewComplete = true;
+			}else if (e.keyCode == 32){
+				ansCtrl2.confirmDuplicate();
+				ansCtrl2.reloadPage();
 			}
 		}else{
 			//In rejection
