@@ -115,7 +115,7 @@ function quickRejectModal(e){
 		buttonDiv = buttonDiv.parentNode;
 	}
 	buttonDiv.children[2].click();
-	ansCtrl.reloadPage();
+	setTimeout(function(){ansCtrl.reloadPage()}, 10);
 }
 
 function createQuickSubmitButton(){
