@@ -1,3 +1,11 @@
+if (nomCtrl == undefined)
+    document.addEventListener("WFPNomCtrlHooked", loadStats);
+else
+    loadStats();
+
+if (settings["accIngress"] && settings["accPoGo"])
+    document.addEventListener("WFPNomSelected", updateNomTypeButtons, false);
+
 function loadStats(){
     if (!nomCtrl.loaded){
         setTimeout(loadStats, 100);
@@ -107,7 +115,6 @@ function loadStats(){
         //end table
         html += "</tbody></table>";
     }
-
     elem.innerHTML = html;
 }
 
@@ -135,11 +142,6 @@ function setNomType(e){
     //Store changes
     localStorage.wfpNominationTypes = JSON.stringify(nomTypes);
 }
-
-document.addEventListener("WFPNomCtrlHooked", loadStats);
-
-if (settings["accIngress"] && settings["accPoGo"])
-    document.addEventListener("WFPNomSelected", updateNomTypeButtons, false);
 
 //Helper functions
 function daysSince(date2){
