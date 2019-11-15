@@ -79,9 +79,9 @@ function keyDownEvent(e){
 	}else{
 		if (!inReject && !inDuplicate){
 			if (e.keyCode == 37 || e.keyCode == 8){ //Left arrow key or backspace
-				changeRevPos(-1);
+				changeRevPos(-1, true);
 			}else if (e.keyCode == 39){ //Right arrow key
-				changeRevPos(1);
+				changeRevPos(1, true);
 			}else if (e.keyCode >= 97 && e.keyCode <= 101){ // 1-5 Num pad
 				var rating = e.keyCode - 97;
 				setRating(revPos, rating);
@@ -186,13 +186,16 @@ function setRating(pos, rate){
 		changeRevPos(1);
 }
 
-function changeRevPos(diff){
+function changeRevPos(diff, manual = false){
 	revFields[revPos].setAttribute("style", "");
 	revPos += diff;
 	if (revPos < 0)
 		revPos = 0;
-	if (revPos > maxRevPos)
+	if (revPos > maxRevPos){
 		revPos = maxRevPos;
+		if (manual)
+			document.getElementById("category-input").focus(); //Focus on what is it box
+	}
 
 	//Set appropriate style
 	revFields[revPos].setAttribute("style", "border-color: #" + colCode + ";");
