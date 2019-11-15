@@ -89,7 +89,7 @@ function loadStats(){
         }
     }
 
-    var html;
+    var html = "";
 
     if (!settings["darkMode"])
         html += "<div id='statReload' onclick='loadStats()'><img src='/img/pages/refresh-24px.svg'></div>";
