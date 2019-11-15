@@ -61,3 +61,7 @@ html {
 .three-card-parent .small-card{
     max-height: 10.08em;    
 }
+
+.card-header__description{
+    height: 2em;
+}
