@@ -1,6 +1,7 @@
 function addExtendedStats(){
 	//Get data from page before modifying it
 	var profileStats = document.getElementById("profile-stats");
+	var reviewTotal = parseInt(profileStats.children[0].children[0].children[1].innerText);
 	var normalAgreements = parseInt(profileStats.children[1].children[1].children[1].innerText) + parseInt(profileStats.children[1].children[2].children[1].innerText) + parseInt(profileStats.children[1].children[3].children[1].innerText);
 
 	//Segment for "Processed _and_ Agreement stat"
@@ -25,9 +26,11 @@ function addExtendedStats(){
 	agreeElem.innerText = " Agreement";
 	agreementStatLeft.appendChild(agreeElem);
 	if (settings["profExtendedStats"] == "aprox")
-		agreementStatRight.innerText = agreementTotal;
+		agreementStatRight.innerText = agreementTotal + " (" + Math.round(agreementTotal/reviewTotal*100) + "%)";
 	else
-		agreementStatRight.innerText = normalAgreements;
+		agreementStatRight.innerText = normalAgreements + " (" + Math.round(normalAgreements/reviewTotal*100) + "%)";
+
+
 
 	agreementStatElem.appendChild(agreementStatLeft);
 	agreementStatElem.appendChild(agreementStatRight);
