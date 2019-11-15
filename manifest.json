@@ -2,7 +2,7 @@
   "manifest_version": 2,
 
   "name": "WayFarer+",
-  "description": "Enable you to use NianticLab's Wayfarer in the way you want!",
+  "description": "Enables you to use NianticLab's Wayfarer in the way you want!",
   "version": "1.10.2",
 
   "browser_action": {
