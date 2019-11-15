@@ -5,12 +5,16 @@ Adds a set of custom tools for Wayfarer that make reviewing and monitoring your 
 
 General discussion, GitHubless bug reporting and feature requests: https://t.me/joinchat/B1ceWQ5xy3wT03gjkq0Few
 
+Documentation and users guide: https://github.com/MrJPGames/WayFarer-/wiki
+
 [![Available for Google Chrome](https://developer.chrome.com/webstore/images/ChromeWebStore_BadgeWBorder_v2_206x58.png)](https://chrome.google.com/webstore/detail/wayfarer%20/fnhddfgebnmokicfdfgcdcdhcmgkeglc)
 [![Available for Firefox](https://addons.cdn.mozilla.net/static/img/addons-buttons/AMO-button_1.png)](https://addons.mozilla.org/en-US/firefox/addon/wayfarerplus/)
 
 Other browser support?
-- Opera's review process is VERY slow. Install via the Google Chrome Web Store instead using "Add to Opera"!
-- Edge will be supported when the Chromium builds become the official stable release
+- Brave, Vivaldi and other chromium browsers that use the Google Chrome Web Store for installing extensions.
+- Opera's review process is VERY slow. Install via the Google Chrome Web Store instead using "Add to Opera"! [More info](https://addons.opera.com/en/extensions/details/install-chrome-extensions/)
+- Firefox for Android, is technically supported, but I do not test for compatability.
+- Edge will be supported when the Chromium builds become the official stable release. When running beta builds you can also install from the Chrome Web Store after enabling instalation from other stores.
 - Safari is unsupported.
 
 Changelog
