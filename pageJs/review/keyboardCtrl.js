@@ -68,12 +68,6 @@ function keyDownEvent(e){
 			var ansCtrl2 = angular.element(ansCtrl2Elem).scope().answerCtrl2;
 			ansCtrl2.confirmLowQuality();
 			ansCtrl.reviewComplete = true;
-		}else if (rejectComplete && e.keyCode == 32){
-			e.preventDefault();
-			var ansCtrl2Elem = document.getElementById("low-quality-modal");
-			var ansCtrl2 = angular.element(ansCtrl2Elem).scope().answerCtrl2;
-			ansCtrl2.confirmLowQuality();
-			ansCtrl2.reloadPage();
 		}
 		return;
 	}
@@ -85,9 +79,9 @@ function keyDownEvent(e){
 	}else{
 		if (!inReject && !inDuplicate){
 			if (e.keyCode == 37 || e.keyCode == 8){ //Left arrow key or backspace
-				changeRevPos(-1);
+				changeRevPos(-1, true);
 			}else if (e.keyCode == 39){ //Right arrow key
-				changeRevPos(1);
+				changeRevPos(1, true);
 			}else if (e.keyCode >= 97 && e.keyCode <= 101){ // 1-5 Num pad
 				var rating = e.keyCode - 97;
 				setRating(revPos, rating);
@@ -105,6 +99,13 @@ function keyDownEvent(e){
 					ansCtrl.reloadPage();
 				}
 			}else if (e.keyCode == 68){ // D key
+				var dupeButton = document.getElementById("markDuplicateButton");
+				if (dupeButton == undefined){
+					if (nSubCtrl.reviewType == "NEW" && nSubCtrl.activePortals.length > 0)
+						nSubCtrl.displayLivePortal(0);
+					else
+						return;
+				}
 				document.getElementById("markDuplicateButton").click();
 				inDuplicate = true;
 
@@ -192,13 +193,16 @@ function setRating(pos, rate){
 		changeRevPos(1);
 }
 
-function changeRevPos(diff){
+function changeRevPos(diff, manual = false){
 	revFields[revPos].setAttribute("style", "");
 	revPos += diff;
 	if (revPos < 0)
 		revPos = 0;
-	if (revPos > maxRevPos)
+	if (revPos > maxRevPos){
 		revPos = maxRevPos;
+		if (manual)
+			document.getElementById("category-input").focus(); //Focus on what is it box
+	}
 
 	//Set appropriate style
 	revFields[revPos].setAttribute("style", "border-color: #" + colCode + ";");

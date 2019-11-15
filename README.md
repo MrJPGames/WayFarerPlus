@@ -19,8 +19,20 @@ Other browser support?
 
 Changelog
 ---
-1.10.0.1:
-- Fix for Dark Mode (A site update happend, which made changes causing an issue in Dark Mode)
+1.10.2:
+- Keyboard control to What is it box (using arrow keys) (#68)
+- Stars no longer misplaced in some languages (#66)
+- Nominations Stats widget truly fixed for Firefox
+- Nomination Stats can be reloaded (useful after setting if a nomination was from PoGo/Ingress to see the stats with that new info you provided)
+- Agreement total % of reviews is now shown in Extended Profile Stats (#67)
+- Duplicate window auto opening can now be disabled (#69)
+
+1.10.1:
+- Fix issue where space bar would quick submit even when typing in a text box
+- Fix Dark Mode after a new website update broke it
+- Typo fixes in settings
+- Quick Reject fix for Firefox
+- Temporary fix for Nominations Stats Widget on Firefox
 
 1.10:
 - Submit timer, lock the submit button for X seconds so you don't review "too quick"

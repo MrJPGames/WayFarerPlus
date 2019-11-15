@@ -1,5 +1,5 @@
 //Sets up default settings on first launch or upgrade
-var settingsVersion = 11;
+var settingsVersion = 12;
 
 chrome.storage.local.get("options_set", function (data){
 	var opt_ver = (data["options_set"] != undefined) ? data["options_set"] : 0;
@@ -45,6 +45,8 @@ chrome.storage.local.get("options_set", function (data){
 			setOption("revTransparentMarker", true);
 			setOption("revSubmitTimer", 0);
 			setOption("revQuickSubmit", true);
+		case 11:
+			setOption("revAutoSelectDupe", true);
 			setOption("options_set", settingsVersion);
 	}
 });

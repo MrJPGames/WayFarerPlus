@@ -141,6 +141,7 @@ function addStats(){
 	collapsibleInput.id = "collapsible";
 	collapsibleInput.setAttribute("class", "toggle");
 	collapsibleInput.type = "checkbox";
+	collapsibleInput.setAttribute("onclick", "loadIfUnloaded()");
 
 	var collapsibleLabel = document.createElement("label");
 	collapsibleLabel.setAttribute("class", "lbl-toggle");
