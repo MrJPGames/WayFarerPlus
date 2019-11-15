@@ -100,3 +100,7 @@ th, td{
 	border: white solid 1pt;
 	padding: 1pt 5pt;
 }
+
+#statReload{
+  float: right;
+}

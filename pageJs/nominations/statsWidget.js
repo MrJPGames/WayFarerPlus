@@ -1,3 +1,5 @@
+var statsLoaded = false;
+
 document.addEventListener("WFPNomCtrlHooked", loadStats);
 
 if (settings["accIngress"] && settings["accPoGo"])
@@ -87,7 +89,9 @@ function loadStats(){
         }
     }
 
-    var html =  "Total Nominations: " + parseInt(nomCount) +
+    var html = "<div id='statReload' onclick='loadStats()'><img src='/img/pages/refresh-24px.svg'></div>"
+
+    html +=  "Total Nominations: " + parseInt(nomCount) +
                 "<br/>Accepted: " + parseInt(acceptedCount) +
                 "<br/>Rejected: " + parseInt(deniedCount) +
                 "<br/>Withdrawn: " + parseInt(withdrawnCount) +
@@ -113,6 +117,8 @@ function loadStats(){
         html += "</tbody></table>";
     }
     elem.innerHTML = html;
+
+    statsLoaded = true;
 }
 
 function updateNomTypeButtons(){
@@ -138,6 +144,11 @@ function setNomType(e){
     nomTypes[nomCtrl.currentNomination.id] = e;
     //Store changes
     localStorage.wfpNominationTypes = JSON.stringify(nomTypes);
+}
+
+function loadIfUnloaded(){
+    if (!statsLoaded)
+        loadStats();
 }
 
 //Helper functions
