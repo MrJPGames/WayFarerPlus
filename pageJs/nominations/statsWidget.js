@@ -89,7 +89,12 @@ function loadStats(){
         }
     }
 
-    var html = "<div id='statReload' onclick='loadStats()'><img src='/img/pages/refresh-24px.svg'></div>"
+    var html;
+
+    if (!settings["darkMode"])
+        html += "<div id='statReload' onclick='loadStats()'><img src='/img/pages/refresh-24px.svg'></div>";
+    else
+        html += "<div id='statReload' style='filter: invert()' onclick='loadStats()'><img src='/img/pages/refresh-24px.svg'></div>";
 
     html +=  "Total Nominations: " + parseInt(nomCount) +
                 "<br/>Accepted: " + parseInt(acceptedCount) +
