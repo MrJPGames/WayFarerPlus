@@ -1,7 +1,4 @@
-if (nomCtrl == undefined)
-    document.addEventListener("WFPNomCtrlHooked", loadStats);
-else
-    loadStats();
+document.addEventListener("WFPNomCtrlHooked", loadStats);
 
 if (settings["accIngress"] && settings["accPoGo"])
     document.addEventListener("WFPNomSelected", updateNomTypeButtons, false);

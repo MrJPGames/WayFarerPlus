@@ -47,7 +47,7 @@ function hookSubCtrl(){
         document.dispatchEvent(modEvent);
 
 		//Auto select first possible duplicate
-		if (nSubCtrl.reviewType == "NEW" && nSubCtrl.activePortals.length > 0)
+		if (nSubCtrl.reviewType == "NEW" && nSubCtrl.activePortals.length > 0 && settings["revAutoSelectDupe"])
 			nSubCtrl.displayLivePortal(0);
 	}
 }
