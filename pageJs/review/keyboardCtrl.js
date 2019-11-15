@@ -99,6 +99,13 @@ function keyDownEvent(e){
 					ansCtrl.reloadPage();
 				}
 			}else if (e.keyCode == 68){ // D key
+				var dupeButton = document.getElementById("markDuplicateButton");
+				if (dupeButton == undefined){
+					if (nSubCtrl.reviewType == "NEW" && nSubCtrl.activePortals.length > 0)
+						nSubCtrl.displayLivePortal(0);
+					else
+						return;
+				}
 				document.getElementById("markDuplicateButton").click();
 				inDuplicate = true;
 
