@@ -19,12 +19,12 @@ chrome.storage.local.get("options_set", function (data){
 			setOption("revLowestDistCircle", true);
 			setOption("revAccessDistCircle", true);
 		case 4:
-			setOption("ctrlessZoom", false);
+			setOption("ctrlessZoom", true);
 		case 5:
 			setOption("revKeyboard", true);
 			setOption("nomLowestDistCircle", true);
 			setOption("nomAccessDistCircle", true);
-			setOption("revMap2ZoomLevel", -1);
+			setOption("revMap2ZoomLevel", 17);
 		case 6:
 			setOption("headProgress", true);
 			setOption("nomIntelButton", true);
