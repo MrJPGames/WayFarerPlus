@@ -24,7 +24,7 @@ function loadStats(){
     var dupeCount = 0;
     var withdrawnCount = 0;
 
-    var availableNominations = 0;
+    var availableNominations = 0; var availablePoGoNominations = 7; var availableIngressNominations = 14;
     if (settings["accIngress"])
         availableNominations += 14;
     if (settings["accPoGo"])
@@ -84,6 +84,11 @@ function loadStats(){
         }
         if (nomAge < nomPeriod){
             availableNominations--;
+            if (nomPeriod == 14)
+                availableIngressNominations--;
+            if (nomPeriod == 15)
+                availablePoGoNominations--;
+
 
             unlocks[(nomPeriod-1)-nomAge]++;
         }
@@ -96,15 +101,21 @@ function loadStats(){
     else
         html += "<div id='statReload' style='filter: invert()' onclick='loadStats()'><img src='/img/pages/refresh-24px.svg'></div>";
 
-    html +=  "Total Nominations: " + parseInt(nomCount) +
-                "<br/>Accepted: " + parseInt(acceptedCount) +
-                "<br/>Rejected: " + parseInt(deniedCount) +
-                "<br/>Withdrawn: " + parseInt(withdrawnCount) +
-                "<br/>Duplicates: " + parseInt(dupeCount) +
-                "<br/>In Voting: " + parseInt(inVoteCount) + " (" + parseInt(inVoteUpgradeCount) + " upgraded)" +
-                "<br/>In Queue: " + parseInt(inQueueCount) + " (" + parseInt(inQueueUpgradeCount) + " upgraded)" +
-                "<br/><br/>Nominations available: " + parseInt(availableNominations) +
-                "<br/>Nomination unlocks:";
+    html += "Total Nominations: " + parseInt(nomCount) +
+            "<br/>Accepted: " + parseInt(acceptedCount) +
+            "<br/>Rejected: " + parseInt(deniedCount) +
+            "<br/>Withdrawn: " + parseInt(withdrawnCount) +
+            "<br/>Duplicates: " + parseInt(dupeCount) +
+            "<br/>In Voting: " + parseInt(inVoteCount) + " (" + parseInt(inVoteUpgradeCount) + " upgraded)" +
+            "<br/>In Queue: " + parseInt(inQueueCount) + " (" + parseInt(inQueueUpgradeCount) + " upgraded)" +
+            "<br/><br/>Nominations available: " + parseInt(availableNominations)
+
+    if (settings["accIngress"] && settings["accPoGo"]){
+        html += "<br/>Pokémon Go nominations: " + parseInt(availablePoGoNominations) + 
+                "<br/>Ingress nominations: " + parseInt(availableIngressNominations);
+    }
+    
+    html += "<br/>Nomination unlocks:";
 
 
     var currentDay = new Date();
