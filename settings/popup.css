@@ -86,6 +86,11 @@ select, input[type="number"]{
   background-color: #20B8E3;
 }
 
+/* Hides Recon offset, JS will show it when Ingress Account setting is enabled */
+#ingressExtra{
+  display: none;
+}
+
 /* Collapsibles CSS */
 
 .wrap-collabsible {

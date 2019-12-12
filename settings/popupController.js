@@ -5,6 +5,9 @@ function changeBoolSetting(elem){
 	//One time special setting (if more special settings are added in the future a refactor will be needed)
 	if (key == "revPresets" && value == true){
 		turnOnPresets();
+	}else if (key == "accIngress"){
+		document.getElementById("ingressExtra").style.display = value ? "block" : "none";
+		store(key, value);
 	}else{
 		store(key, value);
 	}
@@ -62,13 +65,13 @@ function init(settings){
 
 	for(var i = 0; i < inputs.length; i++){
 		if ((inputs[i]).getAttribute("type") == "checkbox"){
-			console.log(inputs[i].getAttribute("class"));
 			if (inputs[i].getAttribute("class") == "toggle")
 				continue; //This is the input for opening and closing submenus!
-			console.log("COOL!");
 			if (settings[inputs[i].id]){
 				inputs[i].checked = true;
 			}
+			if (inputs[i].getAttribute("id") == "accIngress")
+				document.getElementById("ingressExtra").style.display = inputs[i].checked ? "block" : "none";
 			inputs[i].onclick = function(e){changeBoolSetting(e.srcElement)};
 		}else if (inputs[i].getAttribute("type") == "number"){
 			inputs[i].value = settings[inputs[i].id];

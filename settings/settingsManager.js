@@ -1,5 +1,5 @@
 //Sets up default settings on first launch or upgrade
-var settingsVersion = 12;
+var settingsVersion = 13;
 
 chrome.storage.local.get("options_set", function (data){
 	var opt_ver = (data["options_set"] != undefined) ? data["options_set"] : 0;
@@ -47,6 +47,8 @@ chrome.storage.local.get("options_set", function (data){
 			setOption("revQuickSubmit", true);
 		case 11:
 			setOption("revAutoSelectDupe", true);
+		case 12:
+			setOption("profReconOffset", 0);
 			setOption("options_set", settingsVersion);
 	}
 });
