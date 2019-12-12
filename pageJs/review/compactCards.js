@@ -66,9 +66,7 @@ function setupCompactCard() {
     document.getElementById(divNames.visuallyUnique).style.order = 3;
     document.getElementById(divNames.safeAccess).style.order = 4;
     document.getElementById(divNames.whatIsIt).style.order = 7;
-    document.getElementById(divNames.whatIsIt).style.width = "100%";
-    document.getElementById(divNames.whatIsIt).style.minHeight = "250pt";
-    document.getElementById(divNames.additionalComment).style.width = "100%";
+    document.getElementById(divNames.whatIsIt).style.minWidth = "40%";
 
     removeRedundantDescriptions();
 }
