@@ -62,6 +62,10 @@ function init(settings){
 
 	for(var i = 0; i < inputs.length; i++){
 		if ((inputs[i]).getAttribute("type") == "checkbox"){
+			console.log(inputs[i].getAttribute("class"));
+			if (inputs[i].getAttribute("class") == "toggle")
+				continue; //This is the input for opening and closing submenus!
+			console.log("COOL!");
 			if (settings[inputs[i].id]){
 				inputs[i].checked = true;
 			}
