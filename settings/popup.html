@@ -55,16 +55,8 @@
 						<label for="revTranslate" class="switch__label">Translation buttons</label>
 					</div><br/>
 					<div class="switch">
-						<input type="checkbox" class="switch__input" id="revIntelButton" />
-						<label for="revIntelButton" class="switch__label">Open in Intel button</label>
-					</div><br/>
-					<div class="switch">
-						<input type="checkbox" class="switch__input" id="revGoogleMaps" />
-						<label for="revGoogleMaps" class="switch__label">Open in Google Maps button</label>
-					</div><br/>
-					<div class="switch">
-						<input type="checkbox" class="switch__input" id="revCusomMaps" />
-						<label for="revCusomMaps" class="switch__label">Open in Custom Maps button</label>
+						<input type="checkbox" class="switch__input" id="revOpenIn" />
+						<label for="revOpenIn" class="switch__label">Open in ...</label>
 					</div><br/>
 					<a href="/pages/customMaps.html" target="_BLANK">Manage your custom maps</a><br/>
 					<div class="switch">
@@ -145,12 +137,8 @@
 						<label for="nomStats" class="switch__label">Stats Widget</label>
 					</div><br/>
 					<div class="switch">
-						<input type="checkbox" class="switch__input" id="nomIntelButton" />
-						<label for="nomIntelButton" class="switch__label">Open in Intel button</label>
-					</div><br/>
-					<div class="switch">
-						<input type="checkbox" class="switch__input" id="nomGoogleMaps" />
-						<label for="nomGoogleMaps" class="switch__label">Open in Google Maps button</label>
+						<input type="checkbox" class="switch__input" id="nomOpenIn" />
+						<label for="nomOpenIn" class="switch__label">Open in ...</label>
 					</div><br/>
 					<div class="switch">
 						<label>S2 Cell Level:</label>
@@ -203,6 +191,18 @@
 						<input type="checkbox" class="switch__input" id="headProgress" />
 						<label for="headProgress" class="switch__label">Upgrade progress</label>
 					</div>
+				</div>
+			</div>
+		</div>
+		<div class="wrap-collabsible">
+			<input id="openInCollaps" class="toggle" type="checkbox">
+			<label class="lbl-toggle" for="openInCollaps">Open In Configuration</label>
+			<div class="collapsible-content">
+				<div class="content-inner">
+					<p>To display the map options turn on "Open in ..." under the nominations page and or review page settings.</p>
+					<div id="openInList">
+					</div>
+					<button id="addMapButton">Add new map</button>
 				</div>
 			</div>
 		</div>

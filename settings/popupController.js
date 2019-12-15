@@ -1,3 +1,5 @@
+savedMaps = [];
+
 function changeBoolSetting(elem){
 	var key = elem.id;
 	var value = elem.checked;
@@ -85,4 +87,77 @@ function init(settings){
 		selectInputs[i].onchange = function(e){changeSelectSetting(e.srcElement)};
 		selectInputs[i].value = settings[selectInputs[i].id];
 	}
+
+	//Init map manager
+	savedMaps = JSON.parse(settings["customMaps"]);
+	document.getElementById("addMapButton").onclick = addMap;
+	displaySavedMaps();
+}
+
+/* Open In Map management code */
+
+function addMap(){
+	var mapURL = prompt("Please enter the map URL:\n\nThe following can be used in the URL:\n%lat% - Latitude\n%lng% - Longitude\n%title% - Wayspot title\n\nExample URL: https://maps.google.com/maps?q=%lat%,%lng%");
+	if (mapURL == null)
+		return;
+
+	var mapTitle = prompt("Please enter the name of this map:");
+	if (mapTitle == null)
+		return;
+
+	if (confirm("Do you want to add the following map?\n\n" + mapTitle + "\n" + mapURL)){
+		//Only actually add the map when everything was OK
+		var mapObj = {
+			title: mapTitle,
+			url: mapURL
+		};
+		savedMaps.push(mapObj);
+		store("customMaps", JSON.stringify(savedMaps));
+		updateMapsDisplay();
+	}
+}
+
+function displaySavedMaps(){
+	var baseElem = document.getElementById("openInList");
+	for (var i=0; i < savedMaps.length; i++){
+		var container = document.createElement("div");
+		var titleElem = document.createElement("p");
+		var urlText = document.createElement("p");
+		var destroyButton = document.createElement("button");
+
+		container.setAttribute("class", "customMapContainer");
+
+		destroyButton.onclick = function(e){deleteMap(e.srcElement);}; //Works because we re-render upon every addition/deletion
+		destroyButton.setAttribute("assocMapId", i);
+		destroyButton.setAttribute("class", "destroyButton");
+		destroyButton.innerText = "X";
+
+		titleElem.innerText = savedMaps[i].title;
+		urlText.innerText = savedMaps[i].url;
+		urlText.setAttribute("class", "italic");
+
+		container.appendChild(destroyButton);
+		container.appendChild(titleElem);
+		container.appendChild(urlText);
+		baseElem.appendChild(container);
+	}
+}
+
+function deleteMap(srcElem){
+	var id = srcElem.getAttribute("assocMapId");
+	console.log(id);
+	if (confirm("Are you sure you want to remove " + savedMaps[id].title + "?")){
+		savedMaps.splice(id, 1);
+		updateMapsDisplay();
+		store("customMaps", JSON.stringify(savedMaps));
+	}
+}
+
+function updateMapsDisplay(){
+	clearSavedMapsDisplay();
+	displaySavedMaps();
+}
+
+function clearSavedMapsDisplay(){
+	document.getElementById("openInList").innerHTML = null;
 }

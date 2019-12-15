@@ -18,12 +18,8 @@ function modNominationPage(settings){
     if (settings["nomAccessDistCircle"] || settings["nomLowestDistCircle"] || settings["ctrlessZoom"]){
     	addPageJS("nominations/mapMods.js");
     }
-    if (settings["nomIntelButton"] || settings["nomGoogleMaps"]){
+    if (settings["nomOpenIn"]){
     	addPageJS("nominations/mapButtons.js");
-		if (settings["nomIntelButton"])
-	        addIntelButton();
-	    if (settings["nomGoogleMaps"])
-	        addGoogleMapsButton();
 	}
     if (settings["accPoGo"] && settings["accIngress"] && settings["nomStats"])
         addNomTypeButtons();
@@ -88,29 +84,6 @@ function addNomTypeButtons(){
 	nomTypeElem.appendChild(labelIngress);
 
 	titleElem.parentNode.insertBefore(nomTypeElem, titleElem.nextSibling);
-}
-
-function addIntelButton(){
-    addMapButton("https://intel.ingress.com/intel?z=17&pll=",
-                 "Open in Intel", "IIButton");
-}
-
-function addGoogleMapsButton(){
-    addMapButton("https://maps.google.com/maps?q=",
-                 "Open in Google Maps", "gMapButton");
-}
-
-function addMapButton(mapUrl, text, buttonID){
-    var mapElem = document.getElementById("map");
-
-    var button = document.createElement("a");
-    button.setAttribute("class", "customMapButton");
-    button.setAttribute("target", "_BLANK");
-    button.setAttribute("id", buttonID);
-    button.href = mapUrl;
-    button.innerText = text;
-
-    mapElem.parentNode.insertBefore(button, mapElem.nextSibling);
 }
 
 function addStreetView(){

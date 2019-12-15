@@ -176,3 +176,37 @@ select, input[type="number"]{
 .toggle{
   display: none;
 }
+
+
+/* Custom Open In CSS */
+.destroyButton{
+  background: #FF4444;
+  float: right;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  margin-top: 1.5em;
+}
+
+.customMapContainer{
+  background: #000;
+  border-radius: 5px;
+  padding: 0.2em;
+  padding-left: 1em;
+  padding-right: 1em;
+  margin-bottom: .5em;
+}
+
+.italic{
+  font-style: italic;
+}
+
+#addMapButton{
+  background: #5F5;
+  border: none;
+  border-radius: .25em;
+  padding: 0.25em;
+  font-size: 1.5em;
+  text-align: center;
+  width: 100%;
+}
