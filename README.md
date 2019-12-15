@@ -19,6 +19,14 @@ Other browser support?
 
 Changelog
 ---
+1.11:
+- Custom map support added for "Open In". Now you can add any third party map to the Open In dropdown! (Defaults are Google Maps, Ingress Intel and OSM, these can be removed if desired!)
+- Compact view made more compact
+- Recon Badge offset added (For those who's stats got reset)
+- New Settings design to make the increasing number of settings more managable
+- You can now scroll through duplicates using keyboard controls
+- Reject edit bug fixed (You cannot normally reject an edit, would not work but could cause unusual/dangerous behavior)
+
 1.10.2:
 - Keyboard control to What is it box (using arrow keys) (#68)
 - Stars no longer misplaced in some languages (#66)
