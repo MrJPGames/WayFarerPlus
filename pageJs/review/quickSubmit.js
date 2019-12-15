@@ -1,13 +1,14 @@
 //Adds quick submit buttons
 function initQuickSubmit(){
-	var elems = document.getElementsByClassName("button-primary");
-	var length = elems.length; //NEEDED
-	for (var i = 0; i < length; i++){
-		var elem = elems[i*2];
-		var button = createQuickSubmitButton();
-		var parent = elem.parentNode.parentNode;
-		//console.log(parent.children[1]); //.insertBefore(button, elem.parentNode);
-		parent.insertBefore(button, parent.children[1]);
+	var elems = document.querySelectorAll('.button-primary');;
+	for (var i = 0; i < elems.length; i++){
+		var elem = elems[i];
+		if (elem.getAttribute("ng-click") == "answerCtrl.submitForm()"){
+			var button = createQuickSubmitButton();
+			var parent = elem.parentNode.parentNode;
+			//console.log(parent.children[1]); //.insertBefore(button, elem.parentNode);
+			parent.insertBefore(button, parent.children[1]);
+		}
 	}
 
 	createObserver();
@@ -20,7 +21,7 @@ function hookLowQualityModal(){
 	ansCtrl.showLowQualityModal = function(){
 		origFunc();
 		setTimeout(function (){
-			var button = createQuickModalButton();
+			var button = createQuickRejectButton();
 			var modalContent = document.getElementById("low-quality-modal");
 			var submitButton = modalContent.getElementsByClassName("button-primary")[0];
 			button.disabled = submitButton.disabled;
@@ -41,7 +42,7 @@ function hookDupeModal(){
 	markDuplicatePressed = function (guid){
 		origFunc(guid);
 		setTimeout(function (){
-			var button = createQuickModalButton();
+			var button = createQuickDuplicateButton();
 			button.disabled = false;
 			var modalContent = document.getElementsByClassName("modal-content")[0];
 			var submitButton = modalContent.getElementsByClassName("button-primary")[0];
@@ -105,17 +106,25 @@ function updateButtonsEnabled(disable){
 function quickSubmit(){
 	if (ansCtrl.readyToSubmit()){
 		ansCtrl.submitForm();
-		ansCtrl.reloadPage();	
+		ansCtrl.reloadPage();
 	}
 }
 
 function quickRejectModal(e){
-	var buttonDiv = e.srcElement.parentNode;
-	while (buttonDiv.getAttribute("class") != "button-container" && buttonDiv.getAttribute("class") != "text-center"){ //Find the correct container (as the spans could also be the source element)
-		buttonDiv = buttonDiv.parentNode;
+	var ansCtrl2Elem = document.getElementById("low-quality-modal");
+	var ansCtrl2 = angular.element(ansCtrl2Elem).scope().answerCtrl2;
+	if (ansCtrl2.readyToSubmitSpam()){
+		ansCtrl2.confirmLowQuality();
+		ansCtrl2.reloadPage();
 	}
-	buttonDiv.children[2].click();
-	setTimeout(function(){ansCtrl.reloadPage()}, 10);
+}
+
+function quickDuplicateModal(e){
+	console.log("dupe!");
+	var ansCtrl2Elem = document.getElementsByClassName("modal-body")[0].parentNode;
+	var ansCtrl2 = angular.element(ansCtrl2Elem).scope().answerCtrl2;
+	ansCtrl2.confirmDuplicate()
+	ansCtrl2.reloadPage();
 }
 
 function createQuickSubmitButton(){
@@ -132,11 +141,24 @@ function createQuickSubmitButton(){
 	return button;
 }
 
-function createQuickModalButton(){
+function createQuickRejectButton(){
 	var button = document.createElement("button");
 	button.onclick = quickRejectModal;
 	button.setAttribute("class", "button-primary");
-	button.id = "quickModalButton";
+	button.id = "quickRejectButton";
+	button.style.marginRight = "0.2em";
+	button.style.minWidth = "2em";
+
+	addQuickSubmitImages(button);
+
+	return button;
+}
+
+function createQuickDuplicateButton(){
+	var button = document.createElement("button");
+	button.onclick = quickDuplicateModal;
+	button.setAttribute("class", "button-primary");
+	button.id = "quickDuplicateButton";
 	button.style.marginRight = "0.2em";
 	button.style.minWidth = "2em";
 

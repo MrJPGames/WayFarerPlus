@@ -1,5 +1,5 @@
 //Sets up default settings on first launch or upgrade
-var settingsVersion = 12;
+var settingsVersion = 13;
 
 chrome.storage.local.get("options_set", function (data){
 	var opt_ver = (data["options_set"] != undefined) ? data["options_set"] : 0;
@@ -19,19 +19,14 @@ chrome.storage.local.get("options_set", function (data){
 			setOption("revLowestDistCircle", true);
 			setOption("revAccessDistCircle", true);
 		case 4:
-			setOption("ctrlessZoom", false);
+			setOption("ctrlessZoom", true);
 		case 5:
 			setOption("revKeyboard", true);
 			setOption("nomLowestDistCircle", true);
 			setOption("nomAccessDistCircle", true);
-			setOption("revMap2ZoomLevel", -1);
+			setOption("revMap2ZoomLevel", 17);
 		case 6:
 			setOption("headProgress", true);
-			setOption("nomIntelButton", true);
-			setOption("nomGoogleMaps", true);
-		case 7:
-			setOption("revIntelButton", true);
-			setOption("revGoogleMaps", true);
 		case 8:
 			setOption("nomS2Cell", 17);
 			setOption("revS2Cell", 17);
@@ -47,6 +42,11 @@ chrome.storage.local.get("options_set", function (data){
 			setOption("revQuickSubmit", true);
 		case 11:
 			setOption("revAutoSelectDupe", true);
+		case 12:
+			setOption("profReconOffset", 0);
+			setOption("revOpenIn", true);
+			setOption("nomOpenIn", true);
+			setOption("customMaps", '[{"title":"Google Maps","url":"https://maps.google.com/maps?q=%lat%,%lng%"},{"title":"Ingress Intel","url":"https://intel.ingress.com/?ll=%lat%,%lng%&z=18"},{"title":"OSM","url":"https://www.openstreetmap.org/#map=18/%lat%/%lng%"}]');
 			setOption("options_set", settingsVersion);
 	}
 });

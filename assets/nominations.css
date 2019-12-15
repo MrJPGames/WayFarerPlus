@@ -104,3 +104,57 @@ th, td{
 #statReload{
   float: right;
 }
+
+/* Open in drop down CSS */
+.dropbtn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+.dropdown {
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: grey 2px 2px 10px;
+  margin-top: .5em;
+  margin-bottom: .5em;
+  font-size: 1.1em;
+  color: black;
+  padding: .25em;
+  width: 7em;
+  text-align: center;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  left: -.25em;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 9001;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {
+  background-color: #f1f1f1
+  border-radius: 5px;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown:hover .dropbtn {
+  background-color: #3e8e41;
+}

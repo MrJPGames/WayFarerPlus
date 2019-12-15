@@ -24,166 +24,210 @@
 			<label for="ctrlessZoom" class="switch__label">Ctrl-less zooming</label>
 			<img title="No longer required to hold the Ctrl key to zoom in and out on maps. Might cause some issues scrolling on pages with maps." src="../assets/help.svg"/>
 		</div>
-		<h2>Review:</h2>
-		<div class="switch">
-			<input type="checkbox" class="switch__input" id="revKeyboard" />
-			<label for="revKeyboard" class="switch__label">Review using keyboard</label>
-		</div><br/>
-		<div class="switch">
-			<label>Card view:</label>
-			<select id="revCardView">
-				<option value="normal">Normal</option>
-				<option value="compact">Compact</option>
-				<option value="extended">Expanded</option>
-			</select><img title="Different review card display options. Useful for better usability on lower or higher resolution screens." src="../assets/help.svg"/>
-		</div><br/>
-		<div class="switch">
-			<input type="checkbox" class="switch__input" id="revPresets" />
-			<label for="revPresets" class="switch__label">Review presets</label>
-		</div><br/>
-		<div class="switch">
-			<input type="checkbox" class="switch__input" id="revExpireTimer" />
-			<label for="revExpireTimer" class="switch__label">Expire timer</label>
-			<img title="Displays the amount of time left before you can no longer submit your review for a Wayspot" src="../assets/help.svg"/>
-		</div><br/>
-		<div class="switch">
-			<input type="checkbox" class="switch__input" id="revTranslate" />
-			<label for="revTranslate" class="switch__label">Translation buttons</label>
-		</div><br/>
-		<div class="switch">
-			<input type="checkbox" class="switch__input" id="revIntelButton" />
-			<label for="revIntelButton" class="switch__label">Open in Intel button</label>
-		</div><br/>
-		<div class="switch">
-			<input type="checkbox" class="switch__input" id="revGoogleMaps" />
-			<label for="revGoogleMaps" class="switch__label">Open in Google Maps button</label>
-		</div><br/>
-		<div class="switch">
-			<input type="checkbox" class="switch__input" id="revQuickSubmit" />
-			<label for="revQuickSubmit" class="switch__label">Quick submit button</label>
-			<img title="Submit and go to next review in 1 click. The floppy disk ('save') icon with the arrows is the quick submit button." src="../assets/help.svg"/>
-		</div><br/>
-		<div class="switch">
-			<label>S2 Cell Level:</label>
-			<select id="revS2Cell">
-				<option value="-1">No S2 Cell</option>
-				<option value="14">Gym Cell (L14)</option>
-				<option value="15">L15</option>
-				<option value="16">L16</option>
-				<option value="17">Pok&eacute;stop Cell (L17)</option>
-				<option value="18">L18</option>
-				<option value="19">L19</option>
-			</select>
-		</div><br/>
-		<div class="switch">
-			<input type="checkbox" class="switch__input" id="revLowestDistCircle" />
-			<label for="revLowestDistCircle" class="switch__label">20m circle on maps</label>
-			<img title="This indicates the area that cannot contain any other Wayspots. If there is already a Wayspot in this circle the new Wayspot will never appear in any current game." src="../assets/help.svg"/>
-		</div><br/>
-		<div class="switch">
-			<input type="checkbox" class="switch__input" id="revAccessDistCircle" />
-			<label for="revAccessDistCircle" class="switch__label">40m circle on maps</label>
-			<img title="Shows the area from which agents, wizards and trainers will be able to access the Wayspot" src="../assets/help.svg"/>
-		</div><br/>
-		<div class="switch">
-			<input type="checkbox" class="switch__input" id="revTooCloseWarn" />
-			<label for="revTooCloseWarn" class="switch__label">Too Close warning for Wayspots</label>
-			<img title="Provides a warning if a Wayspot nomination is too close to other Wayspots to be able to appear in any game. Warning is useful as these are often duplicates of other Wayspots." src="../assets/help.svg"/>
-		</div><br/>
-		<div class="switch">
-			<input type="checkbox" class="switch__input" id="revEditOrigLoc" />
-			<label for="revEditOrigLoc" class="switch__label">Original location highlight (edits)</label>
-			<img title="Highlights the current location during a location edit review with a circle filled with green." src="../assets/help.svg"/>
-		</div><br/>
-		<div class="switch">
-			<label>Default zoom level "Location Accuracy" map:</label>
-			<select id="revMap2ZoomLevel">
-				<option value="10">Zoomed out</option>
-				<option value="-1">Normal</option>
-				<option value="17">Zoomed in</option>
-				<option value="19">Ultra zoomed in</option>
-			</select>
-		</div><br/>
-		<div class="switch">
-			<input type="checkbox" class="switch__input" id="revTransparentMarker" />
-			<label for="revTransparentMarker" class="switch__label">Transparent location marker.</label>
-			<img title="Makes the location marker of a submission transparent. Helpful if the Wayspot is being obstructed by said marker. Fully disappears on hover." src="../assets/help.svg"/>
+		<div class="wrap-collabsible">
+			<input id="revCollaps" class="toggle" type="checkbox">
+			<label class="lbl-toggle" for="revCollaps">Review Settings</label>
+			<div class="collapsible-content">
+				<div class="content-inner">
+					<div class="switch">
+						<input type="checkbox" class="switch__input" id="revKeyboard" />
+						<label for="revKeyboard" class="switch__label">Review using keyboard</label>
+					</div><br/>
+					<div class="switch">
+						<label>Card view:</label>
+						<select id="revCardView">
+							<option value="normal">Normal</option>
+							<option value="compact">Compact</option>
+							<option value="extended">Expanded</option>
+						</select><img title="Different review card display options. Useful for better usability on lower or higher resolution screens." src="../assets/help.svg"/>
+					</div><br/>
+					<div class="switch">
+						<input type="checkbox" class="switch__input" id="revPresets" />
+						<label for="revPresets" class="switch__label">Review presets</label>
+					</div><br/>
+					<div class="switch">
+						<input type="checkbox" class="switch__input" id="revExpireTimer" />
+						<label for="revExpireTimer" class="switch__label">Expire timer</label>
+						<img title="Displays the amount of time left before you can no longer submit your review for a Wayspot" src="../assets/help.svg"/>
+					</div><br/>
+					<div class="switch">
+						<input type="checkbox" class="switch__input" id="revTranslate" />
+						<label for="revTranslate" class="switch__label">Translation buttons</label>
+					</div><br/>
+					<div class="switch">
+						<input type="checkbox" class="switch__input" id="revOpenIn" />
+						<label for="revOpenIn" class="switch__label">Open in ...</label>
+					</div><br/>
+					<div class="switch">
+						<input type="checkbox" class="switch__input" id="revQuickSubmit" />
+						<label for="revQuickSubmit" class="switch__label">Quick submit button</label>
+						<img title="Submit and go to next review in 1 click. The floppy disk ('save') icon with the arrows is the quick submit button." src="../assets/help.svg"/>
+					</div><br/>
+					<div class="switch">
+						<label>S2 Cell Level:</label>
+						<select id="revS2Cell">
+							<option value="-1">No S2 Cell</option>
+							<option value="14">Gym Cell (L14)</option>
+							<option value="15">L15</option>
+							<option value="16">L16</option>
+							<option value="17">Pok&eacute;stop Cell (L17)</option>
+							<option value="18">L18</option>
+							<option value="19">L19</option>
+						</select>
+					</div><br/>
+					<div class="switch">
+						<input type="checkbox" class="switch__input" id="revLowestDistCircle" />
+						<label for="revLowestDistCircle" class="switch__label">20m circle on maps</label>
+						<img title="This indicates the area that cannot contain any other Wayspots. If there is already a Wayspot in this circle the new Wayspot will never appear in any current game." src="../assets/help.svg"/>
+					</div><br/>
+					<div class="switch">
+						<input type="checkbox" class="switch__input" id="revAccessDistCircle" />
+						<label for="revAccessDistCircle" class="switch__label">40m circle on maps</label>
+						<img title="Shows the area from which agents, wizards and trainers will be able to access the Wayspot" src="../assets/help.svg"/>
+					</div><br/>
+					<div class="switch">
+						<input type="checkbox" class="switch__input" id="revTooCloseWarn" />
+						<label for="revTooCloseWarn" class="switch__label">Too Close warning for Wayspots</label>
+						<img title="Provides a warning if a Wayspot nomination is too close to other Wayspots to be able to appear in any game. Warning is useful as these are often duplicates of other Wayspots." src="../assets/help.svg"/>
+					</div><br/>
+					<div class="switch">
+						<input type="checkbox" class="switch__input" id="revEditOrigLoc" />
+						<label for="revEditOrigLoc" class="switch__label">Original location highlight (edits)</label>
+						<img title="Highlights the current location during a location edit review with a circle filled with green." src="../assets/help.svg"/>
+					</div><br/>
+					<div class="switch">
+						<label>Default zoom level "Location Accuracy" map:</label>
+						<select id="revMap2ZoomLevel">
+							<option value="10">Zoomed out</option>
+							<option value="-1">Normal</option>
+							<option value="17">Zoomed in</option>
+							<option value="19">Ultra zoomed in</option>
+						</select>
+					</div><br/>
+					<div class="switch">
+						<input type="checkbox" class="switch__input" id="revTransparentMarker" />
+						<label for="revTransparentMarker" class="switch__label">Transparent location marker.</label>
+						<img title="Makes the location marker of a submission transparent. Helpful if the Wayspot is being obstructed by said marker. Fully disappears on hover." src="../assets/help.svg"/>
+					</div>
+					<div class="switch">
+						<input type="checkbox" class="switch__input" id="revAutoSelectDupe" />
+						<label for="revAutoSelectDupe" class="switch__label">Auto-select first possible duplicate</label>
+						<img title="Makes it easier to mark duplicates as the first in the list is usually the duplicate if it is a duplicate." src="../assets/help.svg"/>
+					</div>
+					<div class="switch">
+						<label for="revSubmitTimer">Lock submit button for: </label>
+						<input type="number" id="revSubmitTimer" style="width: 4em;"> Seconds
+					</div>
+				</div>
+			</div>
 		</div>
-		<div class="switch">
-			<input type="checkbox" class="switch__input" id="revAutoSelectDupe" />
-			<label for="revAutoSelectDupe" class="switch__label">Auto-select first possible duplicate</label>
-			<img title="Makes it easier to mark duplicates as the first in the list is usually the duplicate if it is a duplicate." src="../assets/help.svg"/>
+		<div class="wrap-collabsible">
+			<input id="nomCollaps" class="toggle" type="checkbox">
+			<label class="lbl-toggle" for="nomCollaps">Nomination Settings</label>
+			<div class="collapsible-content">
+				<div class="content-inner">
+					<div class="switch">
+						<input type="checkbox" class="switch__input" id="nomStreetView" />
+						<label for="nomStreetView" class="switch__label">StreetView preview</label>
+						<img title="Allows you to see StreetView reviewers will see for your own nominations." src="../assets/help.svg"/>
+					</div><br/>
+					<div class="switch">
+						<input type="checkbox" class="switch__input" id="nomStats" />
+						<label for="nomStats" class="switch__label">Stats Widget</label>
+					</div><br/>
+					<div class="switch">
+						<input type="checkbox" class="switch__input" id="nomOpenIn" />
+						<label for="nomOpenIn" class="switch__label">Open in ...</label>
+					</div><br/>
+					<div class="switch">
+						<label>S2 Cell Level:</label>
+						<select id="nomS2Cell">
+							<option value="-1">No S2 Cell</option>
+							<option value="14">Gym Cell (L14)</option>
+							<option value="15">L15</option>
+							<option value="16">L16</option>
+							<option value="17">Pok&eacute;stop Cell (L17)</option>
+							<option value="18">L18</option>
+							<option value="19">L19</option>
+						</select>
+					</div><br/>
+					<div class="switch">
+						<input type="checkbox" class="switch__input" id="nomLowestDistCircle" />
+						<label for="nomLowestDistCircle" class="switch__label">20m circle on maps</label>
+						<img title="This indicates the area that cannot contain any other Wayspots. If there is already a Wayspot in this circle the new Wayspot will never appear in any current game." src="../assets/help.svg"/>
+					</div><br/>
+					<div class="switch">
+						<input type="checkbox" class="switch__input" id="nomAccessDistCircle" />
+						<label for="nomAccessDistCircle" class="switch__label">40m circle on maps</label>
+						<img title="Shows the area from which agents, wizards and trainers will be able to access the Wayspot" src="../assets/help.svg"/>
+					</div>
+				</div>
+			</div>
 		</div>
-		<div class="switch">
-			<label for="revSubmitTimer">Lock submit button for: </label>
-			<input type="number" id="revSubmitTimer" style="width: 4em;"> Seconds
+		<div class="wrap-collabsible">
+			<input id="profCollaps" class="toggle" type="checkbox">
+			<label class="lbl-toggle" for="profCollaps">Profile Settings</label>
+			<div class="collapsible-content">
+				<div class="content-inner">
+					<div class="switch">
+						<label>Extended stats:</label>
+						<select id="profExtendedStats">
+							<option value="off">Off</option>
+							<option value="aprox">Aproximation</option>
+							<option value="truth">Facts only</option>
+						</select>
+						<img title="Aproximation works based on upgrade stats. If you've gotten agreements that did not count towards your upgrades this option will not work for you! Facts only will be less informative but always accurate." src="../assets/help.svg"/>
+					</div>
+				</div>
+			</div>
 		</div>
-		<h2>Nominations:</h2>
-		<div class="switch">
-			<input type="checkbox" class="switch__input" id="nomStreetView" />
-			<label for="nomStreetView" class="switch__label">StreetView preview</label>
-			<img title="Allows you to see StreetView reviewers will see for your own nominations." src="../assets/help.svg"/>
-		</div><br/>
-		<div class="switch">
-			<input type="checkbox" class="switch__input" id="nomStats" />
-			<label for="nomStats" class="switch__label">Stats Widget</label>
-		</div><br/>
-		<div class="switch">
-			<input type="checkbox" class="switch__input" id="nomIntelButton" />
-			<label for="nomIntelButton" class="switch__label">Open in Intel button</label>
-		</div><br/>
-		<div class="switch">
-			<input type="checkbox" class="switch__input" id="nomGoogleMaps" />
-			<label for="nomGoogleMaps" class="switch__label">Open in Google Maps button</label>
-		</div><br/>
-		<div class="switch">
-			<label>S2 Cell Level:</label>
-			<select id="nomS2Cell">
-				<option value="-1">No S2 Cell</option>
-				<option value="14">Gym Cell (L14)</option>
-				<option value="15">L15</option>
-				<option value="16">L16</option>
-				<option value="17">Pok&eacute;stop Cell (L17)</option>
-				<option value="18">L18</option>
-				<option value="19">L19</option>
-			</select>
-		</div><br/>
-		<div class="switch">
-			<input type="checkbox" class="switch__input" id="nomLowestDistCircle" />
-			<label for="nomLowestDistCircle" class="switch__label">20m circle on maps</label>
-			<img title="This indicates the area that cannot contain any other Wayspots. If there is already a Wayspot in this circle the new Wayspot will never appear in any current game." src="../assets/help.svg"/>
-		</div><br/>
-		<div class="switch">
-			<input type="checkbox" class="switch__input" id="nomAccessDistCircle" />
-			<label for="nomAccessDistCircle" class="switch__label">40m circle on maps</label>
-			<img title="Shows the area from which agents, wizards and trainers will be able to access the Wayspot" src="../assets/help.svg"/>
+		<div class="wrap-collabsible">
+			<input id="headCollaps" class="toggle" type="checkbox">
+			<label class="lbl-toggle" for="headCollaps">Header Settings</label>
+			<div class="collapsible-content">
+				<div class="content-inner">
+					<div class="switch">
+						<input type="checkbox" class="switch__input" id="headProgress" />
+						<label for="headProgress" class="switch__label">Upgrade progress</label>
+					</div>
+				</div>
+			</div>
 		</div>
-		<h2>Profile</h2>
-		<div class="switch">
-			<label>Extended stats:</label>
-			<select id="profExtendedStats">
-				<option value="off">Off</option>
-				<option value="aprox">Aproximation</option>
-				<option value="truth">Facts only</option>
-			</select>
-			<img title="Aproximation works based on upgrade stats. If you've gotten agreements that did not count towards your upgrades this option will not work for you! Facts only will be less informative but always accurate." src="../assets/help.svg"/>
+		<div class="wrap-collabsible">
+			<input id="openInCollaps" class="toggle" type="checkbox">
+			<label class="lbl-toggle" for="openInCollaps">Open In Configuration</label>
+			<div class="collapsible-content">
+				<div class="content-inner">
+					<p>To display the map options turn on "Open in ..." under the nominations page and or review page settings.</p>
+					<div id="openInList">
+					</div>
+					<button id="addMapButton">Add new map</button>
+				</div>
+			</div>
 		</div>
-		<h2>Header</h2>
-		<div class="switch">
-			<input type="checkbox" class="switch__input" id="headProgress" />
-			<label for="headProgress" class="switch__label">Upgrade progress</label>
+		<div class="wrap-collabsible">
+			<input id="accCollaps" class="toggle" type="checkbox">
+			<label class="lbl-toggle" for="accCollaps">Personal Accounts</label>
+			<div class="collapsible-content">
+				<div class="content-inner">
+					<div class="switch">
+						<input type="checkbox" class="switch__input" id="accPoGo" />
+						<label for="accPoGo" class="switch__label">Eligible Pokemon Go L40</label>
+						<img title="Turn this on if you have a Pokemon Go account that has the ability to Nominate Wayspots" src="../assets/help.svg"/>
+					</div><br/>
+					<div class="switch">
+						<input type="checkbox" class="switch__input" id="accIngress" />
+						<label for="accIngress" class="switch__label">Ingress L10+</label>
+						<img title="Turn this on if you have a Ingress account that has the ability to Nominate Wayspots" src="../assets/help.svg"/>
+					</div><br/>
+					<div id="ingressExtra" class="switch">
+						<label for="revSubmitTimer">Recon Badge Offset: </label>
+						<input type="number" id="profReconOffset" style="width: 4em;"> Agreements
+						<img title="Some people had their stats reset when OPR became Wayfarer, for those this setting will help correct their Recon Badge stat on the Profile Page when extended profile stats are on" src="../assets/help.svg"/>
+					</div>
+				</div>
+			</div>
 		</div>
-		<h2>Personal account:</h2>
-		<div class="switch">
-			<input type="checkbox" class="switch__input" id="accPoGo" />
-			<label for="accPoGo" class="switch__label">Eligible Pokemon Go L40</label>
-			<img title="Turn this on if you have a Pokemon Go account that has the ability to Nominate Wayspots" src="../assets/help.svg"/>
-		</div><br/>
-		<div class="switch">
-			<input type="checkbox" class="switch__input" id="accIngress" />
-			<label for="accIngress" class="switch__label">Ingress L10+</label>
-			<img title="Turn this on if you have a Ingress account that has the ability to Nominate Wayspots" src="../assets/help.svg"/>
-		</div><br/>
 		<a href="/pages/credits.html" target="_BLANK">Credits</a>
 	</div>
 </body>

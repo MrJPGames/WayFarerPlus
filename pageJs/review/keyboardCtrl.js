@@ -7,6 +7,7 @@ var maxRevPos = 5;
 var colCode = "20B8E3";
 var rejectComplete = false;
 var menuPtr = null;
+var dupePtr = 0;
 
 function setupKeyboardControl(){
 	if (!settings["darkMode"])
@@ -51,14 +52,24 @@ function initKeyboardControls(){
 		}, 20);
 	}
 
+	//Hook closing of modal
 	var closeModal = ansCtrl.resetLowQuality;
 	ansCtrl.resetLowQuality = function(){
 		inReject = false;
 		closeModal();
 	}
+
+	//Create custom duplicate click events (in addition to default behavior to update our local state of things)
+	var duplicateElems = document.getElementById("duplicates-card").getElementsByClassName("filmstrip-image");
+	for (var i=0; i < duplicateElems.length; i++){
+		duplicateElems[i].setAttribute("onclick", "dupePtr = " + i + ";");
+	}
 }
 
 function keyDownEvent(e){
+	if (nSubCtrl.reviewType != "NEW")
+		return;
+	
 	//If typing in a text field ignore ALL input (except for enter to confirm rejection)
 	if (document.activeElement.nodeName == "TEXTAREA" || document.activeElement.nodeName == "INPUT"){
 		if (rejectComplete && e.keyCode == 13){
@@ -78,6 +89,7 @@ function keyDownEvent(e){
 			window.location.href = "/";
 	}else{
 		if (!inReject && !inDuplicate){
+			//Normal review state (not in modal)
 			if (e.keyCode == 37 || e.keyCode == 8){ //Left arrow key or backspace
 				changeRevPos(-1, true);
 			}else if (e.keyCode == 39){ //Right arrow key
@@ -117,6 +129,10 @@ function keyDownEvent(e){
 					inDuplicate = false;
 					func();
 				}
+			}else if (e.keyCode == 188){
+				selectDuplicateRelative(-1);
+			}else if (e.keyCode == 190){
+				selectDuplicateRelative(1);
 			}
 		}else if (inDuplicate){
 			var elem = document.getElementsByClassName("modal-dialog modal-med")[0].children[0].children[0];
@@ -210,6 +226,14 @@ function changeRevPos(diff, manual = false){
 	//Focus on currently rating stars
 	revFields[revPos].focus();
 	revFields[revPos].scrollIntoView(false);
+}
+
+function selectDuplicateRelative(diff){
+	var index = dupePtr+diff;
+	if (index >= 0 && index < nSubCtrl.activePortals.length){
+		nSubCtrl.displayLivePortal(index);
+		dupePtr = index;
+	}
 }
 
 document.addEventListener("WFPAllRevHooked", setupKeyboardControl);
