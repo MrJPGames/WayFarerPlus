@@ -37,6 +37,12 @@ function addMapDropdown(){
         dropdownContainer.appendChild(button);
     }
 
+    if (customMaps.length == 0){
+        var emptySpan = document.createElement("span");
+        emptySpan.innerText = "No custom maps set!";
+        dropdownContainer.appendChild(emptySpan);
+    }
+
     console.log(button);
 
     //Add elem to page

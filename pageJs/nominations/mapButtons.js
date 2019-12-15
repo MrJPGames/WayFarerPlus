@@ -42,6 +42,12 @@ function updateCustomMaps(){
     	button.innerText = title;
     	customMapContainer.appendChild(button);
     }
+
+    if (customMaps.length == 0){
+    	var emptySpan = document.createElement("span");
+    	emptySpan.innerText = "No custom maps set!";
+    	customMapContainer.appendChild(emptySpan);
+    }
 }
 
 document.addEventListener("WFPNomCtrlHooked", initMapButtons, false);
