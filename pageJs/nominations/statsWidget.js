@@ -69,8 +69,8 @@ function loadStats(){
 
         //Available nomination determinations & new unlock date determinations
         var nomAge = daysSince(nomCtrl.nomList[i].day);
+        var nomType = nomTypes[nomCtrl.nomList[i].id];
         if (settings["accIngress"] && settings["accPoGo"]){
-            var nomType = nomTypes[nomCtrl.nomList[i].id];
             if (nomType == "pogo"){
                 nomPeriod = 15;
             }else{
@@ -84,9 +84,9 @@ function loadStats(){
         }
         if (nomAge < nomPeriod){
             availableNominations--;
-            if (nomPeriod == 14)
+            if (nomType == "ingress")
                 availableIngressNominations--;
-            if (nomPeriod == 15)
+            if (nomType == "pogo")
                 availablePoGoNominations--;
 
 
@@ -110,7 +110,9 @@ function loadStats(){
             "<br/>In Queue: " + parseInt(inQueueCount) + " (" + parseInt(inQueueUpgradeCount) + " upgraded)" +
             "<br/><br/>Nominations available: " + parseInt(availableNominations)
 
-    if (settings["accIngress"] && settings["accPoGo"]){
+    console.log(availableNominations, (availableIngressNominations+availablePoGoNominations))
+
+    if (settings["accIngress"] && settings["accPoGo"] && availableNominations == (availableIngressNominations+availablePoGoNominations)){
         html += "<br/>Pokémon Go nominations: " + parseInt(availablePoGoNominations) + 
                 "<br/>Ingress nominations: " + parseInt(availableIngressNominations);
     }
