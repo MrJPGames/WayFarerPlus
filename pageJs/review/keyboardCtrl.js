@@ -67,6 +67,9 @@ function initKeyboardControls(){
 }
 
 function keyDownEvent(e){
+	if (nSubCtrl.reviewType != "NEW")
+		return;
+	
 	//If typing in a text field ignore ALL input (except for enter to confirm rejection)
 	if (document.activeElement.nodeName == "TEXTAREA" || document.activeElement.nodeName == "INPUT"){
 		if (rejectComplete && e.keyCode == 13){
