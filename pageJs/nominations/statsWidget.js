@@ -108,9 +108,7 @@ function loadStats(){
             "<br/>Duplicates: " + parseInt(dupeCount) +
             "<br/>In Voting: " + parseInt(inVoteCount) + " (" + parseInt(inVoteUpgradeCount) + " upgraded)" +
             "<br/>In Queue: " + parseInt(inQueueCount) + " (" + parseInt(inQueueUpgradeCount) + " upgraded)" +
-            "<br/><br/>Nominations available: " + parseInt(availableNominations)
-
-    console.log(availableNominations, (availableIngressNominations+availablePoGoNominations))
+            "<br/><br/>Nominations available: " + parseInt(availableNominations);
 
     if (settings["accIngress"] && settings["accPoGo"] && availableNominations == (availableIngressNominations+availablePoGoNominations)){
         html += "<br/>Pokémon Go nominations: " + parseInt(availablePoGoNominations) + 
