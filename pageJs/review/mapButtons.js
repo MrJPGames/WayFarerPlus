@@ -26,9 +26,9 @@ function addMapDropdown(){
 
         //Link editing:
         link = link.toLowerCase();
-        link = link.replace("%lat%", nSubCtrl.pageData.lat);
-        link = link.replace("%lng%", nSubCtrl.pageData.lng);
-        link = link.replace("%title%", nSubCtrl.pageData.title);
+        link = link.replaceAll("%lat%", nSubCtrl.pageData.lat);
+        link = link.replaceAll("%lng%", nSubCtrl.pageData.lng);
+        link = link.replaceAll("%title%", nSubCtrl.pageData.title);
 
         var button = document.createElement("a");
         button.href = link;
@@ -61,3 +61,9 @@ function addMapDropdown(){
 }
 
 document.addEventListener("WFPNSubCtrlHooked", addMapDropdown);
+
+//Needed entering variables into URLs
+String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.replace(new RegExp(search, 'g'), replacement);
+};
