@@ -66,17 +66,14 @@ function initKeyboardControls(){
 	}
 }
 
-function keyDownEvent(e){
-	if (nSubCtrl.reviewType != "NEW")
-		return;
-	
+function keyDownEvent(e){	
 	//If typing in a text field ignore ALL input (except for enter to confirm rejection)
 	if (document.activeElement.nodeName == "TEXTAREA" || document.activeElement.nodeName == "INPUT"){
 		if (rejectComplete && e.keyCode == 13){
 			//Stop the enter from creating a new line in the textarea
-			e.preventDefault()	
 			if (e.shiftKey)
 				return;
+			e.preventDefault();
 			var ansCtrl2Elem = document.getElementById("low-quality-modal");
 			var ansCtrl2 = angular.element(ansCtrl2Elem).scope().answerCtrl2;
 			ansCtrl2.confirmLowQuality();
@@ -102,7 +99,7 @@ function keyDownEvent(e){
 			}else if (e.keyCode >= 49 && e.keyCode <= 53){ // 1-5 normal
 				var rating = e.keyCode - 49;
 				setRating(revPos, rating);
-			}else if (e.keyCode == 48 || e.keyCode == 96){ //0 normal/Num pad
+			}else if ( (e.keyCode == 48 || e.keyCode == 96) && nSubCtrl.reviewType == "NEW"){ //0 normal/Num pad
 				setRating(0,0);
 			}else if (e.keyCode == 13){ //Enter key
 				if (ansCtrl.readyToSubmit())
