@@ -74,7 +74,9 @@ function keyDownEvent(e){
 	if (document.activeElement.nodeName == "TEXTAREA" || document.activeElement.nodeName == "INPUT"){
 		if (rejectComplete && e.keyCode == 13){
 			//Stop the enter from creating a new line in the textarea
-			e.preventDefault();
+			e.preventDefault()	
+			if (e.shiftKey)
+				return;
 			var ansCtrl2Elem = document.getElementById("low-quality-modal");
 			var ansCtrl2 = angular.element(ansCtrl2Elem).scope().answerCtrl2;
 			ansCtrl2.confirmLowQuality();
