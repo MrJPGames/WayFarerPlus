@@ -91,6 +91,7 @@ function init(settings){
 	//Init map manager
 	savedMaps = JSON.parse(settings["customMaps"]);
 	document.getElementById("addMapButton").onclick = addMap;
+	document.getElementById("resetMapButton").onclick = resetMap;
 	displaySavedMaps();
 }
 
@@ -112,6 +113,15 @@ function addMap(){
 			url: mapURL
 		};
 		savedMaps.push(mapObj);
+		store("customMaps", JSON.stringify(savedMaps));
+		updateMapsDisplay();
+	}
+}
+
+function resetMap(){
+	var trueReset = confirm("Are you sure you want to return \"Open In\" settings to default values?");
+	if (trueReset){
+		savedMaps = JSON.parse(defaultMapSettings);
 		store("customMaps", JSON.stringify(savedMaps));
 		updateMapsDisplay();
 	}
