@@ -47,7 +47,7 @@ chrome.storage.local.get("options_set", function (data){
 			setOption("revOpenIn", true);
 			setOption("nomOpenIn", true);
 		case 13:
-			setOption("customMaps", '[{"title":"Google Maps","url":"https://maps.google.com/maps?q=%lat%,%lng%"},{"title":"Ingress Intel","url":"https://intel.ingress.com/?ll=%lat%,%lng%&z=18"},{"title":"OSM","url":"https://www.openstreetmap.org/?mlat=%lat%&mlon=%lng%#map=18/%lat%/%lng%"}]');
+			setOption("customMaps", '[{"title":"Google Maps","url":"https://maps.google.com/maps?q=%lat%,%lng%"},{"title":"Ingress Intel","url":"https://intel.ingress.com/intel?ll=%lat%,%lng%&z=18"},{"title":"OSM","url":"https://www.openstreetmap.org/?mlat=%lat%&mlon=%lng%#map=18/%lat%/%lng%"}]');
 			setOption("options_set", settingsVersion);
 	}
 });
