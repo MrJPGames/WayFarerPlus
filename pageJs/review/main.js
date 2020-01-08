@@ -1,4 +1,4 @@
-var nSubCtrl, ansCtrl, nSubDS, whatCtrl
+var nSubCtrl, ansCtrl, nSubDS, whatCtrl, whatCtrlScope;
 
 var hooked = 0;
 
@@ -68,12 +68,14 @@ function hookAnsCtrl(){
 
 function hookWhatCtrl(){
 	whatCtrl = angular.element(document.getElementById('WhatIsItController')).scope().whatCtrl;
+	whatCtrlScope = angular.element(document.getElementById('WhatIsItController')).scope();
 
-	if (ansCtrl == undefined){
+	if (whatCtrl == undefined){
 		setTimeout(hookWhatCtrl, 50);
 	}else{
 		hooked++;
 		console.log("[WayFarer+] WhatIsItController was hooked to whatCtrl");
+		console.log("[WayFarer+] WhatIsItController scope was hooked to whatCtrlScope");
 
 		var modEvent = new Event("WFPWhatCtrlHooked");
         document.dispatchEvent(modEvent);
