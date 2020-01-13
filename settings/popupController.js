@@ -91,6 +91,8 @@ function init(settings){
 	//Init map manager
 	savedMaps = JSON.parse(settings["customMaps"]);
 	document.getElementById("addMapButton").onclick = addMap;
+	document.getElementById("importMapButton").onclick = importMap;
+	document.getElementById("resetMapButton").onclick = resetMap;
 	displaySavedMaps();
 }
 
@@ -117,6 +119,34 @@ function addMap(){
 	}
 }
 
+function importMap(){
+	var input = document.createElement("input");
+	input.setAttribute("type", "file");
+	input.setAttribute("accept", ".wfpm");
+	input.click(); // opening dialog
+	console.log(input);
+	input.onchange = function (e){
+		var reader = new FileReader();
+		reader.onload = function(){
+			var text = reader.result;
+			var mapData = JSON.parse(text);
+			savedMaps.push(mapData);
+			store("customMaps", JSON.stringify(savedMaps));
+			updateMapsDisplay();
+		};
+		reader.readAsText(input.files[0]);
+	}
+}
+
+function resetMap(){
+	var trueReset = confirm("Are you sure you want to return \"Open In\" settings to default values?");
+	if (trueReset){
+		savedMaps = JSON.parse(defaultMapSettings);
+		store("customMaps", JSON.stringify(savedMaps));
+		updateMapsDisplay();
+	}
+}
+
 function displaySavedMaps(){
 	var baseElem = document.getElementById("openInList");
 	for (var i=0; i < savedMaps.length; i++){
@@ -124,6 +154,7 @@ function displaySavedMaps(){
 		var titleElem = document.createElement("p");
 		var urlText = document.createElement("p");
 		var destroyButton = document.createElement("button");
+		var exportButton = document.createElement("a");
 
 		container.setAttribute("class", "customMapContainer");
 
@@ -132,6 +163,12 @@ function displaySavedMaps(){
 		destroyButton.setAttribute("class", "destroyButton");
 		destroyButton.innerText = "X";
 
+		exportButton.onclick = function(e){exportMap(e.srcElement);};
+		exportButton.setAttribute("download", savedMaps[i].title + ".wfpm"); //WayFarer Plus Map
+		exportButton.setAttribute("href", "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(savedMaps[i])));
+		exportButton.setAttribute("class", "export");
+		exportButton.innerText = "Export " + savedMaps[i].title;
+
 		titleElem.innerText = savedMaps[i].title;
 		urlText.innerText = savedMaps[i].url;
 		urlText.setAttribute("class", "italic");
@@ -139,13 +176,13 @@ function displaySavedMaps(){
 		container.appendChild(destroyButton);
 		container.appendChild(titleElem);
 		container.appendChild(urlText);
+		container.appendChild(exportButton);
 		baseElem.appendChild(container);
 	}
 }
 
 function deleteMap(srcElem){
 	var id = srcElem.getAttribute("assocMapId");
-	console.log(id);
 	if (confirm("Are you sure you want to remove " + savedMaps[id].title + "?")){
 		savedMaps.splice(id, 1);
 		updateMapsDisplay();

@@ -13,7 +13,7 @@ function modReviewPage(settings){
 		addPageJS("review/compactCards.js");
 	if (settings["revCardView"] == "extended")
 		addPageJS("review/expandedCards.js");
-	if (settings["revGoogleMaps"] || settings["revIntelButton"])
+	if (settings["revOpenIn"])
 		addPageJS("review/mapButtons.js");
 	if (settings["revTranslate"])
 		addPageJS("review/translationButtons.js");

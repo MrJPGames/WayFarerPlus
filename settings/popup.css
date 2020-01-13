@@ -210,3 +210,31 @@ select, input[type="number"]{
   text-align: center;
   width: 100%;
 }
+
+#importMapButton{
+  background: #FFF;
+  color: #000;
+  border: none;
+  border-radius: .25em;
+  margin-top: 0.5em;
+  padding: 0.25em;
+  font-size: 1.5em;
+  text-align: center;
+  width: 100%;
+}
+
+#resetMapButton{
+  background: red;
+  color: white;
+  margin-top: 0.5em;
+  border: none;
+  border-radius: .25em;
+  padding: 0.25em;
+  font-size: 1.5em;
+  text-align: center;
+  width: 100%;
+}
+
+a{
+  color: grey;
+}

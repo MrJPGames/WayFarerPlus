@@ -82,9 +82,10 @@ function addExtendedStats(){
 		curBadgeElem.appendChild(curBadgeRightElem);
 
 		profileStats.children[0].appendChild(curBadgeElem);
+		console.log(badge, reconBadges.length);
 
 		//Check if you don't already have the highest badge
-		if (badge+1 <= reconBadges.length){
+		if (badge+1 < reconBadges.length){
 			var diff = reconBadges[badge+1][0]-reconBadges[badge][0]; //Agreements for next tier - agreements for current tier (= diff in agreements between tiers)
 			var currDiff = normalAgreements-reconBadges[badge][0]; //User's current agreements - current badge tier agreement requirement (= agreements since last badge)
 
@@ -98,12 +99,28 @@ function addExtendedStats(){
 			badgeProgressRightElem.setAttribute("class", "stats-right");
 
 			badgeProgressLeftElem.innerText = "Progress to " + reconBadges[badge+1][1];
-			badgeProgressRightElem.innerText = progress + "%";
+			badgeProgressRightElem.innerText = progress + "% (" + normalAgreements + ")";
 
 			badgeProgressElem.appendChild(badgeProgressLeftElem);
 			badgeProgressElem.appendChild(badgeProgressRightElem);
 
 			profileStats.children[0].appendChild(badgeProgressElem);
+		}else{
+			//Still display agreement total+offset
+			var offsetAgreementElem = document.createElement("h4");
+
+			var offsetAgreementLeftElem = document.createElement("span");
+			offsetAgreementLeftElem.setAttribute("class", "stats-left");
+			var offsetAgreementRightElem = document.createElement("span");
+			offsetAgreementRightElem.setAttribute("class", "stats-right");
+
+			offsetAgreementLeftElem.innerText = "Badge agreement stat: ";
+			offsetAgreementRightElem.innerText = normalAgreements;
+
+			offsetAgreementElem.appendChild(offsetAgreementLeftElem);
+			offsetAgreementElem.appendChild(offsetAgreementRightElem);
+
+			profileStats.children[0].appendChild(offsetAgreementElem);
 		}
 	}
 }

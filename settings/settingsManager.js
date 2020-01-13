@@ -1,5 +1,7 @@
 //Sets up default settings on first launch or upgrade
-var settingsVersion = 13;
+var settingsVersion = 14;
+
+var defaultMapSettings = '[{"title":"Google Maps","url":"https://maps.google.com/maps?q=%lat%,%lng%"},{"title":"Ingress Intel","url":"https://intel.ingress.com/intel?ll=%lat%,%lng%&z=18"},{"title":"OSM","url":"https://www.openstreetmap.org/?mlat=%lat%&mlon=%lng%#map=18/%lat%/%lng%"}]';
 
 chrome.storage.local.get("options_set", function (data){
 	var opt_ver = (data["options_set"] != undefined) ? data["options_set"] : 0;
@@ -46,7 +48,8 @@ chrome.storage.local.get("options_set", function (data){
 			setOption("profReconOffset", 0);
 			setOption("revOpenIn", true);
 			setOption("nomOpenIn", true);
-			setOption("customMaps", '[{"title":"Google Maps","url":"https://maps.google.com/maps?q=%lat%,%lng%"},{"title":"Ingress Intel","url":"https://intel.ingress.com/?ll=%lat%,%lng%&z=18"},{"title":"OSM","url":"https://www.openstreetmap.org/#map=18/%lat%/%lng%"}]');
+		case 13:
+			setOption("customMaps", defaultMapSettings);
 			setOption("options_set", settingsVersion);
 	}
 });

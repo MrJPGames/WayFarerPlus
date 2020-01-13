@@ -32,9 +32,9 @@ function updateCustomMaps(){
 
     	//Link editing:
     	link = link.toLowerCase();
-    	link = link.replace("%lat%", nomCtrl.currentNomination.lat);
-    	link = link.replace("%lng%", nomCtrl.currentNomination.lng);
-    	link = link.replace("%title%", nomCtrl.currentNomination.title);
+    	link = link.replaceAll("%lat%", nomCtrl.currentNomination.lat);
+    	link = link.replaceAll("%lng%", nomCtrl.currentNomination.lng);
+    	link = link.replaceAll("%title%", nomCtrl.currentNomination.title);
 
     	var button = document.createElement("a");
     	button.href = link;
@@ -52,3 +52,9 @@ function updateCustomMaps(){
 
 document.addEventListener("WFPNomCtrlHooked", initMapButtons, false);
 document.addEventListener("WFPNomSelected", updateCustomMaps, false);
+
+//Needed entering variables into URLs
+String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.replace(new RegExp(search, 'g'), replacement);
+};

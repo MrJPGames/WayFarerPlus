@@ -78,7 +78,6 @@ function presetClick(e){
 		if (safeAccess > 0) safeAccess = keepInBounds(parseInt(safeAccess)+randomRange(-1,1));
 	}
 
-	
 	ansCtrl.formData.quality = shouldBePortal;
 	ansCtrl.formData.description = titleAndDescription;
 	ansCtrl.formData.cultural = historicOrCultural;
@@ -92,6 +91,15 @@ function presetClick(e){
 	if (visuallyUnique > 0) document.getElementById(divNames.visuallyUnique).getElementsByClassName("five-stars")[0].children[visuallyUnique-1].click();
 	if (safeAccess > 0) document.getElementById(divNames.safeAccess).getElementsByClassName("five-stars")[0].children[safeAccess-1].click();
 	if (locationAccuracy > 0) document.getElementById(divNames.locationAccuracy).getElementsByClassName("five-stars")[0].children[locationAccuracy-1].click();
+
+	if (preset.whatIsItPath != undefined){
+		for (var i=0; i < preset.whatIsItPath.length; i++){ //Go through all nodes stored for the path to the final setting (from root to deepest child set)
+			whatCtrl.setWhatNode(preset.whatIsItPath[i]); //Set node
+		}
+
+		//After setting the deepest child node we want to sync this change to the DOM
+		whatCtrlScope.$apply();
+	}
 }
 
 function removePreset(e){
@@ -135,7 +143,15 @@ function addPreset(){
 		preset.visuallyUnique = ansCtrl.formData.uniqueness;
 		preset.safeAccess = ansCtrl.formData.safety;
 		preset.locationAccuracy = ansCtrl.formData.location;
-		preset.whatIsIt = whatCtrl.whatNode.id;
+		
+		var whatIsItPath = [whatCtrl.whatNode.id]; //Init with (and will be end of list/array) the final node ID
+		var parent = whatCtrl.whatNode.parent;
+		while (parent.id != "0" && parent.id != null){ //Either root, or just in case no more parent is found
+			whatIsItPath.unshift(parent.id);
+			parent = parent.parent;
+		}
+
+		preset.whatIsItPath = whatIsItPath;
 
 		if (confirm("Do you want to have small random mutations applied?\n\n- These should not affect the outcome of the review.\n- These might make it less likely to get a cooldown while using presets.")){
 			preset.rng = true;
