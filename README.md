@@ -19,6 +19,14 @@ Other browser support?
 
 Changelog
 ---
+1.11.1:
+- Ppresets can now also automatically fill the WhatIsIt box (Only presets made with 1.11.1 or later)
+- Export/Import function added for "Open In" maps configuration
+- Slight improvements to the extended profile for Ingress agents
+- Nominations Stats widget should be more accurate in it's unlock dates
+- Default Intel map settings should work with more IITC versions now
+- Reset "Open In" configuration option added
+
 1.11:
 - Custom map support added for "Open In". Now you can add any third party map to the Open In dropdown! (Defaults are Google Maps, Ingress Intel and OSM, these can be removed if desired!)
 - Compact view made more compact
