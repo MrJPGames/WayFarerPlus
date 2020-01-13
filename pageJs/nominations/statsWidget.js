@@ -72,17 +72,17 @@ function loadStats(){
         var nomType = nomTypes[nomCtrl.nomList[i].id];
         if (settings["accIngress"] && settings["accPoGo"]){
             if (nomType == "pogo"){
-                nomPeriod = 15;
+                nomPeriod = 14;
             }else{
                 //Both when Ingress is set, and otherwise this is our default assumption
-                nomPeriod = 14;
+                nomPeriod = 13;
             }
         }else if (settings["accIngress"]){
-            nomPeriod = 14; //Only ingress noms
+            nomPeriod = 13; //Only ingress noms
         }else{
-            nomPeriod = 15; //Only pogo noms
+            nomPeriod = 14; //Only pogo noms
         }
-        if (nomAge < nomPeriod){
+        if (nomAge <= nomPeriod){
             availableNominations--;
             if (nomType == "ingress")
                 availableIngressNominations--;
@@ -90,7 +90,7 @@ function loadStats(){
                 availablePoGoNominations--;
 
 
-            unlocks[(nomPeriod-1)-nomAge]++;
+            unlocks[(nomPeriod)-(nomAge-1)]++;
         }
     }
 
