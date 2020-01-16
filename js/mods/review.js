@@ -17,7 +17,7 @@ function modReviewPage(settings){
 		addPageJS("review/mapButtons.js");
 	if (settings["revTranslate"])
 		addPageJS("review/translationButtons.js");
-	if (settings["revLowestDistCircle"] || settings["revAccessDistCircle"] || settings["revMap2ZoomLevel"] || settings["revS2Cell"] || settings["revEditOrigLoc"] || settings["ctrlessZoom"] || settings["revMap2ZoomLevel"] != -1)
+	if (settings["revLowestDistCircle"] || settings["revAccessDistCircle"] || settings["revMap2ZoomLevel"] || settings["revS2Cell"] || settings["revEditOrigLoc"] || settings["ctrlessZoom"] || settings["revMap2ZoomLevel"] != -1 || settings["revBigMaps"])
 		addPageJS("review/mapMods.js");
 	if (settings["revKeyboard"])
 		addPageJS("review/keyboardCtrl.js");

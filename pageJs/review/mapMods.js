@@ -176,6 +176,7 @@ function hookLongDistLocEdit(){
 }
 
 function makeMapsBigger(){
+	console.log("test");
 	var dupeCardElem = document.getElementById(divNames.duplicates);
 	var accuracyCardElem = document.getElementById(divNames.location);
 
