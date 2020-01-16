@@ -8,16 +8,16 @@ chrome.storage.local.get("options_set", function (data){
 	switch(opt_ver){
 		case 0:
 			setOption("darkMode", false);
-			setOption("nomStreetView", true);
-			setOption("revTooCloseWarn", true);
-			setOption("revExpireTimer", true);
+			setOption("nomStreetView", true); //Street view preview on the nomination page
+			setOption("revTooCloseWarn", true); //Warning text when wayspot is within 20m of another wayspot on review page
+			setOption("revExpireTimer", true); //Timer in header with remaining time for the current review on review page
 		case 1:
-			setOption("nomStats", true);
+			setOption("nomStats", true); //Adds the nomination stats widget to the nomination page
 		case 2:
 			setOption("accPoGo", true);
 			setOption("accIngress", false);
 		case 3:
-			setOption("revTranslate", true);
+			setOption("revTranslate", true); //Add translate buttons to the review page
 			setOption("revLowestDistCircle", true);
 			setOption("revAccessDistCircle", true);
 		case 4:
@@ -26,14 +26,14 @@ chrome.storage.local.get("options_set", function (data){
 			setOption("revKeyboard", true);
 			setOption("nomLowestDistCircle", true);
 			setOption("nomAccessDistCircle", true);
-			setOption("revMap2ZoomLevel", 17);
+			setOption("revMap2ZoomLevel", 17); //Satellite/streetview map on review page custom zoom level
 		case 6:
-			setOption("headProgress", true);
+			setOption("headProgress", true); //Upgrade percentage in header next to profile picture
 		case 8:
 			setOption("nomS2Cell", 17);
 			setOption("revS2Cell", 17);
 			setOption("revNoTaskDesc", false);
-			setOption("revEditOrigLoc", true);
+			setOption("revEditOrigLoc", true); //Display current location on the review page of location edits
 		case 9:
 			setOption("revCardView", "normal");
 			setOption("revPresets", false);
@@ -45,11 +45,13 @@ chrome.storage.local.get("options_set", function (data){
 		case 11:
 			setOption("revAutoSelectDupe", true);
 		case 12:
-			setOption("profReconOffset", 0);
+			setOption("profReconOffset", 0); //Agreement offset for Ingress Recon badge
 			setOption("revOpenIn", true);
 			setOption("nomOpenIn", true);
 		case 13:
 			setOption("customMaps", defaultMapSettings);
+		case 14:
+			setOption("keepTab", true);
 			setOption("options_set", settingsVersion);
 	}
 });

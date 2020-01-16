@@ -97,7 +97,6 @@ function init(settings){
 }
 
 /* Open In Map management code */
-
 function addMap(){
 	var mapURL = prompt("Please enter the map URL:\n\nThe following can be used in the URL:\n%lat% - Latitude\n%lng% - Longitude\n%title% - Wayspot title\n\nExample URL: https://maps.google.com/maps?q=%lat%,%lng%");
 	if (mapURL == null)
