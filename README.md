@@ -19,6 +19,10 @@ Other browser support?
 
 Changelog
 ---
+1.11.2:
+- You can now keep one tab per map and for all your translation
+- Experimental implementation for bigger maps (turned off by default currently)
+
 1.11.1:
 - Ppresets can now also automatically fill the WhatIsIt box (Only presets made with 1.11.1 or later)
 - Export/Import function added for "Open In" maps configuration
