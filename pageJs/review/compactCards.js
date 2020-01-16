@@ -52,9 +52,9 @@ function setupCompactCard() {
 
     document.getElementById(divNames.historicOrCultural).getElementsByClassName("card-header__title")[0].innerText = "Historic/Cultural";
 
-    document.getElementById("duplicates-card").classList.remove("card--double-width");
-    document.getElementById("duplicates-card").classList.add("card--expand");
-    document.getElementById("duplicates-card").style.order = 4;
+    document.getElementById(divNames.duplicates).classList.remove("card--double-width");
+    document.getElementById(divNames.duplicates).classList.add("card--expand");
+    document.getElementById(divNames.duplicates).style.order = 4;
 
     document.getElementById(divNames.location).classList.remove("card--double-width");
     document.getElementById(divNames.location).classList.add("card--expand");

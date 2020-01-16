@@ -5,7 +5,10 @@ function addTranslationButtons(){
 
 	for (i = 0; i < elems.length; i++){
 		var translateButton = document.createElement("a");
-		translateButton.setAttribute("target", "_BLANK");
+		if (settings["keepTab"])
+            translateButton.setAttribute("target", "wfpTranslate");
+        else
+            translateButton.setAttribute("target", "_BLANK");
 		translateButton.setAttribute("class", "translateButton");
 		translateButton.setAttribute("style", style);
 		translateButton.href = "https://translate.google.com/?sl=auto&q=" + encodeURI(elems[i].innerText);
@@ -17,7 +20,10 @@ function addTranslationButtons(){
 		var elem = document.getElementsByClassName("supporting-statement-central-field")[0];
 
 		var translateButton = document.createElement("a");
-		translateButton.setAttribute("target", "_BLANK");
+		if (settings["keepTab"])
+            translateButton.setAttribute("target", "wfpTranslate");
+        else
+            translateButton.setAttribute("target", "_BLANK");
 		translateButton.setAttribute("class", "translateButton");
 		translateButton.setAttribute("style", style);
 		translateButton.href = "https://translate.google.com/?sl=auto&q=" + encodeURI(elem.innerText);
