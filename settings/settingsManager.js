@@ -52,6 +52,7 @@ chrome.storage.local.get("options_set", function (data){
 			setOption("customMaps", defaultMapSettings);
 		case 14:
 			setOption("keepTab", true);
+			setOption("revBigMaps", false);
 			setOption("options_set", settingsVersion);
 	}
 });

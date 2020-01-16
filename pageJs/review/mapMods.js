@@ -32,6 +32,8 @@ function setupMapMods(){
 		zoomMap2();
 	if (settings["revTransparentMarker"])
 		makeMarkersTransparent();
+	if (settings["revBigMaps"])
+		makeMapsBigger();
 }
 
 function makeMarkersTransparent(){
@@ -171,6 +173,20 @@ function hookLongDistLocEdit(){
 	google.maps.event.addListener(nSubDS.getNewLocationMarker(), 'dragend', function () {
     	longDistCirle.setCenter(nSubDS.getNewLocationMarker().position)
     });
+}
+
+function makeMapsBigger(){
+	var dupeCardElem = document.getElementById(divNames.duplicates);
+	var accuracyCardElem = document.getElementById(divNames.location);
+
+	dupeCardElem.style.height = "600px";
+	accuracyCardElem.style.height = "600px";
+
+	var duplicateMapElem = document.getElementById("map");
+	var accuracyMapElem = document.getElementById("street-view");
+
+	duplicateMapElem.style.height = "100%";
+	accuracyMapElem.style.height = "100%";
 }
 
 document.addEventListener("WFPAllRevHooked", setupMapMods);

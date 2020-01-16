@@ -21,9 +21,9 @@ function addTranslationButtons(){
 
 		var translateButton = document.createElement("a");
 		if (settings["keepTab"])
-            button.setAttribute("target", "wfpTranslate");
+            translateButton.setAttribute("target", "wfpTranslate");
         else
-            button.setAttribute("target", "_BLANK");
+            translateButton.setAttribute("target", "_BLANK");
 		translateButton.setAttribute("class", "translateButton");
 		translateButton.setAttribute("style", style);
 		translateButton.href = "https://translate.google.com/?sl=auto&q=" + encodeURI(elem.innerText);
