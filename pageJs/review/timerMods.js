@@ -52,7 +52,7 @@ function lockSubmitButton(){
 	}else{
 		for (var i = 0; i < buttons.length; i++){
 			if(buttons[i].id == "subButton"){
-				var seconds = Math.round(tDiff/1000) - (1200-settings["revSubmitTimer"]);
+				var seconds = Math.ceil(tDiff/1000 - (1200-parseInt(settings["revSubmitTimer"])));
 				buttons[i].innerText = seconds + "S";
 			}
 		}
@@ -79,7 +79,7 @@ function updateTimer(){
 
 	if (tDiff > 0){
 		var tDiffMin = Math.floor(tDiff/1000/60);
-		var tDiffSec = Math.floor(tDiff/1000 - 60*tDiffMin);
+		var tDiffSec = Math.ceil(tDiff/1000 - 60*tDiffMin);
 
 		timeElem.innerText = pad(tDiffMin,2) + ":" + pad(tDiffSec,2);
 		//Retrigger function in 1 second
