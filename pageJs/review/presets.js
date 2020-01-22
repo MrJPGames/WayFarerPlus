@@ -99,6 +99,21 @@ function presetClick(e){
 
 		//After setting the deepest child node we want to sync this change to the DOM
 		whatCtrlScope.$apply();
+	}else{
+		//Reassign focus function to prevent presets from focusing the WhatIsIt Box search field
+		var tempFunc = whatCtrl.focusOnCategoryInput;
+		whatCtrl.focusOnCategoryInput = function(){console.log("Captured function call")};
+
+		//If not defined reset WhatIsIt Box
+		whatCtrl.backToRootNode();
+
+		//Reset the focus function so regular use of the backToRootFunction can properly set focus to the search field.
+		whatCtrl.focusOnCategoryInput = tempFunc;
+
+		//Sync changes to DOM
+		whatCtrlScope.$apply();
+
+		e.srcElement.focus();
 	}
 }
 
@@ -144,14 +159,16 @@ function addPreset(){
 		preset.safeAccess = ansCtrl.formData.safety;
 		preset.locationAccuracy = ansCtrl.formData.location;
 		
-		var whatIsItPath = [whatCtrl.whatNode.id]; //Init with (and will be end of list/array) the final node ID
-		var parent = whatCtrl.whatNode.parent;
-		while (parent.id != "0" && parent.id != null){ //Either root, or just in case no more parent is found
-			whatIsItPath.unshift(parent.id);
-			parent = parent.parent;
+		if (whatCtrl.whatNode.id != "0"){
+			var whatIsItPath = [whatCtrl.whatNode.id]; //Init with (and will be end of list/array) the final node ID
+			var parent = whatCtrl.whatNode.parent;
+			while (parent.id != "0" && parent.id != null){ //Either root, or just in case no more parent is found
+				whatIsItPath.unshift(parent.id);
+				parent = parent.parent;
+			}
+			preset.whatIsItPath = whatIsItPath;
 		}
 
-		preset.whatIsItPath = whatIsItPath;
 
 		if (confirm("Do you want to have small random mutations applied?\n\n- These should not affect the outcome of the review.\n- These might make it less likely to get a cooldown while using presets.")){
 			preset.rng = true;
