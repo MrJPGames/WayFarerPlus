@@ -35,7 +35,7 @@ function loadStats(){
     }
 
     var nomTypes = JSON.parse(localStorage.wfpNominationTypes);
-    var unlocks = [0,0,0,0,0,0,0,0,0,0,0,0,0,0]; // Array that stores the amount of nomination unlocks for every day for the upcomming 14 days
+    var unlocks = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]; // Array that stores the amount of nomination unlocks for every day for the upcomming 14 days
 
     for(var i = 0; i < nomCount; i++){
         //Keep track of basic counting stats
