@@ -9,7 +9,9 @@ body, html {
 }
 
 img{
-    filter: invert();
+    filter: invert();    
+    float: right;
+    margin-left: 0.5em;
 }
 
 select, input[type="number"]{
