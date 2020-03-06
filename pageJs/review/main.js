@@ -3,7 +3,7 @@ var nSubCtrl, ansCtrl, nSubDS, whatCtrl, whatCtrlScope;
 var hooked = 0;
 
 //Global const for any mod
-const divNames = {shouldBePortal: "photo-card", titleAndDescription: "descriptionDiv", duplicates: "duplicates-card", historicOrCultural: "histcult-card", visuallyUnique: "uniqueness-card", safeAccess: "safety-card", location: "map-card", whatIsIt: "what-is-it-card", additionalComment: "additional-comments-card", locationAccuracy: "map-card"};
+const divNames = {shouldBePortal: "photo-card", titleAndDescription: "descriptionDiv", duplicates: "duplicates-card", historicOrCultural: "histcult-card", visuallyUnique: "uniqueness-card", safeAccess: "safety-card", location: "map-card", whatIsIt: "what-is-it-card-review", additionalComment: "additional-comments-card", locationAccuracy: "map-card"};
 
 setupPage();
 function setupPage(){

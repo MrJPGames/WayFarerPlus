@@ -78,7 +78,7 @@ function updateSpecificButton(elem, value){
 
 function createObserver(){
 	//Used to keep disabled/enabled-ness of button in sync with official submit buttons
-	const subButton = document.getElementById('submitDiv').children[0]; //Top right sub button
+	const subButton = document.getElementById('submit-top').children[0]; //Top right sub button
 
 	//We only care about attribute updates
 	const config = { attributes: true, childList: false, subtree: false };
