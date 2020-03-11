@@ -67,8 +67,12 @@ function hookAnsCtrl(){
 }
 
 function hookWhatCtrl(){
-	whatCtrl = angular.element(document.getElementById('WhatIsItController')).scope().whatCtrl;
-	whatCtrlScope = angular.element(document.getElementById('WhatIsItController')).scope();
+	if (document.getElementById("what-is-it-card-review") == undefined){
+		setTimeout(hookWhatCtrl, 50);
+		return;
+	}
+	whatCtrl = angular.element(document.getElementById("what-is-it-card-review").children[0]).scope().whatCtrl;
+	whatCtrlScope = angular.element(document.getElementById("what-is-it-card-review").children[0]).scope();
 
 	if (whatCtrl == undefined){
 		setTimeout(hookWhatCtrl, 50);
