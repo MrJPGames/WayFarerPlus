@@ -10,7 +10,6 @@ function setupPage(){
 	hookSubCtrl();
 	hookAnsCtrl();
 	hookDataService();
-	hookWhatCtrl();
 	hookedAll();
 }
 
@@ -49,6 +48,9 @@ function hookSubCtrl(){
 		//Auto select first possible duplicate
 		if (nSubCtrl.reviewType == "NEW" && nSubCtrl.activePortals.length > 0 && settings["revAutoSelectDupe"])
 			nSubCtrl.displayLivePortal(0);
+
+		//Only hook what ctrl AFTER sub ctrl
+		hookWhatCtrl();
 	}
 }
 
@@ -67,12 +69,18 @@ function hookAnsCtrl(){
 }
 
 function hookWhatCtrl(){
-	if (document.getElementById("what-is-it-card-review") == undefined){
+	var cardId;
+	if (nSubCtrl.reviewType == "EDIT"){
+		cardId = "what-is-it-card-edit";
+	}else{
+		cardId = "what-is-it-card-review";
+	}
+	if (document.getElementById(cardId) == undefined){
 		setTimeout(hookWhatCtrl, 50);
 		return;
 	}
-	whatCtrl = angular.element(document.getElementById("what-is-it-card-review").children[0]).scope().whatCtrl;
-	whatCtrlScope = angular.element(document.getElementById("what-is-it-card-review").children[0]).scope();
+	whatCtrl = angular.element(document.getElementById(cardId).children[0]).scope().whatCtrl;
+	whatCtrlScope = angular.element(document.getElementById(cardId).children[0]).scope();
 
 	if (whatCtrl == undefined){
 		setTimeout(hookWhatCtrl, 50);
