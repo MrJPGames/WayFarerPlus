@@ -3,7 +3,7 @@
 
   "name": "WayFarer+",
   "description": "Enables you to use NianticLab's Wayfarer in the way you want!",
-  "version": "1.11.2.1",
+  "version": "1.11.3.3",
 
   "browser_action": {
     "default_icon": "icons/icon48.png",
@@ -24,8 +24,7 @@
   ],
 
   "permissions": [
-    "storage",
-    "https://niantic.helpshift.com/a/wayfarer/?p=web&s=wayspot-acceptance-criteria&f=acceptance-criteria-update-log&l=en"
+    "storage"
   ],
   "web_accessible_resources": [
     "pageJs/*.js",

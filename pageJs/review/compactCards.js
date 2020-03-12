@@ -1,6 +1,6 @@
 function removeRedundantDescriptions() {
-    for (var i = document.getElementsByClassName('card-header__description').length - 1; i >= 0; i--) {
-        document.getElementsByClassName('card-header__description')[i].remove();
+    while (document.getElementsByClassName('card-header__description').length > 0) {
+        document.getElementsByClassName('card-header__description')[0].remove();
     }
 }
 
@@ -35,18 +35,18 @@ function setupCompactCard() {
     document.getElementById(divNames.safeAccess).classList.add("middle-card");
 
     document.getElementById(divNames.historicOrCultural).getElementsByClassName('card-header__title')[0].style.padding = "0pt";
-    document.getElementById(divNames.historicOrCultural).getElementsByClassName('card-header__title')[0].style.margin = "2pt 0pt -1pt";
-    document.getElementById(divNames.historicOrCultural).getElementsByClassName('card-header')[0].style.marginBottom = "-20.5pt";
+    document.getElementById(divNames.historicOrCultural).getElementsByClassName('card-header__title')[0].style.margin = "5.5pt 0pt -1pt";
+    document.getElementById(divNames.historicOrCultural).getElementsByClassName('card-header')[0].style.marginBottom = "-20pt";
     document.getElementById(divNames.historicOrCultural).getElementsByClassName('card-header')[0].style.marginTop = "-6pt";
     document.getElementById(divNames.historicOrCultural).style.maxHeight = "3em";
     document.getElementById(divNames.visuallyUnique).getElementsByClassName('card-header__title')[0].style.padding = "0pt";
-    document.getElementById(divNames.visuallyUnique).getElementsByClassName('card-header__title')[0].style.margin = "2pt 0pt -1pt";
-    document.getElementById(divNames.visuallyUnique).getElementsByClassName('card-header')[0].style.marginBottom = "-20.5pt";
+    document.getElementById(divNames.visuallyUnique).getElementsByClassName('card-header__title')[0].style.margin = "5.5pt 0pt -1pt";
+    document.getElementById(divNames.visuallyUnique).getElementsByClassName('card-header')[0].style.marginBottom = "-20pt";
     document.getElementById(divNames.visuallyUnique).getElementsByClassName('card-header')[0].style.marginTop = "-6pt";
     document.getElementById(divNames.visuallyUnique).style.maxHeight = "3em";
     document.getElementById(divNames.safeAccess).getElementsByClassName('card-header__title')[0].style.padding = "0pt";
-    document.getElementById(divNames.safeAccess).getElementsByClassName('card-header__title')[0].style.margin = "2pt 0pt -1pt";
-    document.getElementById(divNames.safeAccess).getElementsByClassName('card-header')[0].style.marginBottom = "-20.5pt";
+    document.getElementById(divNames.safeAccess).getElementsByClassName('card-header__title')[0].style.margin = "5.5pt 0pt -1pt";
+    document.getElementById(divNames.safeAccess).getElementsByClassName('card-header')[0].style.marginBottom = "-20pt";
     document.getElementById(divNames.safeAccess).getElementsByClassName('card-header')[0].style.marginTop = "-6pt";
     document.getElementById(divNames.safeAccess).style.maxHeight = "3em";
 

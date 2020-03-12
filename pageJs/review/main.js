@@ -3,14 +3,13 @@ var nSubCtrl, ansCtrl, nSubDS, whatCtrl, whatCtrlScope;
 var hooked = 0;
 
 //Global const for any mod
-const divNames = {shouldBePortal: "photo-card", titleAndDescription: "descriptionDiv", duplicates: "duplicates-card", historicOrCultural: "histcult-card", visuallyUnique: "uniqueness-card", safeAccess: "safety-card", location: "map-card", whatIsIt: "what-is-it-card", additionalComment: "additional-comments-card", locationAccuracy: "map-card"};
+const divNames = {shouldBePortal: "photo-card", titleAndDescription: "descriptionDiv", duplicates: "duplicates-card", historicOrCultural: "histcult-card", visuallyUnique: "uniqueness-card", safeAccess: "safety-card", location: "map-card", whatIsIt: "what-is-it-card-review", additionalComment: "additional-comments-card", locationAccuracy: "map-card"};
 
 setupPage();
 function setupPage(){
 	hookSubCtrl();
 	hookAnsCtrl();
 	hookDataService();
-	hookWhatCtrl();
 	hookedAll();
 }
 
@@ -49,6 +48,9 @@ function hookSubCtrl(){
 		//Auto select first possible duplicate
 		if (nSubCtrl.reviewType == "NEW" && nSubCtrl.activePortals.length > 0 && settings["revAutoSelectDupe"])
 			nSubCtrl.displayLivePortal(0);
+
+		//Only hook what ctrl AFTER sub ctrl
+		hookWhatCtrl();
 	}
 }
 
@@ -67,8 +69,18 @@ function hookAnsCtrl(){
 }
 
 function hookWhatCtrl(){
-	whatCtrl = angular.element(document.getElementById('WhatIsItController')).scope().whatCtrl;
-	whatCtrlScope = angular.element(document.getElementById('WhatIsItController')).scope();
+	var cardId;
+	if (nSubCtrl.reviewType == "EDIT"){
+		cardId = "what-is-it-card-edit";
+	}else{
+		cardId = "what-is-it-card-review";
+	}
+	if (document.getElementById(cardId) == undefined){
+		setTimeout(hookWhatCtrl, 50);
+		return;
+	}
+	whatCtrl = angular.element(document.getElementById(cardId).children[0]).scope().whatCtrl;
+	whatCtrlScope = angular.element(document.getElementById(cardId).children[0]).scope();
 
 	if (whatCtrl == undefined){
 		setTimeout(hookWhatCtrl, 50);

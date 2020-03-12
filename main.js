@@ -10,6 +10,10 @@ function getData(){
 };
 
 function init(settings){
+	if (settings["useMods"] == false){
+		return;
+		//Do not apply any mods
+	}
 	if (settings["darkMode"] == true){
 		applyPublicStyle();
 	}
