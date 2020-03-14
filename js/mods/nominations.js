@@ -115,6 +115,7 @@ function addStats(){
 	//Create required HTML (Content is written from the pageJS as NominationController access is required!)
 	var container = document.createElement("div");
 	container.setAttribute("class", "wrap-collabsible");
+	container.id = "statsWidget";
 
 	var collapsibleInput = document.createElement("input");
 	collapsibleInput.id = "collapsible";
