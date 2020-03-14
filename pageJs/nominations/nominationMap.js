@@ -12,9 +12,11 @@
     }
     
     function addMap(nominationList, mapElement) {
+
+        const mapSettings = settings["ctrlessZoom"] ? { scrollwheel: true, gestureHandling: 'greedy' } : {};
         const gmap = new google.maps.Map(mapElement, {
-            center: {lat: -34.397, lng: 150.644},
-            zoom: 8
+            zoom: 8,
+            ...mapSettings,
           });
     
         // Options to pass along to the marker clusterer
