@@ -7,7 +7,7 @@ function modReviewPage(settings){
 	newCss.setAttribute("href", chrome.extension.getURL("assets/review.css"));
 	document.getElementsByTagName("head")[0].appendChild(newCss);
 
-	if (settings["profRecordNominations"])
+	if (settings["profRecordReviews"])
 		addPageJS("profile/recordNominations.js");
 	if (settings["revExpireTimer"] || settings["revSubmitTimer"] > 0)
 		addPageJS("review/timerMods.js");
