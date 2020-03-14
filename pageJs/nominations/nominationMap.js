@@ -5,13 +5,14 @@
 
     const colorMap = {
         "ACCEPTED": "green",
-        "NOMINATED": "orange",
-        "WITHDRAWN": "yellow",
+        "NOMINATED": "blue",
+        "WITHDRAWN": "orange",
+        "VOTING": "yellow",
         "REJECTED": "red",
     };
     
     function getIconUrl(nomination) {
-        return `https://maps.google.com/mapfiles/ms/icons/${colorMap[nomination.status] || 'red'}-dot.png`;
+        return `https://maps.google.com/mapfiles/ms/icons/${colorMap[nomination.status] || 'blue'}.png`;
     }
     
     function addMap(nominationList, mapElement) {
