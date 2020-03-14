@@ -77,6 +77,7 @@ html {
 }
 
 .dropdown {
+  float: left;
   background-color: white;
   border-radius: 5px;
   box-shadow: grey 2px 2px 10px;
