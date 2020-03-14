@@ -100,9 +100,9 @@
             setTimeout(loadMap, 100);
             return;
         }
-        console.log("[WayFarer+] Nominations map loaded");
 
         addMap(nomCtrl.nomList, createElements());
+        console.log("[WayFarer+] Nominations map loaded");
     }
 
     document.addEventListener("WFPNomCtrlHooked", loadMap);
