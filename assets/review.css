@@ -62,10 +62,6 @@ html {
     max-height: 10.08em;    
 }
 
-.card-header__description{
-    height: 2em;
-}
-
 /* Open in drop down CSS */
 .dropbtn {
   background-color: #4CAF50;
