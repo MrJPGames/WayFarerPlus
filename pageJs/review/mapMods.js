@@ -34,6 +34,16 @@ function setupMapMods(){
 		makeMarkersTransparent();
 	if (settings["revBigMaps"])
 		makeMapsBigger();
+	if (settings["rev3DMap"]){
+		makeMap3D();
+	}
+}
+
+function makeMap3D(){
+	var options = {
+		tilt: 45
+	};
+	applyMapOptions(options);
 }
 
 function makeMarkersTransparent(){
@@ -115,6 +125,10 @@ function mapsRemoveCtrlToZoom(){
 		scrollwheel: true,
 		gestureHandling: 'greedy'
 	};
+	applyMapOptions(options);
+}
+
+function applyMapOptions(options){
 	if (nSubCtrl.reviewType == "NEW"){
 		nSubCtrl.map.setOptions(options);
 		nSubCtrl.map2.setOptions(options);
@@ -176,7 +190,6 @@ function hookLongDistLocEdit(){
 }
 
 function makeMapsBigger(){
-	console.log("test");
 	var dupeCardElem = document.getElementById(divNames.duplicates);
 	var accuracyCardElem = document.getElementById(divNames.location);
 
@@ -186,7 +199,7 @@ function makeMapsBigger(){
 	var duplicateMapElem = document.getElementById("map");
 	var accuracyMapElem = document.getElementById("street-view");
 
-	duplicateMapElem.style.height = "100%";
+	duplicateMapElem.style.height = "500px";
 	accuracyMapElem.style.height = "100%";
 }
 
