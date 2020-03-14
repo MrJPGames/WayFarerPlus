@@ -8,7 +8,7 @@ function modReviewPage(settings){
 	document.getElementsByTagName("head")[0].appendChild(newCss);
 
 	if (settings["profRecordReviews"])
-		addPageJS("profile/recordNominations.js");
+		addPageJS("profile/recordReviews.js");
 	if (settings["revExpireTimer"] || settings["revSubmitTimer"] > 0)
 		addPageJS("review/timerMods.js");
 	if (settings["revCardView"] == "compact")
