@@ -100,7 +100,7 @@
             setTimeout(loadMap, 100);
             return;
         }
-        console.log("loaded map");
+        console.log("[WayFarer+] Nominations map loaded");
 
         addMap(nomCtrl.nomList, createElements());
     }
