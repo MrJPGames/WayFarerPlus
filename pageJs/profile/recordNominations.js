@@ -1,4 +1,9 @@
 (function() {
+  const infoWindow = new google.maps.InfoWindow({
+    content: 'TODO'
+  });
+  let markers = [];
+
   const getNominations = () => {
     const currentItemsText = localStorage.getItem("wfpSaved") || "[]";
     const currentItems = JSON.parse(currentItemsText);
@@ -6,12 +11,14 @@
   };
 
   const clearLocalStorage = () => {
-    const confirmation = confirm("This will delete all your review history! Are you sure?");
+    const confirmation = confirm(
+      "This will delete all your review history! Are you sure?"
+    );
     if (confirmation) {
-        localStorage.removeItem("wfpSaved");
-        window.location.reload();
+      localStorage.removeItem("wfpSaved");
+      window.location.reload();
     }
-  }
+  };
   const saveNomination = () => {
     if (nSubCtrl.reviewType !== "NEW") {
       console.log("Not a new review. Skipping the save.");
@@ -84,7 +91,7 @@
     });
 
     const bounds = new google.maps.LatLngBounds();
-    const markers = nominationList.map(nomination => {
+    markers = nominationList.map(nomination => {
       const latLng = {
         lat: nomination.lat,
         lng: nomination.lng
@@ -107,6 +114,7 @@
     });
 
     gmap.fitBounds(bounds);
+    return gmap;
   }
 
   const downloadObjectAsJson = (exportObj, exportName) => {
@@ -171,7 +179,7 @@
             <button class="button-secondary" id="clean-history">Clean History</button>
         </div>`
     );
-    buildMap(nominations, document.getElementById("reviewed-map"));
+    const map = buildMap(nominations, document.getElementById("reviewed-map"));
     const nominationListElement = document.getElementById("nomination-list");
     const exportButton = document.getElementById("export-geojson");
     const cleanHistoryButton = document.getElementById("clean-history");
@@ -184,10 +192,19 @@
     cleanHistoryButton.addEventListener("click", clearLocalStorage);
 
     nominationListElement.addEventListener("click", ({ target }) => {
-        if (!(target.dataset && target.dataset.index)) {
-          return;
-        }
-      });
+      const index = target.dataset && target.dataset.index;
+      if (!index) {
+        return;
+      }
+
+      const currentMarker = markers[index];
+      const currentNomination = nominations[index];
+
+
+      infoWindow.open(map, currentMarker);
+      infoWindow.setContent(currentNomination.title);
+      map.panTo({ lat: currentNomination.lat, lng: currentNomination.lng });
+    });
   };
 
   document.addEventListener("WFPAllRevHooked", saveNomination);
