@@ -1,8 +1,4 @@
 (function() {
-    const script = document.createElement('script');
-    script.src = 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js';
-    document.querySelector("head").appendChild(script);
-
     const colorMap = {
         "ACCEPTED": "green",
         "NOMINATED": "blue",

@@ -13,6 +13,7 @@ function modNominationPage(settings){
 	}
 
 	if (settings["nominationMap"]) {
+		addPageJS("libs/markerclusterer.js");
 		addPageJS("nominations/nominationMap.js");
 	}
 
