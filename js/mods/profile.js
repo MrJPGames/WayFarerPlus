@@ -2,7 +2,7 @@ function modProfilePage(settings){
 	if (settings["profExtendedStats"] != "off")
 		addPageJS("profile/extendedStats.js");
 
-	if (settings["profRecordNominations"] != "off") {
+	if (settings["profRecordNominations"]) {
 		addPageJS("profile/recordNominations.js");
 	}
 

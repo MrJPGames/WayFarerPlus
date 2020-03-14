@@ -26,6 +26,8 @@ function modReviewPage(settings){
 	if (settings["revQuickSubmit"])
 		addPageJS("review/quickSubmit.js");
 	
+	if (settings["profRecordNominations"])
+		addPageJS("profile/recordNominations.js");
 	addPageJS("review/main.js", true);
 
 	console.log("[WayFarer+] Review page injection successful!");
