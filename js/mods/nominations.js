@@ -11,6 +11,12 @@ function modNominationPage(settings){
 		addStats();
 		addPageJS("nominations/statsWidget.js");
 	}
+
+	if (settings["nominationMap"]) {
+		addPageJS("libs/markerclusterer.js");
+		addPageJS("nominations/nominationMap.js");
+	}
+
 	if (settings["nomStreetView"]){
 		addStreetView();
 		addPageJS("nominations/streetView.js");

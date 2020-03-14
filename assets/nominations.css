@@ -17,11 +17,10 @@
 }
 
 .wrap-collabsible {
-  margin-bottom: 1.2rem 0;
-  float: right;
+  margin-bottom: 1.2rem;
 }
 
-#collapsible {
+#collapsible, #collapsed-map {
   display: none;
 }
 
