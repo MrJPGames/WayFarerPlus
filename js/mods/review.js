@@ -7,6 +7,8 @@ function modReviewPage(settings){
 	newCss.setAttribute("href", chrome.extension.getURL("assets/review.css"));
 	document.getElementsByTagName("head")[0].appendChild(newCss);
 
+	if (settings["profRecordNominations"])
+		addPageJS("profile/recordNominations.js");
 	if (settings["revExpireTimer"] || settings["revSubmitTimer"] > 0)
 		addPageJS("review/timerMods.js");
 	if (settings["revCardView"] == "compact")
@@ -26,8 +28,6 @@ function modReviewPage(settings){
 	if (settings["revQuickSubmit"])
 		addPageJS("review/quickSubmit.js");
 	
-	if (settings["profRecordNominations"])
-		addPageJS("profile/recordNominations.js");
 	addPageJS("review/main.js", true);
 
 	console.log("[WayFarer+] Review page injection successful!");

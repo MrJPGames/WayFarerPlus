@@ -19,7 +19,8 @@
       window.location.reload();
     }
   };
-  const saveNomination = () => {
+
+  const saveNomination = (submitData) => {
     if (nSubCtrl.reviewType !== "NEW") {
       console.log("Not a new review. Skipping the save.");
       return;
@@ -42,7 +43,8 @@
       lng,
       statement,
       supportingImageUrl,
-      ts: +new Date()
+      ts: +new Date(),
+      review: submitData
     };
 
     const currentItems = getNominations();
@@ -207,6 +209,23 @@
     });
   };
 
-  document.addEventListener("WFPAllRevHooked", saveNomination);
+  document.addEventListener("WFPAllRevHooked", () => saveNomination(false));
   document.addEventListener("WFPPCtrlHooked", showEvaluated);
+  document.addEventListener("WFPAnsCtrlHooked", () => {
+      const { submitForm, confirmLowQuality, markDuplicate, formData } = ansCtrl;
+
+      ansCtrl.submitForm = function() {
+        // This only works for accepts
+        saveNomination(formData);
+        submitForm();
+      }
+      ansCtrl.confirmLowQuality = function() {
+        debugger;
+        // TODO
+      }
+      ansCtrl.markDuplicate = function() {
+        debugger;
+        // TODO
+      }
+  });
 })();
