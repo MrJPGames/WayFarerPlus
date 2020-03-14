@@ -4,6 +4,14 @@
     const currentItems = JSON.parse(currentItemsText);
     return currentItems;
   };
+
+  const clearLocalStorage = () => {
+    const confirmation = confirm("This will delete all your review history! Are you sure?");
+    if (confirmation) {
+        localStorage.removeItem("wfpSaved");
+        window.location.reload();
+    }
+  }
   const saveNomination = () => {
     if (nSubCtrl.reviewType !== "NEW") {
       console.log("Not a new review. Skipping the save.");
@@ -135,13 +143,15 @@
   const showEvaluated = () => {
     const profileStats = document.getElementById("profile-main-contain");
     const nominations = getNominations();
+
+    if (!nominations.length) return;
     profileStats.insertAdjacentHTML(
       "beforeend",
       `
         <div>
             <h3>Reviewed</h3>
             <div id="reviewed-map" style="height:300px"></div>
-            <table class="table table-striped table-hover">
+            <table style="margin-top:1rem" class="table table-striped table-hover">
                 <thead>
                     <tr>
                         <th>Date</th>
@@ -157,24 +167,27 @@
                       .join("")}
                 </tbody>
             </table>
-            <button id="export-geojson">Export GeoJSON</button>
-            <button id="clean-history">Clean History</button>
+            <button class="button-secondary" id="export-geojson">Export GeoJSON</button>
+            <button class="button-secondary" id="clean-history">Clean History</button>
         </div>`
     );
     buildMap(nominations, document.getElementById("reviewed-map"));
     const nominationListElement = document.getElementById("nomination-list");
     const exportButton = document.getElementById("export-geojson");
+    const cleanHistoryButton = document.getElementById("clean-history");
 
     exportButton.addEventListener("click", () => {
       const geoJson = formatAsGeojson(nominations);
       downloadObjectAsJson(geoJson, "nominations.geojson");
     });
 
+    cleanHistoryButton.addEventListener("click", clearLocalStorage);
+
     nominationListElement.addEventListener("click", ({ target }) => {
-      if (!(target.dataset && target.dataset.index)) {
-        return;
-      }
-    });
+        if (!(target.dataset && target.dataset.index)) {
+          return;
+        }
+      });
   };
 
   document.addEventListener("WFPAllRevHooked", saveNomination);
