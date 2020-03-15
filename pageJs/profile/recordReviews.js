@@ -74,7 +74,7 @@
     return dateTimeFormat.format(date);
   };
 
-  const buildLine = ({ ts, accepted, title, review }, index, coll) => {
+  const buildLine = ({ ts, accepted, title, review, lat, lng }, index, coll) => {
     const formattedDate = formatTs(ts);
     let quality = "";
     let moreInfo = "";
@@ -95,11 +95,15 @@
 
     return `
     <tr class="${accepted ? 'success' : ''}">
+        <td>${index + 1}</td>
         <td>${formattedDate}</td>
         <td>${quality}${moreInfo}</td>
         <td>${title}</td>
-        <td class="text-center focus-map" data-index="${index}" style="cursor:pointer" title="Focus in map">📍</td>
-        <td class="text-center toggle" data-index="${index}" style="cursor:pointer" title="Save as Accepted">✅</td>
+        <td class="text-center focus-map">
+          <span title="Focus in map" data-index="${index}" style="cursor:pointer" >📍</span>
+          ${getIntelLink(lat, lng, `<img src="https://intel.ingress.com/favicon.ico" />`)}
+        </td>
+        <td class="text-center toggle" data-index="${index}" style="cursor:pointer" title="Toggle Accepted">✅</td>
     </tr>
     `;
   };
@@ -200,6 +204,8 @@
   const getDD = (term, definition) =>
     definition ? `<dt>${term}</dt><dd>${definition}</dd>` : "";
 
+  const getIntelLink = (lat, lng, content) => `<a target="_blank" rel="noreferrer" title="Open in Intel" href="https://intel.ingress.com/intel?ll=${lat},${lng}&z=21">${content}</a>`
+
   const getScores = ({ review }) => {
     if (!review || typeof review === "string") {
       return "";
@@ -269,7 +275,7 @@
                 supportingImageUrl &&
                   `<a target="_blank" href="${supportingImageUrl}=s0">View</a>`
               )}
-              ${getDD("Location", `<a target="_blank" rel="noreferrer" href="https://intel.ingress.com/intel?ll=${lat},${lng}&z=21">Open in Intel</a>`)}
+              ${getDD("Location", getIntelLink(lat, lng, "Open in Intel"))}
             </dl>
             ${getScores(review)}
           </div>
@@ -293,6 +299,7 @@
               <table class="table table-striped table-condensed">
                   <thead>
                       <tr>
+                          <th>#</th>
                           <th>Date</th>
                           <th>Score</th>
                           <th>Title</th>
