@@ -20,7 +20,7 @@
     }
   };
 
-  const saveNomination = (submitData) => {
+  const saveReview = (submitData) => {
     if (nSubCtrl.reviewType !== "NEW") {
       console.log("Not a new review. Skipping the save.");
       return;
@@ -209,23 +209,31 @@
     });
   };
 
-  document.addEventListener("WFPAllRevHooked", () => saveNomination(false));
+  document.addEventListener("WFPAllRevHooked", () => saveReview(false));
   document.addEventListener("WFPPCtrlHooked", showEvaluated);
   document.addEventListener("WFPAnsCtrlHooked", () => {
-      const { submitForm, confirmLowQuality, markDuplicate, formData } = ansCtrl;
+      const { submitForm, skipToNext, confirmLowQuality, markDuplicate, formData } = ansCtrl;
 
       ansCtrl.submitForm = function() {
         // This only works for accepts
-        saveNomination(formData);
+        saveReview(formData);
         submitForm();
       }
       ansCtrl.confirmLowQuality = function() {
         debugger;
         // TODO
+        confirmLowQuality();
       }
       ansCtrl.markDuplicate = function() {
         debugger;
         // TODO
+        markDuplicate();
+      }
+      ansCtrl.skipToNext = function() {
+        debugger;
+        // TODO
+        saveReview("skipped");
+        skipToNext();
       }
   });
 })();
