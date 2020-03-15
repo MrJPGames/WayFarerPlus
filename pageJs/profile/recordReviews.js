@@ -74,7 +74,7 @@
     return dateTimeFormat.format(date);
   };
 
-  const buildLine = ({ ts, accepted, title, review }, index) => {
+  const buildLine = ({ ts, accepted, title, review }, index, coll) => {
     const formattedDate = formatTs(ts);
     let quality = "";
     let moreInfo = "";
@@ -82,7 +82,8 @@
     if (review === "skipped") {
       quality = "Skipped";
     } else if (!review) {
-      quality = "Unknown";
+      // Latest result without a review will count as pending
+      quality = (index === coll.length - 1) ? "Pending" : "Expired";
     } else if (review.quality) {
       // was not a reject
       quality = review.quality;
@@ -378,10 +379,11 @@
       }, 10);
     };
 
-    ansCtrl.markDuplicate = function() {
-      debugger;
+    ansCtrl.markDuplicate = function(id) {
       // TODO. Need to find a duplicate to test this first!
-      markDuplicate();
+      debugger;
+      markDuplicate(id);
+      saveReview(nSubCtrl.pageData, ansCtrl.formData);
     };
     ansCtrl.skipToNext = function() {
       saveReview(nSubCtrl.pageData, "skipped");
