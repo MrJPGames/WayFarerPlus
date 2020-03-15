@@ -62,20 +62,27 @@
     localStorage.setItem("wfpSaved", JSON.stringify(currentItems));
   };
 
-  const formatTs = ts => {
+  const formatTs = (ts, extra = {}) => {
     const date = new Date(ts);
     const dateTimeFormat = new Intl.DateTimeFormat("default", {
-      year: "numeric",
-      month: "numeric",
       day: "numeric",
-      hour: "numeric",
-      minute: "numeric"
+      month: "numeric",
+      ...extra
     });
     return dateTimeFormat.format(date);
   };
 
-  const buildLine = ({ ts, accepted, title, review, lat, lng }, index, coll) => {
-    const formattedDate = formatTs(ts);
+  const buildLine = (
+    { ts, accepted, title, review, lat, lng },
+    index,
+    coll
+  ) => {
+    const smallDate = formatTs(ts);
+    const formattedDate = formatTs(ts, {
+      year: "numeric",
+      hour: "numeric",
+      minute: "numeric"
+    });
     let score = "";
     let moreInfo = "";
 
@@ -84,13 +91,20 @@
       moreInfo = "Skipped";
     } else if (!review) {
       // Latest result without a review will count as pending
-      score = (index === coll.length - 1) ? "P" : "E";
-      moreInfo = (index === coll.length - 1) ? "Pending" : "Expired";
+      score = index === coll.length - 1 ? "P" : "E";
+      moreInfo = index === coll.length - 1 ? "Pending" : "Expired";
     } else if (review.quality) {
-      const { quality, description, cultural, uniqueness, safety, location } = review; 
+      const {
+        quality,
+        description,
+        cultural,
+        uniqueness,
+        safety,
+        location
+      } = review;
       // was not a reject
       score = quality;
-      moreInfo = `Q:${quality}/D:${description}/C:${cultural}/U:${uniqueness}/S:${safety}/L:${location}`
+      moreInfo = `Q:${quality}/D:${description}/C:${cultural}/U:${uniqueness}/S:${safety}/L:${location}`;
     } else if (review.spam) {
       // was a reject
       score = 1;
@@ -98,15 +112,19 @@
     }
 
     return `
-    <tr class="${accepted ? 'success' : ''}">
+    <tr class="${accepted ? "success" : ""}">
         <td>${index + 1}</td>
-        <td>${formattedDate}</td>
-        <td title="${moreInfo}">${score}</td>
+        <td title="${formattedDate}">${smallDate}</td>
         <td>${title}</td>
         <td class="text-center focus-map">
           <span title="Focus in map" data-index="${index}" style="cursor:pointer" >📍</span>
-          ${getIntelLink(lat, lng, `<img src="https://intel.ingress.com/favicon.ico" />`)}
+          ${getIntelLink(
+            lat,
+            lng,
+            `<img src="https://intel.ingress.com/favicon.ico" />`
+          )}
         </td>
+        <td class="text-center" title="${moreInfo}">${score}</td>
         <td class="text-center toggle" data-index="${index}" style="cursor:pointer" title="Toggle Accepted">✅</td>
     </tr>
     `;
@@ -208,7 +226,8 @@
   const getDD = (term, definition) =>
     definition ? `<dt>${term}</dt><dd>${definition}</dd>` : "";
 
-  const getIntelLink = (lat, lng, content) => `<a target="_blank" rel="noreferrer" title="Open in Intel" href="https://intel.ingress.com/intel?ll=${lat},${lng}&z=21">${content}</a>`
+  const getIntelLink = (lat, lng, content) =>
+    `<a target="_blank" rel="noreferrer" title="Open in Intel" href="https://intel.ingress.com/intel?ll=${lat},${lng}&z=21">${content}</a>`;
 
   const getScores = ({ review }) => {
     if (!review || typeof review === "string") {
@@ -305,9 +324,9 @@
                       <tr>
                           <th>#</th>
                           <th>Date</th>
-                          <th>Score</th>
                           <th>Title</th>
                           <th>Location</th>
+                          <th>Score</th>
                           <th>Mark Accepted</th>
                       </tr>
                   </thead>
@@ -341,9 +360,9 @@
         return;
       }
 
-      const clickOnAccepted = target.classList.contains('toggle');
+      const clickOnAccepted = target.classList.contains("toggle");
 
-      if(clickOnAccepted) {
+      if (clickOnAccepted) {
         const currentItems = getReviews();
         currentItems[index].accepted = !currentItems[index].accepted;
         localStorage.setItem("wfpSaved", JSON.stringify(currentItems));
@@ -351,17 +370,18 @@
       } else {
         const currentMarker = markers[index];
         const currentReview = reviews[index];
-  
+
         infoWindow.open(map, currentMarker);
         infoWindow.setContent(buildInfoWindowContent(currentReview));
         map.setZoom(12);
         map.panTo({ lat: currentReview.lat, lng: currentReview.lng });
       }
-
     });
   };
 
-  document.addEventListener("WFPAllRevHooked", () => saveReview(nSubCtrl.pageData, false));
+  document.addEventListener("WFPAllRevHooked", () =>
+    saveReview(nSubCtrl.pageData, false)
+  );
   document.addEventListener("WFPPCtrlHooked", showEvaluated);
   document.addEventListener("WFPAnsCtrlHooked", () => {
     const {
