@@ -20,7 +20,7 @@
     }
   };
 
-  const saveReview = submitData => {
+  const saveReview = (pageData, submitData) => {
     if (nSubCtrl.reviewType !== "NEW") {
       console.log("Not a new review. Skipping the save.");
       return;
@@ -34,7 +34,7 @@
       lng,
       statement,
       supportingImageUrl
-    } = nSubCtrl.pageData;
+    } = pageData;
     const toSave = {
       title,
       description,
@@ -74,7 +74,7 @@
     return dateTimeFormat.format(date);
   };
 
-  const buildLine = ({ ts, description, title, review, lat, lng }, index) => {
+  const buildLine = ({ ts, accepted, title, review }, index) => {
     const formattedDate = formatTs(ts);
     let quality = "";
     let moreInfo = "";
@@ -86,8 +86,6 @@
     } else if (review.quality) {
       // was not a reject
       quality = review.quality;
-      // const { uniqueness, cultural, description, location, safety } = review;
-      // moreInfo = `(${[ quality, description, cultural, uniqueness, safety, location ].join('/')})`;
     } else if (review.spam) {
       // was a reject
       quality = 1;
@@ -95,11 +93,12 @@
     }
 
     return `
-    <tr>
+    <tr class="${accepted ? 'success' : ''}">
         <td>${formattedDate}</td>
         <td>${quality}${moreInfo}</td>
         <td>${title}</td>
-        <td data-index="${index}" style="cursor:pointer">📍${lat},${lng}</td>
+        <td class="text-center focus-map" data-index="${index}" style="cursor:pointer" title="Focus in map">📍</td>
+        <td class="text-center toggle" data-index="${index}" style="cursor:pointer" title="Save as Accepted">✅</td>
     </tr>
     `;
   };
@@ -129,7 +128,7 @@
         lng: review.lng
       };
       const reviewPoints = review.review || { quality: 0 };
-      const quality = reviewPoints.quality || 1; // Rejected have quality at 0
+      const quality = reviewPoints.quality === "" ? 1 : 0; // Rejected have quality at 0
       const marker = new google.maps.Marker({
         map: gmap,
         position: latLng,
@@ -143,7 +142,7 @@
         }
       });
 
-      marker.addListener('click', () => {
+      marker.addListener("click", () => {
         infoWindow.open(gmap, marker);
         infoWindow.setContent(buildInfoWindowContent(review));
       });
@@ -200,13 +199,44 @@
   const getDD = (term, definition) =>
     definition ? `<dt>${term}</dt><dd>${definition}</dd>` : "";
 
+  const getScores = ({ review }) => {
+    if (!review || typeof review === "string") {
+      return "";
+    }
+    return `
+    <table class="table table-condensed">
+      <thead>
+          <tr>
+              <th>Score</th>
+              <th>Title</th>
+              <th>Cultural</th>
+              <th>Unique</th>
+              <th>Safety</th>
+              <th>Location</th>
+          </tr>
+      </thead>
+      <tbody id="review-list">
+        <tr>
+          <td>${review.quality}</td>
+          <td>${review.description}</td>
+          <td>${review.cultural}</td>
+          <td>${review.uniqueness}</td>
+          <td>${review.safety}</td>
+          <td>${review.location}</td>
+        </tr>
+      </tbody>
+    </table>
+`;
+  };
   const buildInfoWindowContent = review => {
     const {
       title,
       imageUrl,
       description,
       statement,
-      supportingImageUrl
+      supportingImageUrl,
+      lat,
+      lng
     } = review;
     const { comment, newLocation, quality, spam, rejectReason } = getReviewData(
       review.review
@@ -230,11 +260,17 @@
               ${getDD("Title", title)}
               ${getDD("Description", description)}
               ${getDD("Statement", statement)}
-              ${getDD("Supporting Image", supportingImageUrl && `<a target="_blank" href="${supportingImageUrl}=s0">View</a>`)}
               ${getDD("Comment", comment)}
               ${getDD("New Location", newLocation)}
               ${getDD("Reject Reason", rejectReason)}
+              ${getDD(
+                "Supporting Image",
+                supportingImageUrl &&
+                  `<a target="_blank" href="${supportingImageUrl}=s0">View</a>`
+              )}
+              ${getDD("Location", `<a target="_blank" rel="noreferrer" href="https://intel.ingress.com/intel?ll=${lat},${lng}">Open in Intel</a>`)}
             </dl>
+            ${getScores(review)}
           </div>
         </div>
       </div>
@@ -260,6 +296,7 @@
                           <th>Score</th>
                           <th>Title</th>
                           <th>Location</th>
+                          <th>Accepted</th>
                       </tr>
                   </thead>
                   <tbody id="review-list">
@@ -292,17 +329,27 @@
         return;
       }
 
-      const currentMarker = markers[index];
-      const currentReview = reviews[index];
+      const clickOnAccepted = target.classList.contains('toggle');
 
-      infoWindow.open(map, currentMarker);
-      infoWindow.setContent(buildInfoWindowContent(currentReview));
-      map.setZoom(12);
-      map.panTo({ lat: currentReview.lat, lng: currentReview.lng });
+      if(clickOnAccepted) {
+        const currentItems = getReviews();
+        currentItems[index].accepted = !currentItems[index].accepted;
+        localStorage.setItem("wfpSaved", JSON.stringify(currentItems));
+        window.location.reload();
+      } else {
+        const currentMarker = markers[index];
+        const currentReview = reviews[index];
+  
+        infoWindow.open(map, currentMarker);
+        infoWindow.setContent(buildInfoWindowContent(currentReview));
+        map.setZoom(12);
+        map.panTo({ lat: currentReview.lat, lng: currentReview.lng });
+      }
+
     });
   };
 
-  document.addEventListener("WFPAllRevHooked", () => saveReview(false));
+  document.addEventListener("WFPAllRevHooked", () => saveReview(nSubCtrl.pageData, false));
   document.addEventListener("WFPPCtrlHooked", showEvaluated);
   document.addEventListener("WFPAnsCtrlHooked", () => {
     const {
@@ -315,7 +362,7 @@
     ansCtrl.submitForm = function() {
       // This only works for accepts
       submitForm();
-      saveReview(ansCtrl.formData);
+      saveReview(nSubCtrl.pageData, ansCtrl.formData);
     };
 
     ansCtrl.showLowQualityModal = function() {
@@ -326,7 +373,7 @@
         const oldConfirm = ansCtrl2.confirmLowQuality;
         ansCtrl2.confirmLowQuality = function() {
           oldConfirm();
-          saveReview(ansCtrl2.formData);
+          saveReview(nSubCtrl.pageData, ansCtrl2.formData);
         };
       }, 10);
     };
@@ -337,7 +384,7 @@
       markDuplicate();
     };
     ansCtrl.skipToNext = function() {
-      saveReview("skipped");
+      saveReview(nSubCtrl.pageData, "skipped");
       skipToNext();
     };
   });
