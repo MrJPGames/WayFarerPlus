@@ -76,28 +76,32 @@
 
   const buildLine = ({ ts, accepted, title, review, lat, lng }, index, coll) => {
     const formattedDate = formatTs(ts);
-    let quality = "";
+    let score = "";
     let moreInfo = "";
 
     if (review === "skipped") {
-      quality = "Skipped";
+      score = "S";
+      moreInfo = "Skipped";
     } else if (!review) {
       // Latest result without a review will count as pending
-      quality = (index === coll.length - 1) ? "Pending" : "Expired";
+      score = (index === coll.length - 1) ? "P" : "E";
+      moreInfo = (index === coll.length - 1) ? "Pending" : "Expired";
     } else if (review.quality) {
+      const { quality, description, cultural, uniqueness, safety, location } = review; 
       // was not a reject
-      quality = review.quality;
+      score = quality;
+      moreInfo = `Q:${quality}/D:${description}/C:${cultural}/U:${uniqueness}/S:${safety}/L:${location}`
     } else if (review.spam) {
       // was a reject
-      quality = 1;
-      moreInfo = `(${review.rejectReason})`;
+      score = 1;
+      moreInfo = `Reason: ${review.rejectReason}`;
     }
 
     return `
     <tr class="${accepted ? 'success' : ''}">
         <td>${index + 1}</td>
         <td>${formattedDate}</td>
-        <td>${quality}${moreInfo}</td>
+        <td title="${moreInfo}">${score}</td>
         <td>${title}</td>
         <td class="text-center focus-map">
           <span title="Focus in map" data-index="${index}" style="cursor:pointer" >📍</span>
@@ -304,7 +308,7 @@
                           <th>Score</th>
                           <th>Title</th>
                           <th>Location</th>
-                          <th>Accepted</th>
+                          <th>Mark Accepted</th>
                       </tr>
                   </thead>
                   <tbody id="review-list">
