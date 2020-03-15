@@ -1,10 +1,10 @@
 (function() {
   const infoWindow = new google.maps.InfoWindow({
-    content: 'TODO'
+    content: "TODO"
   });
   let markers = [];
 
-  const getNominations = () => {
+  const getReviews = () => {
     const currentItemsText = localStorage.getItem("wfpSaved") || "[]";
     const currentItems = JSON.parse(currentItemsText);
     return currentItems;
@@ -20,7 +20,7 @@
     }
   };
 
-  const saveReview = (submitData) => {
+  const saveReview = submitData => {
     if (nSubCtrl.reviewType !== "NEW") {
       console.log("Not a new review. Skipping the save.");
       return;
@@ -47,12 +47,12 @@
       review: submitData
     };
 
-    const currentItems = getNominations();
+    const currentItems = getReviews();
     const lastItem = currentItems.length
       ? currentItems[currentItems.length - 1]
       : null;
-    const isSameNomination = lastItem && lastItem.imageUrl === imageUrl;
-    if (isSameNomination) {
+    const isSameReview = lastItem && lastItem.imageUrl === imageUrl;
+    if (isSameReview) {
       // update the result
       currentItems[currentItems.length - 1] = toSave;
     } else {
@@ -62,7 +62,7 @@
     localStorage.setItem("wfpSaved", JSON.stringify(currentItems));
   };
 
-  const buildLine = ({ ts, description, title, imageUrl, lat, lng }, index) => {
+  const formatTs = (ts) => {
     const date = new Date(ts);
     const dateTimeFormat = new Intl.DateTimeFormat("default", {
       year: "numeric",
@@ -71,19 +71,40 @@
       hour: "numeric",
       minute: "numeric"
     });
-    const formattedDate = dateTimeFormat.format(date);
+    return dateTimeFormat.format(date);
+  }
+
+  const buildLine = ({ ts, description, title, review, lat, lng }, index) => {
+    const formattedDate = formatTs(ts);
+    let quality = "";
+    let moreInfo = "";
+
+    if (review === "skipped") {
+      quality = "Skipped";
+    } else if (!review) {
+      quality = "Unknown";
+    } else if (review.quality) {
+      // was not a reject
+      quality = review.quality;
+      // const { uniqueness, cultural, description, location, safety } = review;
+      // moreInfo = `(${[ quality, description, cultural, uniqueness, safety, location ].join('/')})`;
+    } else if (review.spam) {
+      // was a reject
+      quality = 1;
+      moreInfo = `(${review.rejectReason})`;
+    }
 
     return `
     <tr>
-        <td>${formattedDate}</th>
-        <td><a href="${imageUrl}=s0" target="_blank"><img style="width: 50px" title="${title} - ${description}" src="${imageUrl}" /></a></td>
+        <td>${formattedDate}</td>
+        <td>${quality}${moreInfo}</td>
         <td>${title}</td>
         <td data-index="${index}" style="cursor:pointer">📍${lat},${lng}</td>
     </tr>
     `;
   };
 
-  function buildMap(nominationList, mapElement) {
+  function buildMap(reviewList, mapElement) {
     const mapSettings = settings["ctrlessZoom"]
       ? { scrollwheel: true, gestureHandling: "greedy" }
       : {};
@@ -93,20 +114,31 @@
     });
 
     const bounds = new google.maps.LatLngBounds();
-    markers = nominationList.map(nomination => {
+    const gradedColors = [
+      "#888888",
+      "#ff3d00",
+      "#ff8e01",
+      "#fece00",
+      "#8ac51f",
+      "#00803b"
+    ];
+
+    markers = reviewList.map(review => {
       const latLng = {
-        lat: nomination.lat,
-        lng: nomination.lng
+        lat: review.lat,
+        lng: review.lng
       };
+      const reviewPoints = review.review || { quality: 0 };
+      const quality = reviewPoints.quality || 1; // Rejected have quality at 0
       const marker = new google.maps.Marker({
         map: gmap,
         position: latLng,
-        title: nomination.title,
+        title: review.title,
         icon: {
           path: google.maps.SymbolPath.CIRCLE,
           scale: 8.5,
-          fillColor: "#F00",
-          fillOpacity: 0.4,
+          fillColor: gradedColors[quality],
+          fillOpacity: 0.8,
           strokeWeight: 0.4
         }
       });
@@ -131,14 +163,14 @@
     downloadAnchorNode.remove();
   };
 
-  const formatAsGeojson = nominations => {
+  const formatAsGeojson = reviews => {
     return {
       type: "FeatureCollection",
-      features: nominations.map(nomination => {
-        const { lat, lng, ...props } = nomination;
+      features: reviews.map(review => {
+        const { lat, lng, ...props } = review;
         return {
           properties: {
-            ...nomination
+            ...props
           },
           geometry: {
             coordinates: [lng, lat],
@@ -150,28 +182,62 @@
     };
   };
 
-  const showEvaluated = () => {
-    const profileStats = document.getElementById("profile-main-contain");
-    const nominations = getNominations();
+  const getReviewData = (reviewData) => typeof reviewData === 'object' ? reviewData : {};
 
-    if (!nominations.length) return;
+  const getDD = (term, definition) => definition ? `<dt>${term}</dt><dd>${definition}</dd>` : '';
+
+  const buildInfoWindowContent = (review) => {
+    console.log({ review });
+    const { title, imageUrl, description, statement, supportingImageUrl } = review;
+    const { comment, newLocation, quality, spam, rejectReason } = getReviewData(review.review);
+    const score = spam ? 1 : (quality || 0);
+    const scoreString = Array(5).fill(0).map((_, i) => (i+1) <= score ? '★' : '☆').join('');
+    const status = review.review === 'skipped' ? 'Skipped' : 'Pending';
+
+    return `<div class="panel panel-default">
+    <div class="panel-heading">${title} <div class="pull-right star-red-orange">${score ? scoreString : status}</div></div>
+    <div class="panel-body">
+        <div class="row">
+          <div class="col-xs-4"><a target="_blank" href="${imageUrl}=s0"><img style="max-width: 100%" src="${imageUrl}" class="img-responsive" alt="${title}"></a></div>
+          <div class="col-xs-8">
+            <dl class="dl-horizontal">
+              ${getDD("Title", title)}
+              ${getDD("Description", description)}
+              ${getDD("Statement", statement)}
+              <dt>Supporting Image</dt>
+              <dd><a target="_blank" href="${supportingImageUrl}=s0">View</a></dd>
+              ${getDD("Comment", comment)}
+              ${getDD("New Location", newLocation)}
+              ${getDD("Reject Reason", rejectReason)}
+            </dl>
+          </div>
+        </div>
+      </div>
+  </div>`;
+  };
+
+  const showEvaluated = () => {
+    const reviews = getReviews();
+
+    if (!reviews.length) return;
+    const profileStats = document.getElementById("profile-main-contain");
     profileStats.insertAdjacentHTML(
       "beforeend",
       `
         <div>
             <h3>Reviewed</h3>
-            <div id="reviewed-map" style="height:300px"></div>
+            <div id="reviewed-map" style="height:400px"></div>
             <table style="margin-top:1rem" class="table table-striped table-hover">
                 <thead>
                     <tr>
                         <th>Date</th>
-                        <th>Image</th>
+                        <th>Score</th>
                         <th>Title</th>
                         <th>Location</th>
                     </tr>
                 </thead>
-                <tbody id="nomination-list">
-                    ${nominations
+                <tbody id="review-list">
+                    ${reviews
                       .map(buildLine)
                       .reverse()
                       .join("")}
@@ -181,73 +247,70 @@
             <button class="button-secondary" id="clean-history">Clean History</button>
         </div>`
     );
-    const map = buildMap(nominations, document.getElementById("reviewed-map"));
-    const nominationListElement = document.getElementById("nomination-list");
+    const map = buildMap(reviews, document.getElementById("reviewed-map"));
+    const reviewListElement = document.getElementById("review-list");
     const exportButton = document.getElementById("export-geojson");
     const cleanHistoryButton = document.getElementById("clean-history");
 
     exportButton.addEventListener("click", () => {
-      const geoJson = formatAsGeojson(nominations);
-      downloadObjectAsJson(geoJson, "nominations.geojson");
+      const geoJson = formatAsGeojson(reviews);
+      downloadObjectAsJson(geoJson, "reviews.geojson");
     });
 
     cleanHistoryButton.addEventListener("click", clearLocalStorage);
 
-    nominationListElement.addEventListener("click", ({ target }) => {
+    reviewListElement.addEventListener("click", ({ target }) => {
       const index = target.dataset && target.dataset.index;
       if (!index) {
         return;
       }
 
       const currentMarker = markers[index];
-      const currentNomination = nominations[index];
-
+      const currentReview = reviews[index];
 
       infoWindow.open(map, currentMarker);
-      infoWindow.setContent(currentNomination.title);
-      map.panTo({ lat: currentNomination.lat, lng: currentNomination.lng });
+      infoWindow.setContent(buildInfoWindowContent(currentReview));
+      map.panTo({ lat: currentReview.lat, lng: currentReview.lng });
     });
   };
 
   document.addEventListener("WFPAllRevHooked", () => saveReview(false));
   document.addEventListener("WFPPCtrlHooked", showEvaluated);
   document.addEventListener("WFPAnsCtrlHooked", () => {
-      const { submitForm, skipToNext, showLowQualityModal, markDuplicate, formData } = ansCtrl;
+    const {
+      submitForm,
+      skipToNext,
+      showLowQualityModal,
+      markDuplicate
+    } = ansCtrl;
 
-      ansCtrl.submitForm = function() {
-        // This only works for accepts
-        saveReview(formData);
-        submitForm();
-      }
+    ansCtrl.submitForm = function() {
+      // This only works for accepts
+      submitForm();
+      saveReview(ansCtrl.formData);
+    };
 
-      ansCtrl.showLowQualityModal = function() {
-        debugger;
-        // TODO
+    ansCtrl.showLowQualityModal = function() {
+      showLowQualityModal();
+      setTimeout(() => {
+        const ansCtrl2Elem = document.getElementById("low-quality-modal");
+        const ansCtrl2 = angular.element(ansCtrl2Elem).scope().answerCtrl2;
+        const oldConfirm = ansCtrl2.confirmLowQuality;
+        ansCtrl2.confirmLowQuality = function() {
+          oldConfirm();
+          saveReview(ansCtrl2.formData);
+        };
+      }, 10);
+    };
 
-        showLowQualityModal();
-        setTimeout(() => {
-          const ansCtrl2Elem = document.getElementById("low-quality-modal");
-          const ansCtrl2 = angular.element(ansCtrl2Elem).scope().answerCtrl2;
-          const rejectFormData = ansCtrl2.formData;
-          const oldConfirm = ansCtrl2.confirmLowQuality;
-          ansCtrl2.confirmLowQuality = function() {
-            // TODO
-            saveReview(rejectFormData);
-            oldConfirm();
-          }
-        }, 10);
-      }
-
-      ansCtrl.markDuplicate = function() {
-        debugger;
-        // TODO
-        markDuplicate();
-      }
-      ansCtrl.skipToNext = function() {
-        debugger;
-        // TODO
-        saveReview("skipped");
-        skipToNext();
-      }
+    ansCtrl.markDuplicate = function() {
+      debugger;
+      // TODO. Need to find a duplicate to test this first!
+      markDuplicate();
+    };
+    ansCtrl.skipToNext = function() {
+      saveReview("skipped");
+      skipToNext();
+    };
   });
 })();
