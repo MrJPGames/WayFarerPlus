@@ -212,18 +212,32 @@
   document.addEventListener("WFPAllRevHooked", () => saveReview(false));
   document.addEventListener("WFPPCtrlHooked", showEvaluated);
   document.addEventListener("WFPAnsCtrlHooked", () => {
-      const { submitForm, skipToNext, confirmLowQuality, markDuplicate, formData } = ansCtrl;
+      const { submitForm, skipToNext, showLowQualityModal, markDuplicate, formData } = ansCtrl;
 
       ansCtrl.submitForm = function() {
         // This only works for accepts
         saveReview(formData);
         submitForm();
       }
-      ansCtrl.confirmLowQuality = function() {
+
+      ansCtrl.showLowQualityModal = function() {
         debugger;
         // TODO
-        confirmLowQuality();
+
+        showLowQualityModal();
+        setTimeout(() => {
+          const ansCtrl2Elem = document.getElementById("low-quality-modal");
+          const ansCtrl2 = angular.element(ansCtrl2Elem).scope().answerCtrl2;
+          const rejectFormData = ansCtrl2.formData;
+          const oldConfirm = ansCtrl2.confirmLowQuality;
+          ansCtrl2.confirmLowQuality = function() {
+            // TODO
+            saveReview(rejectFormData);
+            oldConfirm();
+          }
+        }, 10);
       }
+
       ansCtrl.markDuplicate = function() {
         debugger;
         // TODO
