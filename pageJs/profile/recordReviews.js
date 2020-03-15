@@ -1,6 +1,6 @@
 (function() {
   const infoWindow = new google.maps.InfoWindow({
-    content: "TODO"
+    content: "Loading..."
   });
   let markers = [];
 
@@ -143,6 +143,11 @@
         }
       });
 
+      marker.addListener('click', () => {
+        infoWindow.open(gmap, marker);
+        infoWindow.setContent(buildInfoWindowContent(review));
+      });
+
       bounds.extend(latLng);
       return marker;
     });
@@ -196,7 +201,6 @@
     definition ? `<dt>${term}</dt><dd>${definition}</dd>` : "";
 
   const buildInfoWindowContent = review => {
-    console.log({ review });
     const {
       title,
       imageUrl,
@@ -226,8 +230,7 @@
               ${getDD("Title", title)}
               ${getDD("Description", description)}
               ${getDD("Statement", statement)}
-              <dt>Supporting Image</dt>
-              <dd><a target="_blank" href="${supportingImageUrl}=s0">View</a></dd>
+              ${getDD("Supporting Image", supportingImageUrl && `<a target="_blank" href="${supportingImageUrl}=s0">View</a>`)}
               ${getDD("Comment", comment)}
               ${getDD("New Location", newLocation)}
               ${getDD("Reject Reason", rejectReason)}
@@ -294,6 +297,7 @@
 
       infoWindow.open(map, currentMarker);
       infoWindow.setContent(buildInfoWindowContent(currentReview));
+      map.setZoom(12);
       map.panTo({ lat: currentReview.lat, lng: currentReview.lng });
     });
   };
