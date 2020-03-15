@@ -269,7 +269,7 @@
                 supportingImageUrl &&
                   `<a target="_blank" href="${supportingImageUrl}=s0">View</a>`
               )}
-              ${getDD("Location", `<a target="_blank" rel="noreferrer" href="https://intel.ingress.com/intel?ll=${lat},${lng}">Open in Intel</a>`)}
+              ${getDD("Location", `<a target="_blank" rel="noreferrer" href="https://intel.ingress.com/intel?ll=${lat},${lng}&z=21">Open in Intel</a>`)}
             </dl>
             ${getScores(review)}
           </div>
