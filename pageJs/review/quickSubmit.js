@@ -97,7 +97,7 @@ function createObserver(){
 function updateButtonsEnabled(disable){
 	var buttons = document.getElementsByClassName("button-primary");
 	for (var i = 0; i < buttons.length; i++){
-		if (buttons[i].classLists.contains("quickSubButton")){
+		if (buttons[i].classList.contains("quickSubButton")){
 			buttons[i].disabled = disable;
 		}
 	}
