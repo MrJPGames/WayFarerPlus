@@ -62,7 +62,7 @@
     localStorage.setItem("wfpSaved", JSON.stringify(currentItems));
   };
 
-  const formatTs = (ts) => {
+  const formatTs = ts => {
     const date = new Date(ts);
     const dateTimeFormat = new Intl.DateTimeFormat("default", {
       year: "numeric",
@@ -72,7 +72,7 @@
       minute: "numeric"
     });
     return dateTimeFormat.format(date);
-  }
+  };
 
   const buildLine = ({ ts, description, title, review, lat, lng }, index) => {
     const formattedDate = formatTs(ts);
@@ -147,6 +147,13 @@
       return marker;
     });
 
+    const markerClusterer = new MarkerClusterer(gmap, markers, {
+      imagePath:
+        "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m",
+      gridSize: 30,
+      zoomOnClick: true,
+      maxZoom: 10
+    });
     gmap.fitBounds(bounds);
     return gmap;
   }
@@ -182,20 +189,35 @@
     };
   };
 
-  const getReviewData = (reviewData) => typeof reviewData === 'object' ? reviewData : {};
+  const getReviewData = reviewData =>
+    typeof reviewData === "object" ? reviewData : {};
 
-  const getDD = (term, definition) => definition ? `<dt>${term}</dt><dd>${definition}</dd>` : '';
+  const getDD = (term, definition) =>
+    definition ? `<dt>${term}</dt><dd>${definition}</dd>` : "";
 
-  const buildInfoWindowContent = (review) => {
+  const buildInfoWindowContent = review => {
     console.log({ review });
-    const { title, imageUrl, description, statement, supportingImageUrl } = review;
-    const { comment, newLocation, quality, spam, rejectReason } = getReviewData(review.review);
-    const score = spam ? 1 : (quality || 0);
-    const scoreString = Array(5).fill(0).map((_, i) => (i+1) <= score ? '★' : '☆').join('');
-    const status = review.review === 'skipped' ? 'Skipped' : 'Pending';
+    const {
+      title,
+      imageUrl,
+      description,
+      statement,
+      supportingImageUrl
+    } = review;
+    const { comment, newLocation, quality, spam, rejectReason } = getReviewData(
+      review.review
+    );
+    const score = spam ? 1 : quality || 0;
+    const scoreString = Array(5)
+      .fill(0)
+      .map((_, i) => (i + 1 <= score ? "★" : "☆"))
+      .join("");
+    const status = review.review === "skipped" ? "Skipped" : "Pending";
 
     return `<div class="panel panel-default">
-    <div class="panel-heading">${title} <div class="pull-right star-red-orange">${score ? scoreString : status}</div></div>
+    <div class="panel-heading">${title} <div class="pull-right star-red-orange">${
+      score ? scoreString : status
+    }</div></div>
     <div class="panel-body">
         <div class="row">
           <div class="col-xs-4"><a target="_blank" href="${imageUrl}=s0"><img style="max-width: 100%" src="${imageUrl}" class="img-responsive" alt="${title}"></a></div>
@@ -224,25 +246,27 @@
     profileStats.insertAdjacentHTML(
       "beforeend",
       `
-        <div>
+        <div class="container">
             <h3>Reviewed</h3>
             <div id="reviewed-map" style="height:400px"></div>
-            <table style="margin-top:1rem" class="table table-striped table-hover">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Score</th>
-                        <th>Title</th>
-                        <th>Location</th>
-                    </tr>
-                </thead>
-                <tbody id="review-list">
-                    ${reviews
-                      .map(buildLine)
-                      .reverse()
-                      .join("")}
-                </tbody>
-            </table>
+            <div class="table-responsive" style="margin-top:1rem">
+              <table class="table table-striped table-condensed">
+                  <thead>
+                      <tr>
+                          <th>Date</th>
+                          <th>Score</th>
+                          <th>Title</th>
+                          <th>Location</th>
+                      </tr>
+                  </thead>
+                  <tbody id="review-list">
+                      ${reviews
+                        .map(buildLine)
+                        .reverse()
+                        .join("")}
+                  </tbody>
+              </table>
+            </div>
             <button class="button-secondary" id="export-geojson">Export GeoJSON</button>
             <button class="button-secondary" id="clean-history">Clean History</button>
         </div>`

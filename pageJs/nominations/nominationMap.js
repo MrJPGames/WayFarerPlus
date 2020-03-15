@@ -18,17 +18,7 @@
             zoom: 8,
             ...mapSettings,
           });
-    
-        // Options to pass along to the marker clusterer
-        const clusterOptions = {
-            imagePath: "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m",
-            gridSize: 30,
-            zoomOnClick: true,
-            maxZoom: 10,
-        };
-      
-        // Add a marker clusterer to manage the markers.
-        
+            
         const bounds = new google.maps.LatLngBounds();
         const markers = nominationList.map((nomination) => {
                 const latLng = {
@@ -55,7 +45,12 @@
             bounds.extend(latLng);
             return marker;
         });
-        const markerClusterer = new MarkerClusterer(gmap, markers, clusterOptions);
+        const markerClusterer = new MarkerClusterer(gmap, markers, {
+            imagePath: "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m",
+            gridSize: 30,
+            zoomOnClick: true,
+            maxZoom: 10,
+        });
     
         gmap.fitBounds(bounds);
     } 
