@@ -83,8 +83,8 @@
       hour: "numeric",
       minute: "numeric"
     });
-    let score = "";
-    let moreInfo = "";
+    let score = "?";
+    let moreInfo = "?";
 
     if (review === "skipped") {
       score = "S";
@@ -105,6 +105,9 @@
       // was not a reject
       score = quality;
       moreInfo = `Q:${quality}/D:${description}/C:${cultural}/U:${uniqueness}/S:${safety}/L:${location}`;
+    } else if (review.duplicate) {
+      score = "D";
+      moreInfo = "Duplicate";
     } else if (review.spam) {
       // was a reject
       score = 1;
@@ -178,7 +181,7 @@
       return marker;
     });
 
-    const markerClusterer = new MarkerClusterer(gmap, markers, {
+    new MarkerClusterer(gmap, markers, {
       imagePath:
         "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m",
       gridSize: 30,
@@ -388,8 +391,7 @@
       submitForm,
       skipToNext,
       showLowQualityModal,
-      markDuplicate,
-      showDuplicateModal,
+      markDuplicate
     } = ansCtrl;
 
     ansCtrl.submitForm = function() {
@@ -411,20 +413,25 @@
       }, 10);
     };
 
-    ansCtrl.markDuplicate = function() {
-      markDuplicate();
+    ansCtrl.markDuplicate = function(id) {
+      markDuplicate(id);
       setTimeout(() => {
-        const ansCtrl2Elem = document.querySelector(".modal-content > [ng-controller]");
+        const ansCtrl2Elem = document.querySelector(
+          ".modal-content > [ng-controller]"
+        );
         const ansCtrl2 = angular.element(ansCtrl2Elem).scope().answerCtrl2;
         const confirmDuplicate = ansCtrl2.confirmDuplicate;
         ansCtrl2.confirmDuplicate = function() {
           confirmDuplicate();
-          
-          saveReview(nSubCtrl.pageData, ansCtrl2.formData);
+
+          saveReview(nSubCtrl.pageData, {
+            ...ansCtrl2.formData,
+            duplicateOf: id
+          }); // duplicateOf is not marked in vm or formData
         };
       }, 10);
-    }
-    
+    };
+
     ansCtrl.skipToNext = function() {
       saveReview(nSubCtrl.pageData, "skipped");
       skipToNext();
