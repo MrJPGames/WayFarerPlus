@@ -158,7 +158,7 @@
         lng: review.lng
       };
       const reviewPoints = review.review || { quality: 0 };
-      const quality = reviewPoints.quality === "" ? 1 : 0; // Rejected have quality at 0
+      const quality = (review.review && review.review.quality) ? review.review.quality : 0;
       const marker = new google.maps.Marker({
         map: gmap,
         position: latLng,
@@ -271,15 +271,17 @@
       lat,
       lng
     } = review;
-    const { comment, newLocation, quality, spam, rejectReason } = getReviewData(
+    const { comment, newLocation, quality, spam, rejectReason, duplicate } = getReviewData(
       review.review
     );
+
+    console.log(review);
     const score = spam ? 1 : quality || 0;
     const scoreString = Array(5)
       .fill(0)
       .map((_, i) => (i + 1 <= score ? "★" : "☆"))
       .join("");
-    const status = review.review === "skipped" ? "Skipped" : "Pending";
+    const status = duplicate ? "Duplicate" : review.review === "skipped" ? "Skipped" : "Pending";
 
     return `<div class="panel panel-default">
     <div class="panel-heading">${title} <div class="pull-right star-red-orange">${
