@@ -388,7 +388,8 @@
       submitForm,
       skipToNext,
       showLowQualityModal,
-      markDuplicate
+      markDuplicate,
+      showDuplicateModal,
     } = ansCtrl;
 
     ansCtrl.submitForm = function() {
@@ -410,12 +411,20 @@
       }, 10);
     };
 
-    ansCtrl.markDuplicate = function(id) {
-      // TODO. Need to find a duplicate to test this first!
-      debugger;
-      markDuplicate(id);
-      saveReview(nSubCtrl.pageData, ansCtrl.formData);
-    };
+    ansCtrl.markDuplicate = function() {
+      markDuplicate();
+      setTimeout(() => {
+        const ansCtrl2Elem = document.querySelector(".modal-content > [ng-controller]");
+        const ansCtrl2 = angular.element(ansCtrl2Elem).scope().answerCtrl2;
+        const confirmDuplicate = ansCtrl2.confirmDuplicate;
+        ansCtrl2.confirmDuplicate = function() {
+          confirmDuplicate();
+          
+          saveReview(nSubCtrl.pageData, ansCtrl2.formData);
+        };
+      }, 10);
+    }
+    
     ansCtrl.skipToNext = function() {
       saveReview(nSubCtrl.pageData, "skipped");
       skipToNext();
