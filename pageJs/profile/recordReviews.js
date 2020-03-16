@@ -281,7 +281,7 @@
       .fill(0)
       .map((_, i) => (i + 1 <= score ? "★" : "☆"))
       .join("");
-    const status = duplicate ? "Duplicate" : review.review === "skipped" ? "Skipped" : "Pending";
+    const status = duplicate ? "Duplicate" : review.review === "skipped" ? "Skipped" : "Timed Out/Pending";
 
     return `<div class="panel panel-default">
     <div class="panel-heading">${title} <div class="pull-right star-red-orange">${
