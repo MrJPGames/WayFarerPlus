@@ -72,7 +72,9 @@ function applyPublicStyle(){
 	.hamburger {filter: invert();}
 	.nom-edit-input__text-field {background-color: inherit !important;}
 	.container {background: black !important;}
-	.supporting-statement-central-field, .title-description-central-field {background: black !important;}`;
+	.supporting-statement-central-field, .title-description-central-field {background: black !important;}
+	.table-striped>tbody>tr:nth-of-type(odd) {background-color:black !important;}
+	.table-responsive {color: white !important;}`;
 
 
 
