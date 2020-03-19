@@ -19,6 +19,12 @@ Other browser support?
 
 Changelog
 ---
+1.12:
+- Review history (+map on profile) (off by default)
+- Nomination map, allows you to view all of your nominations marked by status on a map! (Off by default)
+- 3D map, reenable the 3D view in those areas where it is available. (off by default)
+- Minor bug fixes/aesthetic changes
+
 1.11.2:
 - You can now keep one tab per map and for all your translation
 - Experimental implementation for bigger maps (turned off by default currently)
