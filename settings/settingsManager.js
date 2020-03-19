@@ -59,6 +59,7 @@ chrome.storage.local.get("options_set", function (data){
 		case 16:
 			setOption("nominationMap", false);
 			setOption("rev3DMap", false);
+			setOption("revPreciseMarkers", true);
 			setOption("options_set", settingsVersion);
 	}
 });
