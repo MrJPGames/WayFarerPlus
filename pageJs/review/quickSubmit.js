@@ -1,6 +1,6 @@
 //Adds quick submit buttons
 function initQuickSubmit(){
-	var elems = document.querySelectorAll('.button-primary');;
+	var elems = document.querySelectorAll('.button-primary');
 	for (var i = 0; i < elems.length; i++){
 		var elem = elems[i];
 		if (elem.getAttribute("ng-click") == "answerCtrl.submitForm()"){
@@ -97,7 +97,7 @@ function createObserver(){
 function updateButtonsEnabled(disable){
 	var buttons = document.getElementsByClassName("button-primary");
 	for (var i = 0; i < buttons.length; i++){
-		if (buttons[i].id == "quickSubButton"){
+		if (buttons[i].classList.contains("quickSubButton")){
 			buttons[i].disabled = disable;
 		}
 	}
@@ -130,8 +130,7 @@ function quickDuplicateModal(e){
 function createQuickSubmitButton(){
 	var button = document.createElement("button");
 	button.onclick = quickSubmit;
-	button.setAttribute("class", "button-primary");
-	button.id = "quickSubButton";
+	button.setAttribute("class", "button-primary quickSubButton");
 	button.style.marginRight = "1em";
 	button.style.minWidth = "2em";
 	button.disabled = true;
