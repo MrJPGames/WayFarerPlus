@@ -59,7 +59,7 @@ chrome.storage.local.get("options_set", function (data){
 		case 16:
 			setOption("nominationMap", false);
 			setOption("rev3DMap", false);
-			setOption("profRecordReviews", false);
+			setOption("profRecordReviews", true);
 			setOption("options_set", settingsVersion);
 	}
 });
