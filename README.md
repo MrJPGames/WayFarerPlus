@@ -20,8 +20,8 @@ Other browser support?
 Changelog
 ---
 1.12:
-- Review history (+map on profile)
-- Nomination map, allows you to view all of your nominations marked by status on a map! (Off by default)
+- Review history (+map on profile) (Huge thanks to mariomc!)
+- Nomination map, allows you to view all of your nominations marked by status on a map! (Off by default) (Huge thanks to mariomc!)
 - 3D map, reenable the 3D view in those areas where it is available. (off by default)
 - Minor bug fixes/aesthetic changes
 
