@@ -11,6 +11,12 @@ function modNominationPage(settings){
 		addStats();
 		addPageJS("nominations/statsWidget.js");
 	}
+
+	if (settings["nominationMap"]) {
+		addPageJS("libs/markerclusterer.js");
+		addPageJS("nominations/nominationMap.js");
+	}
+
 	if (settings["nomStreetView"]){
 		addStreetView();
 		addPageJS("nominations/streetView.js");
@@ -109,6 +115,7 @@ function addStats(){
 	//Create required HTML (Content is written from the pageJS as NominationController access is required!)
 	var container = document.createElement("div");
 	container.setAttribute("class", "wrap-collabsible");
+	container.id = "statsWidget";
 
 	var collapsibleInput = document.createElement("input");
 	collapsibleInput.id = "collapsible";

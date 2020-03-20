@@ -18,6 +18,11 @@ function addPresetsBar(){
 	presetBox.innerText = "Presets: ";
 	presetBox.setAttribute("class", "presetBox");
 
+	//Add optional styling (have it be expanded or not)
+	if (settings["revCardView"] != "extended"){
+		presetBox.style.maxWidth = "1170px"; //The px value used by Niantic in main.min.css
+	}
+
 	var addButton = document.createElement("button");
 	addButton.innerText = "+";
 	addButton.onclick = addPreset;

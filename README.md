@@ -19,6 +19,12 @@ Other browser support?
 
 Changelog
 ---
+1.12:
+- Review history (+map on profile) (Huge thanks to mariomc!)
+- Nomination map, allows you to view all of your nominations marked by status on a map! (Off by default) (Huge thanks to mariomc!)
+- 3D map, reenable the 3D view in those areas where it is available. (off by default)
+- Minor bug fixes/aesthetic changes
+
 1.11.3 - 1.11.3.3:
 - Updates to ensure full compatability with Wayfarer site updates (1.11.3.3 ONLY, earlier versions have partial compatability)
 - Many minor bug fixed
