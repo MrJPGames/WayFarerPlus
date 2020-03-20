@@ -25,6 +25,10 @@ Changelog
 - 3D map, reenable the 3D view in those areas where it is available. (off by default)
 - Minor bug fixes/aesthetic changes
 
+1.11.3 - 1.11.3.3:
+- Updates to ensure full compatability with Wayfarer site updates (1.11.3.3 ONLY, earlier versions have partial compatability)
+- Many minor bug fixed
+
 1.11.2:
 - You can now keep one tab per map and for all your translation
 - Experimental implementation for bigger maps (turned off by default currently)
