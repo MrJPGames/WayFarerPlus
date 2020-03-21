@@ -60,7 +60,7 @@ chrome.storage.local.get("options_set", function (data){
 			setOption("nominationMap", false);
 			setOption("rev3DMap", false);
 			setOption("profRecordReviews", true);
-    casw 17:
+    	case 17:
 			setOption("revPreciseMarkers", true);
 			setOption("options_set", settingsVersion);
 	}
