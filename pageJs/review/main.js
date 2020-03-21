@@ -35,6 +35,7 @@ function hookedAll(){
 
 function hookSubCtrl(){
 	nSubCtrl = angular.element(document.getElementById("NewSubmissionController")).scope().subCtrl;
+	nSubCtrlScope = angular.element(document.getElementById("NewSubmissionController")).scope();
 	
 	if (nSubCtrl == undefined || nSubCtrl.pageData == undefined || nSubCtrl.pageData.expires == undefined || nSubCtrl.loaded == false || nSubCtrl.pageData.description == undefined){
 		setTimeout(hookSubCtrl, 50);
