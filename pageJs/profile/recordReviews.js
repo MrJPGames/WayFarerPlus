@@ -157,8 +157,11 @@
         lat: review.lat,
         lng: review.lng
       };
-      const reviewPoints = review.review || { quality: 0 };
-      const quality = (review.review && review.review.quality) ? review.review.quality : 0;
+
+      const isSkipped = review.review === 'skipped';
+      const isPending = review.review === false;
+      const hasReview = Boolean(review.review);
+      const quality = (hasReview && !isSkipped && !isPending) ? (review.review.quality || 1) : 0;
       const marker = new google.maps.Marker({
         map: gmap,
         position: latLng,
