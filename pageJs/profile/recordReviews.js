@@ -158,7 +158,10 @@
         lng: review.lng
       };
 
-      const quality = (review.review && review.review.quality !== undefined) ? (review.review.quality || 1) : 0;
+      const isSkipped = review.review === 'skipped';
+      const isPending = review.review === false;
+      const hasReview = Boolean(review.review);
+      const quality = (hasReview && !isSkipped && !isPending) ? (review.review.quality || 1) : 0;
       const marker = new google.maps.Marker({
         map: gmap,
         position: latLng,
