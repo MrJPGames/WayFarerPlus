@@ -2,6 +2,8 @@
 var lowDistCircle, longDistCirle;
 
 function setupMapMods(){
+	if (settings["revPreciseMarkers"])
+		addPreciseMarkers();
 	if (settings["revLowestDistCircle"]){
 		addLowestDistCircle(nSubCtrl.map);
 		addLowestDistCircle(nSubCtrl.map2, true);
@@ -24,8 +26,6 @@ function setupMapMods(){
         	addS2(nSubCtrl.locationEditsMap, lat, lng, settings["revS2Cell"]);
         hookS2LocEdit();
     }
-    if (settings["revPreciseMarkers"])
-    	addPreciseMarkers();
 
     if (settings["revEditOrigLoc"] && ansCtrl.needsLocationEdit && !settings["revPreciseMarkers"])
     	addOrigLocation(nSubCtrl.locationEditsMap);
