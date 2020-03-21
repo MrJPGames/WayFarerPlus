@@ -8,6 +8,10 @@ body, html {
     color: white;
 }
 
+.container {
+  height: calc(100vh + 1pt); /* Activates scrolling for the container and a workaround for #102 */
+}
+
 img{
     filter: invert();    
     float: right;
