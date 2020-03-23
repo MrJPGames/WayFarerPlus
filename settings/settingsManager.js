@@ -42,7 +42,6 @@ chrome.storage.local.get("options_set", function (data){
 			setOption("revTransparentMarker", true);
 			setOption("revSubmitTimer", 0);
 			setOption("revQuickSubmit", true);
-			setOption("revAutoRetry", true);
 		case 11:
 			setOption("revAutoSelectDupe", true);
 		case 12:
@@ -60,8 +59,10 @@ chrome.storage.local.get("options_set", function (data){
 			setOption("nominationMap", false);
 			setOption("rev3DMap", false);
 			setOption("profRecordReviews", true);
-    case 17:
+    	case 17:
 			setOption("revPreciseMarkers", true);
+		case 18:
+			setOption("revAutoRetry", true);
 			setOption("options_set", settingsVersion);
 	}
 });
