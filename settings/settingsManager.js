@@ -1,5 +1,5 @@
 //Sets up default settings on first launch or upgrade
-var settingsVersion = 17;
+var settingsVersion = 18;
 
 var defaultMapSettings = '[{"title":"Google Maps","url":"https://maps.google.com/maps?q=%lat%,%lng%"},{"title":"Ingress Intel","url":"https://intel.ingress.com/intel?ll=%lat%,%lng%&z=18"},{"title":"OSM","url":"https://www.openstreetmap.org/?mlat=%lat%&mlon=%lng%#map=18/%lat%/%lng%"}]';
 
@@ -60,6 +60,8 @@ chrome.storage.local.get("options_set", function (data){
 			setOption("nominationMap", false);
 			setOption("rev3DMap", false);
 			setOption("profRecordReviews", true);
+    	case 17:
+			setOption("revPreciseMarkers", true);
 			setOption("options_set", settingsVersion);
 	}
 });
