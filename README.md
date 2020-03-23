@@ -13,20 +13,27 @@ Documentation and users guide: https://github.com/MrJPGames/WayFarer-/wiki
 Other browser support?
 - Brave, Vivaldi and other chromium browsers that use the Google Chrome Web Store for installing extensions.
 - Opera's review process is VERY slow. Install via the Google Chrome Web Store instead using "Add to Opera"! [More info](https://addons.opera.com/en/extensions/details/install-chrome-extensions/)
-- Firefox for Android, is technically supported, but I do not test for compatability.
+- Firefox for Android, is technically supported, but I do not test for compatibility.
 - Edge will be supported when the Chromium builds become the official stable release. When running beta builds you can also install from the Chrome Web Store after enabling instalation from other stores.
 - Safari is unsupported.
 
 Changelog
 ---
+1.12.2:
+- Auto retry for review page errors (eg. No more nominations available for review)
+
+1.12.1 - 1.12.1.1:
+- Precise Markers
+- Minor bug fixes
+
 1.12:
 - Review history (+map on profile) (Huge thanks to mariomc!)
 - Nomination map, allows you to view all of your nominations marked by status on a map! (Off by default) (Huge thanks to mariomc!)
-- 3D map, reenable the 3D view in those areas where it is available. (off by default)
+- 3D map, re-enable the 3D view in those areas where it is available. (off by default)
 - Minor bug fixes/aesthetic changes
 
 1.11.3 - 1.11.3.3:
-- Updates to ensure full compatability with Wayfarer site updates (1.11.3.3 ONLY, earlier versions have partial compatability)
+- Updates to ensure full compatibility with Wayfarer site updates (1.11.3.3 ONLY, earlier versions have partial compatability)
 - Many minor bug fixed
 
 1.11.2:
@@ -34,7 +41,7 @@ Changelog
 - Experimental implementation for bigger maps (turned off by default currently)
 
 1.11.1:
-- Ppresets can now also automatically fill the WhatIsIt box (Only presets made with 1.11.1 or later)
+- Presets can now also automatically fill the WhatIsIt box (Only presets made with 1.11.1 or later)
 - Export/Import function added for "Open In" maps configuration
 - Slight improvements to the extended profile for Ingress agents
 - Nominations Stats widget should be more accurate in it's unlock dates
@@ -45,7 +52,7 @@ Changelog
 - Custom map support added for "Open In". Now you can add any third party map to the Open In dropdown! (Defaults are Google Maps, Ingress Intel and OSM, these can be removed if desired!)
 - Compact view made more compact
 - Recon Badge offset added (For those who's stats got reset)
-- New Settings design to make the increasing number of settings more managable
+- New Settings design to make the increasing number of settings more manageable
 - You can now scroll through duplicates using keyboard controls
 - Reject edit bug fixed (You cannot normally reject an edit, would not work but could cause unusual/dangerous behavior)
 
@@ -69,9 +76,9 @@ Changelog
 - Quick Submit Button, one click to submit and continue to next review
 - Space bar can be used to submit review and go to next while using keyboard controls (with or without Quick Submit button on)
 - Better module loading, also fixes some Firefox only bugs.
-- Transparent pin, location pin can be made transparent and will become invisable on hover. Useful to see if the Wayspot is on the satellite underneath the pin.
+- Transparent pin, location pin can be made transparent and will become invisible on hover. Useful to see if the Wayspot is on the satellite underneath the pin.
 - Ingress Recon Badge progress now displayed on profile (If extended profile stats are on AND ingress account is turned on)
-- Extended profile is now customizable: Off, Aproximation and Facts Only. Aproximation can only be used if you have always had your agreements count towards upgrades. Facts only uses data that is accurate even if some of your agreements did not count towards upgrades and off disables the extend stats feature.
+- Extended profile is now customizable: Off, Approximation and Facts Only. Approximation can only be used if you have always had your agreements count towards upgrades. Facts only uses data that is accurate even if some of your agreements did not count towards upgrades and off disables the extend stats feature.
 - Some fixes for bugs and glitches
 
 1.9.3:
@@ -93,7 +100,7 @@ Changelog
 - Quickly get to reject reasons while using keyboard controls by pressing 0 at any point during the review.
 - Dark mode fixes needed after recent site update
 - whatCtrl is now hooked on review page and accessible to other modules. (Hooked event: WFPWhatCtrlHooked)
-- Refactor making modifcations more modular and expandable for future and 3rd party development
+- Refactor making modifications more modular and expandable for future and 3rd party development
 
 1.8.2:
 - Cleaned up original location highlight during location edits as per #37
@@ -109,34 +116,34 @@ Changelog
 - Current location is marked during location edit review
 - Map buttons are always present during edit review (including edits with no location edit)
 - Made translation buttons clearer and smaller
-- First option in duplicates is autoselected
-- Duplicates can now be done with keyboard (if it's the autoselected one)
+- First option in duplicates is auto selected
+- Duplicates can now be done with keyboard (if it's the auto selected one)
 - Made settings more understandable by adding addition info where possibly needed
 - Duplicate strip can now be scrolled through using the scroll wheel
-- Extended Nomination stats are now more accurate, taking withdrawls into account (which according to niantic should grant you a nomination back if you withdraw it in the 13 day period)
+- Extended Nomination stats are now more accurate, taking withdrawals into account (which according to niantic should grant you a nomination back if you withdraw it in the 13 day period)
 - Improvements and fixes to Dark Mode
 
 1.7.2
 - Map buttons are now an option for the review page as well
-- Edit agreements on profile has been changed to Other agreements as my assumtions seem to have been wrong, and there is no clear origin for these agreements.
+- Edit agreements on profile has been changed to Other agreements as my assumptions seem to have been wrong, and there is no clear origin for these agreements.
 
 1.7.1:
-- More advanced Nominations stat widget. Now displays upcomming dates on which new Nominations will unlock.
-- Google Maps and Itel Map buttons added to Nominations page
+- More advanced Nominations stat widget. Now displays upcoming dates on which new Nominations will unlock.
+- Google Maps and Intel Map buttons added to Nominations page
 - Progress percentage next to user icon in header added
 - Description in a review can be clicked to google it like the title is by default
 - Lat Long coordinates now displayed above the map on Nominations page
 - Small fixes to the Dark Theme on the Nominations page
 
 1.7:
-- Added reviewing with the keyboard (including numpad). Press the number corresponding to the star rating. Use the arrow keys to naviaget manually between the options. Press enter to submit and to continue to the next review. Use backspace to go back in rejction menus or go home after finishing a review.
+- Added reviewing with the keyboard (including numpad). Press the number corresponding to the star rating. Use the arrow keys to navigate manually between the options. Press enter to submit and to continue to the next review. Use backspace to go back in rejection menus or go home after finishing a review.
 - 20m and 40m circles are now also available for the nominations page
 - Default zoom level for the "Location Accuracy" map now configurable in settings. A more zoomed in map can be useful when using the keyboard to review to avoid having to use the mouse to zoom in, which is often needed.
 - Improved settings backend, should solve a bug in previous versions when updating to a version with new settings.
 
 1.6.1
 - Fixes #6 #7 and #8
-- Removes any libary from being required (result: smaller file size, possibly better performace but only extremly slight)
+- Removes any library from being required (result: smaller file size, possibly better performace but only extremly slight)
 - Further improvements to the Dark Mode
 
 1.6:
@@ -154,7 +161,7 @@ Changelog
 
 1.4:
 - Added nomination page stats widget. See how many nominations you have accepted, rejected, in queue, in voting etc. This widget also allows you to see how many nominations you can still make (in Ingress Prime ONLY currently) and how many days until new nominations become available to you.
-- Fixed Dark Theme issue in nominations page (sort order arrow was invisable)
+- Fixed Dark Theme issue in nominations page (sort order arrow was invisible)
 
 1.3:
 - Added customizability, any WayFarer+ function or modification can now be turned on or off!
