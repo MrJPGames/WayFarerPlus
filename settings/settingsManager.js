@@ -56,12 +56,11 @@ chrome.storage.local.get("options_set", function (data){
 			setOption("revBigMaps", false);
 		case 15:
 			setOption("useMods", true);
-			setOption("options_set", settingsVersion);
 		case 16:
 			setOption("nominationMap", false);
 			setOption("rev3DMap", false);
 			setOption("profRecordReviews", true);
-    	case 17:
+    case 17:
 			setOption("revPreciseMarkers", true);
 			setOption("options_set", settingsVersion);
 	}
