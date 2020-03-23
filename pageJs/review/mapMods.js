@@ -2,6 +2,8 @@
 var lowDistCircle, longDistCirle;
 
 function setupMapMods(){
+	if (settings["revPreciseMarkers"])
+		addPreciseMarkers();
 	if (settings["revLowestDistCircle"]){
 		addLowestDistCircle(nSubCtrl.map);
 		addLowestDistCircle(nSubCtrl.map2, true);
@@ -24,7 +26,8 @@ function setupMapMods(){
         	addS2(nSubCtrl.locationEditsMap, lat, lng, settings["revS2Cell"]);
         hookS2LocEdit();
     }
-    if (settings["revEditOrigLoc"] && ansCtrl.needsLocationEdit)
+
+    if (settings["revEditOrigLoc"] && ansCtrl.needsLocationEdit && !settings["revPreciseMarkers"])
     	addOrigLocation(nSubCtrl.locationEditsMap);
 	if (settings["ctrlessZoom"])
 		mapsRemoveCtrlToZoom();
@@ -38,6 +41,111 @@ function setupMapMods(){
 		makeMap3D();
 	}
 }
+
+function addPreciseMarkers(){
+	if (ansCtrl.needsLocationEdit){		
+	    var nSubCtrlScope = angular.element(document.getElementById("NewSubmissionController")).scope();
+		var editMarkers = nSubCtrlScope.getAllLocationMarkers();
+		function setEditMarkersIcon(markers) {
+			for (var i = 0; i < editMarkers.length; i++) {
+				editMarkers[i].setIcon(extURL + "assets/precise_map-spot.svg");
+				if (settings["revEditOrigLoc"] && editMarkers[i].position.lat()  == nSubCtrl.pageData.lat && editMarkers[i].position.lng() == nSubCtrl.pageData.lng){
+					editMarkers[i].setIcon(extURL + "assets/precise_custom_map-spot.svg");
+				}
+			}
+		}
+		setEditMarkersIcon(editMarkers);
+		for (var i = 0; i< editMarkers.length; i++){
+			function addMarkerListner(m){
+				m.addListener("click", function(){
+					var nSubCtrlScope = angular.element(document.getElementById("NewSubmissionController")).scope();
+					var editMarkers = nSubCtrlScope.getAllLocationMarkers();
+					setEditMarkersIcon(editMarkers);
+					m.setIcon(extURL + "assets/precise_green_map-spot.svg");
+				});
+			}
+			addMarkerListner(editMarkers[i]);
+		}
+	}else{
+		//Map1 all excluding "main/current" marker 
+		var locationMarkers = nSubCtrl.markers;
+	    for (var i = 0; i < locationMarkers.length; i++){
+	        locationMarkers[i].setIcon(extURL + "assets/precise_map-spot.svg");
+	    }
+	 }
+
+	//Do map2 (satelite) markers (by recreating the map as we can't hook nicely)
+	function createCustomStreetView() {
+		var map2 = new google.maps.Map(document.getElementById("street-view"), {
+			tilt: 0,
+			center: {
+				lat: nSubCtrl.pageData.lat,
+				lng: nSubCtrl.pageData.lng
+			},
+			mapTypeId: "hybrid",
+			zoom: 15,
+			scaleControl: true,
+			mapTypeControl: false
+		});
+		var marker = new google.maps.Marker({
+			map: map2,
+			position: {
+				lat: parseFloat(nSubCtrl.pageData.lat),
+				lng: parseFloat(nSubCtrl.pageData.lng)
+			},
+			title: nSubCtrl.pageData.title,
+			icon: "/img/marker-orange.svg"
+		});
+		nSubCtrl.originalMap2Marker = marker;
+		for (var i = 0; i < nSubCtrl.activePortals.length; i++) {
+			var nearby = nSubCtrl.activePortals[i];
+			var temp = new google.maps.Marker({
+				map: map2,
+				position: {
+					lat: parseFloat(nearby.lat),
+					lng: parseFloat(nearby.lng)
+				},
+				title: nearby.title,
+				icon: extURL + "assets/precise_map-spot.svg"
+			})
+		}
+		var panorama = map2.getStreetView();
+		var client = new google.maps.StreetViewService;
+		client.getPanoramaByLocation({
+			lat: nSubCtrl.pageData.lat,
+			lng: nSubCtrl.pageData.lng
+		}, 50, function (result, status) {
+			if (status === "OK") {
+				var point = new google.maps.LatLng(nSubCtrl.pageData.lat, nSubCtrl.pageData.lng);
+				var oldPoint = point;
+				point = result.location.latLng;
+				var heading = google.maps.geometry.spherical.computeHeading(point, oldPoint);
+				panorama.setPosition(point);
+				panorama.setPov({
+					heading: heading,
+					pitch: 0,
+					zoom: 1
+				});
+				panorama.setMotionTracking(false);
+				panorama.setVisible(true);
+				nSubCtrl.imageDate = result.imageDate;
+			} else
+				;
+		});
+		nSubCtrl.panorama = panorama;
+		nSubCtrl.map2 = map2;
+	}
+	createCustomStreetView();
+
+	var originalResetStreetView = nSubCtrl.resetStreetView;
+	//Hook the reset map2 function
+	nSubCtrl.resetStreetView = function(){
+		originalResetStreetView(); //Restore original internal state
+		createCustomStreetView(); //Change map to our custom map with custom markers!
+	}
+}
+
+
 
 function makeMap3D(){
 	var options = {
@@ -79,15 +187,31 @@ function hookResetMapFuncs(){
 }
 
 function addOrigLocation(gMap){
-	var oPos = new google.maps.LatLng(nSubCtrl.pageData.lat, nSubCtrl.pageData.lng);
-	
-    var nSubCtrlScope = angular.element(document.getElementById("NewSubmissionController")).scope();
+	function setEditMarkersIcon(editMarkers) {
+		var oPos = new google.maps.LatLng(nSubCtrl.pageData.lat, nSubCtrl.pageData.lng);
+		for (var i = 0; i < editMarkers.length; i++) {
+			if (editMarkers[i].position.lat() == oPos.lat() && editMarkers[i].position.lng() == oPos.lng()) {
+				editMarkers[i].setIcon(extURL + "assets/custom_map-spot.svg");
+			}
+		}
+	}
+
+	var nSubCtrlScope = angular.element(document.getElementById("NewSubmissionController")).scope();
 	var editMarkers = nSubCtrlScope.getAllLocationMarkers();
-    for (var i = 0; i < editMarkers.length; i++){
-    	if (editMarkers[i].position.lat() == oPos.lat() && editMarkers[i].position.lng() == oPos.lng()){
-        	editMarkers[i].setIcon(extURL + "assets/custom_map-spot.svg");
-    	}
-    }
+	setEditMarkersIcon(editMarkers);
+
+    //Persistent:
+	for (var i = 0; i< editMarkers.length; i++){
+		function addMarkerListner(m){
+			m.addListener("click", function(){
+				var nSubCtrlScope = angular.element(document.getElementById("NewSubmissionController")).scope();
+				var editMarkers = nSubCtrlScope.getAllLocationMarkers();
+				setEditMarkersIcon(editMarkers);
+				m.setIcon("/img/marker-green.svg");
+			});
+		}
+		addMarkerListner(editMarkers[i]);
+	}
 }
 
 
