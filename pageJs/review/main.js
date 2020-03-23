@@ -1,6 +1,7 @@
 var nSubCtrl, ansCtrl, nSubDS, whatCtrl, whatCtrlScope;
 
 var hooked = 0;
+var autoretry = false;
 
 //Global const for any mod
 const divNames = {shouldBePortal: "photo-card", titleAndDescription: "descriptionDiv", duplicates: "duplicates-card", historicOrCultural: "histcult-card", visuallyUnique: "uniqueness-card", safeAccess: "safety-card", location: "map-card", whatIsIt: "what-is-it-card-review", additionalComment: "additional-comments-card", locationAccuracy: "map-card"};
@@ -38,6 +39,12 @@ function hookSubCtrl(){
 	nSubCtrlScope = angular.element(document.getElementById("NewSubmissionController")).scope();
 	
 	if (nSubCtrl == undefined || nSubCtrl.pageData == undefined || nSubCtrl.pageData.expires == undefined || nSubCtrl.loaded == false || nSubCtrl.pageData.description == undefined){
+		if (nSubCtrl.errorMessage != "" && !autoretry) {
+			autoretry = true;			
+			var modEvent = new Event("WFPNSubCtrlError");
+			document.dispatchEvent(modEvent);
+		}
+
 		setTimeout(hookSubCtrl, 50);
 	}else{
 		hooked++;
