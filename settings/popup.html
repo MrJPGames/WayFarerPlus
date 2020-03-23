@@ -20,7 +20,7 @@
 		<div class="switch">
 			<input type="checkbox" class="switch__input" id="useMods" />
 			<label for="useMods" class="switch__label">WayFarer+ modifications</label>
-			<img title="This allows you to turn off all modifcations made by WayFarer+ without changing your settings. This allows you to re-enable WayFarer+ with your current settings intact." src="../assets/help.svg"/>
+			<img title="This allows you to turn off all modifications made by WayFarer+ without changing your settings. This allows you to re-enable WayFarer+ with your current settings intact." src="../assets/help.svg"/>
 		</div><br/>
 		<div class="switch">
 			<input type="checkbox" class="switch__input" id="darkMode" />
@@ -149,6 +149,11 @@
 						<label for="revSubmitTimer">Lock submit button for: </label>
 						<input type="number" id="revSubmitTimer" style="width: 4em;"> Seconds
 					</div>
+					<div class="switch">
+						<input type="checkbox" class="switch__input" id="revAutoRetry" />
+						<label for="revAutoRetry" class="switch__label">Auto-retry for more nominations</label>
+						<img title="Automatically looks for more nominations to review when Wayfarer assumes that no nominations are available." src="../assets/help.svg"/>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -209,10 +214,10 @@
 						<label>Extended stats:</label>
 						<select id="profExtendedStats">
 							<option value="off">Off</option>
-							<option value="aprox">Aproximation</option>
+							<option value="aprox">Approximation</option>
 							<option value="truth">Facts only</option>
 						</select>
-						<img title="Aproximation works based on upgrade stats. If you've gotten agreements that did not count towards your upgrades this option will not work for you! Facts only will be less informative but always accurate." src="../assets/help.svg"/>
+						<img title="Approximation works based on upgrade stats. If you've gotten agreements that did not count towards your upgrades this option will not work for you! Facts only will be less informative but always accurate." src="../assets/help.svg"/>
 					</div>
 				</div>
 			</div>

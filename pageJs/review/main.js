@@ -38,7 +38,13 @@ function hookSubCtrl(){
 	nSubCtrlScope = angular.element(document.getElementById("NewSubmissionController")).scope();
 	
 	if (nSubCtrl == undefined || nSubCtrl.pageData == undefined || nSubCtrl.pageData.expires == undefined || nSubCtrl.loaded == false || nSubCtrl.pageData.description == undefined){
-		setTimeout(hookSubCtrl, 50);
+		if (nSubCtrl != undefined && nSubCtrl.errorMessage != "") {
+			autoretry = true;
+			var modEvent = new Event("WFPNSubCtrlError");
+			document.dispatchEvent(modEvent);
+		}else {
+			setTimeout(hookSubCtrl, 50);
+		}
 	}else{
 		hooked++;
 		console.log("[WayFarer+] NewSubmissionController was hooked to nSubCtrl");
