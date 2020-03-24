@@ -42,30 +42,17 @@
 			<div class="collapsible-content">
 				<div class="content-inner">
 					<div class="switch">
-						<input type="checkbox" class="switch__input" id="revKeyboard" />
-						<label for="revKeyboard" class="switch__label">Review using keyboard</label>
-					</div><br/>
-					<div class="switch">
 						<input type="checkbox" class="switch__input" id="revPresets" />
 						<label for="revPresets" class="switch__label">Review presets</label>
 					</div><br/>
 					<div class="switch">
-						<label>Card view:</label>
-						<select id="revCardView">
-							<option value="normal">Normal</option>
-							<option value="compact">Compact</option>
-							<option value="extended">Expanded</option>
-						</select><img title="Different review card display options. Useful for better usability on lower or higher resolution screens." src="../assets/help.svg"/>
+						<input type="checkbox" class="switch__input" id="revKeyboard" />
+						<label for="revKeyboard" class="switch__label">Review using keyboard</label>
 					</div><br/>
 					<div class="switch">
 						<input type="checkbox" class="switch__input" id="profRecordReviews" />
 						<label for="profRecordReviews" class="switch__label">Record Reviews</label>
-						<img title="Remembers the nominations you viewed and shows them in your profile." src="../assets/help.svg"/>
-					</div><br/>
-					<div class="switch">
-						<input type="checkbox" class="switch__input" id="revEditOrigLoc" />
-						<label for="revEditOrigLoc" class="switch__label">Original location highlight (edits)</label>
-						<img title="Highlights the current location during a location edit review with a circle filled with green." src="../assets/help.svg"/>
+						<img title="Stores the nominations you viewed and shows them in your profile." src="../assets/help.svg"/>
 					</div><br/>
 					<div class="switch">
 						<input type="checkbox" class="switch__input" id="revQuickSubmit" />
@@ -75,11 +62,7 @@
 					<div class="switch">
 						<input type="checkbox" class="switch__input" id="revOpenIn" />
 						<label for="revOpenIn" class="switch__label">Open in ...</label>
-					</div><br/>
-					<div class="switch">
-						<input type="checkbox" class="switch__input" id="rev3DMap" />
-						<label for="rev3DMap" class="switch__label">Use 3D satellite</label>
-						<img title="Makes maps on review page bigger." src="../assets/help.svg"/>
+						<img title="Adds a button that allows you to view the current location in any of your 'Open in...' maps." src="../assets/help.svg"/>
 					</div><br/>
 					<div class="switch">
 						<input type="checkbox" class="switch__input" id="revTranslate" />
@@ -88,7 +71,31 @@
 					<div class="switch">
 						<input type="checkbox" class="switch__input" id="revExpireTimer" />
 						<label for="revExpireTimer" class="switch__label">Expire timer</label>
-						<img title="Displays the amount of time left before you can no longer submit your review for a Wayspot" src="../assets/help.svg"/>
+						<img title="Displays the amount of time left before you can no longer submit your review for a Wayspot." src="../assets/help.svg"/>
+					</div><br/>
+					<div class="switch">
+						<label for="revSubmitTimer">Lock submit button for: </label>
+						<input type="number" id="revSubmitTimer" style="width: 4em;"> Seconds
+					</div>
+					<div class="switch">
+						<input type="checkbox" class="switch__input" id="revAutoRetry" />
+						<label for="revAutoRetry" class="switch__label">Auto-retry for more nominations</label>
+						<img title="Automatically looks for more nominations to review when no nominations are available." src="../assets/help.svg"/>
+					</div>
+					<div class="switch">
+						<label>Card view:</label>
+						<select id="revCardView">
+							<option value="normal">Normal</option>
+							<option value="compact">Compact</option>
+							<option value="extended">Expanded</option>
+						</select>
+						<img title="Different review card display options. Useful for better usability on lower or higher resolution screens." src="../assets/help.svg"/>
+					</div><br/>
+					<h2>Map modifications:</h2>
+					<div class="switch">
+						<input type="checkbox" class="switch__input" id="revEditOrigLoc" />
+						<label for="revEditOrigLoc" class="switch__label">Original location highlight (edits)</label>
+						<img title="Highlights the current location during a location edit review with a circle filled with green." src="../assets/help.svg"/>
 					</div><br/>
 					<div class="switch">
 						<input type="checkbox" class="switch__input" id="revPreciseMarkers" />
@@ -137,8 +144,8 @@
 					</div><br/>
 					<div class="switch">
 						<input type="checkbox" class="switch__input" id="revTransparentMarker" />
-						<label for="revTransparentMarker" class="switch__label">Transparent location marker.</label>
-						<img title="Makes the location marker of a submission transparent. Helpful if the Wayspot is being obstructed by said marker. Fully disappears on hover." src="../assets/help.svg"/>
+						<label for="revTransparentMarker" class="switch__label">Translucent location marker.</label>
+						<img title="Makes the location marker of a submission translucent. Helpful if the Wayspot is being obstructed by said marker. Fully disappears on hover." src="../assets/help.svg"/>
 					</div>
 					<div class="switch">
 						<input type="checkbox" class="switch__input" id="revAutoSelectDupe" />
@@ -146,14 +153,10 @@
 						<img title="Makes it easier to mark duplicates as the first in the list is usually the duplicate if it is a duplicate." src="../assets/help.svg"/>
 					</div>
 					<div class="switch">
-						<label for="revSubmitTimer">Lock submit button for: </label>
-						<input type="number" id="revSubmitTimer" style="width: 4em;"> Seconds
-					</div>
-					<div class="switch">
-						<input type="checkbox" class="switch__input" id="revAutoRetry" />
-						<label for="revAutoRetry" class="switch__label">Auto-retry for more nominations</label>
-						<img title="Automatically looks for more nominations to review when Wayfarer assumes that no nominations are available." src="../assets/help.svg"/>
-					</div>
+						<input type="checkbox" class="switch__input" id="rev3DMap" />
+						<label for="rev3DMap" class="switch__label">Use 3D satellite</label>
+						<img title="Makes maps on review page bigger." src="../assets/help.svg"/>
+					</div><br/>
 				</div>
 			</div>
 		</div>
@@ -163,9 +166,9 @@
 			<div class="collapsible-content">
 				<div class="content-inner">
 					<div class="switch">
-						<input type="checkbox" class="switch__input" id="nomStreetView" />
-						<label for="nomStreetView" class="switch__label">StreetView preview</label>
-						<img title="Allows you to see StreetView reviewers will see for your own nominations." src="../assets/help.svg"/>
+						<input type="checkbox" class="switch__input" id="nominationMap" />
+						<label for="nominationMap" class="switch__label">Nomination Map</label>
+						<img title="Shows a map with all your nominations" src="../assets/help.svg"/>
 					</div><br/>
 					<div class="switch">
 						<input type="checkbox" class="switch__input" id="nomStats" />
@@ -176,10 +179,12 @@
 						<label for="nomOpenIn" class="switch__label">Open in ...</label>
 					</div><br/>
 					<div class="switch">
-						<input type="checkbox" class="switch__input" id="nominationMap" />
-						<label for="nominationMap" class="switch__label">Nomination Map</label>
-						<img title="Shows a map with the nominations done" src="../assets/help.svg"/>
+						<input type="checkbox" class="switch__input" id="nomStreetView" />
+						<label for="nomStreetView" class="switch__label">StreetView preview</label>
+						<img title="Allows you to see StreetView reviewers will see for your own nominations." src="../assets/help.svg"/>
 					</div><br/>
+
+					<h2>Map modifications:</h2>
 					<div class="switch">
 						<label>S2 Cell Level:</label>
 						<select id="nomS2Cell">
