@@ -11,7 +11,6 @@ function getIconUrl(nomination) {
 }
 
 function addMap(nominationList, mapElement) {
-
 	const mapSettings = settings["ctrlessZoom"] ? { scrollwheel: true, gestureHandling: 'greedy' } : {};
 	const gmap = new google.maps.Map(mapElement, {
 		zoom: 8,
@@ -73,7 +72,7 @@ function createElements() {
 	collapsibleContent.setAttribute("class", "collapsible-content");
 
 	const mapElement = document.createElement("div");
-	mapElement.style="height: 400px;";
+	mapElement.style = "height: 400px;";
 	mapElement.setAttribute("class", "map-element");
 	mapElement.innerText = "Loading...";
 
