@@ -17,8 +17,12 @@ function hookLowQualityModalOpen(){
 		orig();
 		//The modal needs time to load
 		setTimeout(function(){
-			markSubmitButtons();
-			hookRejectReadyFunction();
+			//Only make changes if the timer hasn't already ran out (as it's useless at that point, and will cause minor visual bugs)
+			var tDiff = nSubCtrl.pageData.expires - Date.now();
+			if (tDiff/1000 >= 1200-parseInt(settings["revSubmitTimer"])) {
+				markSubmitButtons();
+				hookRejectReadyFunction();
+			}
 		}, 10);
 	}
 }
