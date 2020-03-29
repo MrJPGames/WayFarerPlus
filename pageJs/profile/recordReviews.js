@@ -1,445 +1,539 @@
-(function() {
-  const infoWindow = new google.maps.InfoWindow({
-    content: "Loading..."
-  });
-  let markers = [];
+const infoWindow = new google.maps.InfoWindow({
+	content: "Loading..."
+});
+let markers = [];
 
-  const getReviews = () => {
-    const currentItemsText = localStorage.getItem("wfpSaved") || "[]";
-    const currentItems = JSON.parse(currentItemsText);
-    return currentItems;
-  };
+const getReviews = () => {
+	const currentItemsText = localStorage.getItem("wfpSaved") || "[]";
+	const currentItems = JSON.parse(currentItemsText);
+	return currentItems;
+};
 
-  const clearLocalStorage = () => {
-    const confirmation = confirm(
-      "This will delete all your review history! Are you sure?"
-    );
-    if (confirmation) {
-      localStorage.removeItem("wfpSaved");
-      window.location.reload();
-    }
-  };
+const clearLocalStorage = () => {
+	const confirmation = confirm(
+		"This will delete all your review history! Are you sure?"
+	);
+	if (confirmation) {
+		localStorage.removeItem("wfpSaved");
+		window.location.reload();
+	}
+};
 
-  const saveReview = (pageData, submitData) => {
-    if (nSubCtrl.reviewType !== "NEW") {
-      console.log("Not a new review. Skipping the save.");
-      return;
-    }
+const saveReview = (pageData, submitData) => {
+	if (nSubCtrl.reviewType !== "NEW") {
+		console.log("[WayFarer+] Not a new review. Skipping the save.");
+		return;
+	}
 
-    const {
-      title,
-      description,
-      imageUrl,
-      lat,
-      lng,
-      statement,
-      supportingImageUrl
-    } = pageData;
-    const toSave = {
-      title,
-      description,
-      imageUrl,
-      lat,
-      lng,
-      statement,
-      supportingImageUrl,
-      ts: +new Date(),
-      review: submitData
-    };
+	const {
+		title,
+		description,
+		imageUrl,
+		lat,
+		lng,
+		statement,
+		supportingImageUrl
+	} = pageData;
+	const toSave = {
+		title,
+		description,
+		imageUrl,
+		lat,
+		lng,
+		statement,
+		supportingImageUrl,
+		ts: +new Date(),
+		review: submitData
+	};
 
-    const currentItems = getReviews();
-    const lastItem = currentItems.length
-      ? currentItems[currentItems.length - 1]
-      : null;
-    const isSameReview = lastItem && lastItem.imageUrl === imageUrl;
-    if (isSameReview) {
-      // update the result
-      currentItems[currentItems.length - 1] = toSave;
-    } else {
-      // push the new result
-      currentItems.push(toSave);
-    }
-    localStorage.setItem("wfpSaved", JSON.stringify(currentItems));
-  };
+	const currentItems = getReviews();
+	const lastItem = currentItems.length
+		? currentItems[currentItems.length - 1]
+		: null;
+	const isSameReview = lastItem && lastItem.imageUrl === imageUrl;
+	if (isSameReview) {
+		// update the result
+		currentItems[currentItems.length - 1] = toSave;
+	} else {
+		// push the new result
+		currentItems.push(toSave);
+	}
+	localStorage.setItem("wfpSaved", JSON.stringify(currentItems));
+};
 
-  const formatTs = (ts, extra = {}) => {
-    const date = new Date(ts);
-    const dateTimeFormat = new Intl.DateTimeFormat("default", {
-      day: "numeric",
-      month: "numeric",
-      ...extra
-    });
-    return dateTimeFormat.format(date);
-  };
+const formatTs = (ts, extra = {}) => {
+	const date = new Date(ts);
+	const dateTimeFormat = new Intl.DateTimeFormat("default", {
+		day: "numeric",
+		month: "numeric",
+		...extra
+	});
+	return dateTimeFormat.format(date);
+};
 
-  const buildLine = (
-    { ts, accepted, title, review, lat, lng },
-    index,
-    coll
-  ) => {
-    const smallDate = formatTs(ts);
-    const formattedDate = formatTs(ts, {
-      year: "numeric",
-      hour: "numeric",
-      minute: "numeric"
-    });
-    let score = "?";
-    let moreInfo = "?";
+function formatTsDateTime(ts){
+	const date = new Date(ts);
+	const dateTimeFormat = new Intl.DateTimeFormat("default", {
+		day: "numeric",
+		month: "short",
+		hour: "numeric",
+		minute: "numeric"
+	});
+	return dateTimeFormat.format(date);
+}
 
-    if (review === "skipped") {
-      score = "S";
-      moreInfo = "Skipped";
-    } else if (!review) {
-      // Latest result without a review will count as pending
-      score = index === coll.length - 1 ? "P" : "E";
-      moreInfo = index === coll.length - 1 ? "Pending" : "Expired";
-    } else if (review.quality) {
-      const {
-        quality,
-        description,
-        cultural,
-        uniqueness,
-        safety,
-        location
-      } = review;
-      // was not a reject
-      score = quality;
-      moreInfo = `Q:${quality}/D:${description}/C:${cultural}/U:${uniqueness}/S:${safety}/L:${location}`;
-    } else if (review.duplicate) {
-      score = "D";
-      moreInfo = "Duplicate";
-    } else if (review.spam) {
-      // was a reject
-      score = 1;
-      moreInfo = `Reason: ${review.rejectReason}`;
-    }
+const buildLine = (
+	{ts, accepted, title, review, lat, lng},
+	index,
+	coll
+) => {
+	const smallDate = formatTs(ts);
+	const formattedDate = formatTs(ts, {
+		year: "numeric",
+		hour: "numeric",
+		minute: "numeric"
+	});
+	let score = "?";
+	let moreInfo = "?";
 
-    return `
-    <tr class="${accepted ? "success" : ""}">
-        <td>${index + 1}</td>
-        <td title="${formattedDate}">${smallDate}</td>
-        <td>${title}</td>
-        <td class="text-center focus-map">
-          <span title="Focus in map" data-index="${index}" style="cursor:pointer" >📍</span>
-          ${getIntelLink(
-            lat,
-            lng,
-            `<img src="https://intel.ingress.com/favicon.ico" />`
-          )}
-        </td>
-        <td class="text-center" title="${moreInfo}">${score}</td>
-        <td class="text-center toggle" data-index="${index}" style="cursor:pointer" title="Toggle Accepted">✅</td>
-    </tr>
-    `;
-  };
+	if (review === "skipped") {
+		score = "Skipped";
+		moreInfo = "Skipped";
+	} else if (!review) {
+		// Latest result without a review will count as pending
+		score = index === coll.length - 1 ? "Pending" : "Expired";
+		moreInfo = index === coll.length - 1 ? "Pending" : "Expired";
+	} else if (review.quality) {
+		const {
+			quality,
+			description,
+			cultural,
+			uniqueness,
+			safety,
+			location
+		} = review;
+		// was not a reject
+		score = getStarDisplay(quality);;
+		moreInfo = `Q:${quality}/D:${description}/C:${cultural}/U:${uniqueness}/S:${safety}/L:${location}`;
+	} else if (review.duplicate) {
+		score = "Duplicate";
+		moreInfo = "Duplicate";
+	} else if (review.spam) {
+		// was a reject
+		score = getStarDisplay(1);
+		moreInfo = `Reason: ${review.rejectReason}`;
+	}
 
-  function buildMap(reviewList, mapElement) {
-    const mapSettings = settings["ctrlessZoom"]
-      ? { scrollwheel: true, gestureHandling: "greedy" }
-      : {};
-    const gmap = new google.maps.Map(mapElement, {
-      zoom: 8,
-      ...mapSettings
-    });
+	return `
+	<tr class="${accepted ? "success" : ""}">
+		<td>${index + 1}</td>
+		<td title="${formattedDate}">${smallDate}</td>
+		<td>${title}</td>
+		<td class="text-center focus-map">
+		  <span title="Focus in map" data-index="${index}" style="cursor:pointer" >📍</span>
+		  ` + (settings["profOpenIn"]  ? getOpenInButton(lat, lng, title).outerHTML : getIntelLink(lat, lng,`<img src="https://intel.ingress.com/favicon.ico" />`)) + `
+		</td>
+		<td class="text-center" title="${moreInfo}">` + ((score.innerHTML !== undefined) ? score.innerHTML : score) + `</td>
+		<td class="text-center toggle" data-index="${index}" style="cursor:pointer" title="Toggle Accepted">✅</td>
+	</tr>
+	`;
+};
 
-    const bounds = new google.maps.LatLngBounds();
-    const gradedColors = [
-      "#888888",
-      "#ff3d00",
-      "#ff8e01",
-      "#fece00",
-      "#8ac51f",
-      "#00803b"
-    ];
+function getOpenInButton(lat, lng, title){
+	//Create main dropdown menu ("button")
+	var mainButton = document.createElement("div");
+	mainButton.setAttribute("class", "dropdown");
 
-    markers = reviewList.map(review => {
-      const latLng = {
-        lat: review.lat,
-        lng: review.lng
-      };
+	var buttonText = document.createElement("span");
+	buttonText.innerText = "Open in ...";
 
-      const isSkipped = review.review === 'skipped';
-      const isPending = review.review === false;
-      const hasReview = Boolean(review.review);
-      const quality = (hasReview && !isSkipped && !isPending) ? (review.review.quality || 1) : 0;
-      const marker = new google.maps.Marker({
-        map: gmap,
-        position: latLng,
-        title: review.title,
-        icon: {
-          path: google.maps.SymbolPath.CIRCLE,
-          scale: 8.5,
-          fillColor: gradedColors[quality],
-          fillOpacity: 0.8,
-          strokeWeight: 0.4
-        }
-      });
+	var dropdownContainer = document.createElement("div");
+	dropdownContainer.setAttribute("class", "dropdown-content");
 
-      marker.addListener("click", () => {
-        infoWindow.open(gmap, marker);
-        infoWindow.setContent(buildInfoWindowContent(review));
-      });
+	mainButton.appendChild(buttonText);
+	mainButton.appendChild(dropdownContainer);
 
-      bounds.extend(latLng);
-      return marker;
-    });
+	dropdownContainer.innerHTML = null;
 
-    new MarkerClusterer(gmap, markers, {
-      imagePath:
-        "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m",
-      gridSize: 30,
-      zoomOnClick: true,
-      maxZoom: 10
-    });
-    gmap.fitBounds(bounds);
-    return gmap;
-  }
+	var customMaps = JSON.parse(settings["customMaps"]);
 
-  const downloadObjectAsJson = (exportObj, exportName) => {
-    var dataStr =
-      "data:text/json;charset=utf-8," +
-      encodeURIComponent(JSON.stringify(exportObj));
-    var downloadAnchorNode = document.createElement("a");
-    downloadAnchorNode.setAttribute("href", dataStr);
-    downloadAnchorNode.setAttribute("download", exportName);
-    document.body.appendChild(downloadAnchorNode); // required for firefox
-    downloadAnchorNode.click();
-    downloadAnchorNode.remove();
-  };
+	for (var i=0; i < customMaps.length; i++){
+		var title = customMaps[i].title;
+		var link = customMaps[i].url;
 
-  const formatAsGeojson = reviews => {
-    return {
-      type: "FeatureCollection",
-      features: reviews.map(review => {
-        const { lat, lng, ...props } = review;
-        return {
-          properties: {
-            ...props
-          },
-          geometry: {
-            coordinates: [lng, lat],
-            type: "Point"
-          },
-          type: "Feature"
-        };
-      })
-    };
-  };
+		//Link editing:
+		link = link.toLowerCase();
+		link = link.replaceAll("%lat%", lat);
+		link = link.replaceAll("%lng%", lng);
+		link = link.replaceAll("%title%", title);
 
-  const getReviewData = reviewData =>
-    typeof reviewData === "object" ? reviewData : {};
+		var button = document.createElement("a");
+		button.href = link;
+		if (settings["keepTab"])
+			button.setAttribute("target", getStringHash(customMaps[i].url)); //On URL with placeholders as those are the same between different wayspots but not between different maps!
+		else
+			button.setAttribute("target", "_BLANK");
+		button.innerText = title;
+		dropdownContainer.appendChild(button);
+	}
 
-  const getDD = (term, definition) =>
-    definition ? `<dt>${term}</dt><dd>${definition}</dd>` : "";
+	if (customMaps.length == 0){
+		var emptySpan = document.createElement("span");
+		emptySpan.innerText = "No custom maps set!";
+		dropdownContainer.appendChild(emptySpan);
+	}
 
-  const getIntelLink = (lat, lng, content) =>
-    `<a target="_blank" rel="noreferrer" title="Open in Intel" href="https://intel.ingress.com/intel?ll=${lat},${lng}&z=21">${content}</a>`;
+	return mainButton;
+}
 
-  const getScores = ({ review }) => {
-    if (!review || typeof review === "string") {
-      return "";
-    }
-    return `
-    <table class="table table-condensed">
-      <thead>
-          <tr>
-              <th>Score</th>
-              <th>Title</th>
-              <th>Cultural</th>
-              <th>Unique</th>
-              <th>Safety</th>
-              <th>Location</th>
-          </tr>
-      </thead>
-      <tbody id="review-list">
-        <tr>
-          <td>${review.quality}</td>
-          <td>${review.description}</td>
-          <td>${review.cultural}</td>
-          <td>${review.uniqueness}</td>
-          <td>${review.safety}</td>
-          <td>${review.location}</td>
-        </tr>
-      </tbody>
-    </table>
-`;
-  };
-  const buildInfoWindowContent = review => {
-    const {
-      title,
-      imageUrl,
-      description,
-      statement,
-      supportingImageUrl,
-      lat,
-      lng
-    } = review;
-    const { comment, newLocation, quality, spam, rejectReason, duplicate } = getReviewData(
-      review.review
-    );
+function buildMap(reviewList, mapElement) {
+	const mapSettings = settings["ctrlessZoom"]
+		? {scrollwheel: true, gestureHandling: "greedy"}
+		: {};
+	const gmap = new google.maps.Map(mapElement, {
+		zoom: 8,
+		...mapSettings
+	});
 
-    console.log(review);
-    const score = spam ? 1 : quality || 0;
-    const scoreString = Array(5)
-      .fill(0)
-      .map((_, i) => (i + 1 <= score ? "★" : "☆"))
-      .join("");
-    const status = duplicate ? "Duplicate" : review.review === "skipped" ? "Skipped" : "Timed Out/Pending";
+	const bounds = new google.maps.LatLngBounds();
+	const gradedColors = [
+		"#888888",
+		"#ff3d00",
+		"#ff8e01",
+		"#fece00",
+		"#8ac51f",
+		"#00803b"
+	];
 
-    return `<div class="panel panel-default">
-    <div class="panel-heading">${title} <div class="pull-right star-red-orange">${
-      score ? scoreString : status
-    }</div></div>
-    <div class="panel-body">
-        <div class="row">
-          <div class="col-xs-4"><a target="_blank" href="${imageUrl}=s0"><img style="max-width: 100%" src="${imageUrl}" class="img-responsive" alt="${title}"></a></div>
-          <div class="col-xs-8">
-            <dl class="dl-horizontal">
-              ${getDD("Title", title)}
-              ${getDD("Description", description)}
-              ${getDD("Statement", statement)}
-              ${getDD("Comment", comment)}
-              ${getDD("New Location", newLocation)}
-              ${getDD("Reject Reason", rejectReason)}
-              ${getDD(
-                "Supporting Image",
-                supportingImageUrl &&
-                  `<a target="_blank" href="${supportingImageUrl}=s0">View</a>`
-              )}
-              ${getDD("Location", getIntelLink(lat, lng, "Open in Intel"))}
-            </dl>
-            ${getScores(review)}
-          </div>
-        </div>
-      </div>
-  </div>`;
-  };
+	markers = reviewList.map(review => {
+		const latLng = {
+			lat: review.lat,
+			lng: review.lng
+		};
 
-  const showEvaluated = () => {
-    const reviews = getReviews();
+		const isSkipped = review.review === 'skipped';
+		const isPending = review.review === false;
+		const hasReview = Boolean(review.review);
+		const quality = (hasReview && !isSkipped && !isPending) ? (review.review.quality || 1) : 0;
+		const marker = new google.maps.Marker({
+			map: gmap,
+			position: latLng,
+			title: review.title,
+			icon: {
+				path: google.maps.SymbolPath.CIRCLE,
+				scale: 8.5,
+				fillColor: gradedColors[quality],
+				fillOpacity: 0.8,
+				strokeWeight: 0.4
+			}
+		});
 
-    if (!reviews.length) return;
-    const profileStats = document.getElementById("profile-main-contain");
-    profileStats.insertAdjacentHTML(
-      "beforeend",
-      `
-        <div class="container">
-            <h3>Reviewed</h3>
-            <div id="reviewed-map" style="height:400px"></div>
-            <div class="table-responsive" style="margin-top:1rem">
-              <table class="table table-striped table-condensed">
-                  <thead>
-                      <tr>
-                          <th>#</th>
-                          <th>Date</th>
-                          <th>Title</th>
-                          <th>Location</th>
-                          <th>Score</th>
-                          <th>Mark Accepted</th>
-                      </tr>
-                  </thead>
-                  <tbody id="review-list">
-                      ${reviews
-                        .map(buildLine)
-                        .reverse()
-                        .join("")}
-                  </tbody>
-              </table>
-            </div>
-            <button class="button-secondary" id="export-geojson">Export GeoJSON</button>
-            <button class="button-secondary" id="clean-history">Clean History</button>
-        </div>`
-    );
-    const map = buildMap(reviews, document.getElementById("reviewed-map"));
-    const reviewListElement = document.getElementById("review-list");
-    const exportButton = document.getElementById("export-geojson");
-    const cleanHistoryButton = document.getElementById("clean-history");
+		marker.addListener("click", () => {
+			infoWindow.open(gmap, marker);
+			infoWindow.setContent(buildInfoWindowContent(review));
+		});
 
-    exportButton.addEventListener("click", () => {
-      const geoJson = formatAsGeojson(reviews);
-      downloadObjectAsJson(geoJson, "reviews.geojson");
-    });
+		bounds.extend(latLng);
+		return marker;
+	});
 
-    cleanHistoryButton.addEventListener("click", clearLocalStorage);
+	new MarkerClusterer(gmap, markers, {
+		imagePath:
+			"https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m",
+		gridSize: 30,
+		zoomOnClick: true,
+		maxZoom: 10
+	});
+	gmap.fitBounds(bounds);
+	return gmap;
+}
 
-    reviewListElement.addEventListener("click", ({ target }) => {
-      const index = target.dataset && target.dataset.index;
-      if (!index) {
-        return;
-      }
+const downloadObjectAsJson = (exportObj, exportName) => {
+	var dataStr =
+		"data:text/json;charset=utf-8," +
+		encodeURIComponent(JSON.stringify(exportObj));
+	var downloadAnchorNode = document.createElement("a");
+	downloadAnchorNode.setAttribute("href", dataStr);
+	downloadAnchorNode.setAttribute("download", exportName);
+	document.body.appendChild(downloadAnchorNode); // required for firefox
+	downloadAnchorNode.click();
+	downloadAnchorNode.remove();
+};
 
-      const clickOnAccepted = target.classList.contains("toggle");
+const formatAsGeojson = reviews => {
+	return {
+		type: "FeatureCollection",
+		features: reviews.map(review => {
+			const {lat, lng, ...props} = review;
+			return {
+				properties: {
+					...props
+				},
+				geometry: {
+					coordinates: [lng, lat],
+					type: "Point"
+				},
+				type: "Feature"
+			};
+		})
+	};
+};
 
-      if (clickOnAccepted) {
-        const currentItems = getReviews();
-        currentItems[index].accepted = !currentItems[index].accepted;
-        localStorage.setItem("wfpSaved", JSON.stringify(currentItems));
-        window.location.reload();
-      } else {
-        const currentMarker = markers[index];
-        const currentReview = reviews[index];
+const getReviewData = reviewData =>
+	typeof reviewData === "object" ? reviewData : {};
 
-        infoWindow.open(map, currentMarker);
-        infoWindow.setContent(buildInfoWindowContent(currentReview));
-        map.setZoom(12);
-        map.panTo({ lat: currentReview.lat, lng: currentReview.lng });
-      }
-    });
-  };
+const getDD = (term, definition) =>
+	definition ? `<dt>${term}</dt><dd>${definition}</dd>` : "";
 
-  document.addEventListener("WFPAllRevHooked", () =>
-    saveReview(nSubCtrl.pageData, false)
-  );
-  document.addEventListener("WFPPCtrlHooked", showEvaluated);
-  document.addEventListener("WFPAnsCtrlHooked", () => {
-    const {
-      submitForm,
-      skipToNext,
-      showLowQualityModal,
-      markDuplicate
-    } = ansCtrl;
+var getIntelLink;
+if (settings["keepTab"]) {
+	getIntelLink = (lat, lng, content) =>
+		`<a target="wfpRevIntel" title="Open in Intel" href="https://intel.ingress.com/intel?ll=${lat},${lng}&z=21">${content}</a>`;
+} else {
+	getIntelLink = (lat, lng, content) =>
+		`<a target="_blank" title="Open in Intel" href="https://intel.ingress.com/intel?ll=${lat},${lng}&z=21">${content}</a>`;
+}
 
-    ansCtrl.submitForm = function() {
-      // This only works for accepts
-      submitForm();
-      saveReview(nSubCtrl.pageData, ansCtrl.formData);
-    };
+function getStarDisplay(i){
+	var container = document.createElement("span");
+	for (var j=i; j>=1; j--){
+		var star = document.createElement("span");
+		star.setAttribute("class", "glyphicon glyphicon-star star-gray");
+		container.appendChild(star);
+	}
+	for (var j=i; j<5; j++){
 
-    ansCtrl.showLowQualityModal = function() {
-      showLowQualityModal();
-      setTimeout(() => {
-        const ansCtrl2Elem = document.getElementById("low-quality-modal");
-        const ansCtrl2 = angular.element(ansCtrl2Elem).scope().answerCtrl2;
-        const oldConfirm = ansCtrl2.confirmLowQuality;
-        ansCtrl2.confirmLowQuality = function() {
-          oldConfirm();
-          saveReview(nSubCtrl.pageData, ansCtrl2.formData);
-        };
-      }, 10);
-    };
+		var emptyStar = document.createElement("span");
+		emptyStar.setAttribute("class", "glyphicon text-center glyphicon-star-empty star-gray");
+		container.appendChild(emptyStar);
+	}
+	return container;
+}
 
-    ansCtrl.markDuplicate = function(id) {
-      markDuplicate(id);
-      setTimeout(() => {
-        const ansCtrl2Elem = document.querySelector(
-          ".modal-content > [ng-controller]"
-        );
-        const ansCtrl2 = angular.element(ansCtrl2Elem).scope().answerCtrl2;
-        const confirmDuplicate = ansCtrl2.confirmDuplicate;
-        ansCtrl2.confirmDuplicate = function() {
-          confirmDuplicate();
+const getScores = ({review}) => {
+	if (!review || typeof review === "string") {
+		return "";
+	}
+	return `
+		<table class="table table-condensed">
+			<thead>
+				<tr>
+					<th>Score</th>
+					<th>Title</th>
+					<th>Cultural</th>
+					<th>Unique</th>
+					<th>Safety</th>
+					<th>Location</th>
+			  </tr>
+			</thead>
+			<tbody id="review-list">
+				<tr>
+					<td>${review.quality}</td>
+					<td>${review.description}</td>
+					<td>${review.cultural}</td>
+					<td>${review.uniqueness}</td>
+					<td>${review.safety}</td>
+					<td>${review.location}</td>
+				</tr>
+			</tbody>
+		</table>`;
+};
+const buildInfoWindowContent = review => {
+	const {
+		title,
+		imageUrl,
+		description,
+		statement,
+		supportingImageUrl,
+		lat,
+		lng,
+		ts
+	} = review;
+	const {comment, newLocation, quality, spam, rejectReason, duplicate} = getReviewData(
+		review.review
+	);
 
-          saveReview(nSubCtrl.pageData, {
-            ...ansCtrl2.formData,
-            duplicateOf: id
-          }); // duplicateOf is not marked in vm or formData
-        };
-      }, 10);
-    };
+	console.log(review);
+	const score = spam ? 1 : quality || 0;
+	const scoreString = Array(5)
+	.fill(0)
+	.map((_, i) => (i + 1 <= score ? "★" : "☆"))
+	.join("");
+	const status = duplicate ? "Duplicate" : review.review === "skipped" ? "Skipped" : "Timed Out/Pending";
 
-    ansCtrl.skipToNext = function() {
-      saveReview(nSubCtrl.pageData, "skipped");
-      skipToNext();
-    };
-  });
-})();
+	return `
+<div class="panel panel-default">
+	<div class="panel-heading">
+		${title}
+	
+		<div class="pull-right star-red-orange">
+			${score ? scoreString : status}
+		</div>
+	</div>
+	<div class="panel-body">
+		<div class="row">
+			<div class="col-xs-4"><a target="_blank" href="${imageUrl}=s0"><img style="max-width: 100%" src="${imageUrl}" class="img-responsive" alt="${title}"></a></div>
+			<div class="col-xs-8">
+				<dl class="dl-horizontal">
+					${getDD("Title", title)}
+					${getDD("Description", description)}
+					${getDD("Statement", statement)}
+					${getDD("Comment", comment)}
+					${getDD("New Location", newLocation)}
+					${getDD("Reject Reason", rejectReason)}
+					${getDD("Supporting Image",supportingImageUrl && `<a target="_blank" href="${supportingImageUrl}=s0">View</a>`)}
+					${getDD("Location", getIntelLink(lat, lng, "Open in Intel"))}
+					${getDD("Date", formatTsDateTime(ts))}
+				</dl>
+			${getScores(review)}
+			</div>
+		</div>
+	</div>
+</div>`;
+};
+
+const showEvaluated = () => {
+	const reviews = getReviews();
+
+	if (!reviews.length) return;
+	const profileStats = document.getElementById("profile-main-contain");
+	profileStats.insertAdjacentHTML(
+		"beforeend",
+		`
+		<div class="container">
+			<h3>Review History</h3>
+			<div id="reviewed-map" style="height:400px"></div>
+			<div class="table-responsive" style="margin-top:1rem">
+			<table class="table table-striped table-condensed">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Date</th>
+						<th>Title</th>
+						<th>Location</th>
+						<th>Score</th>
+						<th style="width: 1%;white-space: nowrap;">Mark Accepted</th>
+					</tr>
+				</thead>
+			  <tbody id="review-list">
+				  ${reviews.map(buildLine).reverse().join("")}
+			  </tbody>
+			</table>
+			</div>
+			<button class="button-secondary" id="export-geojson">Export GeoJSON</button>
+			<button class="button-secondary" id="clean-history">Clean History</button>
+		</div>`
+	);
+	const map = buildMap(reviews, document.getElementById("reviewed-map"));
+	const reviewListElement = document.getElementById("review-list");
+	const exportButton = document.getElementById("export-geojson");
+	const cleanHistoryButton = document.getElementById("clean-history");
+
+	exportButton.addEventListener("click", () => {
+		const geoJson = formatAsGeojson(reviews);
+		downloadObjectAsJson(geoJson, "reviews.geojson");
+	});
+
+	cleanHistoryButton.addEventListener("click", clearLocalStorage);
+
+	reviewListElement.addEventListener("click", ({target}) => {
+		const index = target.dataset && target.dataset.index;
+		if (!index) {
+			return;
+		}
+
+		const clickOnAccepted = target.classList.contains("toggle");
+
+		if (clickOnAccepted) {
+			const currentItems = getReviews();
+			currentItems[index].accepted = !currentItems[index].accepted;
+			localStorage.setItem("wfpSaved", JSON.stringify(currentItems));
+			window.location.reload();
+		} else {
+			const currentMarker = markers[index];
+			const currentReview = reviews[index];
+
+			infoWindow.open(map, currentMarker);
+			infoWindow.setContent(buildInfoWindowContent(currentReview));
+			map.setZoom(12);
+			map.panTo({lat: currentReview.lat, lng: currentReview.lng});
+		}
+	});
+};
+
+document.addEventListener("WFPAllRevHooked", () =>
+	saveReview(nSubCtrl.pageData, false)
+);
+document.addEventListener("WFPPCtrlHooked", showEvaluated);
+document.addEventListener("WFPAnsCtrlHooked", () => {
+	const {
+		submitForm,
+		skipToNext,
+		showLowQualityModal,
+		markDuplicate
+	} = ansCtrl;
+
+	ansCtrl.submitForm = function () {
+		// This only works for accepts
+		submitForm();
+		saveReview(nSubCtrl.pageData, ansCtrl.formData);
+	};
+
+	ansCtrl.showLowQualityModal = function () {
+		showLowQualityModal();
+		setTimeout(() => {
+			const ansCtrl2Elem = document.getElementById("low-quality-modal");
+			const ansCtrl2 = angular.element(ansCtrl2Elem).scope().answerCtrl2;
+			const oldConfirm = ansCtrl2.confirmLowQuality;
+			ansCtrl2.confirmLowQuality = function () {
+				oldConfirm();
+				saveReview(nSubCtrl.pageData, ansCtrl2.formData);
+			};
+		}, 10);
+	};
+
+	ansCtrl.markDuplicate = function (id) {
+		markDuplicate(id);
+		setTimeout(() => {
+			const ansCtrl2Elem = document.querySelector(
+				".modal-content > [ng-controller]"
+			);
+			const ansCtrl2 = angular.element(ansCtrl2Elem).scope().answerCtrl2;
+			const confirmDuplicate = ansCtrl2.confirmDuplicate;
+			ansCtrl2.confirmDuplicate = function () {
+				confirmDuplicate();
+
+				saveReview(nSubCtrl.pageData, {
+					...ansCtrl2.formData,
+					duplicateOf: id
+				}); // duplicateOf is not marked in vm or formData
+			};
+		}, 10);
+	};
+
+	ansCtrl.skipToNext = function () {
+		saveReview(nSubCtrl.pageData, "skipped");
+		skipToNext();
+	};
+});
+
+//Needed entering variables into URLs
+String.prototype.replaceAll = function(search, replacement) {
+	var target = this;
+	return target.replace(new RegExp(search, 'g'), replacement);
+};
+
+
+//NON-SECURE (But good enough for uniqueID on URLs)
+function getStringHash(str){
+	var hash = 0;
+	if (str.length == 0) {
+		return hash;
+	}
+	for (var i = 0; i < str.length; i++) {
+		var char = str.charCodeAt(i);
+		hash = ((hash<<5)-hash)+char;
+		hash = hash & hash;
+	}
+	return hash;
+}

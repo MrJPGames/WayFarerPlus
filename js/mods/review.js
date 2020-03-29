@@ -11,9 +11,9 @@ function modReviewPage(settings){
 		addPageJS("profile/recordReviews.js");
 	if (settings["revExpireTimer"] || settings["revSubmitTimer"] > 0)
 		addPageJS("review/timerMods.js");
-	if (settings["revCardView"] == "compact")
+	if (settings["revCardView"] === "compact")
 		addPageJS("review/compactCards.js");
-	if (settings["revCardView"] == "extended")
+	if (settings["revCardView"] === "extended")
 		addPageJS("review/expandedCards.js");
 	if (settings["revOpenIn"])
 		addPageJS("review/mapButtons.js");

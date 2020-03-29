@@ -74,7 +74,8 @@ function applyPublicStyle(){
 	.container {background: black !important;}
 	.supporting-statement-central-field, .title-description-central-field {background: black !important;}
 	.table-striped>tbody>tr:nth-of-type(odd) {background-color:black !important;}
-	.table-responsive {color: white !important;}`;
+	.table-responsive {color: white !important;}
+	tr.success{color: black !important;}`;
 
 
 
