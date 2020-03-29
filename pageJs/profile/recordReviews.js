@@ -71,6 +71,17 @@ const formatTs = (ts, extra = {}) => {
 	return dateTimeFormat.format(date);
 };
 
+function formatTsDateTime(ts){
+	const date = new Date(ts);
+	const dateTimeFormat = new Intl.DateTimeFormat("default", {
+		day: "numeric",
+		month: "short",
+		hour: "numeric",
+		minute: "numeric"
+	});
+	return dateTimeFormat.format(date);
+}
+
 const buildLine = (
 	{ts, accepted, title, review, lat, lng},
 	index,
@@ -335,7 +346,8 @@ const buildInfoWindowContent = review => {
 		statement,
 		supportingImageUrl,
 		lat,
-		lng
+		lng,
+		ts
 	} = review;
 	const {comment, newLocation, quality, spam, rejectReason, duplicate} = getReviewData(
 		review.review
@@ -371,6 +383,7 @@ const buildInfoWindowContent = review => {
 					${getDD("Reject Reason", rejectReason)}
 					${getDD("Supporting Image",supportingImageUrl && `<a target="_blank" href="${supportingImageUrl}=s0">View</a>`)}
 					${getDD("Location", getIntelLink(lat, lng, "Open in Intel"))}
+					${getDD("Date", formatTsDateTime(ts))}
 				</dl>
 			${getScores(review)}
 			</div>
