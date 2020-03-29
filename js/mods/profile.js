@@ -4,6 +4,8 @@ function modProfilePage(settings){
 
 	if (settings["profRecordReviews"]) {
 		addPageJS("libs/markerclusterer.js");
+		addPageJS("libs/jquery.js");
+		addPageJS("libs/datatables.js");
 		addPageJS("profile/recordReviews.js");
 	}
 
