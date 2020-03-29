@@ -19,6 +19,7 @@ function showChangelog(version){
 			changelogStr += "1.12.3:\n\
 							- On-site changelogs!\n\
 							- Improvements to Review History display\n\
+							- Option to turn on Open In for Review History\
 							- Lock submit timer now works for rejections\n\
 							- Minor improvements to settings UX";
 		default:
@@ -37,5 +38,10 @@ function showChangelog(version){
 
 	changelogDiv.appendChild(header);
 	changelogDiv.appendChild(changelogContent);
+
+	changelogDiv.onclick = function(){
+		changelogDiv.remove();
+	};
+
 	document.getElementsByTagName("body")[0].appendChild(changelogDiv);
 }
