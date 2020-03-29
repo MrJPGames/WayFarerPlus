@@ -3,6 +3,10 @@ function modProfilePage(settings){
 		addPageJS("profile/extendedStats.js");
 
 	if (settings["profRecordReviews"]) {
+		const newCss = document.createElement("link");
+		newCss.setAttribute("rel", "stylesheet");
+		newCss.setAttribute("href", chrome.extension.getURL("assets/datatables.css"));
+	  	document.getElementsByTagName("head")[0].appendChild(newCss);
 		addPageJS("libs/markerclusterer.js");
 		addPageJS("libs/jquery.js");
 		addPageJS("libs/datatables.js");
