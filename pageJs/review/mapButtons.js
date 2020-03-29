@@ -25,7 +25,6 @@ function addMapDropdown(){
         var link = customMaps[i].url;
 
         //Link editing:
-        link = link.toLowerCase();
         link = link.replaceAll("%lat%", nSubCtrl.pageData.lat);
         link = link.replaceAll("%lng%", nSubCtrl.pageData.lng);
         link = link.replaceAll("%title%", nSubCtrl.pageData.title);
@@ -66,7 +65,7 @@ document.addEventListener("WFPNSubCtrlHooked", addMapDropdown);
 //Needed entering variables into URLs
 String.prototype.replaceAll = function(search, replacement) {
     var target = this;
-    return target.replace(new RegExp(search, 'g'), replacement);
+    return target.replace(new RegExp(search, 'gi'), replacement);
 };
 
 //NON-SECURE (But good enough for uniqueID on URLs)
