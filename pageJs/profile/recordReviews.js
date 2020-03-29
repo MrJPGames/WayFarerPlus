@@ -4,6 +4,11 @@
   });
   let markers = [];
 
+  /*
+            <span title="Focus in map" data-index="${index}" style="cursor:pointer" >📍</span>
+          <td class="text-center toggle" data-index="${index}" style="cursor:pointer" title="Toggle Accepted">✅</td>
+  */
+
   const getReviews = () => {
     const currentItemsText = localStorage.getItem("wfpSaved") || "[]";
     const currentItems = JSON.parse(currentItemsText);
@@ -62,75 +67,13 @@
     localStorage.setItem("wfpSaved", JSON.stringify(currentItems));
   };
 
-  const formatTs = (ts, extra = {}) => {
-    const date = new Date(ts);
+  const formatTs = (date, extra = {}) => {
     const dateTimeFormat = new Intl.DateTimeFormat("default", {
       day: "numeric",
       month: "numeric",
       ...extra
     });
     return dateTimeFormat.format(date);
-  };
-
-  const buildLine = (
-    { ts, accepted, title, review, lat, lng },
-    index,
-    coll
-  ) => {
-    const smallDate = formatTs(ts);
-    const formattedDate = formatTs(ts, {
-      year: "numeric",
-      hour: "numeric",
-      minute: "numeric"
-    });
-    let score = "?";
-    let moreInfo = "?";
-
-    if (review === "skipped") {
-      score = "S";
-      moreInfo = "Skipped";
-    } else if (!review) {
-      // Latest result without a review will count as pending
-      score = index === coll.length - 1 ? "P" : "E";
-      moreInfo = index === coll.length - 1 ? "Pending" : "Expired";
-    } else if (review.quality) {
-      const {
-        quality,
-        description,
-        cultural,
-        uniqueness,
-        safety,
-        location
-      } = review;
-      // was not a reject
-      score = quality;
-      moreInfo = `Q:${quality}/D:${description}/C:${cultural}/U:${uniqueness}/S:${safety}/L:${location}`;
-    } else if (review.duplicate) {
-      score = "D";
-      moreInfo = "Duplicate";
-    } else if (review.spam) {
-      // was a reject
-      score = 1;
-      moreInfo = `Reason: ${review.rejectReason}`;
-    }
-
-    return `
-    <tr class="${accepted ? "success" : ""}">
-        <td>${index + 1}</td>
-        <td title="${formattedDate}">${smallDate}</td>
-        <td>${title}</td>
-        <td class="text-center focus-map">
-          <span title="Focus in map" data-index="${index}" style="cursor:pointer" >📍</span>
-          ${getIntelLink(
-            lat,
-            lng,
-            `<img src="https://intel.ingress.com/favicon.ico" />`
-          )}
-        </td>
-        <td class="text-center" title="${moreInfo}">${score}</td>
-        <td class="text-center toggle" data-index="${index}" style="cursor:pointer" title="Toggle Accepted">✅</td>
-    </tr>
-    `;
   };
 
   function buildMap(reviewList, mapElement) {
@@ -237,7 +180,7 @@
     `<a target="_blank" rel="noreferrer" title="Open in Intel" href="https://intel.ingress.com/intel?ll=${lat},${lng}&z=21">${content}</a>`;
 
   const getScores = ({ review }) => {
-    if (!review || typeof review === "string") {
+    if (!review || typeof review === "string" || !review.quality) {
       return "";
     }
     return `
@@ -252,14 +195,14 @@
               <th>Location</th>
           </tr>
       </thead>
-      <tbody id="review-list">
+      <tbody class="review-list">
         <tr>
-          <td>${review.quality}</td>
-          <td>${review.description}</td>
-          <td>${review.cultural}</td>
-          <td>${review.uniqueness}</td>
-          <td>${review.safety}</td>
-          <td>${review.location}</td>
+          <td class="text-center">${review.quality}</td>
+          <td class="text-center">${review.description}</td>
+          <td class="text-center">${review.cultural}</td>
+          <td class="text-center">${review.uniqueness}</td>
+          <td class="text-center">${review.safety}</td>
+          <td class="text-center">${review.location}</td>
         </tr>
       </tbody>
     </table>
@@ -273,7 +216,8 @@
       statement,
       supportingImageUrl,
       lat,
-      lng
+      lng,
+      index
     } = review;
     const {
       comment,
@@ -281,10 +225,10 @@
       quality,
       spam,
       rejectReason,
+      what,
       duplicate
     } = getReviewData(review.review);
 
-    console.log(review);
     const score = spam ? 1 : quality || 0;
     const scoreString = Array(5)
       .fill(0)
@@ -311,12 +255,18 @@
               ${getDD("Comment", comment)}
               ${getDD("New Location", newLocation)}
               ${getDD("Reject Reason", rejectReason)}
+              ${getDD("Comment", rejectReason)}
+              ${getDD("What is it?", what)}
               ${getDD(
                 "Supporting Image",
                 supportingImageUrl &&
                   `<a target="_blank" href="${supportingImageUrl}=s0">View</a>`
               )}
               ${getDD("Location", getIntelLink(lat, lng, "Open in Intel"))}
+              ${getDD(
+                "Open in Map",
+                `<span title="Focus in map" data-index="${index}" style="cursor:pointer" >📍</span>`
+              )}
             </dl>
             ${getScores(review)}
           </div>
@@ -326,7 +276,7 @@
   };
 
   const showEvaluated = () => {
-    const reviews = getReviews();
+    const reviews = getReviews().map((review, index) => ({ ...review, index }));
 
     if (!reviews.length) return;
     const profileStats = document.getElementById("profile-main-contain");
@@ -336,35 +286,162 @@
         <div class="container">
             <h3>Reviewed</h3>
             <div id="reviewed-map" style="height:400px"></div>
-            <table class="table table-striped table-condensed" id="review-history">
-            </table>
+            <div class="table-responsive">
+              <table class="table table-striped table-condensed" id="review-history">
+              </table>
+            </div>
             <button class="button-secondary" id="export-geojson">Export GeoJSON</button>
             <button class="button-secondary" id="clean-history">Clean History</button>
         </div>`
     );
-    const reviewHistoryTable = document.getElementById("review-history");
-    const dataSet = reviews.map(({ ts, title, lat, lng }) => [
-      ts,
-      title,
-      `${lat},${lng}`,
-      `SCORE`,
-      `MARK ACCEPTED`
-    ]);
-    $(reviewHistoryTable).DataTable({
-      data: dataSet,
-      stateSave: true,
+    const $reviewHistory = $("#review-history");
+    const table = $reviewHistory.DataTable({
+      data: reviews,
       order: [[0, "desc"]],
-      dom: 'Pfrtip',
+      dom: "PBfrtip",
+      buttons: ["copy"],
+      deferRender: true,
+      scrollY: 400,
+      scrollCollapse: true,
+      scroller: true,
+      responsive: {
+        details: {
+          renderer: function(api, rowIdx, columns) {
+            return buildInfoWindowContent(reviews[rowIdx]);
+          }
+        }
+      },
+      searchPanes: {
+        columns: [
+          9, // score
+          17, // Reject Reason
+          20 // What is it
+        ]
+      },
       columns: [
-        { title: "Date" },
-        { title: "Title" },
-        { title: "Location" },
-        { title: "Score" },
-        { title: "Mark Accepted" }
+        {
+          title: "#",
+          data: 'index',
+          visible: false
+        },
+        {
+          title: "Date",
+          data: "ts",
+          render: (ts, type, row) => {
+            if (type === "display" || type === "filter") {
+              const date = new Date(ts);
+              const formattedDate = formatTs(date, {
+                year: "numeric",
+                hour: "numeric",
+                minute: "numeric"
+              });
+              return formattedDate;
+            }
+            return ts;
+          }
+        },
+        { title: "Title", data: "title", responsivePriority: 1 },
+        { title: "Description", data: "description" },
+        { title: "Latitude", data: "lat" },
+        { title: "Longitude", data: "lng" },
+        { title: "Statement", data: "statement" },
+        {
+          title: "Image URL",
+          data: "imageUrl"
+        },
+        {
+          title: "Supporting Image URL",
+          data: "supportingImageUrl"
+        },
+        // General Score
+        {
+          title: "Score",
+          data: "review.quality",
+          defaultContent: false,
+          render: (score, type, { review }) => {
+            if (review === "skipped") {
+              return "Skipped";
+            }
+            if (!review) {
+              // Latest result without a review will count as pending
+              return "Expired";
+            }
+            if (review.quality) {
+              return review.quality;
+            }
+            if (review.duplicate) {
+              return "Duplicate";
+            }
+            if (review.spam) {
+              // was a reject
+              return 1;
+            }
+            return "?";
+          }
+        },
+        {
+          title: "Description Score",
+          data: "review.description",
+          defaultContent: "?"
+        },
+        {
+          title: "Cultural Score",
+          data: "review.cultural",
+          defaultContent: "?"
+        },
+        {
+          title: "Uniqueness Score",
+          data: "review.uniqueness",
+          defaultContent: "?"
+        },
+        {
+          title: "Safety Score",
+          data: "review.safety",
+          defaultContent: "?"
+        },
+        {
+          title: "Location Score",
+          data: "review.location",
+          defaultContent: "?"
+        },
+        // Review Data
+        {
+          title: "Duplicate",
+          data: "review.duplicate",
+          defaultContent: false
+        },
+        {
+          title: "Spam",
+          data: "review.spam",
+          defaultContent: false
+        },
+        {
+          title: "Reject Reason",
+          data: "review.rejectReason",
+          defaultContent: "NOT_REJECTED"
+        },
+        {
+          title: "Comment",
+          data: "review.comment",
+          defaultContent: false
+        },
+        {
+          title: "New Location",
+          data: "review.newLocation",
+          defaultContent: false
+        },
+        {
+          title: "What is it?",
+          data: "review.what",
+          defaultContent: false
+        }
+        // { title: "Mark Accepted", data: null, defaultContent: 'MARK' }
       ]
     });
-    // const map = buildMap(reviews, document.getElementById("reviewed-map"));
-    const reviewListElement = document.getElementById("review-list");
+    $reviewHistory.on( 'draw.dt', function () {
+      console.log( 'Table redrawn' );
+  } );
+    const map = buildMap(reviews, document.getElementById("reviewed-map"));
     const exportButton = document.getElementById("export-geojson");
     const cleanHistoryButton = document.getElementById("clean-history");
 
@@ -426,7 +503,13 @@
         const oldConfirm = ansCtrl2.confirmLowQuality;
         ansCtrl2.confirmLowQuality = function() {
           oldConfirm();
-          saveReview(nSubCtrl.pageData, ansCtrl2.formData);
+          saveReview(nSubCtrl.pageData, {
+            ...ansCtrl2.formData,
+            review: {
+              ...answerCtrl2.formData.review,
+              comment: ansCtrl2.rejectComment
+            }
+          });
         };
       }, 10);
     };
