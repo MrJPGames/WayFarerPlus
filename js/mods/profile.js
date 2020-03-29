@@ -8,7 +8,6 @@ function modProfilePage(settings){
 		newCss.setAttribute("href", chrome.extension.getURL("assets/datatables.css"));
 	  	document.getElementsByTagName("head")[0].appendChild(newCss);
 		addPageJS("libs/markerclusterer.js");
-		addPageJS("libs/jquery.js");
 		addPageJS("libs/datatables.js");
 		addPageJS("profile/recordReviews.js");
 	}

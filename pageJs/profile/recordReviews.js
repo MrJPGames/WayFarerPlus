@@ -158,10 +158,11 @@
         lng: review.lng
       };
 
-      const isSkipped = review.review === 'skipped';
+      const isSkipped = review.review === "skipped";
       const isPending = review.review === false;
       const hasReview = Boolean(review.review);
-      const quality = (hasReview && !isSkipped && !isPending) ? (review.review.quality || 1) : 0;
+      const quality =
+        hasReview && !isSkipped && !isPending ? review.review.quality || 1 : 0;
       const marker = new google.maps.Marker({
         map: gmap,
         position: latLng,
@@ -274,9 +275,14 @@
       lat,
       lng
     } = review;
-    const { comment, newLocation, quality, spam, rejectReason, duplicate } = getReviewData(
-      review.review
-    );
+    const {
+      comment,
+      newLocation,
+      quality,
+      spam,
+      rejectReason,
+      duplicate
+    } = getReviewData(review.review);
 
     console.log(review);
     const score = spam ? 1 : quality || 0;
@@ -284,7 +290,11 @@
       .fill(0)
       .map((_, i) => (i + 1 <= score ? "★" : "☆"))
       .join("");
-    const status = duplicate ? "Duplicate" : review.review === "skipped" ? "Skipped" : "Timed Out/Pending";
+    const status = duplicate
+      ? "Duplicate"
+      : review.review === "skipped"
+      ? "Skipped"
+      : "Timed Out/Pending";
 
     return `<div class="panel panel-default">
     <div class="panel-heading">${title} <div class="pull-right star-red-orange">${
@@ -326,31 +336,34 @@
         <div class="container">
             <h3>Reviewed</h3>
             <div id="reviewed-map" style="height:400px"></div>
-            <div class="table-responsive" style="margin-top:1rem">
-              <table class="table table-striped table-condensed">
-                  <thead>
-                      <tr>
-                          <th>#</th>
-                          <th>Date</th>
-                          <th>Title</th>
-                          <th>Location</th>
-                          <th>Score</th>
-                          <th>Mark Accepted</th>
-                      </tr>
-                  </thead>
-                  <tbody id="review-list">
-                      ${reviews
-                        .map(buildLine)
-                        .reverse()
-                        .join("")}
-                  </tbody>
-              </table>
-            </div>
+            <table class="table table-striped table-condensed" id="review-history">
+            </table>
             <button class="button-secondary" id="export-geojson">Export GeoJSON</button>
             <button class="button-secondary" id="clean-history">Clean History</button>
         </div>`
     );
-    const map = buildMap(reviews, document.getElementById("reviewed-map"));
+    const reviewHistoryTable = document.getElementById("review-history");
+    const dataSet = reviews.map(({ ts, title, lat, lng }) => [
+      ts,
+      title,
+      `${lat},${lng}`,
+      `SCORE`,
+      `MARK ACCEPTED`
+    ]);
+    $(reviewHistoryTable).DataTable({
+      data: dataSet,
+      stateSave: true,
+      order: [[0, "desc"]],
+      dom: 'Pfrtip',
+      columns: [
+        { title: "Date" },
+        { title: "Title" },
+        { title: "Location" },
+        { title: "Score" },
+        { title: "Mark Accepted" }
+      ]
+    });
+    // const map = buildMap(reviews, document.getElementById("reviewed-map"));
     const reviewListElement = document.getElementById("review-list");
     const exportButton = document.getElementById("export-geojson");
     const cleanHistoryButton = document.getElementById("clean-history");
@@ -362,29 +375,29 @@
 
     cleanHistoryButton.addEventListener("click", clearLocalStorage);
 
-    reviewListElement.addEventListener("click", ({ target }) => {
-      const index = target.dataset && target.dataset.index;
-      if (!index) {
-        return;
-      }
+    // reviewListElement.addEventListener("click", ({ target }) => {
+    //   const index = target.dataset && target.dataset.index;
+    //   if (!index) {
+    //     return;
+    //   }
 
-      const clickOnAccepted = target.classList.contains("toggle");
+    //   const clickOnAccepted = target.classList.contains("toggle");
 
-      if (clickOnAccepted) {
-        const currentItems = getReviews();
-        currentItems[index].accepted = !currentItems[index].accepted;
-        localStorage.setItem("wfpSaved", JSON.stringify(currentItems));
-        window.location.reload();
-      } else {
-        const currentMarker = markers[index];
-        const currentReview = reviews[index];
+    //   if (clickOnAccepted) {
+    //     const currentItems = getReviews();
+    //     currentItems[index].accepted = !currentItems[index].accepted;
+    //     localStorage.setItem("wfpSaved", JSON.stringify(currentItems));
+    //     window.location.reload();
+    //   } else {
+    //     const currentMarker = markers[index];
+    //     const currentReview = reviews[index];
 
-        infoWindow.open(map, currentMarker);
-        infoWindow.setContent(buildInfoWindowContent(currentReview));
-        map.setZoom(12);
-        map.panTo({ lat: currentReview.lat, lng: currentReview.lng });
-      }
-    });
+    //     infoWindow.open(map, currentMarker);
+    //     infoWindow.setContent(buildInfoWindowContent(currentReview));
+    //     map.setZoom(12);
+    //     map.panTo({ lat: currentReview.lat, lng: currentReview.lng });
+    //   }
+    // });
   };
 
   document.addEventListener("WFPAllRevHooked", () =>

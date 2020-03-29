@@ -28,7 +28,6 @@
   ],
   "web_accessible_resources": [
     "pageJs/*.js",
-    "assets/*",
-    "images/*"
+    "assets/*"
   ]
 }
