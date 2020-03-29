@@ -18,7 +18,7 @@
   "content_scripts": [
     {
       "matches": ["*://wayfarer.nianticlabs.com/*"],
-      "js": ["js/styler.js", "js/mods/nominations.js", "js/mods/review.js", "js/mods/profile.js", "js/mods/header.js", "settings/settingsManager.js","main.js"],
+      "js": ["js/styler.js", "js/mods/nominations.js", "js/mods/review.js", "js/mods/profile.js", "js/mods/header.js", "js/mods/all.js", "settings/settingsManager.js","main.js"],
       "run_at": "document_start"
     }
   ],
