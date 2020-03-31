@@ -20,6 +20,19 @@ Other browser support?
 
 Changelog
 ---
+1.12.4:
+- An additional S2 cell level can be enabled at the same time.
+
+1.12.3:
+- Changelogs will now be shown on Wayfarer after a WF+ update!
+- Improvements to Review History display
+    - Stars are displayed as stars not numbers
+    - Status is fully written out (as there was plenty room, and the shorthand was unclear)
+    - Marked as accepted is now readable in dark mode
+- Option to turn on Open In for Review History
+- Lock submit timer now works for rejections
+- Minor improvements to settings UX
+
 1.12.2:
 - Auto retry for review page errors (eg. No more nominations available for review)
 

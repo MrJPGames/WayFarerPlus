@@ -21,7 +21,7 @@ function modNominationPage(settings){
 		addStreetView();
 		addPageJS("nominations/streetView.js");
 	}
-    if (settings["nomAccessDistCircle"] || settings["nomLowestDistCircle"] || settings["ctrlessZoom"]){
+    if (settings["nomAccessDistCircle"] || settings["nomLowestDistCircle"] || settings["ctrlessZoom"] || settings["nomS2Cell"] != -1 || settings["nomSecondS2Cell"] != -1){
     	addPageJS("nominations/mapMods.js");
     }
     if (settings["nomOpenIn"]){
@@ -51,7 +51,7 @@ function modNominationPage(settings){
 			queries: [{element: "#map"}]
 	});
 
-	if (settings["nomS2Cell"] != -1)
+	if (settings["nomS2Cell"] != -1 || settings["nomSecondS2Cell"] != -1)
 		addPageJS("libs/S2.js");
 	
 	addPageJS("nominations/main.js", true);

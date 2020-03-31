@@ -16,16 +16,29 @@ function setupMapMods(){
 	}
 	if (settings["revLowestDistCircle"] || settings["revAccessDistCircle"] || settings["revMap2ZoomLevel"] != -1)
 		hookResetMapFuncs();
+
 	if (settings["revS2Cell"] != -1){
 		var lat = nSubCtrl.pageData.lat;
-	    var lng = nSubCtrl.pageData.lng;
+		var lng = nSubCtrl.pageData.lng;
 
-        addS2(nSubCtrl.map, lat, lng, settings["revS2Cell"]);
-        addS2(nSubCtrl.map2, lat, lng, settings["revS2Cell"]);
-        if (ansCtrl.needsLocationEdit)
-        	addS2(nSubCtrl.locationEditsMap, lat, lng, settings["revS2Cell"]);
-        hookS2LocEdit();
-    }
+		addS2(nSubCtrl.map, lat, lng, settings["revS2Cell"]);
+		addS2(nSubCtrl.map2, lat, lng, settings["revS2Cell"]);
+		if (ansCtrl.needsLocationEdit)
+			addS2(nSubCtrl.locationEditsMap, lat, lng, settings["revS2Cell"]);
+	}
+	if (settings["revSecondS2Cell"] != -1){
+		var lat = nSubCtrl.pageData.lat;
+		var lng = nSubCtrl.pageData.lng;
+
+		addS2(nSubCtrl.map, lat, lng, settings["revSecondS2Cell"]);
+		addS2(nSubCtrl.map2, lat, lng, settings["revSecondS2Cell"]);
+		if (ansCtrl.needsLocationEdit)
+			addS2(nSubCtrl.locationEditsMap, lat, lng, settings["revSecondS2Cell"]);
+	}
+
+	if (settings["revSecondS2Cell"] != -1 || settings["revS2Cell"] != -1){
+		hookS2LocEdit();
+	}
 
     if (settings["revEditOrigLoc"] && ansCtrl.needsLocationEdit && !settings["revPreciseMarkers"])
     	addOrigLocation(nSubCtrl.locationEditsMap);
@@ -240,7 +253,10 @@ function hookS2LocEdit(){
 	}
 	google.maps.event.addListener(nSubDS.getNewLocationMarker(), 'dragend', function () {
 		var pos = nSubDS.getNewLocationMarker().position;
-		addS2(nSubCtrl.map2, pos.lat(), pos.lng(), settings["revS2Cell"]);
+		if (settings["revS2Cell"] != -1)
+			addS2(nSubCtrl.map2, pos.lat(), pos.lng(), settings["revS2Cell"]);
+		if (settings["revSecondS2Cell"] != -1)
+			addS2(nSubCtrl.map2, pos.lat(), pos.lng(), settings["revSecondS2Cell"]);
 	});
 }
 
