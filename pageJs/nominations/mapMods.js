@@ -24,6 +24,12 @@ function applyMapMods(){
         if (SVMap != undefined)
             addS2(SVMap, settings["nomS2Cell"]);
     }
+    if (settings["nomSecondS2Cell"] != -1){
+        addS2(nomCtrl.map, settings["nomSecondS2Cell"]);
+        //SVMap is exported by the nomStreetView mod when active
+        if (SVMap != undefined)
+            addS2(SVMap, settings["nomSecondS2Cell"]);
+    }
 }
 
 function addLowestDistCircle(gMap){ 
@@ -64,7 +70,6 @@ function mapsRemoveCtrlToZoom(){
     if (SVMap != undefined)
         SVMap.setOptions(options);
 }
-
 
 function addS2(map, lvl){
     var lat = nomCtrl.currentNomination.lat;
