@@ -4,11 +4,6 @@
   });
   let markers = [];
 
-  /*
-            <span title="Focus in map" data-index="${index}" style="cursor:pointer" >📍</span>
-          <td class="text-center toggle" data-index="${index}" style="cursor:pointer" title="Toggle Accepted">✅</td>
-  */
-
   const getReviews = () => {
     const currentItemsText = localStorage.getItem("wfpSaved") || "[]";
     const currentItems = JSON.parse(currentItemsText);
@@ -67,14 +62,32 @@
     localStorage.setItem("wfpSaved", JSON.stringify(currentItems));
   };
 
-  const formatTs = (date, extra = {}) => {
-    const dateTimeFormat = new Intl.DateTimeFormat("default", {
-      day: "numeric",
-      month: "numeric",
-      ...extra,
-    });
-    return dateTimeFormat.format(date);
+  const dateSettings = {
+    day: "numeric",
+    month: "numeric",
+    year: "numeric",
   };
+
+  const getQuality = review => {
+    const isSkipped = review.review === "skipped";
+    const isPending = review.review === false;
+    const hasReview = Boolean(review.review);
+    const quality =
+      hasReview && !isSkipped && !isPending ? review.review.quality || 1 : 0;
+
+    return quality;
+  };
+
+  const gradedColors = [
+    "#888888",
+    "#ff3d00",
+    "#ff8e01",
+    "#fece00",
+    "#8ac51f",
+    "#00803b",
+  ];
+
+  const getColor = review => gradedColors[getQuality(review)];
 
   function buildMap(reviewList, mapElement) {
     const mapSettings = settings["ctrlessZoom"]
@@ -86,26 +99,13 @@
     });
 
     const bounds = new google.maps.LatLngBounds();
-    const gradedColors = [
-      "#888888",
-      "#ff3d00",
-      "#ff8e01",
-      "#fece00",
-      "#8ac51f",
-      "#00803b",
-    ];
-
+  
     markers = reviewList.map((review) => {
       const latLng = {
         lat: review.lat,
         lng: review.lng,
       };
 
-      const isSkipped = review.review === "skipped";
-      const isPending = review.review === false;
-      const hasReview = Boolean(review.review);
-      const quality =
-        hasReview && !isSkipped && !isPending ? review.review.quality || 1 : 0;
       const marker = new google.maps.Marker({
         map: gmap,
         position: latLng,
@@ -113,7 +113,7 @@
         icon: {
           path: google.maps.SymbolPath.CIRCLE,
           scale: 8.5,
-          fillColor: gradedColors[quality],
+          fillColor: getColor(review),
           fillOpacity: 0.8,
           strokeWeight: 0.4,
         },
@@ -139,26 +139,17 @@
     return gmap;
   }
 
-  const downloadObjectAsJson = (exportObj, exportName) => {
-    var dataStr =
-      "data:text/json;charset=utf-8," +
-      encodeURIComponent(JSON.stringify(exportObj));
-    var downloadAnchorNode = document.createElement("a");
-    downloadAnchorNode.setAttribute("href", dataStr);
-    downloadAnchorNode.setAttribute("download", exportName);
-    document.body.appendChild(downloadAnchorNode); // required for firefox
-    downloadAnchorNode.click();
-    downloadAnchorNode.remove();
-  };
-
   const formatAsGeojson = (reviews) => {
     return {
       type: "FeatureCollection",
       features: reviews.map((review) => {
         const { lat, lng, ...props } = review;
+        const reviewData = getReviewData(review.review);
         return {
           properties: {
+            "marker-color": getColor(review),
             ...props,
+            ...reviewData,
           },
           geometry: {
             coordinates: [lng, lat],
@@ -180,9 +171,7 @@
       return date.toString();
     }
 
-    return formatTs(date, {
-      year: "numeric",
-    });
+    return new Intl.DateTimeFormat("default", dateSettings).format(date);
   };
   const getDD = (term, definition) =>
     definition ? `<dt>${term}</dt><dd>${definition}</dd>` : "";
@@ -279,7 +268,11 @@
               ${getDD("Review #", index)}
               ${getDD(
                 "Open in Map",
-                `<span title="Focus in map" data-index="${index}" style="cursor:pointer" >📍</span>`
+                `<span class="focus-in-map" title="Focus in map" data-index="${index}" style="cursor:pointer" >📍</span>`
+              )}
+              ${getDD(
+                "Mark Accepted",
+                `<span class="text-center toggle" data-index="${index}" style="cursor:pointer" title="Toggle Accepted">✅</span>`
               )}
             </dl>
             ${getScores(review)}
@@ -299,30 +292,47 @@
       `
         <div class="container">
             <h3>Reviewed</h3>
-            <div id="reviewed-map" style="height:400px"></div>
+            <div id="reviewed-map" style="height:600px"></div>
             <div class="table-responsive">
               <table class="table table-striped table-condensed" id="review-history">
               </table>
             </div>
-            <button class="button-secondary" id="export-geojson">Export GeoJSON</button>
-            <button class="button-secondary" id="clean-history">Clean History</button>
         </div>`
     );
     const $reviewHistory = $("#review-history");
-    const table = $reviewHistory.DataTable({
+    $reviewHistory.DataTable({
+      initComplete: () => {
+        $(document).trigger("resize"); // fix for recalculation of columns
+      },
       data: reviews,
       order: [[0, "desc"]],
       dom: "PBfrtip",
-      buttons: ["copy"],
+      buttons: [
+        "copy",
+        "csv",
+        {
+          text: "geojson",
+          action: (_ev, data) => {
+            const filteredReviews = data.buttons
+              .exportData()
+              .body.map(([index]) => reviews[index]);
+            const geoJson = formatAsGeojson(filteredReviews);
+            $.fn.dataTable.fileSave(
+              new Blob([JSON.stringify(geoJson)]),
+              "reviews.geojson"
+            );
+          },
+        },
+        { text: "Delete History", action: clearLocalStorage },
+      ],
       deferRender: true,
       scrollY: 400,
       scrollCollapse: true,
       scroller: true,
       responsive: {
         details: {
-          renderer: function (api, rowIdx, columns) {
-            return buildInfoWindowContent(reviews[rowIdx]);
-          },
+          renderer: (_api, rowIdx, _columns) =>
+            buildInfoWindowContent(reviews[rowIdx]),
         },
       },
       searchPanes: {
@@ -341,7 +351,7 @@
         {
           title: "Date",
           data: "ts",
-          render: (ts, type, row) => {
+          render: (ts, type) => {
             if (type === "display" || type === "filter") {
               return getFormattedDate(ts);
             }
@@ -443,46 +453,38 @@
           data: "review.what",
           defaultContent: false,
         },
-        // { title: "Mark Accepted", data: null, defaultContent: 'MARK' }
       ],
     });
     $reviewHistory.on("draw.dt", function () {
       console.log("Table redrawn");
     });
-    const map = buildMap(reviews, document.getElementById("reviewed-map"));
-    const exportButton = document.getElementById("export-geojson");
-    const cleanHistoryButton = document.getElementById("clean-history");
+    const mapElement = document.getElementById("reviewed-map");
+    const map = buildMap(reviews, mapElement);
 
-    exportButton.addEventListener("click", () => {
-      const geoJson = formatAsGeojson(reviews);
-      downloadObjectAsJson(geoJson, "reviews.geojson");
+    $("#content-container").on("click", ".toggle[data-index]", (ev) => {
+      const { target } = ev;
+      const { index } = target.dataset;
+      const currentItems = getReviews();
+      currentItems[index].accepted = !currentItems[index].accepted;
+      localStorage.setItem("wfpSaved", JSON.stringify(currentItems));
     });
 
-    cleanHistoryButton.addEventListener("click", clearLocalStorage);
+    $("#content-container").on("click", ".focus-in-map[data-index]", (ev) => {
+      const { target } = ev;
+      const { index } = target.dataset;
+      const currentMarker = markers[index];
+      const currentReview = reviews[index];
 
-    // reviewListElement.addEventListener("click", ({ target }) => {
-    //   const index = target.dataset && target.dataset.index;
-    //   if (!index) {
-    //     return;
-    //   }
-
-    //   const clickOnAccepted = target.classList.contains("toggle");
-
-    //   if (clickOnAccepted) {
-    //     const currentItems = getReviews();
-    //     currentItems[index].accepted = !currentItems[index].accepted;
-    //     localStorage.setItem("wfpSaved", JSON.stringify(currentItems));
-    //     window.location.reload();
-    //   } else {
-    //     const currentMarker = markers[index];
-    //     const currentReview = reviews[index];
-
-    //     infoWindow.open(map, currentMarker);
-    //     infoWindow.setContent(buildInfoWindowContent(currentReview));
-    //     map.setZoom(12);
-    //     map.panTo({ lat: currentReview.lat, lng: currentReview.lng });
-    //   }
-    // });
+      mapElement.scrollIntoView({
+        behavior: "smooth",
+        block: "end",
+        inline: "nearest",
+      });
+      infoWindow.open(map, currentMarker);
+      infoWindow.setContent(buildInfoWindowContent(currentReview));
+      map.setZoom(12);
+      map.panTo({ lat: currentReview.lat, lng: currentReview.lng });
+    });
   };
 
   document.addEventListener("WFPAllRevHooked", () =>

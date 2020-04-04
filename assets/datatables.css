@@ -963,3 +963,7 @@ table.dataTable tbody td.selected a {
 #review-history tbody td {
   white-space: normal;
 }
+
+#ProfileController .gm-style .gm-style-iw-c, #ProfileController .gm-style .gm-style-iw-d {
+  max-height: none !important;
+}
