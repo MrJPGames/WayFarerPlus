@@ -1,6 +1,6 @@
-(function() {
+(function () {
   const infoWindow = new google.maps.InfoWindow({
-    content: "Loading..."
+    content: "Loading...",
   });
   let markers = [];
 
@@ -38,7 +38,7 @@
       lat,
       lng,
       statement,
-      supportingImageUrl
+      supportingImageUrl,
     } = pageData;
     const toSave = {
       title,
@@ -49,7 +49,7 @@
       statement,
       supportingImageUrl,
       ts: +new Date(),
-      review: submitData
+      review: submitData,
     };
 
     const currentItems = getReviews();
@@ -71,7 +71,7 @@
     const dateTimeFormat = new Intl.DateTimeFormat("default", {
       day: "numeric",
       month: "numeric",
-      ...extra
+      ...extra,
     });
     return dateTimeFormat.format(date);
   };
@@ -82,7 +82,7 @@
       : {};
     const gmap = new google.maps.Map(mapElement, {
       zoom: 8,
-      ...mapSettings
+      ...mapSettings,
     });
 
     const bounds = new google.maps.LatLngBounds();
@@ -92,13 +92,13 @@
       "#ff8e01",
       "#fece00",
       "#8ac51f",
-      "#00803b"
+      "#00803b",
     ];
 
-    markers = reviewList.map(review => {
+    markers = reviewList.map((review) => {
       const latLng = {
         lat: review.lat,
-        lng: review.lng
+        lng: review.lng,
       };
 
       const isSkipped = review.review === "skipped";
@@ -115,8 +115,8 @@
           scale: 8.5,
           fillColor: gradedColors[quality],
           fillOpacity: 0.8,
-          strokeWeight: 0.4
-        }
+          strokeWeight: 0.4,
+        },
       });
 
       marker.addListener("click", () => {
@@ -133,7 +133,7 @@
         "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m",
       gridSize: 30,
       zoomOnClick: true,
-      maxZoom: 10
+      maxZoom: 10,
     });
     gmap.fitBounds(bounds);
     return gmap;
@@ -151,28 +151,27 @@
     downloadAnchorNode.remove();
   };
 
-  const formatAsGeojson = reviews => {
+  const formatAsGeojson = (reviews) => {
     return {
       type: "FeatureCollection",
-      features: reviews.map(review => {
+      features: reviews.map((review) => {
         const { lat, lng, ...props } = review;
         return {
           properties: {
-            ...props
+            ...props,
           },
           geometry: {
             coordinates: [lng, lat],
-            type: "Point"
+            type: "Point",
           },
-          type: "Feature"
+          type: "Feature",
         };
-      })
+      }),
     };
   };
 
-  const getReviewData = reviewData =>
+  const getReviewData = (reviewData) =>
     typeof reviewData === "object" ? reviewData : {};
-
 
   const getFormattedDate = (ts, fullDate) => {
     const date = new Date(ts);
@@ -180,12 +179,11 @@
     if (fullDate) {
       return date.toString();
     }
-    
+
     return formatTs(date, {
       year: "numeric",
     });
-    return formattedDate;
-  }
+  };
   const getDD = (term, definition) =>
     definition ? `<dt>${term}</dt><dd>${definition}</dd>` : "";
 
@@ -221,7 +219,7 @@
     </table>
 `;
   };
-  const buildInfoWindowContent = review => {
+  const buildInfoWindowContent = (review) => {
     const {
       title,
       imageUrl,
@@ -231,7 +229,7 @@
       lat,
       lng,
       index,
-      ts
+      ts,
     } = review;
     const {
       comment,
@@ -240,7 +238,7 @@
       spam,
       rejectReason,
       what,
-      duplicate
+      duplicate,
     } = getReviewData(review.review);
 
     const score = spam ? 1 : quality || 0;
@@ -278,6 +276,7 @@
               )}
               ${getDD("Location", getIntelLink(lat, lng, "Open in Intel"))}
               ${getDD("Review Date", getFormattedDate(ts, true))}
+              ${getDD("Review #", index)}
               ${getDD(
                 "Open in Map",
                 `<span title="Focus in map" data-index="${index}" style="cursor:pointer" >📍</span>`
@@ -321,23 +320,23 @@
       scroller: true,
       responsive: {
         details: {
-          renderer: function(api, rowIdx, columns) {
+          renderer: function (api, rowIdx, columns) {
             return buildInfoWindowContent(reviews[rowIdx]);
-          }
-        }
+          },
+        },
       },
       searchPanes: {
         columns: [
           9, // score
           17, // Reject Reason
-          20 // What is it
-        ]
+          20, // What is it
+        ],
       },
       columns: [
         {
           title: "#",
-          data: 'index',
-          visible: false
+          data: "index",
+          visible: false,
         },
         {
           title: "Date",
@@ -347,7 +346,7 @@
               return getFormattedDate(ts);
             }
             return ts;
-          }
+          },
         },
         { title: "Title", data: "title", responsivePriority: 1 },
         { title: "Description", data: "description" },
@@ -356,11 +355,11 @@
         { title: "Statement", data: "statement" },
         {
           title: "Image URL",
-          data: "imageUrl"
+          data: "imageUrl",
         },
         {
           title: "Supporting Image URL",
-          data: "supportingImageUrl"
+          data: "supportingImageUrl",
         },
         // General Score
         {
@@ -386,70 +385,70 @@
               return 1;
             }
             return "?";
-          }
+          },
         },
         {
           title: "Description Score",
           data: "review.description",
-          defaultContent: "?"
+          defaultContent: "?",
         },
         {
           title: "Cultural Score",
           data: "review.cultural",
-          defaultContent: "?"
+          defaultContent: "?",
         },
         {
           title: "Uniqueness Score",
           data: "review.uniqueness",
-          defaultContent: "?"
+          defaultContent: "?",
         },
         {
           title: "Safety Score",
           data: "review.safety",
-          defaultContent: "?"
+          defaultContent: "?",
         },
         {
           title: "Location Score",
           data: "review.location",
-          defaultContent: "?"
+          defaultContent: "?",
         },
         // Review Data
         {
           title: "Duplicate",
           data: "review.duplicate",
-          defaultContent: false
+          defaultContent: false,
         },
         {
           title: "Spam",
           data: "review.spam",
-          defaultContent: false
+          defaultContent: false,
         },
         {
           title: "Reject Reason",
           data: "review.rejectReason",
-          defaultContent: "NOT_REJECTED"
+          defaultContent: "NOT_REJECTED",
         },
         {
           title: "Comment",
           data: "review.comment",
-          defaultContent: false
+          defaultContent: false,
         },
         {
           title: "New Location",
           data: "review.newLocation",
-          defaultContent: false
+          defaultContent: false,
         },
         {
           title: "What is it?",
           data: "review.what",
-          defaultContent: false
-        }
+          defaultContent: false,
+        },
         // { title: "Mark Accepted", data: null, defaultContent: 'MARK' }
-      ]
+      ],
     });
-    $reviewHistory.on( 'draw.dt', function () {
-      console.log( 'Table redrawn' );
-  } );
+    $reviewHistory.on("draw.dt", function () {
+      console.log("Table redrawn");
+    });
     const map = buildMap(reviews, document.getElementById("reviewed-map"));
     const exportButton = document.getElementById("export-geojson");
     const cleanHistoryButton = document.getElementById("clean-history");
@@ -495,35 +494,35 @@
       submitForm,
       skipToNext,
       showLowQualityModal,
-      markDuplicate
+      markDuplicate,
     } = ansCtrl;
 
-    ansCtrl.submitForm = function() {
+    ansCtrl.submitForm = function () {
       // This only works for accepts
       submitForm();
       saveReview(nSubCtrl.pageData, ansCtrl.formData);
     };
 
-    ansCtrl.showLowQualityModal = function() {
+    ansCtrl.showLowQualityModal = function () {
       showLowQualityModal();
       setTimeout(() => {
         const ansCtrl2Elem = document.getElementById("low-quality-modal");
         const ansCtrl2 = angular.element(ansCtrl2Elem).scope().answerCtrl2;
         const oldConfirm = ansCtrl2.confirmLowQuality;
-        ansCtrl2.confirmLowQuality = function() {
+        ansCtrl2.confirmLowQuality = function () {
           oldConfirm();
           saveReview(nSubCtrl.pageData, {
             ...ansCtrl2.formData,
             review: {
               ...answerCtrl2.formData.review,
-              comment: ansCtrl2.rejectComment
-            }
+              comment: ansCtrl2.rejectComment,
+            },
           });
         };
       }, 10);
     };
 
-    ansCtrl.markDuplicate = function(id) {
+    ansCtrl.markDuplicate = function (id) {
       markDuplicate(id);
       setTimeout(() => {
         const ansCtrl2Elem = document.querySelector(
@@ -531,18 +530,18 @@
         );
         const ansCtrl2 = angular.element(ansCtrl2Elem).scope().answerCtrl2;
         const confirmDuplicate = ansCtrl2.confirmDuplicate;
-        ansCtrl2.confirmDuplicate = function() {
+        ansCtrl2.confirmDuplicate = function () {
           confirmDuplicate();
 
           saveReview(nSubCtrl.pageData, {
             ...ansCtrl2.formData,
-            duplicateOf: id
+            duplicateOf: id,
           }); // duplicateOf is not marked in vm or formData
         };
       }, 10);
     };
 
-    ansCtrl.skipToNext = function() {
+    ansCtrl.skipToNext = function () {
       saveReview(nSubCtrl.pageData, "skipped");
       skipToNext();
     };
