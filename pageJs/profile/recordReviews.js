@@ -173,6 +173,19 @@
   const getReviewData = reviewData =>
     typeof reviewData === "object" ? reviewData : {};
 
+
+  const getFormattedDate = (ts, fullDate) => {
+    const date = new Date(ts);
+
+    if (fullDate) {
+      return date.toString();
+    }
+    
+    return formatTs(date, {
+      year: "numeric",
+    });
+    return formattedDate;
+  }
   const getDD = (term, definition) =>
     definition ? `<dt>${term}</dt><dd>${definition}</dd>` : "";
 
@@ -187,12 +200,12 @@
     <table class="table table-condensed">
       <thead>
           <tr>
-              <th>Score</th>
-              <th>Title</th>
-              <th>Cultural</th>
-              <th>Unique</th>
-              <th>Safety</th>
-              <th>Location</th>
+              <th class="text-center">Score</th>
+              <th class="text-center">Title</th>
+              <th class="text-center">Cultural</th>
+              <th class="text-center">Unique</th>
+              <th class="text-center">Safety</th>
+              <th class="text-center">Location</th>
           </tr>
       </thead>
       <tbody class="review-list">
@@ -217,7 +230,8 @@
       supportingImageUrl,
       lat,
       lng,
-      index
+      index,
+      ts
     } = review;
     const {
       comment,
@@ -246,8 +260,8 @@
     }</div></div>
     <div class="panel-body">
         <div class="row">
-          <div class="col-xs-4"><a target="_blank" href="${imageUrl}=s0"><img style="max-width: 100%" src="${imageUrl}" class="img-responsive" alt="${title}"></a></div>
-          <div class="col-xs-8">
+          <div class="col-xs-12 col-sm-4"><a target="_blank" href="${imageUrl}=s0"><img style="max-width: 100%" src="${imageUrl}" class="img-responsive" alt="${title}"></a></div>
+          <div class="col-xs-12 col-sm-8">
             <dl class="dl-horizontal">
               ${getDD("Title", title)}
               ${getDD("Description", description)}
@@ -263,6 +277,7 @@
                   `<a target="_blank" href="${supportingImageUrl}=s0">View</a>`
               )}
               ${getDD("Location", getIntelLink(lat, lng, "Open in Intel"))}
+              ${getDD("Review Date", getFormattedDate(ts, true))}
               ${getDD(
                 "Open in Map",
                 `<span title="Focus in map" data-index="${index}" style="cursor:pointer" >📍</span>`
@@ -329,13 +344,7 @@
           data: "ts",
           render: (ts, type, row) => {
             if (type === "display" || type === "filter") {
-              const date = new Date(ts);
-              const formattedDate = formatTs(date, {
-                year: "numeric",
-                hour: "numeric",
-                minute: "numeric"
-              });
-              return formattedDate;
+              return getFormattedDate(ts);
             }
             return ts;
           }
