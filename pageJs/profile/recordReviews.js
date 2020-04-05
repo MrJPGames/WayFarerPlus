@@ -405,8 +405,9 @@
       const reviewData = getReviewData(review);
       return {
         properties: {
-          "marker-color": getColor(review),
+          "marker-color": getColor(this.review),
           ...props,
+          index: this.index,
           ...reviewData,
         },
         geometry: {
