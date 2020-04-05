@@ -1,4 +1,9 @@
 function modProfilePage(settings){
+	var newCss = document.createElement("link");
+	newCss.setAttribute("rel", "stylesheet");
+	newCss.setAttribute("href", chrome.extension.getURL("assets/profile.css"));
+	document.getElementsByTagName("head")[0].appendChild(newCss);
+
 	if (settings["profExtendedStats"] != "off")
 		addPageJS("profile/extendedStats.js");
 

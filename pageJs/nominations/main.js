@@ -18,7 +18,7 @@ function setupPage(){
         var modEvent = new Event("WFPNomCtrlHooked");
         document.dispatchEvent(modEvent);
     }
-};
+}
 
 function selectNomination(){
     var nomSelectEvent = new Event("WFPNomSelected");

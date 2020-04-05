@@ -9,16 +9,30 @@ Documentation and users guide: https://github.com/MrJPGames/WayFarer-/wiki
 
 [![Available for Google Chrome](https://developer.chrome.com/webstore/images/ChromeWebStore_BadgeWBorder_v2_206x58.png)](https://chrome.google.com/webstore/detail/wayfarer%20/fnhddfgebnmokicfdfgcdcdhcmgkeglc)
 [![Available for Firefox](https://addons.cdn.mozilla.net/static/img/addons-buttons/AMO-button_1.png)](https://addons.mozilla.org/en-US/firefox/addon/wayfarerplus/)
+[Available on Opera](https://addons.opera.com/en/extensions/details/wayfarer/)
 
 Other browser support?
 - Brave, Vivaldi and other chromium browsers that use the Google Chrome Web Store for installing extensions.
-- Opera's review process is VERY slow. Install via the Google Chrome Web Store instead using "Add to Opera"! [More info](https://addons.opera.com/en/extensions/details/install-chrome-extensions/)
+- Opera's review process is VERY slow. To be sure you're running a more recent version install via the Google Chrome Web Store instead using "Add to Opera"! [More info](https://addons.opera.com/en/extensions/details/install-chrome-extensions/)
 - Firefox for Android, is technically supported, but I do not test for compatibility.
 - Edge will be supported when the Chromium builds become the official stable release. When running beta builds you can also install from the Chrome Web Store after enabling instalation from other stores.
 - Safari is unsupported.
 
 Changelog
 ---
+1.12.4:
+- An additional S2 cell level can be enabled at the same time.
+
+1.12.3:
+- Changelogs will now be shown on Wayfarer after a WF+ update!
+- Improvements to Review History display
+    - Stars are displayed as stars not numbers
+    - Status is fully written out (as there was plenty room, and the shorthand was unclear)
+    - Marked as accepted is now readable in dark mode
+- Option to turn on Open In for Review History
+- Lock submit timer now works for rejections
+- Minor improvements to settings UX
+
 1.12.2:
 - Auto retry for review page errors (eg. No more nominations available for review)
 

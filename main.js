@@ -39,7 +39,7 @@ function init(settings){
 
 		//Always
 		modHeader(settings);
-		//modAll(settings);
+		modAll(settings);
 	});
 }
 
