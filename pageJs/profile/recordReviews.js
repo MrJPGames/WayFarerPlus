@@ -642,6 +642,11 @@
         .rows({ search: "applied" })
         .data()
         .each((review) => review.showMarker());
+      
+      const shownReviews = reviews.filter(filterShown);
+      cluster.clearMarkers();
+      cluster.addMarkers(getMarkers(shownReviews));
+
       cluster.fitMapToMarkers();
     });
 
