@@ -11,10 +11,16 @@ function modProfilePage(settings){
 		const newCss = document.createElement("link");
 		newCss.setAttribute("rel", "stylesheet");
 		newCss.setAttribute("href", chrome.extension.getURL("assets/datatables.css"));
-	  	document.getElementsByTagName("head")[0].appendChild(newCss);
-		addPageJS("libs/markerclusterer.js");
+		document.getElementsByTagName("head")[0].appendChild(newCss);
+		const newCss2 = document.createElement("link");
+		newCss2.setAttribute("rel", "stylesheet");
+		newCss2.setAttribute("href", chrome.extension.getURL("assets/daterangepicker.css"));
+		document.getElementsByTagName("head")[0].appendChild(newCss2);
+		addPageJS("libs/moment.js");
 		addPageJS("libs/datatables.js");
-		addPageJS("profile/recordReviews.js");
+		addPageJS("libs/markerclusterer.js");
+		addPageJS("libs/daterangepicker.js");
+		addPageJS("profile/recordReviews.js", true);
 	}
 
 	addPageJS("profile/main.js", true);
