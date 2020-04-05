@@ -211,7 +211,7 @@
   const getIntelLink = (lat, lng, content) =>
     `<a target="_blank" rel="noreferrer" title="Open in Intel" href="https://intel.ingress.com/intel?ll=${lat},${lng}&z=21">${content}</a>`;
 
-  const getScores = ({ review }) => {
+  const renderScores = ({ review }) => {
     if (!review || typeof review === "string" || !review.quality) {
       return "";
     }
@@ -263,7 +263,7 @@
 
       this.marker.addListener("click", () => {
         infoWindow.open(this.gmap, this.marker);
-        infoWindow.setContent(buildInfoWindowContent(review));
+        infoWindow.setContent(this.buildInfoWindowContent());
       });
     }
 
@@ -277,7 +277,15 @@
       this.marker.setMap(this.map);
     }
 
-    getScore() {
+    toggleAccepted() {
+      this.review.accepted = !this.review.accepted;
+      const localStorageReviews = getReviews();
+      const localStorageReview = localStorageReviews[this.index]
+      localStorageReview.accepted = !localStorageReview.accepted;
+      localStorage.setItem("wfpSaved", JSON.stringify(localStorageReviews));
+    }
+
+    renderScore(type) {
       const review = this.review.review;
       if (review === "skipped") {
         return "Skipped";
@@ -287,16 +295,35 @@
         return "Expired";
       }
       if (review.quality) {
-        return review.quality;
+        return type === "sort" || type === "export"
+          ? review.quality
+          : getStarRating(review.quality);
       }
       if (review.duplicate) {
         return "Duplicate";
       }
       if (review.spam) {
         // was a reject
-        return 1;
+        return type === "sort" || type === "export" ? 1 : getStarRating(1);
       }
       return "?";
+    }
+
+    renderActions() {
+      const {
+        index,
+        review: { lat, lng },
+      } = this;
+      return `
+      <span class="toggle-details"></span>
+      <span class="focus-in-map" title="Focus in map" data-index="${index}" style="cursor:pointer" >📍</span>
+      ${getIntelLink(
+        lat,
+        lng,
+        `<img src="https://intel.ingress.com/favicon.ico" />`
+      )}
+      <span class="text-center toggle" data-index="${index}" style="cursor:pointer" title="Toggle Accepted">✅</span>
+      `;
     }
 
     buildInfoWindowContent() {
@@ -308,9 +335,9 @@
         supportingImageUrl,
         lat,
         lng,
-        index,
         ts,
       } = this.review;
+      const index = this.index;
       const {
         comment,
         newLocation,
@@ -343,7 +370,6 @@
                 ${getDD("Comment", comment)}
                 ${getDD("New Location", newLocation)}
                 ${getDD("Reject Reason", rejectReason)}
-                ${getDD("Comment", rejectReason)}
                 ${getDD("What is it?", what)}
                 ${getDD(
                   "Supporting Image",
@@ -367,7 +393,7 @@
                   `<span class="text-center toggle" data-index="${index}" style="cursor:pointer" title="Toggle Accepted">✅</span>`
                 )}
               </dl>
-              ${getScores(this.review)}
+              ${renderScores(this.review)}
             </div>
           </div>
         </div>
@@ -398,7 +424,7 @@
     const localstorageReviews = getReviews();
 
     if (!localstorageReviews.length) return;
-    $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+    $.fn.dataTable.ext.search.push((_settings, data, _dataIndex) => {
       const minVal = $("#min").val();
       const maxVal = $("#max").val();
       const min = new Date(minVal || 0);
@@ -408,27 +434,37 @@
       const ts = data[1] || 0;
       return +min <= ts && ts <= +max;
     });
+    $.fn.dataTable.ext.search.push((_settings, data, _dataIndex) => {
+      const searchValue = $("#search").val();
+      return data[2].indexOf(searchValue) > -1;
+    });
     const profileStats = document.getElementById("profile-main-contain");
     profileStats.insertAdjacentHTML(
       "beforeend",
       `
         <div class="container">
-            <h3>Reviewed</h3>
-            <div id="reviewed-map" style="height:600px"></div>
+            <h3>Review History</h3>
             <div class="row row-input">
-              <div class="col-xs-6">
+              <div class="col-xs-4">
                 <div class="input-group">
                 <label class="input-group-addon" for="max">Start Date</label>
                   <input id="min" type="date" class="form-control">
                 </div>
               </div>
-              <div class="col-xs-6">
+              <div class="col-xs-4">
                 <div class="input-group">
                   <label class="input-group-addon" for="max">End Date</label>
                   <input id="max" type="date" class="form-control">
                 </div>
               </div>
-            </div><!-- /.row -->
+              <div class="col-xs-4">
+              <div class="input-group">
+                <label class="input-group-addon" for="search">Search</label>
+                <input id="search" type="text" autocomplete="off" class="form-control">
+              </div>
+            </div>
+            </div>
+            <div id="reviewed-map" style="height:600px"></div>
             <div class="table-responsive">
               <table class="table table-striped table-condensed" id="review-history">
               </table>
@@ -456,31 +492,31 @@
       initComplete: () => {
         $(document).trigger("resize"); // fix for recalculation of columns
       },
-      rowCallback: (row, { accepted }) => {
+      rowCallback: (row, review) => {
+        const accepted = review.review && review.review.accepted;
         row.classList.remove("success");
         if (accepted) {
           row.classList.add("success");
         }
       },
-      drawCallback: () => {
-        console.log("drawn");
-      },
       data: reviews,
       order: [[0, "desc"]],
-      dom: "frtipB",
+      dom: "rtiB",
       buttons: [
         {
-          extend: "copy",
+          extend: "copyHtml5",
           title: "Copy",
           exportOptions: {
-            columns: ":not(:last-child)",
+            orthogonal: "export",
+            columns: (idx, data) => idx < data.length - 1 && idx !== 0,
           },
         },
         {
-          extend: "csv",
+          extend: "csvHtml5",
           title: "CSV",
           exportOptions: {
-            columns: ":not(:last-child)",
+            orthogonal: "export",
+            columns: (idx, data) => idx < data.length - 1 && idx !== 0,
           },
         },
         {
@@ -506,14 +542,6 @@
       scrollY: 400,
       scrollCollapse: true,
       scroller: true,
-      responsive: {
-        details: {
-          renderer: (table, rowIdx, _columns) => {
-            const reviewInstance = table.rows(rowIdx).data()[0];
-            return reviewInstance.buildInfoWindowContent();
-          },
-        },
-      },
       columns: [
         {
           title: "#",
@@ -523,108 +551,119 @@
         {
           title: "Date",
           data: "review.ts",
-          responsivePriority: 1,
-          render: (ts, type, data) => {
+          render: (ts, type) => {
             if (type === "display") {
               return getFormattedDate(ts);
             }
             return ts;
           },
         },
-        { title: "Title", data: "review.title", responsivePriority: 1 },
-        { title: "Description", data: "review.description", visible: false },
-        { title: "Latitude", data: "review.lat", visible: false },
-        { title: "Longitude", data: "review.lng", visible: false },
-        { title: "Statement", data: "review.statement" },
-        {
-          title: "Image URL",
-          data: "review.imageUrl",
-        },
-        {
-          title: "Supporting Image URL",
-          data: "review.supportingImageUrl",
-        },
+        { title: "Title", data: "review.title" },
         // General Score
         {
           title: "Score",
           data: "review.review.quality",
           defaultContent: false,
-          responsivePriority: 2,
-          render: (_score, _type, data) => data.getScore(),
+          render: (_score, type, data) => data.renderScore(type),
+        },
+        { title: "Description", data: "review.description", visible: false },
+        {
+          title: "Supporting Statement",
+          data: "review.statement",
+          visible: false,
+        },
+        { title: "Image URL", data: "review.imageUrl", visible: false },
+        {
+          title: "Supporting Image URL",
+          data: "review.supportingImageUrl",
+          visible: false,
         },
         {
           title: "Description Score",
           data: "review.review.description",
           defaultContent: "?",
+          visible: false,
         },
         {
           title: "Cultural Score",
           data: "review.review.cultural",
           defaultContent: "?",
+          visible: false,
         },
         {
           title: "Uniqueness Score",
           data: "review.review.uniqueness",
           defaultContent: "?",
+          visible: false,
         },
         {
           title: "Safety Score",
           data: "review.review.safety",
           defaultContent: "?",
+          visible: false,
         },
         {
           title: "Location Score",
           data: "review.review.location",
           defaultContent: "?",
+          visible: false,
         },
         // Review Data
         {
           title: "Duplicate",
           data: "review.review.duplicate",
           defaultContent: false,
+          visible: false,
         },
         {
           title: "Spam",
           data: "review.review.spam",
           defaultContent: false,
+          visible: false,
         },
         {
           title: "Reject Reason",
           data: "review.review.rejectReason",
           defaultContent: "NOT_REJECTED",
+          visible: false,
         },
         {
           title: "Comment",
           data: "review.review.comment",
           defaultContent: false,
+          visible: false,
         },
         {
           title: "New Location",
           data: "review.review.newLocation",
           defaultContent: false,
+          visible: false,
         },
         {
           title: "What is it?",
           data: "review.review.what",
           defaultContent: false,
+          visible: false,
         },
         {
           title: "Accepted?",
           data: "review.accepted",
           defaultContent: false,
+          visible: false,
         },
         {
-          title: "Map",
-          responsivePriority: 3,
-          render: (_score, _type, { index }) => {
-            return `<span class="focus-in-map" title="Focus in map" data-index="${index}" style="cursor:pointer" >📍</span>`;
+          title: "Actions",
+          className: "review-actions",
+          sortable: false,
+          render: (_score, _type, review) => {
+            return review.renderActions();
           },
         },
       ],
     });
     window.table = table; // TODO delete this
 
-    $("#min, #max").on(
+    $("#min, #max, #search").on(
       "change",
       debounce(() => {
         table.draw();
@@ -634,7 +673,6 @@
     const filterShown = (review) => review.onMap;
 
     $reviewHistory.on("draw.dt", function () {
-      console.log("Table redrawn");
       // Hide all
       reviews.forEach((review) => review.hideMarker());
       // Show visible
@@ -642,7 +680,7 @@
         .rows({ search: "applied" })
         .data()
         .each((review) => review.showMarker());
-      
+
       const shownReviews = reviews.filter(filterShown);
       cluster.clearMarkers();
       cluster.addMarkers(getMarkers(shownReviews));
@@ -650,14 +688,28 @@
       cluster.fitMapToMarkers();
     });
 
+    $reviewHistory.on("click", ".review-actions .toggle-details", (ev) => {
+      var tr = $(ev.target).closest("tr");
+      var row = table.row(tr);
+      const review = row.data();
+
+      if (row.child.isShown()) {
+        // This row is already open - close it
+        row.child.hide();
+        tr.removeClass("shown");
+      } else {
+        // Open this row
+        row.child(review.buildInfoWindowContent()).show();
+        tr.addClass("shown");
+      }
+    });
+
     $("#content-container").on("click", ".toggle[data-index]", (ev) => {
       const { target } = ev;
       const { index } = target.dataset;
-      const currentItems = getReviews();
-      currentItems[index].accepted = !currentItems[index].accepted;
-      reviews[index].accepted = !reviews[index].accepted;
-      table.row(parseInt(index, 10)).data(reviews[index]).draw();
-      localStorage.setItem("wfpSaved", JSON.stringify(currentItems));
+      const currentReview = reviews[index];
+      currentReview.toggleAccepted();
+      table.row(parseInt(index, 10)).draw();
     });
 
     $("#content-container").on("click", ".focus-in-map[data-index]", (ev) => {
