@@ -61,6 +61,18 @@
 
     return mainButton;
   }
+
+  const debounce = (callback, time) => {
+    let interval;
+    return (...args) => {
+      clearTimeout(interval);
+      interval = setTimeout(() => {
+        interval = null;
+        callback(...args);
+      }, time);
+    };
+  };
+
   const emptyArray = Array(5).fill(0);
   function getStarRating(score) {
     return `<span style="white-space:nowrap">${emptyArray
@@ -359,6 +371,21 @@
     const reviews = getReviews().map((review, index) => ({ ...review, index }));
 
     if (!reviews.length) return;
+    $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+      const min = +new Date($("#min").val());
+      const max = +new Date($("#max").val());
+      const ts = data[1] || 0; // use data for the age column
+
+      if (
+        (isNaN(min) && isNaN(max)) ||
+        (isNaN(min) && ts <= max) ||
+        (min <= ts && isNaN(max)) ||
+        (min <= ts && ts <= max)
+      ) {
+        return true;
+      }
+      return false;
+    });
     const profileStats = document.getElementById("profile-main-contain");
     profileStats.insertAdjacentHTML(
       "beforeend",
@@ -366,11 +393,22 @@
         <div class="container">
             <h3>Reviewed</h3>
             <div id="reviewed-map" style="height:600px"></div>
+            <div class="form-group">
+              <input type="date" id="min" class="form-control" />
+              <input type="date" id="max" class="form-control"/>
+            </div>
             <div class="table-responsive">
               <table class="table table-striped table-condensed" id="review-history">
               </table>
             </div>
         </div>`
+    );
+
+    $("#min, #max").on(
+      "change",
+      debounce(() => {
+        table.draw();
+      }, 250)
     );
     const $reviewHistory = $("#review-history");
     const table = $reviewHistory.DataTable({
@@ -385,7 +423,7 @@
       },
       data: reviews,
       order: [[0, "desc"]],
-      dom: "BfrtipP",
+      dom: "frtipB",
       buttons: [
         {
           extend: "copy",
@@ -414,7 +452,11 @@
             );
           },
         },
-        { text: "Delete History", action: clearLocalStorage, className: 'btn-danger' },
+        {
+          text: "Delete History",
+          action: clearLocalStorage,
+          className: "btn-danger",
+        },
       ],
       deferRender: true,
       scrollY: 400,
@@ -425,13 +467,6 @@
           renderer: (_api, rowIdx, _columns) =>
             buildInfoWindowContent(reviews[rowIdx]),
         },
-      },
-      searchPanes: {
-        columns: [
-          9, // score
-          17, // Reject Reason
-          21, // Accepted
-        ],
       },
       columns: [
         {
@@ -444,7 +479,7 @@
           data: "ts",
           responsivePriority: 1,
           render: (ts, type) => {
-            if (type === "display" || type === "filter") {
+            if (type === "display") {
               return getFormattedDate(ts);
             }
             return ts;
@@ -478,14 +513,14 @@
               return "Expired";
             }
             if (review.quality) {
-              return type === 'display' ? getStarRating(review.quality) : review.quality;
+              return review.quality;
             }
             if (review.duplicate) {
               return "Duplicate";
             }
             if (review.spam) {
               // was a reject
-              return type === 'display' ? getStarRating(1) : 1;
+              return 1;
             }
             return "?";
           },
