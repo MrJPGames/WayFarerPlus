@@ -68,7 +68,7 @@
     year: "numeric",
   };
 
-  const getQuality = review => {
+  const getQuality = (review) => {
     const isSkipped = review.review === "skipped";
     const isPending = review.review === false;
     const hasReview = Boolean(review.review);
@@ -87,7 +87,7 @@
     "#00803b",
   ];
 
-  const getColor = review => gradedColors[getQuality(review)];
+  const getColor = (review) => gradedColors[getQuality(review)];
 
   function buildMap(reviewList, mapElement) {
     const mapSettings = settings["ctrlessZoom"]
@@ -99,7 +99,7 @@
     });
 
     const bounds = new google.maps.LatLngBounds();
-  
+
     markers = reviewList.map((review) => {
       const latLng = {
         lat: review.lat,
@@ -304,18 +304,30 @@
       initComplete: () => {
         $(document).trigger("resize"); // fix for recalculation of columns
       },
-      rowCallback: ( row, { accepted }) => {
-        row.classList.remove('success');
+      rowCallback: (row, { accepted }) => {
+        row.classList.remove("success");
         if (accepted) {
-          row.classList.add('success');
+          row.classList.add("success");
         }
       },
       data: reviews,
       order: [[0, "desc"]],
       dom: "BfrtipP",
       buttons: [
-        "copy",
-        "csv",
+        {
+          extend: "copy",
+          title: "Copy",
+          exportOptions: {
+            columns: ":not(:last-child)",
+          },
+        },
+        {
+          extend: "csv",
+          title: 'CSV',
+          exportOptions: {
+            columns: ":not(:last-child)",
+          },
+        },
         {
           text: "geojson",
           action: (_ev, data) => {
@@ -365,7 +377,7 @@
           },
         },
         { title: "Title", data: "title", responsivePriority: 1 },
-        { title: "Description", data: "description" },
+        { title: "Description", data: "description", visible: false },
         { title: "Latitude", data: "lat" },
         { title: "Longitude", data: "lng" },
         { title: "Statement", data: "statement" },
@@ -382,6 +394,7 @@
           title: "Score",
           data: "review.quality",
           defaultContent: false,
+          responsivePriority: 2,
           render: (_score, _type, { review }) => {
             if (review === "skipped") {
               return "Skipped";
@@ -459,9 +472,17 @@
           data: "review.what",
           defaultContent: false,
         },
+        {
+          title: "Open In",
+          responsivePriority: 3,
+          render: (_score, _type, { index, lat, lng, title }) => {
+            return `
+            <span class="focus-in-map" title="Focus in map" data-index="${index}" style="cursor:pointer" >📍</span>
+            ${settings["profOpenIn"]  ? getOpenInButton(lat, lng, title).outerHTML : getIntelLink(lat, lng,`<img src="https://intel.ingress.com/favicon.ico" />`)}`;
+          },
+        },
       ],
     });
-    window.table = table;
     $reviewHistory.on("draw.dt", function () {
       console.log("Table redrawn");
     });
