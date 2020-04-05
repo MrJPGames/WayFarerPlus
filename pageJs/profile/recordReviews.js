@@ -142,9 +142,9 @@
   const formatAsGeojson = (reviews) => {
     return {
       type: "FeatureCollection",
-      features: reviews.map((review) => {
-        const { lat, lng, ...props } = review;
-        const reviewData = getReviewData(review.review);
+      features: reviews.map((r) => {
+        const { lat, lng, review, ...props } = r;
+        const reviewData = getReviewData(review);
         return {
           properties: {
             "marker-color": getColor(review),
@@ -271,7 +271,7 @@
                 `<span class="focus-in-map" title="Focus in map" data-index="${index}" style="cursor:pointer" >📍</span>`
               )}
               ${getDD(
-                "Mark Accepted",
+                "Toggle Accepted",
                 `<span class="text-center toggle" data-index="${index}" style="cursor:pointer" title="Toggle Accepted">✅</span>`
               )}
             </dl>
@@ -300,13 +300,19 @@
         </div>`
     );
     const $reviewHistory = $("#review-history");
-    $reviewHistory.DataTable({
+    const table = $reviewHistory.DataTable({
       initComplete: () => {
         $(document).trigger("resize"); // fix for recalculation of columns
       },
+      rowCallback: ( row, { accepted }) => {
+        row.classList.remove('success');
+        if (accepted) {
+          row.classList.add('success');
+        }
+      },
       data: reviews,
       order: [[0, "desc"]],
-      dom: "PBfrtip",
+      dom: "BfrtipP",
       buttons: [
         "copy",
         "csv",
@@ -319,7 +325,7 @@
             const geoJson = formatAsGeojson(filteredReviews);
             $.fn.dataTable.fileSave(
               new Blob([JSON.stringify(geoJson)]),
-              "reviews.geojson"
+              "reviews.json"
             );
           },
         },
@@ -376,7 +382,7 @@
           title: "Score",
           data: "review.quality",
           defaultContent: false,
-          render: (score, type, { review }) => {
+          render: (_score, _type, { review }) => {
             if (review === "skipped") {
               return "Skipped";
             }
@@ -455,6 +461,7 @@
         },
       ],
     });
+    window.table = table;
     $reviewHistory.on("draw.dt", function () {
       console.log("Table redrawn");
     });
@@ -466,6 +473,8 @@
       const { index } = target.dataset;
       const currentItems = getReviews();
       currentItems[index].accepted = !currentItems[index].accepted;
+      reviews[index].accepted = !reviews[index].accepted;
+      table.row(parseInt(index, 10)).data(reviews[index]).draw();
       localStorage.setItem("wfpSaved", JSON.stringify(currentItems));
     });
 
