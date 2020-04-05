@@ -674,12 +674,6 @@ div.dtsp-searchPanes div.btn-group button.btn {
   height: 40px;
 }
 
-div.dtsp-searchPanes,
-div.row {
-  margin-left: 0px;
-  margin-right: 0px;
-}
-
 div.dtsp-searchPane {
   margin: 10px;
   display: inline-block;
@@ -966,4 +960,10 @@ table.dataTable tbody td.selected a {
 
 #ProfileController .gm-style .gm-style-iw-c, #ProfileController .gm-style .gm-style-iw-d {
   max-height: none !important;
+}
+
+.row-input {
+  margin-top: 20px;
+  margin-bottom: 20px;
+
 }

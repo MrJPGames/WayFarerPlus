@@ -372,19 +372,14 @@
 
     if (!reviews.length) return;
     $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
-      const min = +new Date($("#min").val());
-      const max = +new Date($("#max").val());
-      const ts = data[1] || 0; // use data for the age column
-
-      if (
-        (isNaN(min) && isNaN(max)) ||
-        (isNaN(min) && ts <= max) ||
-        (min <= ts && isNaN(max)) ||
-        (min <= ts && ts <= max)
-      ) {
-        return true;
-      }
-      return false;
+      const minVal = $("#min").val();
+      const maxVal = $("#max").val();
+      const min = new Date(minVal || 0);
+      const max = maxVal ? new Date(maxVal) : new Date();
+      min.setHours(0, 0, 0); // start of the day
+      max.setHours(23, 59, 59); // end of the day
+      const ts = data[1] || 0;
+      return +min <= ts && ts <= +max;
     });
     const profileStats = document.getElementById("profile-main-contain");
     profileStats.insertAdjacentHTML(
@@ -393,10 +388,20 @@
         <div class="container">
             <h3>Reviewed</h3>
             <div id="reviewed-map" style="height:600px"></div>
-            <div class="form-group">
-              <input type="date" id="min" class="form-control" />
-              <input type="date" id="max" class="form-control"/>
-            </div>
+            <div class="row row-input">
+              <div class="col-xs-6">
+                <div class="input-group">
+                <label class="input-group-addon" for="max">Start Date</label>
+                  <input id="min" type="date" class="form-control">
+                </div>
+              </div>
+              <div class="col-xs-6">
+                <div class="input-group">
+                  <label class="input-group-addon" for="max">End Date</label>
+                  <input id="max" type="date" class="form-control">
+                </div>
+              </div>
+            </div><!-- /.row -->
             <div class="table-responsive">
               <table class="table table-striped table-condensed" id="review-history">
               </table>
@@ -487,8 +492,8 @@
         },
         { title: "Title", data: "title", responsivePriority: 1 },
         { title: "Description", data: "description", visible: false },
-        { title: "Latitude", data: "lat" },
-        { title: "Longitude", data: "lng" },
+        { title: "Latitude", data: "lat", visible: false },
+        { title: "Longitude", data: "lng", visible: false },
         { title: "Statement", data: "statement" },
         {
           title: "Image URL",
