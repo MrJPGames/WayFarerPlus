@@ -173,75 +173,23 @@
 
   const getColor = (review) => gradedColors[getQuality(review)];
 
-  function buildMap(reviewList, mapElement) {
+  const buildMap = (mapElement) => {
     const mapSettings = settings["ctrlessZoom"]
       ? { scrollwheel: true, gestureHandling: "greedy" }
       : {};
     const gmap = new google.maps.Map(mapElement, {
       zoom: 8,
+      center: { lat: 0, lng: 0 },
       ...mapSettings,
     });
 
-    const bounds = new google.maps.LatLngBounds();
-
-    markers = reviewList.map((review) => {
-      const latLng = {
-        lat: review.lat,
-        lng: review.lng,
-      };
-
-      const marker = new google.maps.Marker({
-        map: gmap,
-        position: latLng,
-        title: review.title,
-        icon: {
-          path: google.maps.SymbolPath.CIRCLE,
-          scale: 8.5,
-          fillColor: getColor(review),
-          fillOpacity: 0.8,
-          strokeWeight: 0.4,
-        },
-      });
-
-      marker.addListener("click", () => {
-        infoWindow.open(gmap, marker);
-        infoWindow.setContent(buildInfoWindowContent(review));
-      });
-
-      bounds.extend(latLng);
-      return marker;
-    });
-
-    new MarkerClusterer(gmap, markers, {
-      imagePath:
-        "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m",
-      gridSize: 30,
-      zoomOnClick: true,
-      maxZoom: 10,
-    });
-    gmap.fitBounds(bounds);
     return gmap;
-  }
+  };
 
   const formatAsGeojson = (reviews) => {
     return {
       type: "FeatureCollection",
-      features: reviews.map((r) => {
-        const { lat, lng, review, ...props } = r;
-        const reviewData = getReviewData(review);
-        return {
-          properties: {
-            "marker-color": getColor(review),
-            ...props,
-            ...reviewData,
-          },
-          geometry: {
-            coordinates: [lng, lat],
-            type: "Point",
-          },
-          type: "Feature",
-        };
-      }),
+      features: reviews.map((review) => review.getGeojson()),
     };
   };
 
@@ -292,85 +240,164 @@
     </table>
 `;
   };
-  const buildInfoWindowContent = (review) => {
-    const {
-      title,
-      imageUrl,
-      description,
-      statement,
-      supportingImageUrl,
-      lat,
-      lng,
-      index,
-      ts,
-    } = review;
-    const {
-      comment,
-      newLocation,
-      quality,
-      spam,
-      rejectReason,
-      what,
-      duplicate,
-    } = getReviewData(review.review);
 
-    const score = spam ? 1 : quality || 0;
-    const status = duplicate
-      ? "Duplicate"
-      : review.review === "skipped"
-      ? "Skipped"
-      : "Timed Out/Pending";
+  class Review {
+    constructor({ review, map, index, cluster }) {
+      this.review = review;
+      this.index = index;
+      this.map = map;
+      this.onMap = true;
+      this.cluster = cluster;
+      this.marker = new google.maps.Marker({
+        map,
+        position: { lat: review.lat, lng: review.lng },
+        title: review.title,
+        icon: {
+          path: google.maps.SymbolPath.CIRCLE,
+          scale: 8.5,
+          fillColor: getColor(review),
+          fillOpacity: 0.8,
+          strokeWeight: 0.4,
+        },
+      });
 
-    return `<div class="panel panel-default review-details">
-    <div class="panel-heading">${title} <div class="pull-right">${
-      score ? getStarRating(score) : status
-    }</div></div>
-    <div class="panel-body">
-        <div class="row">
-          <div class="col-xs-12 col-sm-4"><a target="_blank" href="${imageUrl}=s0"><img style="max-width: 100%" src="${imageUrl}" class="img-responsive" alt="${title}"></a></div>
-          <div class="col-xs-12 col-sm-8">
-            <dl class="dl-horizontal">
-              ${getDD("Title", title)}
-              ${getDD("Description", description)}
-              ${getDD("Statement", statement)}
-              ${getDD("Comment", comment)}
-              ${getDD("New Location", newLocation)}
-              ${getDD("Reject Reason", rejectReason)}
-              ${getDD("Comment", rejectReason)}
-              ${getDD("What is it?", what)}
-              ${getDD(
-                "Supporting Image",
-                supportingImageUrl &&
-                  `<a target="_blank" href="${supportingImageUrl}=s0">View</a>`
-              )}
-              ${getDD(
-                "Location",
-                settings["profOpenIn"]
-                  ? getOpenInButton(lat, lng, title).outerHTML
-                  : getIntelLink(lat, lng, `Open in Intel`)
-              )}
-              ${getDD("Review Date", getFormattedDate(ts, true))}
-              ${getDD("Review #", index)}
-              ${getDD(
-                "Focus in Map",
-                `<span class="focus-in-map" title="Focus in map" data-index="${index}" style="cursor:pointer" >📍</span>`
-              )}
-              ${getDD(
-                "Toggle Accepted",
-                `<span class="text-center toggle" data-index="${index}" style="cursor:pointer" title="Toggle Accepted">✅</span>`
-              )}
-            </dl>
-            ${getScores(review)}
+      this.marker.addListener("click", () => {
+        infoWindow.open(this.gmap, this.marker);
+        infoWindow.setContent(buildInfoWindowContent(review));
+      });
+    }
+
+    hideMarker() {
+      this.onMap = false;
+      this.marker.setMap(null);
+    }
+
+    showMarker() {
+      this.onMap = true;
+      this.marker.setMap(this.map);
+    }
+
+    getScore() {
+      const review = this.review.review;
+      if (review === "skipped") {
+        return "Skipped";
+      }
+      if (!review) {
+        // Latest result without a review will count as pending
+        return "Expired";
+      }
+      if (review.quality) {
+        return review.quality;
+      }
+      if (review.duplicate) {
+        return "Duplicate";
+      }
+      if (review.spam) {
+        // was a reject
+        return 1;
+      }
+      return "?";
+    }
+
+    buildInfoWindowContent() {
+      const {
+        title,
+        imageUrl,
+        description,
+        statement,
+        supportingImageUrl,
+        lat,
+        lng,
+        index,
+        ts,
+      } = this.review;
+      const {
+        comment,
+        newLocation,
+        quality,
+        spam,
+        rejectReason,
+        what,
+        duplicate,
+      } = getReviewData(this.review.review);
+
+      const score = spam ? 1 : quality || 0;
+      const status = duplicate
+        ? "Duplicate"
+        : this.review.review === "skipped"
+        ? "Skipped"
+        : "Timed Out/Pending";
+
+      return `<div class="panel panel-default review-details">
+      <div class="panel-heading">${title} <div class="pull-right">${
+        score ? getStarRating(score) : status
+      }</div></div>
+      <div class="panel-body">
+          <div class="row">
+            <div class="col-xs-12 col-sm-4"><a target="_blank" href="${imageUrl}=s0"><img style="max-width: 100%" src="${imageUrl}" class="img-responsive" alt="${title}"></a></div>
+            <div class="col-xs-12 col-sm-8">
+              <dl class="dl-horizontal">
+                ${getDD("Title", title)}
+                ${getDD("Description", description)}
+                ${getDD("Statement", statement)}
+                ${getDD("Comment", comment)}
+                ${getDD("New Location", newLocation)}
+                ${getDD("Reject Reason", rejectReason)}
+                ${getDD("Comment", rejectReason)}
+                ${getDD("What is it?", what)}
+                ${getDD(
+                  "Supporting Image",
+                  supportingImageUrl &&
+                    `<a target="_blank" href="${supportingImageUrl}=s0">View</a>`
+                )}
+                ${getDD(
+                  "Location",
+                  settings["profOpenIn"]
+                    ? getOpenInButton(lat, lng, title).outerHTML
+                    : getIntelLink(lat, lng, `Open in Intel`)
+                )}
+                ${getDD("Review Date", getFormattedDate(ts, true))}
+                ${getDD("Review #", index)}
+                ${getDD(
+                  "Focus in Map",
+                  `<span class="focus-in-map" title="Focus in map" data-index="${index}" style="cursor:pointer" >📍</span>`
+                )}
+                ${getDD(
+                  "Toggle Accepted",
+                  `<span class="text-center toggle" data-index="${index}" style="cursor:pointer" title="Toggle Accepted">✅</span>`
+                )}
+              </dl>
+              ${getScores(this.review)}
+            </div>
           </div>
         </div>
-      </div>
-  </div>`;
-  };
+    </div>`;
+    }
+
+    getGeojson() {
+      const { lat, lng, review, ...props } = this.review;
+      const reviewData = getReviewData(review);
+      return {
+        properties: {
+          "marker-color": getColor(review),
+          ...props,
+          ...reviewData,
+        },
+        geometry: {
+          coordinates: [lng, lat],
+          type: "Point",
+        },
+        type: "Feature",
+      };
+    }
+  }
+
+  const getMarkers = (reviews) => reviews.map((review) => review.marker);
 
   const showEvaluated = () => {
-    const reviews = getReviews().map((review, index) => ({ ...review, index }));
+    const localstorageReviews = getReviews();
 
-    if (!reviews.length) return;
+    if (!localstorageReviews.length) return;
     $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
       const minVal = $("#min").val();
       const maxVal = $("#max").val();
@@ -409,13 +436,22 @@
         </div>`
     );
 
-    $("#min, #max").on(
-      "change",
-      debounce(() => {
-        table.draw();
-      }, 250)
-    );
     const $reviewHistory = $("#review-history");
+    const mapElement = document.getElementById("reviewed-map");
+    const map = buildMap(mapElement);
+    const cluster = new MarkerClusterer(map, [], {
+      imagePath:
+        "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m",
+      gridSize: 30,
+      zoomOnClick: true,
+      maxZoom: 10,
+    });
+    const reviews = localstorageReviews.map(
+      (review, index) => new Review({ review, map, index, cluster })
+    );
+    cluster.addMarkers(getMarkers(reviews));
+    cluster.fitMapToMarkers();
+
     const table = $reviewHistory.DataTable({
       initComplete: () => {
         $(document).trigger("resize"); // fix for recalculation of columns
@@ -425,6 +461,9 @@
         if (accepted) {
           row.classList.add("success");
         }
+      },
+      drawCallback: () => {
+        console.log("drawn");
       },
       data: reviews,
       order: [[0, "desc"]],
@@ -469,8 +508,10 @@
       scroller: true,
       responsive: {
         details: {
-          renderer: (_api, rowIdx, _columns) =>
-            buildInfoWindowContent(reviews[rowIdx]),
+          renderer: (table, rowIdx, _columns) => {
+            const reviewInstance = table.rows(rowIdx).data()[0];
+            return reviewInstance.buildInfoWindowContent();
+          },
         },
       },
       columns: [
@@ -481,114 +522,95 @@
         },
         {
           title: "Date",
-          data: "ts",
+          data: "review.ts",
           responsivePriority: 1,
-          render: (ts, type) => {
+          render: (ts, type, data) => {
             if (type === "display") {
               return getFormattedDate(ts);
             }
             return ts;
           },
         },
-        { title: "Title", data: "title", responsivePriority: 1 },
-        { title: "Description", data: "description", visible: false },
-        { title: "Latitude", data: "lat", visible: false },
-        { title: "Longitude", data: "lng", visible: false },
-        { title: "Statement", data: "statement" },
+        { title: "Title", data: "review.title", responsivePriority: 1 },
+        { title: "Description", data: "review.description", visible: false },
+        { title: "Latitude", data: "review.lat", visible: false },
+        { title: "Longitude", data: "review.lng", visible: false },
+        { title: "Statement", data: "review.statement" },
         {
           title: "Image URL",
-          data: "imageUrl",
+          data: "review.imageUrl",
         },
         {
           title: "Supporting Image URL",
-          data: "supportingImageUrl",
+          data: "review.supportingImageUrl",
         },
         // General Score
         {
           title: "Score",
-          data: "review.quality",
+          data: "review.review.quality",
           defaultContent: false,
           responsivePriority: 2,
-          render: (_score, type, { review }) => {
-            if (review === "skipped") {
-              return "Skipped";
-            }
-            if (!review) {
-              // Latest result without a review will count as pending
-              return "Expired";
-            }
-            if (review.quality) {
-              return review.quality;
-            }
-            if (review.duplicate) {
-              return "Duplicate";
-            }
-            if (review.spam) {
-              // was a reject
-              return 1;
-            }
-            return "?";
-          },
+          render: (_score, _type, data) => data.getScore(),
         },
         {
           title: "Description Score",
-          data: "review.description",
+          data: "review.review.description",
           defaultContent: "?",
         },
         {
           title: "Cultural Score",
-          data: "review.cultural",
+          data: "review.review.cultural",
           defaultContent: "?",
         },
         {
           title: "Uniqueness Score",
-          data: "review.uniqueness",
+          data: "review.review.uniqueness",
           defaultContent: "?",
         },
         {
           title: "Safety Score",
-          data: "review.safety",
+          data: "review.review.safety",
           defaultContent: "?",
         },
         {
           title: "Location Score",
-          data: "review.location",
+          data: "review.review.location",
           defaultContent: "?",
         },
         // Review Data
         {
           title: "Duplicate",
-          data: "review.duplicate",
+          data: "review.review.duplicate",
           defaultContent: false,
         },
         {
           title: "Spam",
-          data: "review.spam",
+          data: "review.review.spam",
           defaultContent: false,
         },
         {
           title: "Reject Reason",
-          data: "review.rejectReason",
+          data: "review.review.rejectReason",
           defaultContent: "NOT_REJECTED",
         },
         {
           title: "Comment",
-          data: "review.comment",
+          data: "review.review.comment",
           defaultContent: false,
         },
         {
           title: "New Location",
-          data: "review.newLocation",
+          data: "review.review.newLocation",
           defaultContent: false,
         },
         {
           title: "What is it?",
-          data: "review.what",
+          data: "review.review.what",
           defaultContent: false,
         },
         {
           title: "Accepted?",
-          data: "accepted",
+          data: "review.accepted",
           defaultContent: false,
         },
         {
@@ -600,11 +622,28 @@
         },
       ],
     });
+    window.table = table; // TODO delete this
+
+    $("#min, #max").on(
+      "change",
+      debounce(() => {
+        table.draw();
+      }, 250)
+    );
+
+    const filterShown = (review) => review.onMap;
+
     $reviewHistory.on("draw.dt", function () {
       console.log("Table redrawn");
+      // Hide all
+      reviews.forEach((review) => review.hideMarker());
+      // Show visible
+      table
+        .rows({ search: "applied" })
+        .data()
+        .each((review) => review.showMarker());
+      cluster.fitMapToMarkers();
     });
-    const mapElement = document.getElementById("reviewed-map");
-    const map = buildMap(reviews, mapElement);
 
     $("#content-container").on("click", ".toggle[data-index]", (ev) => {
       const { target } = ev;
@@ -628,7 +667,7 @@
         inline: "nearest",
       });
       infoWindow.open(map, currentMarker);
-      infoWindow.setContent(buildInfoWindowContent(currentReview));
+      infoWindow.setContent(currentReview.buildInfoWindowContent());
       map.setZoom(12);
       map.panTo({ lat: currentReview.lat, lng: currentReview.lng });
     });
