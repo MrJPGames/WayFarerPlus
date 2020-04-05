@@ -216,7 +216,7 @@
       return "";
     }
     return `
-    <table class="table table-condensed">
+    <table class="table table-condensed scores">
       <thead>
           <tr>
               <th class="text-center">Score</th>
@@ -504,23 +504,15 @@
       dom: "rtiB",
       buttons: [
         {
-          extend: "copyHtml5",
-          title: "Copy",
-          exportOptions: {
-            orthogonal: "export",
-            columns: (idx, data) => idx < data.length - 1 && idx !== 0,
-          },
-        },
-        {
           extend: "csvHtml5",
           title: "CSV",
           exportOptions: {
             orthogonal: "export",
-            columns: (idx, data) => idx < data.length - 1 && idx !== 0,
+            columns: ':not(:last-child)',
           },
         },
         {
-          text: "geojson",
+          text: "GeoJSON",
           action: (_ev, data) => {
             const filteredReviews = data.buttons
               .exportData()
