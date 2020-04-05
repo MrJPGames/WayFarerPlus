@@ -1,4 +1,76 @@
 (function () {
+  String.prototype.replaceAll = function (search, replacement) {
+    var target = this;
+    return target.replace(new RegExp(search, "gi"), replacement);
+  };
+  //NON-SECURE (But good enough for uniqueID on URLs)
+  function getStringHash(str) {
+    var hash = 0;
+    if (str.length == 0) {
+      return hash;
+    }
+    for (var i = 0; i < str.length; i++) {
+      var char = str.charCodeAt(i);
+      hash = (hash << 5) - hash + char;
+      hash = hash & hash; // Convert to 32bit integer
+    }
+    return hash;
+  }
+  function getOpenInButton(lat, lng, title) {
+    //Create main dropdown menu ("button")
+    var mainButton = document.createElement("div");
+    mainButton.setAttribute("class", "dropdown");
+
+    var buttonText = document.createElement("span");
+    buttonText.innerText = "Open in ...";
+
+    var dropdownContainer = document.createElement("div");
+    dropdownContainer.setAttribute("class", "dropdown-content");
+
+    mainButton.appendChild(buttonText);
+    mainButton.appendChild(dropdownContainer);
+
+    dropdownContainer.innerHTML = null;
+
+    var customMaps = JSON.parse(settings["customMaps"]);
+
+    for (var i = 0; i < customMaps.length; i++) {
+      var title = customMaps[i].title;
+      var link = customMaps[i].url;
+
+      //Link editing:
+      link = link.replaceAll("%lat%", lat);
+      link = link.replaceAll("%lng%", lng);
+      link = link.replaceAll("%title%", title);
+
+      var button = document.createElement("a");
+      button.href = link;
+      if (settings["keepTab"])
+        button.setAttribute("target", getStringHash(customMaps[i].url));
+      //On URL with placeholders as those are the same between different wayspots but not between different maps!
+      else button.setAttribute("target", "_BLANK");
+      button.innerText = title;
+      dropdownContainer.appendChild(button);
+    }
+
+    if (customMaps.length == 0) {
+      var emptySpan = document.createElement("span");
+      emptySpan.innerText = "No custom maps set!";
+      dropdownContainer.appendChild(emptySpan);
+    }
+
+    return mainButton;
+  }
+  const emptyArray = Array(5).fill(0);
+  function getStarRating(score) {
+    return `<span style="white-space:nowrap">${emptyArray
+      .map((_, i) =>
+        i + 1 <= score
+          ? `<span class="glyphicon glyphicon-star star-gray"></span>`
+          : `<span class="glyphicon glyphicon-star-empty star-gray"></span>`
+      )
+      .join("")}</span>`;
+  }
   const infoWindow = new google.maps.InfoWindow({
     content: "Loading...",
   });
@@ -231,19 +303,15 @@
     } = getReviewData(review.review);
 
     const score = spam ? 1 : quality || 0;
-    const scoreString = Array(5)
-      .fill(0)
-      .map((_, i) => (i + 1 <= score ? "★" : "☆"))
-      .join("");
     const status = duplicate
       ? "Duplicate"
       : review.review === "skipped"
       ? "Skipped"
       : "Timed Out/Pending";
 
-    return `<div class="panel panel-default">
-    <div class="panel-heading">${title} <div class="pull-right star-red-orange">${
-      score ? scoreString : status
+    return `<div class="panel panel-default review-details">
+    <div class="panel-heading">${title} <div class="pull-right">${
+      score ? getStarRating(score) : status
     }</div></div>
     <div class="panel-body">
         <div class="row">
@@ -263,11 +331,16 @@
                 supportingImageUrl &&
                   `<a target="_blank" href="${supportingImageUrl}=s0">View</a>`
               )}
-              ${getDD("Location", getIntelLink(lat, lng, "Open in Intel"))}
+              ${getDD(
+                "Location",
+                settings["profOpenIn"]
+                  ? getOpenInButton(lat, lng, title).outerHTML
+                  : getIntelLink(lat, lng, `Open in Intel`)
+              )}
               ${getDD("Review Date", getFormattedDate(ts, true))}
               ${getDD("Review #", index)}
               ${getDD(
-                "Open in Map",
+                "Focus in Map",
                 `<span class="focus-in-map" title="Focus in map" data-index="${index}" style="cursor:pointer" >📍</span>`
               )}
               ${getDD(
@@ -323,7 +396,7 @@
         },
         {
           extend: "csv",
-          title: 'CSV',
+          title: "CSV",
           exportOptions: {
             columns: ":not(:last-child)",
           },
@@ -341,7 +414,7 @@
             );
           },
         },
-        { text: "Delete History", action: clearLocalStorage },
+        { text: "Delete History", action: clearLocalStorage, className: 'btn-danger' },
       ],
       deferRender: true,
       scrollY: 400,
@@ -357,7 +430,7 @@
         columns: [
           9, // score
           17, // Reject Reason
-          20, // What is it
+          21, // Accepted
         ],
       },
       columns: [
@@ -369,6 +442,7 @@
         {
           title: "Date",
           data: "ts",
+          responsivePriority: 1,
           render: (ts, type) => {
             if (type === "display" || type === "filter") {
               return getFormattedDate(ts);
@@ -395,7 +469,7 @@
           data: "review.quality",
           defaultContent: false,
           responsivePriority: 2,
-          render: (_score, _type, { review }) => {
+          render: (_score, type, { review }) => {
             if (review === "skipped") {
               return "Skipped";
             }
@@ -404,14 +478,14 @@
               return "Expired";
             }
             if (review.quality) {
-              return review.quality;
+              return type === 'display' ? getStarRating(review.quality) : review.quality;
             }
             if (review.duplicate) {
               return "Duplicate";
             }
             if (review.spam) {
               // was a reject
-              return 1;
+              return type === 'display' ? getStarRating(1) : 1;
             }
             return "?";
           },
@@ -473,12 +547,15 @@
           defaultContent: false,
         },
         {
-          title: "Open In",
+          title: "Accepted?",
+          data: "accepted",
+          defaultContent: false,
+        },
+        {
+          title: "Map",
           responsivePriority: 3,
-          render: (_score, _type, { index, lat, lng, title }) => {
-            return `
-            <span class="focus-in-map" title="Focus in map" data-index="${index}" style="cursor:pointer" >📍</span>
-            ${settings["profOpenIn"]  ? getOpenInButton(lat, lng, title).outerHTML : getIntelLink(lat, lng,`<img src="https://intel.ingress.com/favicon.ico" />`)}`;
+          render: (_score, _type, { index }) => {
+            return `<span class="focus-in-map" title="Focus in map" data-index="${index}" style="cursor:pointer" >📍</span>`;
           },
         },
       ],
