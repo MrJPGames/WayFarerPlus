@@ -48,7 +48,7 @@ function addPageJS(file, defer = false){
 	var newScript = document.createElement("script");
 	newScript.src = chrome.extension.getURL("pageJs/" + file);
 	if (defer){
-		newScript.setAttribute("defer", "true");
+		newScript.setAttribute("defer", "");
 	}
 	document.getElementsByTagName("head")[0].appendChild(newScript);
 }

@@ -17,9 +17,10 @@ function modProfilePage(settings){
 		newCss2.setAttribute("href", chrome.extension.getURL("assets/daterangepicker.css"));
 		document.getElementsByTagName("head")[0].appendChild(newCss2);
 		addPageJS("libs/moment.js");
+		addPageJS("libs/jquery.js");
 		addPageJS("libs/datatables.js");
 		addPageJS("libs/markerclusterer.js");
-		addPageJS("libs/daterangepicker.js");
+		setTimeout(() => addPageJS("libs/daterangepicker.js"), 100);
 		addPageJS("profile/recordReviews.js", true);
 	}
 

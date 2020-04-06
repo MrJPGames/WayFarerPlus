@@ -425,20 +425,7 @@
     const localstorageReviews = getReviews();
 
     if (!localstorageReviews.length) return;
-    $.fn.dataTable.ext.search.push((_settings, data, _dataIndex) => {
-      const minVal = $("#min").val();
-      const maxVal = $("#max").val();
-      const min = new Date(minVal || 0);
-      const max = maxVal ? new Date(maxVal) : new Date();
-      min.setHours(0, 0, 0); // start of the day
-      max.setHours(23, 59, 59); // end of the day
-      const ts = data[1] || 0;
-      return +min <= ts && ts <= +max;
-    });
-    $.fn.dataTable.ext.search.push((_settings, data, _dataIndex) => {
-      const searchValue = $("#search").val();
-      return data[2].indexOf(searchValue) > -1;
-    });
+
     const profileStats = document.getElementById("profile-main-contain");
     profileStats.insertAdjacentHTML(
       "beforeend",
@@ -446,19 +433,13 @@
         <div class="container">
             <h3>Review History</h3>
             <div class="row row-input">
-              <div class="col-xs-4">
+              <div class="col-xs-6">
                 <div class="input-group">
-                <label class="input-group-addon" for="max">Start Date</label>
-                  <input id="min" type="date" class="form-control">
+                <label class="input-group-addon" for="date-range">Start Date</label>
+                  <input id="date-range" type="text" class="form-control">
                 </div>
               </div>
-              <div class="col-xs-4">
-                <div class="input-group">
-                  <label class="input-group-addon" for="max">End Date</label>
-                  <input id="max" type="date" class="form-control">
-                </div>
-              </div>
-              <div class="col-xs-4">
+              <div class="col-xs-6">
               <div class="input-group">
                 <label class="input-group-addon" for="search">Search</label>
                 <input id="search" type="text" autocomplete="off" class="form-control">
@@ -654,26 +635,26 @@
         },
       ],
     });
-    window.table = table; // TODO delete this
 
-    $("#min, #search").on(
-      "change",
-      debounce(() => {
-        table.draw();
-      }, 250)
-    );
+    const debouncedDraw = debounce(() => {
+      table.draw();
+    }, 250);
 
-    $("#min").daterangepicker(
+    $("#search").on("change", debouncedDraw);
+
+    let startDate = moment(reviews[0].review.ts);
+    let endDate = moment();
+    $("#date-range").daterangepicker(
       {
         showDropdowns: true,
         timePicker: true,
         timePicker24Hour: true,
         autoApply: true,
         ranges: {
-          Today: [moment(), moment()],
+          Today: [moment().startOf('day'), moment()],
           Yesterday: [
-            moment().subtract(1, "days"),
-            moment().subtract(1, "days"),
+            moment().subtract(1, "days").startOf('day'),
+            moment().subtract(1, "days").endOf('day'),
           ],
           "Last 7 Days": [moment().subtract(6, "days"), moment()],
           "Last 30 Days": [moment().subtract(29, "days"), moment()],
@@ -684,22 +665,29 @@
           ],
         },
         alwaysShowCalendars: true,
-        startDate: "03/30/2020",
-        endDate: "04/05/2020",
-        maxDate: "03/31/2020",
+        startDate,
+        endDate,
+        maxDate: moment(),
+        locale: {
+          format: "DD/MM/YYYY",
+        },
       },
-      function (start, end, label) {
-        console.log(
-          "New date range selected: " +
-            start.format("YYYY-MM-DD") +
-            " to " +
-            end.format("YYYY-MM-DD") +
-            " (predefined range: " +
-            label +
-            ")"
-        );
+      (start, end) => {
+        startDate = start;
+        endDate = end;
+        debouncedDraw();
       }
     );
+
+    $.fn.dataTable.ext.search.push((_settings, data, _dataIndex) => {
+      const ts = moment(parseInt(data[1]));
+      return +ts >= +startDate && +ts <= +endDate;
+    });
+
+    $.fn.dataTable.ext.search.push((_settings, data, _dataIndex) => {
+      const searchValue = $("#search").val();
+      return data[2].indexOf(searchValue) > -1;
+    });
 
     const filterShown = (review) => review.onMap;
 
