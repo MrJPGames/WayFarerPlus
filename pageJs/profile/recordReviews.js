@@ -209,7 +209,9 @@
     definition ? `<dt>${term}</dt><dd>${definition}</dd>` : "";
 
   const getIntelLink = (lat, lng, content) =>
-    `<a target="_blank" rel="noreferrer" title="Open in Intel" href="https://intel.ingress.com/intel?ll=${lat},${lng}&z=21">${content}</a>`;
+    `<a target="${getTarget(
+      "intel"
+    )}" rel="noreferrer" title="Open in Intel" href="https://intel.ingress.com/intel?ll=${lat},${lng}&z=21">${content}</a>`;
 
   const renderScores = ({ review }) => {
     if (!review || typeof review === "string" || !review.quality) {
@@ -241,6 +243,12 @@
 `;
   };
 
+  const getTarget = (target) => {
+    if (!settings["keepTab"]) {
+      return "_blank";
+    }
+    return getStringHash(target);
+  };
   class Review {
     constructor({ review, map, index, cluster }) {
       this.review = review;
@@ -361,7 +369,9 @@
       }</div></div>
       <div class="panel-body">
           <div class="row">
-            <div class="col-xs-12 col-sm-4"><a target="_blank" href="${imageUrl}=s0"><img style="max-width: 100%" src="${imageUrl}" class="img-responsive" alt="${title}"></a></div>
+            <div class="col-xs-12 col-sm-4"><a target="${getTarget(
+              "images"
+            )}" href="${imageUrl}=s0"><img style="max-width: 100%" src="${imageUrl}" class="img-responsive" alt="${title}"></a></div>
             <div class="col-xs-12 col-sm-8">
               <dl class="dl-horizontal">
                 ${getDD("Title", title)}
@@ -374,7 +384,9 @@
                 ${getDD(
                   "Supporting Image",
                   supportingImageUrl &&
-                    `<a target="_blank" href="${supportingImageUrl}=s0">View</a>`
+                    `<a target="${getTarget(
+                      "images"
+                    )}" href="${supportingImageUrl}=s0">View</a>`
                 )}
                 ${getDD(
                   "Location",
@@ -651,10 +663,10 @@
         timePicker24Hour: true,
         autoApply: true,
         ranges: {
-          Today: [moment().startOf('day'), moment()],
+          Today: [moment().startOf("day"), moment()],
           Yesterday: [
-            moment().subtract(1, "days").startOf('day'),
-            moment().subtract(1, "days").endOf('day'),
+            moment().subtract(1, "days").startOf("day"),
+            moment().subtract(1, "days").endOf("day"),
           ],
           "Last 7 Days": [moment().subtract(6, "days"), moment()],
           "Last 30 Days": [moment().subtract(29, "days"), moment()],
