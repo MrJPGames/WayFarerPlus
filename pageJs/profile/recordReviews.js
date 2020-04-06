@@ -296,9 +296,11 @@
     renderScore(type) {
       const review = this.review.review;
       if (review === "skipped") {
+        if (type === "sort") return 0;
         return "Skipped";
       }
       if (!review) {
+        if (type === "sort") return -1;
         // Latest result without a review will count as pending
         return "Expired";
       }
@@ -308,6 +310,7 @@
           : getStarRating(review.quality);
       }
       if (review.duplicate) {
+        if (type === "sort") return -2;
         return "Duplicate";
       }
       if (review.spam) {
@@ -698,7 +701,7 @@
 
     $.fn.dataTable.ext.search.push((_settings, data, _dataIndex) => {
       const searchValue = $("#search").val();
-      return data[2].indexOf(searchValue) > -1;
+      return data[2].toLowerCase().indexOf(searchValue.toLowerCase()) > -1;
     });
 
     const filterShown = (review) => review.onMap;
