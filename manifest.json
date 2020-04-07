@@ -27,6 +27,7 @@
     "storage"
   ],
   "web_accessible_resources": [
+    "pageJs/libs/*.js",
     "pageJs/*.js",
     "assets/*"
   ]
