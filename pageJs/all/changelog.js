@@ -25,7 +25,15 @@ function showChangelog(version){
 		case 20:
 			changelogStr += "1.12.4:\n\
 							- An additional S2 cell level can be enabled\n\
-							  at the same time.";
+							  at the same time.\n\n";
+		case 21:
+			changelogStr += "1.13:\n\
+							- Major Review History update by mariomc:\n\
+							-> Search by title/date\n\
+							-> Filtered exports are now possible!\n\
+							-> Marking a review as 'accepted' no longer refreshes the page\n\
+							-> Details can be viewed inline with the table\n\
+							-> GeoJSON now has colour-coding";
 		default:
 			break;
 	}

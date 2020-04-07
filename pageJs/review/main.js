@@ -14,7 +14,8 @@ function setupPage(){
 }
 
 function onHooked(){
-	addDescriptionLink();
+	if (settings["revDescLink"])
+		addDescriptionLink();
 	filmStripScroll();
 	if (nSubCtrl.reviewType == "NEW")
 		if (nSubCtrl.pageData.nearbyPortals[0] != undefined)
