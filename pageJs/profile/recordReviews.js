@@ -793,7 +793,7 @@
           saveReview(nSubCtrl.pageData, {
             ...ansCtrl2.formData,
             review: {
-              ...answerCtrl2.formData.review,
+              ...ansCtrl2.formData.review,
               comment: ansCtrl2.rejectComment,
             },
           });
