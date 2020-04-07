@@ -14,7 +14,8 @@ function setupPage(){
 }
 
 function onHooked(){
-	addDescriptionLink();
+	if (settings["revDescLink"])
+		addDescriptionLink();
 	filmStripScroll();
 	if (nSubCtrl.reviewType == "NEW")
 		if (nSubCtrl.pageData.nearbyPortals[0] != undefined)
@@ -34,11 +35,11 @@ function hookedAll(){
 }
 
 function hookSubCtrl(){
-	nSubCtrl = angular.element(document.getElementById("NewSubmissionController")).scope().subCtrl;
-	nSubCtrlScope = angular.element(document.getElementById("NewSubmissionController")).scope();
+	tempNSubCtrl = angular.element(document.getElementById("NewSubmissionController")).scope().subCtrl;
+	tempNSubCtrlScope = angular.element(document.getElementById("NewSubmissionController")).scope();
 	
-	if (nSubCtrl == undefined || nSubCtrl.pageData == undefined || nSubCtrl.pageData.expires == undefined || nSubCtrl.loaded == false || nSubCtrl.pageData.description == undefined){
-		if (nSubCtrl != undefined && nSubCtrl.errorMessage != "") {
+	if (tempNSubCtrl == undefined || tempNSubCtrl.pageData == undefined || tempNSubCtrl.pageData.expires == undefined || tempNSubCtrl.loaded == false || tempNSubCtrl.pageData.description == undefined){
+		if (tempNSubCtrl != undefined && tempNSubCtrl.errorMessage != "") {
 			autoretry = true;
 			var modEvent = new Event("WFPNSubCtrlError");
 			document.dispatchEvent(modEvent);
@@ -46,8 +47,11 @@ function hookSubCtrl(){
 			setTimeout(hookSubCtrl, 50);
 		}
 	}else{
+		nSubCtrl = tempNSubCtrl;
+		nSubCtrlScope = tempNSubCtrlScope;
 		hooked++;
 		console.log("[WayFarer+] NewSubmissionController was hooked to nSubCtrl");
+		console.log("[WayFarer+] NewSubmissionController's scope was hooked to nSubCtrlScope");
 
 		var modEvent = new Event("WFPNSubCtrlHooked");
         document.dispatchEvent(modEvent);
@@ -62,11 +66,12 @@ function hookSubCtrl(){
 }
 
 function hookAnsCtrl(){
-	ansCtrl = angular.element(document.getElementById("AnswersController")).scope().answerCtrl;
+	tempAnsCtrl = angular.element(document.getElementById("AnswersController")).scope().answerCtrl;
 
-	if (ansCtrl == undefined){
+	if (tempAnsCtrl == undefined){
 		setTimeout(hookAnsCtrl, 50);
 	}else{
+		ansCtrl = tempAnsCtrl;
 		hooked++;
 		console.log("[WayFarer+] AnswersController was hooked to ansCtrl");
 
@@ -86,12 +91,14 @@ function hookWhatCtrl(){
 		setTimeout(hookWhatCtrl, 50);
 		return;
 	}
-	whatCtrl = angular.element(document.getElementById(cardId).children[0]).scope().whatCtrl;
-	whatCtrlScope = angular.element(document.getElementById(cardId).children[0]).scope();
+	tempWhatCtrl = angular.element(document.getElementById(cardId).children[0]).scope().whatCtrl;
+	tempWhatCtrlScope = angular.element(document.getElementById(cardId).children[0]).scope();
 
-	if (whatCtrl == undefined){
+	if (tempWhatCtrl == undefined){
 		setTimeout(hookWhatCtrl, 50);
 	}else{
+		whatCtrl = tempWhatCtrl;
+		whatCtrlScope = tempWhatCtrlScope;
 		hooked++;
 		console.log("[WayFarer+] WhatIsItController was hooked to whatCtrl");
 		console.log("[WayFarer+] WhatIsItController scope was hooked to whatCtrlScope");
@@ -102,10 +109,11 @@ function hookWhatCtrl(){
 }
 
 function hookDataService(){
-	angular.element(document.getElementsByTagName("html")[0]).injector().invoke(["NewSubmissionDataService", function (nSF) {nSubDS = nSF;}]);
-	if (nSubDS == undefined){
+	angular.element(document.getElementsByTagName("html")[0]).injector().invoke(["NewSubmissionDataService", function (nSF) {tempNSubDS = nSF;}]);
+	if (tempNSubDS == undefined){
 		setTimeout(hookDataService, 50);
 	}else{
+		nSubDS = tempNSubDS;
 		hooked++;
 		console.log("[WayFarer+] NewSubmissionDataService was hooked to nSubDS");
 
@@ -143,12 +151,12 @@ function filmStripScroll(){
 function checkNearby(){
 	var d = distance(nSubCtrl.pageData.lat, nSubCtrl.pageData.lng, nSubCtrl.pageData.nearbyPortals[0].lat, nSubCtrl.pageData.nearbyPortals[0].lng);
 	if (d < 20){
-		console.log("[WayFarer+] WARNING: Portal nomination too close, will not go live!");
+		console.log("[WayFarer+] WARNING: Portal nomination too close, will not go live in any current Niantic game!");
 
 		if (settings["revTooCloseWarn"]){
 			var warningDiv = document.createElement("div");
 			warningDiv.style = "color: red; font-size: 1em; display: block; font-weight: bold;";
-			warningDiv.innerText = "NOTE: Wayspot TOO CLOSE to go online in ANY current Niantic game!";
+			warningDiv.innerText = "NOTE: Wayspot within 20m of another, possibly a duplicate?";
 
 			var ansHeader = document.getElementsByClassName("answer-header")[0];
 			ansHeader.parentNode.insertBefore(warningDiv, ansHeader);

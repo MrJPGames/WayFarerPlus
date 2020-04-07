@@ -8,11 +8,12 @@ function setupPage(){
     }
 
     var nomCtrlDiv = document.getElementsByClassName("nominations-controller")[0];
-    nomCtrl = angular.element(nomCtrlDiv).scope().nomCtrl;
-    if (nomCtrl == undefined){
+    tempNomCtrl = angular.element(nomCtrlDiv).scope().nomCtrl;
+    if (tempNomCtrl == undefined){
         //Retry until page is loaded far enough to grab nomination controller
         setTimeout(setupPage, 100);
     }else{
+        nomCtrl = tempNomCtrl;
         console.log("[WayFarer+] Hooked NominationsController to nomCtrl");
         
         var modEvent = new Event("WFPNomCtrlHooked");

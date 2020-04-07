@@ -74,7 +74,10 @@ function applyPublicStyle(){
 	.container {background: black !important;}
 	.supporting-statement-central-field, .title-description-central-field {background: black !important;}
 	.table-striped>tbody>tr:nth-of-type(odd) {background-color:black !important;}
+	.table-striped>tbody>tr:nth-of-type(even) {background-color:#222 !important;}
 	.table-responsive {color: white !important;}
+	#review-history .panel-body, #review-history .scores, #review-history .scores tr {background-color: black !important; }
+	.row-input input { background-color: black !important; }
 	tr.success{color: black !important;}`;
 
 
