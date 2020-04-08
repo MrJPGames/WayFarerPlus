@@ -125,17 +125,19 @@ function presetClick(e){
 function removePreset(e){
 	e.preventDefault();
 
-	var pID = e.srcElement.getAttribute("presetID");
-	var presets = JSON.parse(localStorage.wfpPresets);
-	presets.splice(pID, 1); //Remove from array
-	localStorage.wfpPresets = JSON.stringify(presets); //Store removal
+	if (confirm("Are you sure you want to remove this preset?")){
+		var pID = e.srcElement.getAttribute("presetID");
+		var presets = JSON.parse(localStorage.wfpPresets);
+		presets.splice(pID, 1); //Remove from array
+		localStorage.wfpPresets = JSON.stringify(presets); //Store removal
 
-	//Remove all "old" buttons
-	while (presetContainer.firstChild) {
-	    presetContainer.removeChild(presetContainer.firstChild);
+		//Remove all "old" buttons
+		while (presetContainer.firstChild) {
+			presetContainer.removeChild(presetContainer.firstChild);
+		}
+		//Readd buttons
+		addAllPresetButtons();
 	}
-	//Readd buttons
-	addAllPresetButtons();
 }
 
 function keepInBounds(val){
