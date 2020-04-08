@@ -27,6 +27,9 @@ function modNominationPage(settings){
     if (settings["nomOpenIn"]){
     	addPageJS("nominations/mapButtons.js");
 	}
+	if (settings["nomExportButtons"]){
+		addPageJS("nominations/exportButtons.js");
+	}
     if (settings["accPoGo"] && settings["accIngress"] && settings["nomStats"])
         addNomTypeButtons();
 
