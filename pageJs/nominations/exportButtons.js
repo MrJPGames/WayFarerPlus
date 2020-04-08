@@ -1,7 +1,8 @@
 (function () {
   function downloadFile(type, name, content) {
     const hiddenElement = document.createElement("a");
-    hiddenElement.href = `data:${type};charset=utf-8,` + encodeURIComponent(content);
+    hiddenElement.href =
+      `data:${type};charset=utf-8,` + encodeURIComponent(content);
     hiddenElement.target = "_blank";
     hiddenElement.download = name;
     hiddenElement.click();
@@ -40,12 +41,17 @@
       WITHDRAWN: "#FFA500",
       VOTING: "#FFFF00",
       REJECTED: "#FF0000",
-      DEFAULT: "#FFFFFF"
+      DEFAULT: "#FFFFFF",
     };
 
     // nomCtrl.nomList
     csvButton.addEventListener("click", () => {
       const nominationList = nomCtrl.nomList || [];
+
+      if (!nominationList.length) {
+        alert("No nominations to export!");
+        return;
+      }
 
       const csv = convertToCSV(nominationList);
       downloadFile("text/csv", "nominations.csv", csv);
@@ -53,6 +59,10 @@
 
     geojsonButton.addEventListener("click", () => {
       const nominationList = nomCtrl.nomList || [];
+      if (!nominationList.length) {
+        alert("No nominations to export!");
+        return;
+      }
       const geojson = {
         type: "FeatureCollection",
         features: nominationList.map(({ lat, lng, ...props }) => {
