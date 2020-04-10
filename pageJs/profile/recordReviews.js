@@ -86,7 +86,6 @@
   const infoWindow = new google.maps.InfoWindow({
     content: "Loading...",
   });
-  let markers = [];
 
   const getReviews = () => {
     const currentItemsText = localStorage.getItem("wfpSaved") || "[]";
@@ -749,8 +748,8 @@
     $("#content-container").on("click", ".focus-in-map[data-index]", (ev) => {
       const { target } = ev;
       const { index } = target.dataset;
-      const currentMarker = markers[index];
       const currentReview = reviews[index];
+      const currentMarker = currentReview.marker;
 
       mapElement.scrollIntoView({
         behavior: "smooth",
@@ -760,7 +759,7 @@
       infoWindow.open(map, currentMarker);
       infoWindow.setContent(currentReview.buildInfoWindowContent());
       map.setZoom(12);
-      map.panTo({ lat: currentReview.lat, lng: currentReview.lng });
+      map.panTo({ lat: currentReview.review.lat, lng: currentReview.review.lng });
     });
   };
 

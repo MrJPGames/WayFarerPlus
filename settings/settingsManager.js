@@ -72,6 +72,8 @@ chrome.storage.local.get("options_set", function (data){
 			setOption("revDescLink", true);
 		case 22:
 			setOption("options_set", settingsVersion);
+		case 22:
+			setOption("nomExportButtons", true);
 	}
 });
 
