@@ -33,7 +33,16 @@ function showChangelog(version){
 							-> Filtered exports are now possible!\n\
 							-> Marking a review as 'accepted' no longer refreshes the page\n\
 							-> Details can be viewed inline with the table\n\
-							-> GeoJSON now has colour-coding";
+							-> GeoJSON now has colour-coding\n\n";
+		case 22:
+			changelogStr += "1.14:\n\
+							- Nomination notifications (ONLY when on nominations page!) notifies\n\
+							  when a nomination goes in voting or gets an upgrade\n\
+							- Nominations can now be exported to CSV and GeoJSON (Thanks to mariomc!)\n\
+							- Review history will be account specific from now on\n\
+							  your current history will be transferred to only 1 account!\n\
+							- Improved keyboard controls (ctr+enter or spacebar to quick submit)\n\
+							- More detailed nomination stats";
 		default:
 			break;
 	}

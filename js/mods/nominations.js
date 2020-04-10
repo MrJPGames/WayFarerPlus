@@ -12,6 +12,10 @@ function modNominationPage(settings){
 		addPageJS("nominations/statsWidget.js");
 	}
 
+	if (settings["nomNotify"]){
+		addPageJS("nominations/notify.js");
+	}
+
 	if (settings["nominationMap"]) {
 		addPageJS("libs/markerclusterer.js");
 		addPageJS("nominations/nominationMap.js");
@@ -26,6 +30,9 @@ function modNominationPage(settings){
     }
     if (settings["nomOpenIn"]){
     	addPageJS("nominations/mapButtons.js");
+	}
+	if (settings["nomExportButtons"]){
+		addPageJS("nominations/exportButtons.js");
 	}
     if (settings["accPoGo"] && settings["accIngress"] && settings["nomStats"])
         addNomTypeButtons();

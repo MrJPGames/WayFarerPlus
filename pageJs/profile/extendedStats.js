@@ -82,7 +82,6 @@ function addExtendedStats(){
 		curBadgeElem.appendChild(curBadgeRightElem);
 
 		profileStats.children[0].appendChild(curBadgeElem);
-		console.log(badge, reconBadges.length);
 
 		//Check if you don't already have the highest badge
 		if (badge+1 < reconBadges.length){

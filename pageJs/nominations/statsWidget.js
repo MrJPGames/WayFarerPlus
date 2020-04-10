@@ -71,7 +71,7 @@ function loadStats(){
         var nomAge = daysSince(nomCtrl.nomList[i].day);
         var nomType = nomTypes[nomCtrl.nomList[i].id];
         if (settings["accIngress"] && settings["accPoGo"]){
-            if (nomType == "pogo"){
+            if (nomType === "pogo"){
                 nomPeriod = 14;
             }else{
                 //Both when Ingress is set, and otherwise this is our default assumption
@@ -84,9 +84,9 @@ function loadStats(){
         }
         if (nomAge <= nomPeriod){
             availableNominations--;
-            if (nomType == "ingress")
+            if (nomType === "ingress")
                 availableIngressNominations--;
-            if (nomType == "pogo")
+            if (nomType === "pogo")
                 availablePoGoNominations--;
 
 
@@ -102,12 +102,13 @@ function loadStats(){
         html += "<div id='statReload' style='filter: invert()' onclick='loadStats()'><img src='/img/pages/refresh-24px.svg'></div>";
 
     html += "Total Nominations: " + parseInt(nomCount) +
-            "<br/>Accepted: " + parseInt(acceptedCount) +
-            "<br/>Rejected: " + parseInt(deniedCount) +
-            "<br/>Withdrawn: " + parseInt(withdrawnCount) +
-            "<br/>Duplicates: " + parseInt(dupeCount) +
+            "<br/>Accepted: " + parseInt(acceptedCount) + " (" + (Math.round(acceptedCount/nomCount*100)) + "%)" +
+            "<br/>Rejected: " + parseInt(deniedCount) + " (" + (Math.round(deniedCount/nomCount*100)) + "%)" +
+            "<br/>Withdrawn: " + parseInt(withdrawnCount) + " (" + (Math.round(withdrawnCount/nomCount*100)) + "%)" +
+            "<br/>Duplicates: " + parseInt(dupeCount) + " (" + (Math.round(dupeCount/nomCount*100)) + "%)" +
             "<br/>In Voting: " + parseInt(inVoteCount) + " (" + parseInt(inVoteUpgradeCount) + " upgraded)" +
             "<br/>In Queue: " + parseInt(inQueueCount) + " (" + parseInt(inQueueUpgradeCount) + " upgraded)" +
+            "<br/>Accepted ratio: 1:" + Math.round(10*(1/(acceptedCount/deniedCount)))/10 +
             "<br/><br/>Nominations available: " + parseInt(availableNominations);
 
     if (settings["accIngress"] && settings["accPoGo"] && availableNominations == (availableIngressNominations+availablePoGoNominations)){

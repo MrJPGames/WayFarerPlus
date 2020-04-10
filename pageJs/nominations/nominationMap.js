@@ -1,8 +1,9 @@
 const colorMap = {
 	"ACCEPTED": "green",
 	"NOMINATED": "blue",
-	"WITHDRAWN": "orange",
+	"WITHDRAWN": "grey",
 	"VOTING": "yellow",
+	"DUPLICATE": "orange",
 	"REJECTED": "red",
 };
 
