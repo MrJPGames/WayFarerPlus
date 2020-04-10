@@ -37,7 +37,7 @@ function showChangelog(version){
 		case 22:
 			changelogStr += "1.14:\n\
 							- Improved keyboard controls (ctr+enter or spacebar to quick submit)\n\
-							";
+							- More detailed nomination stats";
 		default:
 			break;
 	}
