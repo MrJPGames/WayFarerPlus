@@ -1,4 +1,15 @@
 (function () {
+  //Because the storage format was updated we need to check (at least for quite some time) whether someone has
+  //updated and in case they have convert the old storage system to the new system!
+  (function(){
+    if (localStorage.wfpSaved !== undefined){
+      //User used an older function and hasn't updated yet, let's do so!
+      storeReviewHistory(JSON.parse(localStorage.wfpSaved));
+      localStorage.removeItem("wfpSaved");
+    }
+  })();
+
+
   String.prototype.replaceAll = function (search, replacement) {
     var target = this;
     return target.replace(new RegExp(search, "gi"), replacement);
@@ -6,7 +17,7 @@
   //NON-SECURE (But good enough for uniqueID on URLs)
   function getStringHash(str) {
     var hash = 0;
-    if (str.length == 0) {
+    if (str.length === 0) {
       return hash;
     }
     for (var i = 0; i < str.length; i++) {
@@ -53,13 +64,33 @@
       dropdownContainer.appendChild(button);
     }
 
-    if (customMaps.length == 0) {
+    if (customMaps.length === 0) {
       var emptySpan = document.createElement("span");
       emptySpan.innerText = "No custom maps set!";
       dropdownContainer.appendChild(emptySpan);
     }
 
     return mainButton;
+  }
+
+  function storeReviewHistory(data){
+    var userID = (document.getElementById("upgrades-profile-icon").getElementsByTagName("image")[0].href.baseVal).substr(37);
+    localStorage.setItem("wfpSaved" + userID, JSON.stringify(data));
+  }
+
+  function getReviewHistory(){
+    var userID = (document.getElementById("upgrades-profile-icon").getElementsByTagName("image")[0].href.baseVal).substr(37);
+    var ret = localStorage.getItem("wfpSaved" + userID);
+    if (ret === undefined){
+      return [];
+    }else{
+      return JSON.parse(ret);
+    }
+  }
+
+  function removeReviewHistory(){
+    var userID = (document.getElementById("upgrades-profile-icon").getElementsByTagName("image")[0].href.baseVal).substr(37);
+    localStorage.removeItem("wfpSaved" + userID);
   }
 
   const debounce = (callback, time) => {
@@ -88,8 +119,7 @@
   });
 
   const getReviews = () => {
-    const currentItemsText = localStorage.getItem("wfpSaved") || "[]";
-    const currentItems = JSON.parse(currentItemsText);
+    const currentItems = getReviewHistory();
     return currentItems;
   };
 
@@ -98,7 +128,7 @@
       "This will delete all your review history! Are you sure?"
     );
     if (confirmation) {
-      localStorage.removeItem("wfpSaved");
+      removeReviewHistory();
       window.location.reload();
     }
   };
@@ -142,7 +172,7 @@
       // push the new result
       currentItems.push(toSave);
     }
-    localStorage.setItem("wfpSaved", JSON.stringify(currentItems));
+    storeReviewHistory(currentItems);
   };
 
   const dateSettings = {
@@ -289,7 +319,7 @@
       const localStorageReviews = getReviews();
       const localStorageReview = localStorageReviews[this.index];
       localStorageReview.accepted = !localStorageReview.accepted;
-      localStorage.setItem("wfpSaved", JSON.stringify(localStorageReviews));
+      storeReviewHistory(localStorageReviews);
     }
 
     renderScore(type) {
