@@ -33,7 +33,11 @@ function showChangelog(version){
 							-> Filtered exports are now possible!\n\
 							-> Marking a review as 'accepted' no longer refreshes the page\n\
 							-> Details can be viewed inline with the table\n\
-							-> GeoJSON now has colour-coding";
+							-> GeoJSON now has colour-coding\n\n";
+		case 22:
+			changelogStr += "1.14:\n\
+							- Improved keyboard controls (ctr+enter or spacebar to quick submit)\n\
+							";
 		default:
 			break;
 	}

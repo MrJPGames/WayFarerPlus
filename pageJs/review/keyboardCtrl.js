@@ -68,30 +68,35 @@ function initKeyboardControls(){
 
 function keyDownEvent(e){	
 	//If typing in a text field ignore ALL input (except for enter to confirm rejection)
-	if (document.activeElement.nodeName == "TEXTAREA" || document.activeElement.nodeName == "INPUT"){
-		if (rejectComplete && e.keyCode == 13){
-			//Stop the enter from creating a new line in the textarea
+	if (document.activeElement.nodeName === "TEXTAREA" || document.activeElement.nodeName === "INPUT"){
+		if (rejectComplete && e.keyCode === 13){
+			//Allow for new line if shift is held
 			if (e.shiftKey)
 				return;
+			//Stop the enter from creating a new line in the textarea
 			e.preventDefault();
 			var ansCtrl2Elem = document.getElementById("low-quality-modal");
 			var ansCtrl2 = angular.element(ansCtrl2Elem).scope().answerCtrl2;
 			ansCtrl2.confirmLowQuality();
-			ansCtrl.reviewComplete = true;
+			if (e.ctrlKey){
+				ansCtrl2.reloadPage();
+			}else {
+				ansCtrl.reviewComplete = true;
+			}
 		}
 		return;
 	}
 	if (ansCtrl.reviewComplete){
-		if (e.keyCode == 13) //Enter Key
+		if (e.keyCode === 13) //Enter Key
 			ansCtrl.reloadPage();
-		if (e.keyCode == 8) //Backspace
+		if (e.keyCode === 8) //Backspace
 			window.location.href = "/";
 	}else{
 		if (!inReject && !inDuplicate){
 			//Normal review state (not in modal)
-			if (e.keyCode == 37 || e.keyCode == 8){ //Left arrow key or backspace
+			if (e.keyCode === 37 || e.keyCode === 8){ //Left arrow key or backspace
 				changeRevPos(-1, true);
-			}else if (e.keyCode == 39){ //Right arrow key
+			}else if (e.keyCode === 39){ //Right arrow key
 				changeRevPos(1, true);
 			}else if (e.keyCode >= 97 && e.keyCode <= 101){ // 1-5 Num pad
 				var rating = e.keyCode - 97;
@@ -99,20 +104,20 @@ function keyDownEvent(e){
 			}else if (e.keyCode >= 49 && e.keyCode <= 53){ // 1-5 normal
 				var rating = e.keyCode - 49;
 				setRating(revPos, rating);
-			}else if ( (e.keyCode == 48 || e.keyCode == 96) && nSubCtrl.reviewType == "NEW"){ //0 normal/Num pad
+			}else if ( (e.keyCode === 48 || e.keyCode === 96) && nSubCtrl.reviewType === "NEW"){ //0 normal/Num pad
 				setRating(0,0);
-			}else if (e.keyCode == 13){ //Enter key
-				if (ansCtrl.readyToSubmit())
-					ansCtrl.submitForm();
-			}else if (e.keyCode == 32){
+			}else if (e.keyCode === 32 || (e.keyCode === 13 && e.ctrlKey) ){ //Space bar or ctrl+enter
 				if (ansCtrl.readyToSubmit()){
 					ansCtrl.submitForm();
 					ansCtrl.reloadPage();
 				}
-			}else if (e.keyCode == 68){ // D key
+			}else if (e.keyCode === 13){ //Enter key
+				if (ansCtrl.readyToSubmit())
+					ansCtrl.submitForm();
+			}else if (e.keyCode === 68){ // D key
 				var dupeButton = document.getElementById("markDuplicateButton");
-				if (dupeButton == undefined){
-					if (nSubCtrl.reviewType == "NEW" && nSubCtrl.activePortals.length > 0)
+				if (dupeButton === undefined){
+					if (nSubCtrl.reviewType === "NEW" && nSubCtrl.activePortals.length > 0)
 						nSubCtrl.displayLivePortal(0);
 					else
 						return;
@@ -128,26 +133,26 @@ function keyDownEvent(e){
 					inDuplicate = false;
 					func();
 				}
-			}else if (e.keyCode == 188){
+			}else if (e.keyCode === 188){
 				selectDuplicateRelative(-1);
-			}else if (e.keyCode == 190){
+			}else if (e.keyCode === 190){
 				selectDuplicateRelative(1);
 			}
 		}else if (inDuplicate){
 			var elem = document.getElementsByClassName("modal-dialog modal-med")[0].children[0].children[0];
 			var ansCtrl2 = angular.element(elem).scope().answerCtrl2;
-			if (e.keyCode == 8){
+			if (e.keyCode === 8){ //Backspace
 				ansCtrl2.resetDuplicate();
-			}else if (e.keyCode == 13){
-				ansCtrl2.confirmDuplicate();
-				ansCtrl.reviewComplete = true;
-			}else if (e.keyCode == 32){
+			}else if (e.keyCode === 32 || (e.keyCode === 13 && e.ctrlKey) ){ //Space bar or ctrl+enter
 				ansCtrl2.confirmDuplicate();
 				ansCtrl2.reloadPage();
+			}else if (e.keyCode === 13){
+				ansCtrl2.confirmDuplicate();
+				ansCtrl.reviewComplete = true;
 			}
 		}else{
 			//In rejection
-			if (e.keyCode == 37 || e.keyCode == 8){ //Left arrow or backspace
+			if (e.keyCode === 37 || e.keyCode === 8){ //Left arrow or backspace
 				//Reject selection complete but not typing in reason
 				if (rejectComplete){
 					//Click the element for the user (the top "menu" in reject reason screen)
@@ -155,7 +160,7 @@ function keyDownEvent(e){
 					//Reset menu ptr
 					menuPtr = document.getElementById("reject-reason").children[0].children[2];
 					rejectComplete = false;
-				}else if (menuPtr.getAttribute("class") == "sub-group-list"){ //Check if in a submenu
+				}else if (menuPtr.getAttribute("class") === "sub-group-list"){ //Check if in a submenu
 					menuPtr.parentNode.children[0].click(); //Minimizes submenu
 					menuPtr = menuPtr.parentNode.parentNode; //Reset menuPtr to main menu
 				}else{
@@ -170,12 +175,12 @@ function keyDownEvent(e){
 			if (e.keyCode >= 49 && e.keyCode <= 57){
 				menuPos = e.keyCode - 49;
 			}
-			if (menuPos != -1){
+			if (menuPos !== -1){
 				//A number was pressed
-				if (menuPtr.children[menuPos] != undefined){
+				if (menuPtr.children[menuPos] !== undefined){
 					menuPtr.children[menuPos].children[0].click();
 
-					if (menuPtr.getAttribute("class") == "group-list"){ //Check if in main menu
+					if (menuPtr.getAttribute("class") === "group-list"){ //Check if in main menu
 						menuPtr = menuPtr.children[menuPos].children[2];
 
 						var i = 0;

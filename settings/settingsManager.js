@@ -1,5 +1,5 @@
 //Sets up default settings on first launch or upgrade
-var settingsVersion = 22;
+var settingsVersion = 23;
 
 var defaultMapSettings = '[{"title":"Google Maps","url":"https://maps.google.com/maps?q=%lat%,%lng%"},{"title":"Ingress Intel","url":"https://intel.ingress.com/intel?ll=%lat%,%lng%&z=18"},{"title":"OSM","url":"https://www.openstreetmap.org/?mlat=%lat%&mlon=%lng%#map=18/%lat%/%lng%"}]';
 
@@ -70,6 +70,7 @@ chrome.storage.local.get("options_set", function (data){
 			setOption("revSecondS2Cell", -1);
 		case 21:
 			setOption("revDescLink", true);
+		case 22:
 			setOption("options_set", settingsVersion);
 	}
 });
