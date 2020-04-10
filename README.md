@@ -20,6 +20,29 @@ Other browser support?
 
 Changelog
 ---
+1.14:
+- Nomination notifications notifies when a nomination goes in voting or gets an upgrade
+    - This only happens upon loading the nominations page. A load/reload is needed to see any changes!
+- Nominations can now be exported to CSV and GeoJSON (Thanks to mariomc!)
+- Review history will be account specific from now on your current history will be transferred to only 1 account!
+- Improved keyboard controls (ctr+enter or spacebar to quick submit)
+- More detailed nomination stats
+
+1.13.1:
+- Minor bug fix in the way review history is stored
+
+1.13:
+- Major Review History update by mariomc:
+    - Search by title/date
+    - Filtered exports are now possible!
+    - Marking a review as 'accepted' no longer refreshes the page
+    - Details can be viewed inline with the table
+    - GeoJSON now has colour-coding
+- Minor bug fixes
+- Small improvements for userscript integration
+
+
+
 1.12.4:
 - An additional S2 cell level can be enabled at the same time.
 
