@@ -38,6 +38,8 @@ function showChangelog(version){
 			changelogStr += "1.14:\n\
 							- Nomination notifications (ONLY when on nominations page!) notifies\n\
 							  when a nomination goes in voting or gets an upgrade\n\
+							- Review history will be account specific from now on\n\
+							  your current history will be transferred to only 1 account!\n\
 							- Improved keyboard controls (ctr+enter or spacebar to quick submit)\n\
 							- More detailed nomination stats";
 		default:
