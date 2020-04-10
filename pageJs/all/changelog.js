@@ -36,6 +36,8 @@ function showChangelog(version){
 							-> GeoJSON now has colour-coding\n\n";
 		case 22:
 			changelogStr += "1.14:\n\
+							- Nomination notifications (ONLY when on nominations page!) notifies\n\
+							  when a nomination goes in voting or gets an upgrade\n\
 							- Improved keyboard controls (ctr+enter or spacebar to quick submit)\n\
 							- More detailed nomination stats";
 		default:

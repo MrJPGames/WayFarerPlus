@@ -73,6 +73,7 @@ chrome.storage.local.get("options_set", function (data){
 		case 22:
 			setOption("options_set", settingsVersion);
 		case 22:
+			setOption("nomNotify", true);
 			setOption("nomExportButtons", true);
 	}
 });
