@@ -7,8 +7,6 @@
 	function detectChange(){
 		console.log(localStorage.wfpNomList);
 		if (localStorage.wfpNomList === undefined){
-			console.log(nomCtrl.nomList);
-			console.log(makeNominationDictionary(nomCtrl.nomList));
 			localStorage.wfpNomList = JSON.stringify(makeNominationDictionary(nomCtrl.nomList));
 		}else{
 			//Only makes sense to look for change if we have data of the previous state!
@@ -24,7 +22,6 @@
 
 				//In queue -> In voting
 				if (historicalData.status !== "VOTING" && nom.status === "VOTING"){
-					console.log("In voting");
 					createNotification(`${nom.title} went into voting!`);
 				}else if (historicalData.upgraded === false && nom.upgraded === true){
 					createNotification(`${nom.title} was upgraded!`)
