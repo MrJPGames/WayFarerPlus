@@ -20,6 +20,13 @@ Other browser support?
 
 Changelog
 ---
+1.14.1:
+- A translate all button has been added. This button will translate all three fields at the same time!
+- Nomination data export now includes a account specific UID
+- UX/UI improvements to Review History
+- If 2 different S2 cell levels are used they now use different colours
+- A major issue that broke Review History was fixed!
+
 1.14:
 - Nomination notifications notifies when a nomination goes in voting or gets an upgrade
     - This only happens upon loading the nominations page. A load/reload is needed to see any changes!
