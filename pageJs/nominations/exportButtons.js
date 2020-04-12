@@ -46,7 +46,7 @@
 
     // nomCtrl.nomList
     csvButton.addEventListener("click", () => {
-      const nominationList = nomCtrl.nomList || [];
+      const nominationList = addUserID(nomCtrl.nomList) || [];
 
       if (!nominationList.length) {
         alert("No nominations to export!");
@@ -58,7 +58,7 @@
     });
 
     geojsonButton.addEventListener("click", () => {
-      const nominationList = nomCtrl.nomList || [];
+      const nominationList = addUserID(nomCtrl.nomList) || [];
       if (!nominationList.length) {
         alert("No nominations to export!");
         return;
@@ -82,6 +82,13 @@
       downloadFile("text/json", "nominations.json", JSON.stringify(geojson));
     });
   }
+
+  function addUserID(nomList){
+    nomList.forEach(elem => elem["userID"] = userID);
+    return nomList;
+  }
+
+  var userID = (document.getElementById("upgrades-profile-icon").getElementsByTagName("image")[0].href.baseVal).substr(37);
 
   document.addEventListener("WFPNomCtrlHooked", initButtons, false);
 })();
