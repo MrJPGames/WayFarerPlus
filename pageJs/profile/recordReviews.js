@@ -361,7 +361,7 @@
 				lng,
 				`<img src="https://intel.ingress.com/favicon.ico" />`
 			)}
-      <span class="text-center toggle" data-index="${index}" style="cursor:pointer" title="Toggle Accepted">✅</span>
+      <span class="text-center toggle" data-index="${index}" style="cursor:pointer;" title="Toggle Accepted">✅</span>
       `;
 		}
 
@@ -402,7 +402,7 @@
           <div class="row">
             <div class="col-xs-12 col-sm-4"><a target="${getTarget(
 				"images"
-			)}" href="${imageUrl}=s0"><img style="max-width: 100%" src="${imageUrl}" class="img-responsive" alt="${title}"></a></div>
+			)}" href="${imageUrl}=s0"><img style="max-width: 100%; max-height: 300px;" src="${imageUrl}" class="img-responsive" alt="${title}"></a></div>
             <div class="col-xs-12 col-sm-8">
               <dl class="dl-horizontal">
                 ${getDD("Title", title)}
@@ -556,7 +556,7 @@
 				},
 			],
 			deferRender: true,
-			scrollY: 400,
+			scrollY: 500,
 			scrollCollapse: true,
 			scroller: true,
 			columns: [
@@ -771,7 +771,12 @@
 			const { index } = target.dataset;
 			const currentReview = reviews[index];
 			currentReview.toggleAccepted();
-			table.row(parseInt(index, 10)).draw();
+			const rowElem = ev.currentTarget.parentElement.parentElement;
+			if (rowElem.classList.contains("success")){
+				rowElem.classList.remove("success");
+			}else{
+				rowElem.classList.add("success");
+			}
 		});
 
 		$("#content-container").on("click", ".focus-in-map[data-index]", (ev) => {
