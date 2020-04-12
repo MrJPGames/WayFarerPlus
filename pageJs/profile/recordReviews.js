@@ -679,6 +679,8 @@
 			],
 		});
 
+		$('.dataTables_scrollBody').css('min-height', '500px');
+
 		const debouncedDraw = debounce(() => {
 			table.draw();
 		}, 250);
