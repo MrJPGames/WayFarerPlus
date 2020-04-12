@@ -42,7 +42,15 @@ function showChangelog(version){
 							- Review history will be account specific from now on\n\
 							  your current history will be transferred to only 1 account!\n\
 							- Improved keyboard controls (ctr+enter or spacebar to quick submit)\n\
-							- More detailed nomination stats";
+							- More detailed nomination stats\n\n";
+		case 23:
+			changelogStr += "1.14.1\n\
+							- A translate all button has been added. This button will translate all\n\
+							three fields at the same time!\n\
+							- Nomination data export now includes a account specific UID\n\
+							- UX/UI improvements to Review History\n\
+							- If 2 different S2 cell levels are used they now use different colours\n\
+							- A major issue that broke Review History was fixed!";
 		default:
 			break;
 	}
