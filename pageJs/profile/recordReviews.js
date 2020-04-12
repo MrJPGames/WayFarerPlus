@@ -81,7 +81,7 @@
   function getReviewHistory(){
     var userID = (document.getElementById("upgrades-profile-icon").getElementsByTagName("image")[0].href.baseVal).substr(37);
     var ret = localStorage.getItem("wfpSaved" + userID);
-    if (ret === undefined){
+    if (ret === undefined || ret === null){
       return [];
     }else{
       return JSON.parse(ret);
@@ -107,12 +107,12 @@
   const emptyArray = Array(5).fill(0);
   function getStarRating(score) {
     return `<span style="white-space:nowrap">${emptyArray
-      .map((_, i) =>
+    .map((_, i) =>
         i + 1 <= score
-          ? `<span class="glyphicon glyphicon-star star-gray"></span>`
-          : `<span class="glyphicon glyphicon-star-empty star-gray"></span>`
-      )
-      .join("")}</span>`;
+            ? `<span class="glyphicon glyphicon-star star-gray"></span>`
+            : `<span class="glyphicon glyphicon-star-empty star-gray"></span>`
+    )
+    .join("")}</span>`;
   }
   const infoWindow = new google.maps.InfoWindow({
     content: "Loading...",
@@ -125,7 +125,7 @@
 
   const clearLocalStorage = () => {
     const confirmation = confirm(
-      "This will delete all your review history! Are you sure?"
+        "This will delete all your review history! Are you sure?"
     );
     if (confirmation) {
       removeReviewHistory();
@@ -162,8 +162,8 @@
 
     const currentItems = getReviews();
     const lastItem = currentItems.length
-      ? currentItems[currentItems.length - 1]
-      : null;
+        ? currentItems[currentItems.length - 1]
+        : null;
     const isSameReview = lastItem && lastItem.imageUrl === imageUrl;
     if (isSameReview) {
       // update the result
@@ -186,7 +186,7 @@
     const isPending = review.review === false;
     const hasReview = Boolean(review.review);
     const quality =
-      hasReview && !isSkipped && !isPending ? review.review.quality || 1 : 0;
+        hasReview && !isSkipped && !isPending ? review.review.quality || 1 : 0;
 
     return quality;
   };
@@ -204,8 +204,8 @@
 
   const buildMap = (mapElement) => {
     const mapSettings = settings["ctrlessZoom"]
-      ? { scrollwheel: true, gestureHandling: "greedy" }
-      : {};
+        ? { scrollwheel: true, gestureHandling: "greedy" }
+        : {};
     const gmap = new google.maps.Map(mapElement, {
       zoom: 8,
       center: { lat: 0, lng: 0 },
@@ -223,7 +223,7 @@
   };
 
   const getReviewData = (reviewData) =>
-    typeof reviewData === "object" ? reviewData : {};
+      typeof reviewData === "object" ? reviewData : {};
 
   const getFormattedDate = (ts, fullDate) => {
     const date = new Date(ts);
@@ -235,12 +235,12 @@
     return new Intl.DateTimeFormat("default", dateSettings).format(date);
   };
   const getDD = (term, definition) =>
-    definition ? `<dt>${term}</dt><dd>${definition}</dd>` : "";
+      definition ? `<dt>${term}</dt><dd>${definition}</dd>` : "";
 
   const getIntelLink = (lat, lng, content) =>
-    `<a target="${getTarget(
-      "intel"
-    )}" rel="noreferrer" title="Open in Intel" href="https://intel.ingress.com/intel?ll=${lat},${lng}&z=21">${content}</a>`;
+      `<a target="${getTarget(
+          "intel"
+      )}" rel="noreferrer" title="Open in Intel" href="https://intel.ingress.com/intel?ll=${lat},${lng}&z=21">${content}</a>`;
 
   const renderScores = ({ review }) => {
     if (!review || typeof review === "string" || !review.quality) {
@@ -335,8 +335,8 @@
       }
       if (review.quality) {
         return type === "sort" || type === "export"
-          ? review.quality
-          : getStarRating(review.quality);
+            ? review.quality
+            : getStarRating(review.quality);
       }
       if (review.duplicate) {
         if (type === "sort") return -2;
@@ -358,9 +358,9 @@
       <span class="toggle-details"></span>
       <span class="focus-in-map" title="Focus in map" data-index="${index}" style="cursor:pointer" >📍</span>
       ${getIntelLink(
-        lat,
-        lng,
-        `<img src="https://intel.ingress.com/favicon.ico" />`
+          lat,
+          lng,
+          `<img src="https://intel.ingress.com/favicon.ico" />`
       )}
       <span class="text-center toggle" data-index="${index}" style="cursor:pointer" title="Toggle Accepted">✅</span>
       `;
@@ -390,20 +390,20 @@
 
       const score = spam ? 1 : quality || 0;
       const status = duplicate
-        ? "Duplicate"
-        : this.review.review === "skipped"
-        ? "Skipped"
-        : "Timed Out/Pending";
+          ? "Duplicate"
+          : this.review.review === "skipped"
+              ? "Skipped"
+              : "Timed Out/Pending";
 
       return `<div class="panel panel-default review-details">
       <div class="panel-heading">${title} <div class="pull-right">${
-        score ? getStarRating(score) : status
+          score ? getStarRating(score) : status
       }</div></div>
       <div class="panel-body">
           <div class="row">
             <div class="col-xs-12 col-sm-4"><a target="${getTarget(
-              "images"
-            )}" href="${imageUrl}=s0"><img style="max-width: 100%" src="${imageUrl}" class="img-responsive" alt="${title}"></a></div>
+          "images"
+      )}" href="${imageUrl}=s0"><img style="max-width: 100%" src="${imageUrl}" class="img-responsive" alt="${title}"></a></div>
             <div class="col-xs-12 col-sm-8">
               <dl class="dl-horizontal">
                 ${getDD("Title", title)}
@@ -414,28 +414,28 @@
                 ${getDD("Reject Reason", rejectReason)}
                 ${getDD("What is it?", what)}
                 ${getDD(
-                  "Supporting Image",
-                  supportingImageUrl &&
-                    `<a target="${getTarget(
-                      "images"
-                    )}" href="${supportingImageUrl}=s0">View</a>`
-                )}
+          "Supporting Image",
+          supportingImageUrl &&
+          `<a target="${getTarget(
+              "images"
+          )}" href="${supportingImageUrl}=s0">View</a>`
+      )}
                 ${getDD(
-                  "Location",
-                  settings["profOpenIn"]
-                    ? getOpenInButton(lat, lng, title).outerHTML
-                    : getIntelLink(lat, lng, `Open in Intel`)
-                )}
+          "Location",
+          settings["profOpenIn"]
+              ? getOpenInButton(lat, lng, title).outerHTML
+              : getIntelLink(lat, lng, `Open in Intel`)
+      )}
                 ${getDD("Review Date", getFormattedDate(ts, true))}
                 ${getDD("Review #", index)}
                 ${getDD(
-                  "Focus in Map",
-                  `<span class="focus-in-map" title="Focus in map" data-index="${index}" style="cursor:pointer" >📍</span>`
-                )}
+          "Focus in Map",
+          `<span class="focus-in-map" title="Focus in map" data-index="${index}" style="cursor:pointer" >📍</span>`
+      )}
                 ${getDD(
-                  "Toggle Accepted",
-                  `<span class="text-center toggle" data-index="${index}" style="cursor:pointer" title="Toggle Accepted">✅</span>`
-                )}
+          "Toggle Accepted",
+          `<span class="text-center toggle" data-index="${index}" style="cursor:pointer" title="Toggle Accepted">✅</span>`
+      )}
               </dl>
               ${renderScores(this.review)}
             </div>
@@ -472,8 +472,8 @@
 
     const profileStats = document.getElementById("profile-main-contain");
     profileStats.insertAdjacentHTML(
-      "beforeend",
-      `
+        "beforeend",
+        `
         <div class="container">
             <h3>Review History</h3>
             <div class="row row-input">
@@ -503,13 +503,13 @@
     const map = buildMap(mapElement);
     const cluster = new MarkerClusterer(map, [], {
       imagePath:
-        "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m",
+          "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m",
       gridSize: 30,
       zoomOnClick: true,
       maxZoom: 10,
     });
     const reviews = localstorageReviews.map(
-      (review, index) => new Review({ review, map, index, cluster })
+        (review, index) => new Review({ review, map, index, cluster })
     );
     cluster.addMarkers(getMarkers(reviews));
     cluster.fitMapToMarkers();
@@ -541,12 +541,12 @@
           text: "GeoJSON",
           action: (_ev, data) => {
             const filteredReviews = data.buttons
-              .exportData()
-              .body.map(([index]) => reviews[index]);
+            .exportData()
+            .body.map(([index]) => reviews[index]);
             const geoJson = formatAsGeojson(filteredReviews);
             $.fn.dataTable.fileSave(
-              new Blob([JSON.stringify(geoJson)]),
-              "reviews.json"
+                new Blob([JSON.stringify(geoJson)]),
+                "reviews.json"
             );
           },
         },
@@ -689,38 +689,38 @@
     let startDate = moment(reviews[0].review.ts);
     let endDate = moment();
     $("#date-range").daterangepicker(
-      {
-        showDropdowns: true,
-        timePicker: true,
-        timePicker24Hour: true,
-        autoApply: true,
-        ranges: {
-          Today: [moment().startOf("day"), moment()],
-          Yesterday: [
-            moment().subtract(1, "days").startOf("day"),
-            moment().subtract(1, "days").endOf("day"),
-          ],
-          "Last 7 Days": [moment().subtract(6, "days"), moment()],
-          "Last 30 Days": [moment().subtract(29, "days"), moment()],
-          "This Month": [moment().startOf("month"), moment().endOf("month")],
-          "Last Month": [
-            moment().subtract(1, "month").startOf("month"),
-            moment().subtract(1, "month").endOf("month"),
-          ],
+        {
+          showDropdowns: true,
+          timePicker: true,
+          timePicker24Hour: true,
+          autoApply: true,
+          ranges: {
+            Today: [moment().startOf("day"), moment()],
+            Yesterday: [
+              moment().subtract(1, "days").startOf("day"),
+              moment().subtract(1, "days").endOf("day"),
+            ],
+            "Last 7 Days": [moment().subtract(6, "days"), moment()],
+            "Last 30 Days": [moment().subtract(29, "days"), moment()],
+            "This Month": [moment().startOf("month"), moment().endOf("month")],
+            "Last Month": [
+              moment().subtract(1, "month").startOf("month"),
+              moment().subtract(1, "month").endOf("month"),
+            ],
+          },
+          alwaysShowCalendars: true,
+          startDate,
+          endDate,
+          maxDate: moment(),
+          locale: {
+            format: "DD/MM/YYYY",
+          },
         },
-        alwaysShowCalendars: true,
-        startDate,
-        endDate,
-        maxDate: moment(),
-        locale: {
-          format: "DD/MM/YYYY",
-        },
-      },
-      (start, end) => {
-        startDate = start;
-        endDate = end;
-        debouncedDraw();
-      }
+        (start, end) => {
+          startDate = start;
+          endDate = end;
+          debouncedDraw();
+        }
     );
 
     $.fn.dataTable.ext.search.push((_settings, data, _dataIndex) => {
@@ -740,9 +740,9 @@
       reviews.forEach((review) => review.hideMarker());
       // Show visible
       table
-        .rows({ search: "applied" })
-        .data()
-        .each((review) => review.showMarker());
+      .rows({ search: "applied" })
+      .data()
+      .each((review) => review.showMarker());
 
       const shownReviews = reviews.filter(filterShown);
       cluster.clearMarkers();
@@ -794,7 +794,7 @@
   };
 
   document.addEventListener("WFPAllRevHooked", () =>
-    saveReview(nSubCtrl.pageData, false)
+      saveReview(nSubCtrl.pageData, false)
   );
   document.addEventListener("WFPPCtrlHooked", showEvaluated);
   document.addEventListener("WFPAnsCtrlHooked", () => {
@@ -834,7 +834,7 @@
       markDuplicate(id);
       setTimeout(() => {
         const ansCtrl2Elem = document.querySelector(
-          ".modal-content > [ng-controller]"
+            ".modal-content > [ng-controller]"
         );
         const ansCtrl2 = angular.element(ansCtrl2Elem).scope().answerCtrl2;
         const confirmDuplicate = ansCtrl2.confirmDuplicate;
