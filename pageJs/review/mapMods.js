@@ -30,10 +30,10 @@ function setupMapMods(){
 		var lat = nSubCtrl.pageData.lat;
 		var lng = nSubCtrl.pageData.lng;
 
-		addS2(nSubCtrl.map, lat, lng, settings["revSecondS2Cell"]);
-		addS2(nSubCtrl.map2, lat, lng, settings["revSecondS2Cell"]);
+		addS2(nSubCtrl.map, lat, lng, settings["revSecondS2Cell"], "#E47252");
+		addS2(nSubCtrl.map2, lat, lng, settings["revSecondS2Cell"], "#E47252");
 		if (ansCtrl.needsLocationEdit)
-			addS2(nSubCtrl.locationEditsMap, lat, lng, settings["revSecondS2Cell"]);
+			addS2(nSubCtrl.locationEditsMap, lat, lng, settings["revSecondS2Cell"], "#E47252");
 	}
 
 	if (settings["revSecondS2Cell"] != -1 || settings["revS2Cell"] != -1){
@@ -194,6 +194,8 @@ function hookResetMapFuncs(){
 			zoomMap2();
 		if (settings["revS2Cell"] != -1)
 			addS2(nSubCtrl.map2, nSubCtrl.pageData.lat, nSubCtrl.pageData.lng, settings["revS2Cell"]);
+		if (settings["revSecondS2Cell"] != -1)
+			addS2(nSubCtrl.map2, nSubCtrl.pageData.lat, nSubCtrl.pageData.lng, settings["revSecondS2Cell"], "#E47252");
 		if (settings["revTransparentMarker"])
 			makeMarkersTransparent();
     }
@@ -228,7 +230,7 @@ function addOrigLocation(gMap){
 }
 
 
-function addS2(map, lat, lng, lvl){
+function addS2(map, lat, lng, lvl, colCode = '#00FF00'){
     var cell = window.S2.S2Cell.FromLatLng({lat: lat, lng: lng}, lvl);
 
     var cellCorners = cell.getCornerLatLngs();
@@ -239,7 +241,7 @@ function addS2(map, lat, lng, lvl){
         geodesic: true,
         fillColor: 'grey',
         fillOpacity: 0.2,
-        strokeColor: '#00FF00',
+        strokeColor: colCode,
         strokeOpacity: 1.0,
         strokeWeight: 1,
         map: map
