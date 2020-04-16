@@ -79,7 +79,8 @@ function applyPublicStyle(){
 	#review-history .panel-body, #review-history .scores, #review-history .scores tr {background-color: black !important; }
 	.row-input input { background-color: black !important; }
 	tr.success{color: black !important;}
-	div.dts div.dataTables_scrollBody {background: repeating-linear-gradient(45deg, #000, #222 10px, #555 10px, #888 20px) !important;}`;
+	div.dts div.dataTables_scrollBody {background: repeating-linear-gradient(45deg, #000, #222 10px, #555 10px, #888 20px) !important;}
+	#help-section-content h3 b{color: #FFF !important;}`;
 
 
 
