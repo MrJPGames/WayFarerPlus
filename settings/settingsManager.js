@@ -79,6 +79,7 @@ function setDefaults() {
 				setOption("revTranslateAll", true);
 			case 24:
 				setOption("revLoadNotify", false);
+				setOption("revMinDistCircle", true);
 				setOption("options_set", settingsVersion);
 		}
 	});

@@ -14,6 +14,9 @@ function setupMapMods(){
 		addAccessDistCircle(nSubCtrl.map2, true);
 			hookLongDistLocEdit();
 	}
+	if (settings["revMinDistCircle"]){
+		hookMinDistCircle();
+	}
 	if (settings["revLowestDistCircle"] || settings["revAccessDistCircle"] || settings["revMap2ZoomLevel"] != -1)
 		hookResetMapFuncs();
 
@@ -296,7 +299,7 @@ function addLowestDistCircle(gMap, hook = false){
 }
 
 function hookLowestDistLocEdit(){
-	if (nSubDS.getNewLocationMarker() == undefined || nSubDS.getNewLocationMarker() ==  null){
+	if (nSubDS.getNewLocationMarker() === undefined || nSubDS.getNewLocationMarker() ==  null){
 		setTimeout(hookLowestDistLocEdit, 500);
 		return;
 	}
@@ -322,13 +325,32 @@ function addAccessDistCircle(gMap, hook = false){
 }
 
 function hookLongDistLocEdit(){
-	if (nSubDS.getNewLocationMarker() == undefined || nSubDS.getNewLocationMarker() ==  null){
+	if (nSubDS.getNewLocationMarker() === undefined || nSubDS.getNewLocationMarker() ==  null){
 		setTimeout(hookLongDistLocEdit, 500);
 		return;
 	}
 	google.maps.event.addListener(nSubDS.getNewLocationMarker(), 'dragend', function () {
     	longDistCirle.setCenter(nSubDS.getNewLocationMarker().position)
     });
+}
+
+function hookMinDistCircle(){
+	if (nSubDS.getNewLocationMarker() === undefined || nSubDS.getNewLocationMarker() ==  null){
+		setTimeout(hookMinDistCircle, 500);
+		return;
+	}
+	console.log("TEEEEEEEEEEEST");
+	var latLng = new google.maps.LatLng(nSubCtrl.pageData.lat, nSubCtrl.pageData.lng);
+	var c = new google.maps.Circle({
+		map: nSubCtrl.map2,
+		center: latLng,
+		radius: 2, //This is prone to change with wayfarer updates!
+		strokeColor: 'red',
+		fillColor: 'red',
+		strokeOpacity: 0.8,
+		strokeWeight: 1,
+		fillOpacity: 0.5
+	});
 }
 
 function makeMapsBigger(){
