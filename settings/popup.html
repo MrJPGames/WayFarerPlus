@@ -1,7 +1,5 @@
 <html>
 <head>
-	<script src="settingsManager.js"></script>
-	<script src="popupController.js"></script>
 	<link rel="stylesheet" type="text/css" href="popup.css">
 	<style>
 		html{
@@ -322,7 +320,15 @@
 				</div>
 			</div>
 		</div>
+		<div id="settingButtonsContainer">
+			<input id="settingsImporter" type="file" accept=".wfps"/>
+			<label class="settingsButton" for="settingsImporter">Import Settings</label>
+			<div id="settingsExporter" class="settingsButton">Export Settings</div>
+			<div id="settingsReset" class="settingsButton">Reset Settings</div>
+		</div>
 		<a href="/pages/credits.html" target="_BLANK">Credits</a>
 	</div>
+	<script src="settingsManager.js"></script>
+	<script src="popupController.js"></script>
 </body>
 </html>

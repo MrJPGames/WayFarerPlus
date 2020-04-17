@@ -1,5 +1,7 @@
 savedMaps = [];
 
+var localSettings;
+
 function changeBoolSetting(elem){
 	var key = elem.id;
 	var value = elem.checked;
@@ -32,6 +34,7 @@ function changeNumberSetting(elem){
 function store(k, v){
 	var obj = {};
 	obj[k] = v;
+	localSettings[k] = v;
 	chrome.storage.local.set(obj, function() {
 	    console.log('[Wayfarer+] Setting \"' + k + '\" set to \"' + v + '\"');
 	});
@@ -63,6 +66,8 @@ function getData(){
 }
 
 function init(settings){
+	localSettings = settings;
+
 	var inputs = document.getElementsByTagName("input");
 
 	for(var i = 0; i < inputs.length; i++){
@@ -196,4 +201,45 @@ function updateMapsDisplay(){
 
 function clearSavedMapsDisplay(){
 	document.getElementById("openInList").innerHTML = null;
+}
+
+function downloadFile(type, name, content) {
+	const hiddenElement = document.createElement("a");
+	hiddenElement.href =
+		`data:${type};charset=utf-8,` + encodeURIComponent(content);
+	hiddenElement.target = "_blank";
+	hiddenElement.download = name;
+	hiddenElement.click();
+}
+
+//Export settings
+document.getElementById("settingsExporter").onclick = function(){
+	downloadFile("text", "wfpSettings.wfps", JSON.stringify(localSettings));
+};
+
+//Import settings
+document.getElementById("settingsImporter").onchange = function(elem){
+	var URI = elem.target;
+	var reader = new FileReader();
+	reader.onload = function(){
+		var importData = JSON.parse(reader.result);
+		console.log(importData);
+		if (importData["options_set"] !== undefined){
+			for (let [key, value] of Object.entries(importData)) {
+				store(key, value);
+			}
+			window.location.reload();
+		}else{
+			alert("The selected file was not a valid WayFarer+ config file");
+		}
+	};
+	reader.readAsText(URI.files[0]);
+};
+
+document.getElementById("settingsReset").onclick = function(){
+	if (confirm("Are you sure you want to reset all settings?")){
+		store("options_set", 0);
+		setDefaults();
+		window.location.reload();
+	}
 }
