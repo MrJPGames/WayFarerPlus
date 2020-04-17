@@ -50,7 +50,15 @@ function showChangelog(version){
 							- Nomination data export now includes a account specific UID\n\
 							- UX/UI improvements to Review History\n\
 							- If 2 different S2 cell levels are used they now use different colours\n\
-							- A major issue that broke Review History was fixed!";
+							- A major issue that broke Review History was fixed!\n\n";
+		case 24:
+			changelogStr += "1.14.2\n\
+							- WayFarer+ settings can now be exported, imported or reset to default values.\n\
+							- For users affected by very long loading times, you can now enable a notification\n\
+							sound in settings that will notify you when a nomination has loaded\n\
+							- By default a small circle will appear when moving a nomination, this will indicate\n\
+							the area where wayfarer won't allow you to move it to, as it's too close to the original\n\
+							location";
 		default:
 			break;
 	}

@@ -5,6 +5,7 @@
 		if (localStorage.wfpSaved !== undefined){
 			//User used an older function and hasn't updated yet, let's do so!
 			storeReviewHistory(JSON.parse(localStorage.wfpSaved));
+			localStorage.wfpSaveBackup = localStorage.wfpSaved;
 			localStorage.removeItem("wfpSaved");
 		}
 	})();
@@ -74,12 +75,12 @@
 
 	function storeReviewHistory(data){
 		var userID = (document.getElementById("upgrades-profile-icon").getElementsByTagName("image")[0].href.baseVal).substr(37);
-		localStorage.setItem("wfpSaved" + userID, JSON.stringify(data));
+		localStorage["wfpSaved" + userID] = JSON.stringify(data);
 	}
 
 	function getReviewHistory(){
 		var userID = (document.getElementById("upgrades-profile-icon").getElementsByTagName("image")[0].href.baseVal).substr(37);
-		var ret = localStorage.getItem("wfpSaved" + userID);
+		var ret = localStorage["wfpSaved" + userID];
 		if (ret === undefined || ret === null){
 			return [];
 		}else{
@@ -679,6 +680,8 @@
 			],
 		});
 
+		$('.dataTables_scrollBody').css('min-height', '500px');
+
 		const debouncedDraw = debounce(() => {
 			table.draw();
 		}, 250);
@@ -811,8 +814,8 @@
 
 		ansCtrl.submitForm = function () {
 			// This only works for accepts
-			submitForm();
 			saveReview(nSubCtrl.pageData, ansCtrl.formData);
+			submitForm();
 		};
 
 		ansCtrl.showLowQualityModal = function () {
@@ -822,7 +825,6 @@
 				const ansCtrl2 = angular.element(ansCtrl2Elem).scope().answerCtrl2;
 				const oldConfirm = ansCtrl2.confirmLowQuality;
 				ansCtrl2.confirmLowQuality = function () {
-					oldConfirm();
 					saveReview(nSubCtrl.pageData, {
 						...ansCtrl2.formData,
 						review: {
@@ -830,6 +832,7 @@
 							comment: ansCtrl2.rejectComment,
 						},
 					});
+					oldConfirm();
 				};
 			}, 10);
 		};
@@ -843,12 +846,13 @@
 				const ansCtrl2 = angular.element(ansCtrl2Elem).scope().answerCtrl2;
 				const confirmDuplicate = ansCtrl2.confirmDuplicate;
 				ansCtrl2.confirmDuplicate = function () {
-					confirmDuplicate();
-
+					var customFormData = ansCtrl2.formData;
+					customFormData.duplicate = true; //This is because we want to store before we actually let Wayfarer itself set this to true
 					saveReview(nSubCtrl.pageData, {
-						...ansCtrl2.formData,
+						...customFormData,
 						duplicateOf: id,
 					}); // duplicateOf is not marked in vm or formData
+					confirmDuplicate();
 				};
 			}, 10);
 		};

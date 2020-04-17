@@ -5,7 +5,6 @@
 	}
 
 	function detectChange(){
-		console.log(localStorage.wfpNomList);
 		if (localStorage.wfpNomList === undefined){
 			localStorage.wfpNomList = JSON.stringify(makeNominationDictionary(nomCtrl.nomList));
 		}else{

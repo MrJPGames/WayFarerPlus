@@ -29,6 +29,8 @@ function modReviewPage(settings){
 		addPageJS("review/quickSubmit.js");
 	if (settings["revAutoRetry"])
 		addPageJS("review/autoRetry.js");
+	if (settings["revLoadNotify"])
+		addPageJS("review/loadNotify.js");
 	
 	addPageJS("review/main.js", true);
 

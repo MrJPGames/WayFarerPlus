@@ -1,7 +1,5 @@
 <html>
 <head>
-	<script src="settingsManager.js"></script>
-	<script src="popupController.js"></script>
 	<link rel="stylesheet" type="text/css" href="popup.css">
 	<style>
 		html{
@@ -82,6 +80,11 @@
 						<img title="Automatically looks for more nominations to review when no nominations are available." src="../assets/help.svg"/>
 					</div>
 					<div class="switch">
+						<input type="checkbox" class="switch__input" id="revLoadNotify" />
+						<label for="revLoadNotify" class="switch__label">Play sound when nomination loads</label>
+						<img title="Useful when Wayfarer has really long loading times in your area." src="../assets/help.svg"/>
+					</div><br/>
+					<div class="switch">
 						<label>Card view:</label>
 						<select id="revCardView">
 							<option value="normal">Normal</option>
@@ -138,6 +141,11 @@
 						<input type="checkbox" class="switch__input" id="revAccessDistCircle" />
 						<label for="revAccessDistCircle" class="switch__label">40m circle on maps</label>
 						<img title="Shows the area from which agents, wizards and trainers will be able to access the Wayspot" src="../assets/help.svg"/>
+					</div><br/>
+					<div class="switch">
+						<input type="checkbox" class="switch__input" id="revMinDistCircle" />
+						<label for="revMinDistCircle" class="switch__label">Show dead-zone when moving location marker</label>
+						<img title="Shows the area in which is deemed to close for a new location suggestion during a non-edit review" src="../assets/help.svg"/>
 					</div><br/>
 					<div class="switch">
 						<input type="checkbox" class="switch__input" id="revTooCloseWarn" />
@@ -253,8 +261,8 @@
 				<div class="content-inner">
 					<div class="switch">
 						<input type="checkbox" class="switch__input" id="profRecordReviews" />
-						<label for="profRecordReviews" class="switch__label">Record Reviews</label>
-						<img title="Stores the nominations you viewed and shows them in your profile." src="../assets/help.svg"/>
+						<label for="profRecordReviews" class="switch__label">Review History</label>
+						<img title="Stores the nominations you viewed and shows them in your profile. Only records your reviews when the option is enabled!" src="../assets/help.svg"/>
 					</div><br/>
 					<div class="switch">
 						<input type="checkbox" class="switch__input" id="profOpenIn" />
@@ -322,7 +330,15 @@
 				</div>
 			</div>
 		</div>
+		<div id="settingButtonsContainer">
+			<input id="settingsImporter" type="file" accept=".wfps"/>
+			<label class="settingsButton" for="settingsImporter">Import Settings</label>
+			<div id="settingsExporter" class="settingsButton">Export Settings</div>
+			<div id="settingsReset" class="settingsButton">Reset Settings</div>
+		</div>
 		<a href="/pages/credits.html" target="_BLANK">Credits</a>
 	</div>
+	<script src="settingsManager.js"></script>
+	<script src="popupController.js"></script>
 </body>
 </html>

@@ -167,6 +167,7 @@ th, td{
   bottom: 1em;
   right: 1em;
   width: 30em;
+  z-index: 100;
 }
 
 .wfpNotification{
