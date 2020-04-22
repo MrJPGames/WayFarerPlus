@@ -157,3 +157,23 @@ html {
     transform: rotate(360deg);
   }
 }
+
+#wfpNotify{
+    position: absolute;
+    bottom: 1em;
+    right: 1em;
+    width: 30em;
+    z-index: 100;
+}
+
+.wfpNotification{
+    border-radius: 0.5em;
+    background-color: #3e8e41CC;
+    padding: 1em;
+    margin-top: 1.5em;
+    color: white;
+}
+
+.wfpNotifyCloseButton{
+    float: right;
+}
