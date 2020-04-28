@@ -82,6 +82,7 @@ function setDefaults() {
 				setOption("revMinDistCircle", true);
 			case 25:
 				setOption("accLowIngress", false);
+				setOption("nomEditAid", true);
 				setOption("options_set", settingsVersion);
 		}
 	});

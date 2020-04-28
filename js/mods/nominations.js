@@ -34,6 +34,9 @@ function modNominationPage(settings){
 	if (settings["nomExportButtons"]){
 		addPageJS("nominations/exportButtons.js");
 	}
+	if (settings["nomEditAid"]){
+		addPageJS("nominations/editAid.js");
+	}
     if (settings["accPoGo"] && settings["accIngress"] && settings["nomStats"])
         addNomTypeButtons();
 

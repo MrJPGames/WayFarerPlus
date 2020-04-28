@@ -113,7 +113,6 @@ function initNomMap() {
 	//Hook filter function
 	var oldOOMFunc = nomCtrl.openOptionsModal;
 	nomCtrl.openOptionsModal = function(){
-		console.log("test");
 		oldOOMFunc(); //First let nomCtrl do the filtering and reloading, then we go!
 		//Inject our own after function into scope
 		nomCtrlScope.$root.modalInstance.result.then(function() {updateMap(nomCtrl.nomList, nominationMap);});
