@@ -1,4 +1,12 @@
-(function () {
+(function deferLegacyCode() {
+	if (window.jQuery) {
+		mainLoad();
+	} else {
+		setTimeout(deferLegacyCode, 50);
+	}
+})();
+
+function mainLoad() {
 	var localStorageFailed = false;
 	//Because the storage format was updated we need to check (at least for quite some time) whether someone has
 	//updated and in case they have convert the old storage system to the new system!
@@ -898,4 +906,4 @@
 			skipToNext();
 		};
 	});
-})();
+}
