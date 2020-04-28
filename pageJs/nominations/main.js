@@ -1,4 +1,4 @@
-var nomCtrl;
+var nomCtrl, nomCtrlScope;
 
 setupPage();
 function setupPage(){
@@ -8,7 +8,8 @@ function setupPage(){
     }
 
     var nomCtrlDiv = document.getElementsByClassName("nominations-controller")[0];
-    tempNomCtrl = angular.element(nomCtrlDiv).scope().nomCtrl;
+    nomCtrlScope = angular.element(nomCtrlDiv).scope();
+    tempNomCtrl = nomCtrlScope.nomCtrl;
     if (tempNomCtrl === undefined || tempNomCtrl.loaded === false){
         //Retry until page is loaded far enough to grab nomination controller
         setTimeout(setupPage, 100);
