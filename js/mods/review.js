@@ -15,12 +15,16 @@ function modReviewPage(settings){
 		addPageJS("review/compactCards.js");
 	if (settings["revCardView"] === "extended")
 		addPageJS("review/expandedCards.js");
-	if (settings["revOpenIn"])
+	if (settings["revOpenIn"]) {
+		addPageJS("general/mapButtons.js");
 		addPageJS("review/mapButtons.js");
+	}
 	if (settings["revTranslate"] || settings["revTranslateAll"])
 		addPageJS("review/translationButtons.js");
-	if (settings["revLowestDistCircle"] || settings["revAccessDistCircle"] || settings["revMap2ZoomLevel"] || settings["revS2Cell"] != -1 || settings["revSecondS2Cell"] != -1 || settings["revEditOrigLoc"] || settings["ctrlessZoom"] || settings["revMap2ZoomLevel"] != -1 || settings["revBigMaps"] || settings["rev3DMap"])
+	if (settings["revLowestDistCircle"] || settings["revAccessDistCircle"] || settings["revMap2ZoomLevel"] || settings["revS2Cell"] != -1 || settings["revSecondS2Cell"] != -1 || settings["revEditOrigLoc"] || settings["ctrlessZoom"] || settings["revMap2ZoomLevel"] != -1 || settings["revBigMaps"] || settings["rev3DMap"]) {
+		addPageJS("general/mapMods.js");
 		addPageJS("review/mapMods.js");
+	}
 	if (settings["revKeyboard"])
 		addPageJS("review/keyboardCtrl.js");
 	if (settings["revPresets"])
