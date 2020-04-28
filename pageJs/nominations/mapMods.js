@@ -3,7 +3,7 @@ function applyMapMods(){
     if (settings["nomLowestDistCircle"]){
         addLowestDistCircle(nomCtrl.map);
         //SVMap is exported by the nomStreetView mod when active
-        if (SVMap != undefined)
+        if (SVMap !== undefined)
             addLowestDistCircle(SVMap);
     }
     if (settings["nomAccessDistCircle"]){
@@ -12,24 +12,44 @@ function applyMapMods(){
         if (SVMap != undefined)
             addAccessDistCircle(SVMap);
     }
+    if (settings["nomMinDistCircle"]){
+        addMinDistCircle(nomCtrl.map);
+        //SVMap is exported by the nomStreetView mod when active
+        if (SVMap !== undefined)
+            addMinDistCircle(SVMap);
+    }
 
     //Ctrl-less zoom
     if (settings["ctrlessZoom"])
         mapsRemoveCtrlToZoom();
 
     //S2 cell
-    if (settings["nomS2Cell"] != -1){
+    if (settings["nomS2Cell"] !== -1){
         addS2(nomCtrl.map, settings["nomS2Cell"]);
         //SVMap is exported by the nomStreetView mod when active
-        if (SVMap != undefined)
+        if (SVMap !== undefined)
             addS2(SVMap, settings["nomS2Cell"]);
     }
-    if (settings["nomSecondS2Cell"] != -1){
+    if (settings["nomSecondS2Cell"] !== -1){
         addS2(nomCtrl.map, settings["nomSecondS2Cell"], "#E47252");
         //SVMap is exported by the nomStreetView mod when active
-        if (SVMap != undefined)
+        if (SVMap !== undefined)
             addS2(SVMap, settings["nomSecondS2Cell"], "#E47252");
     }
+}
+
+function addMinDistCircle(gMap){
+    var latLng = new google.maps.LatLng(nomCtrl.currentNomination.lat, nomCtrl.currentNomination.lng);
+    var c = new google.maps.Circle({
+        map: gMap,
+        center: latLng,
+        radius: 2, //This is prone to change with wayfarer updates!
+        strokeColor: 'red',
+        fillColor: 'red',
+        strokeOpacity: 0.8,
+        strokeWeight: 1,
+        fillOpacity: 0.5
+    });
 }
 
 function addLowestDistCircle(gMap){ 

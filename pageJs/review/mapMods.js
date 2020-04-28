@@ -339,7 +339,6 @@ function hookMinDistCircle(){
 		setTimeout(hookMinDistCircle, 500);
 		return;
 	}
-	console.log("TEEEEEEEEEEEST");
 	var latLng = new google.maps.LatLng(nSubCtrl.pageData.lat, nSubCtrl.pageData.lng);
 	var c = new google.maps.Circle({
 		map: nSubCtrl.map2,
