@@ -7,9 +7,9 @@ function changeBoolSetting(elem){
 	var value = elem.checked;
 
 	//One time special setting (if more special settings are added in the future a refactor will be needed)
-	if (key == "revPresets" && value == true){
+	if (key === "revPresets" && value === true){
 		turnOnPresets();
-	}else if (key == "accIngress"){
+	}else if (key === "accLowIngress"){
 		document.getElementById("ingressExtra").style.display = value ? "block" : "none";
 		store(key, value);
 	}else{
