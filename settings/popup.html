@@ -215,6 +215,11 @@
 						<label for="nomStreetView" class="switch__label">StreetView preview</label>
 						<img title="Allows you to see StreetView reviewers will see for your own nominations." src="../assets/help.svg"/>
 					</div><br/>
+					<div class="switch">
+						<input type="checkbox" class="switch__input" id="nomEditAid" />
+						<label for="nomEditAid" class="switch__label">Nomination edit aids</label>
+						<img title="Shows live character counts for the editable fields." src="../assets/help.svg"/>
+					</div><br/>
 
 					<h2>Map modifications:</h2>
 					<div class="switch">
@@ -240,6 +245,11 @@
 							<option value="18">L18</option>
 							<option value="19">L19</option>
 						</select>
+					</div><br/>
+					<div class="switch">
+						<input type="checkbox" class="switch__input" id="nomMinDistCircle" />
+						<label for="nomMinDistCircle" class="switch__label">2m circle on maps</label>
+						<img title="This indicates the area where reviewers won't be able to move the nomination to from it's original location." src="../assets/help.svg"/>
 					</div><br/>
 					<div class="switch">
 						<input type="checkbox" class="switch__input" id="nomLowestDistCircle" />
@@ -318,11 +328,16 @@
 						<img title="Turn this on if you have a Pokemon Go account that has the ability to Nominate Wayspots" src="../assets/help.svg"/>
 					</div><br/>
 					<div class="switch">
-						<input type="checkbox" class="switch__input" id="accIngress" />
-						<label for="accIngress" class="switch__label">Ingress L10+</label>
+						<input type="checkbox" class="switch__input" id="accLowIngress" />
+						<label for="accLowIngress" class="switch__label">Linked Ingress Account</label>
 						<img title="Turn this on if you have a Ingress account that has the ability to Nominate Wayspots" src="../assets/help.svg"/>
 					</div><br/>
 					<div id="ingressExtra" class="switch">
+						<div class="switch">
+							<input type="checkbox" class="switch__input" id="accIngress" />
+							<label for="accIngress" class="switch__label">Ingress L10+</label>
+							<img title="Turn this on if you have a Ingress account that has the ability to Nominate Wayspots" src="../assets/help.svg"/>
+						</div><br/>
 						<label for="revSubmitTimer">Recon Badge Offset: </label>
 						<input type="number" id="profReconOffset" style="width: 4em;"> Agreements
 						<img title="Some people had their stats reset when OPR became Wayfarer, for those this setting will help correct their Recon Badge stat on the Profile Page when extended profile stats are on" src="../assets/help.svg"/>

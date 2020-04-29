@@ -25,7 +25,7 @@ function addExtendedStats(){
 	var agreeElem = document.createElement("span");
 	agreeElem.innerText = " Agreement";
 	agreementStatLeft.appendChild(agreeElem);
-	if (settings["profExtendedStats"] == "aprox")
+	if (settings["profExtendedStats"] === "aprox")
 		agreementStatRight.innerText = agreementTotal + " (" + Math.round(agreementTotal/reviewTotal*100) + "%)";
 	else
 		agreementStatRight.innerText = normalAgreements + " (" + Math.round(normalAgreements/reviewTotal*100) + "%)";
@@ -37,7 +37,7 @@ function addExtendedStats(){
 
 	profileStats.children[1].insertBefore(agreementStatElem, profileStats.children[1].children[1]);
 
-	if (settings["profExtendedStats"] == "aprox"){
+	if (settings["profExtendedStats"] === "aprox"){
 		//Segment for "Other Agreements"
 		var otherAgreements = agreementTotal - normalAgreements;
 
@@ -58,7 +58,7 @@ function addExtendedStats(){
 	}
 
 	//if Ingress agent add recon badge progress to page:
-	if (settings["accIngress"]){
+	if (settings["accLowIngress"] || settings["accIngress"]){
 		//For this segment we want to add the recon badge offset to normalAgreements
 		normalAgreements += settings["profReconOffset"];
 		const reconBadges = [ [0, 'None'], [100, 'Bronze'], [750, 'Silver'], [2500, 'Gold'], [5000, 'Platinum'], [10000, 'Onyx'] ];

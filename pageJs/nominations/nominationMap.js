@@ -11,21 +11,32 @@ function getIconUrl(nomination) {
 	return `https://maps.google.com/mapfiles/ms/icons/${colorMap[nomination.status] || 'blue'}.png`;
 }
 
+var nominationMarkers = [];
+var nominationMap;
+var nominationCluster = null;
+
 function addMap(nominationList, mapElement) {
 	const mapSettings = settings["ctrlessZoom"] ? { scrollwheel: true, gestureHandling: 'greedy' } : {};
-	const gmap = new google.maps.Map(mapElement, {
+	nominationMap = new google.maps.Map(mapElement, {
 		zoom: 8,
 		...mapSettings,
 	  });
 
+	updateMap(nominationList, mapElement);
+}
+
+function updateMap(nominationList){
+	if (nominationCluster !== null)
+		nominationCluster.clearMarkers();
+
 	const bounds = new google.maps.LatLngBounds();
-	const markers = nominationList.map((nomination) => {
-			const latLng = {
+	nominationMarkers = nominationList.map((nomination) => {
+		const latLng = {
 			lat: nomination.lat,
 			lng: nomination.lng
 		};
 		const marker =  new google.maps.Marker({
-			map: gmap,
+			map: nominationMap,
 			position: latLng,
 			title: nomination.title,
 			icon: {
@@ -44,14 +55,14 @@ function addMap(nominationList, mapElement) {
 		bounds.extend(latLng);
 		return marker;
 	});
-	const markerClusterer = new MarkerClusterer(gmap, markers, {
+	nominationCluster = new MarkerClusterer(nominationMap, nominationMarkers, {
 		imagePath: "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m",
 		gridSize: 30,
 		zoomOnClick: true,
 		maxZoom: 10,
 	});
 
-	gmap.fitBounds(bounds);
+	nominationMap.fitBounds(bounds);
 }
 
 function createElements() {
@@ -76,6 +87,7 @@ function createElements() {
 	mapElement.style = "height: 400px;";
 	mapElement.setAttribute("class", "map-element");
 	mapElement.innerText = "Loading...";
+	mapElement.id = "nominationMap";
 
 	collapsibleContent.appendChild(mapElement);
 
@@ -89,7 +101,7 @@ function createElements() {
 	return mapElement;
 }
 
-function loadMap() {
+function initNomMap() {
 	if (!nomCtrl.loaded){
 		setTimeout(loadMap, 100);
 		return;
@@ -97,6 +109,14 @@ function loadMap() {
 
 	addMap(nomCtrl.nomList, createElements());
 	console.log("[WayFarer+] Nominations map loaded");
+
+	//Hook filter function
+	var oldOOMFunc = nomCtrl.openOptionsModal;
+	nomCtrl.openOptionsModal = function(){
+		oldOOMFunc(); //First let nomCtrl do the filtering and reloading, then we go!
+		//Inject our own after function into scope
+		nomCtrlScope.$root.modalInstance.result.then(function() {updateMap(nomCtrl.nomList, nominationMap);});
+	}
 }
 
-document.addEventListener("WFPNomCtrlHooked", loadMap);
+document.addEventListener("WFPNomCtrlHooked", initNomMap);
