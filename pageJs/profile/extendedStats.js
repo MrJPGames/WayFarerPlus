@@ -58,7 +58,7 @@ function addExtendedStats(){
 	}
 
 	//if Ingress agent add recon badge progress to page:
-	if (settings["accLowIngress"]){
+	if (settings["accLowIngress"] || settings["accIngress"]){
 		//For this segment we want to add the recon badge offset to normalAgreements
 		normalAgreements += settings["profReconOffset"];
 		const reconBadges = [ [0, 'None'], [100, 'Bronze'], [750, 'Silver'], [2500, 'Gold'], [5000, 'Platinum'], [10000, 'Onyx'] ];
