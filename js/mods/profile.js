@@ -8,6 +8,7 @@ function modProfilePage(settings){
 		addPageJS("profile/extendedStats.js");
 
 	if (settings["profRecordReviews"]) {
+		addPageJS("general/reviewHistory.js");
 		addPageJS("libs/jquery.js");
 		const newCss = document.createElement("link");
 		newCss.setAttribute("rel", "stylesheet");
@@ -21,7 +22,7 @@ function modProfilePage(settings){
 		addPageJS("libs/datatables.js");
 		addPageJS("libs/markerclusterer.js");
 		addPageJS("libs/daterangepicker.js", true);
-		addPageJS("profile/recordReviews.js", true);
+		addPageJS("profile/displayReviews.js", true);
 	}
 
 	addPageJS("profile/main.js", true);

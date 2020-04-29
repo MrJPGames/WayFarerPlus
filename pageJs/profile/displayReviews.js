@@ -7,6 +7,43 @@ document.addEventListener("WFPPCtrlHooked", function deferLegacyCode() {
 });
 
 function mainLoad() {
+	const emptyArray = Array(5).fill(0);
+	function getStarRating(score) {
+		return `<span style="white-space:nowrap">${emptyArray
+		.map((_, i) =>
+			i + 1 <= score
+				? `<span class="glyphicon glyphicon-star star-gray"></span>`
+				: `<span class="glyphicon glyphicon-star-empty star-gray"></span>`
+		)
+		.join("")}</span>`;
+	}
+
+	function clearLocalStorage() {
+		const confirmation = confirm(
+			"This will delete all your review history! Are you sure?"
+		);
+		if (confirmation) {
+			removeReviewHistory();
+			window.location.reload();
+		}
+	};
+
+	const debounce = (callback, time) => {
+		let interval;
+		return (...args) => {
+			clearTimeout(interval);
+			interval = setTimeout(() => {
+				interval = null;
+				callback(...args);
+			}, time);
+		};
+	};
+
+
+	const infoWindow = new google.maps.InfoWindow({
+		content: "Loading...",
+	});
+
 	String.prototype.replaceAll = function (search, replacement) {
 		var target = this;
 		return target.replace(new RegExp(search, "gi"), replacement);
@@ -697,213 +734,3 @@ function mainLoad() {
 
 	showEvaluated();
 }
-var localStorageFailed = false;
-//Because the storage format was updated we need to check (at least for quite some time) whether someone has
-//updated and in case they have convert the old storage system to the new system!
-(function(){
-	if (localStorage.wfpSaved !== undefined){
-		//User used an older function and hasn't updated yet, let's do so!
-		storeReviewHistory(JSON.parse(localStorage.wfpSaved));
-		safeLocalStorageAssign("wfpSaveBackup", localStorage.wfpSaved);
-		localStorage.removeItem("wfpSaved");
-	}
-})();
-
-function storeReviewHistory(data){
-	var userID = (document.getElementById("upgrades-profile-icon").getElementsByTagName("image")[0].href.baseVal).substr(37);
-	safeLocalStorageAssign("wfpSaved" + userID, JSON.stringify(data));
-}
-
-function getReviewHistory(){
-	var userID = (document.getElementById("upgrades-profile-icon").getElementsByTagName("image")[0].href.baseVal).substr(37);
-	var ret = localStorage["wfpSaved" + userID];
-	if (ret === undefined || ret === null){
-		return [];
-	}else{
-		return JSON.parse(ret);
-	}
-}
-
-function removeReviewHistory(){
-	var userID = (document.getElementById("upgrades-profile-icon").getElementsByTagName("image")[0].href.baseVal).substr(37);
-	localStorage.removeItem("wfpSaved" + userID);
-}
-
-function safeLocalStorageAssign(key, value){
-	try{
-		localStorage[key] = value;
-	} catch (e){
-		if (!localStorageFailed && sessionStorage["historyFull"] === undefined){
-			//Store we displayed the warning this session
-			sessionStorage["historyFull"] = true;
-
-			var container = document.createElement("div");
-			container.id = "wfpNotify";
-
-			document.getElementsByTagName("html")[0].appendChild(container);
-
-			var notification = document.createElement("div");
-			notification.setAttribute("class", "wfpNotification");
-
-			var content = document.createElement("p");
-			content.innerText = "Your Review History is full.\nNo new reviews will be stored, please export and remove the current history to keep storing new reviews!";
-
-			var closeButton = document.createElement("div");
-			closeButton.innerText = "X";
-			closeButton.setAttribute("class", "wfpNotifyCloseButton");
-			closeButton.onclick = function(){
-				notification.remove();
-			};
-
-			notification.appendChild(closeButton);
-			notification.appendChild(content);
-
-			document.getElementById("wfpNotify").appendChild(notification);
-		}
-		localStorageFailed = true;
-	}
-}
-
-const debounce = (callback, time) => {
-	let interval;
-	return (...args) => {
-		clearTimeout(interval);
-		interval = setTimeout(() => {
-			interval = null;
-			callback(...args);
-		}, time);
-	};
-};
-
-const emptyArray = Array(5).fill(0);
-function getStarRating(score) {
-	return `<span style="white-space:nowrap">${emptyArray
-	.map((_, i) =>
-		i + 1 <= score
-			? `<span class="glyphicon glyphicon-star star-gray"></span>`
-			: `<span class="glyphicon glyphicon-star-empty star-gray"></span>`
-	)
-	.join("")}</span>`;
-}
-const infoWindow = new google.maps.InfoWindow({
-	content: "Loading...",
-});
-
-const getReviews = () => {
-	const currentItems = getReviewHistory();
-	return currentItems;
-};
-
-const clearLocalStorage = () => {
-	const confirmation = confirm(
-		"This will delete all your review history! Are you sure?"
-	);
-	if (confirmation) {
-		removeReviewHistory();
-		window.location.reload();
-	}
-};
-
-const saveReview = (pageData, submitData) => {
-	if (nSubCtrl.reviewType !== "NEW") {
-		console.log("Not a new review. Skipping the save.");
-		return;
-	}
-
-	const {
-		title,
-		description,
-		imageUrl,
-		lat,
-		lng,
-		statement,
-		supportingImageUrl,
-	} = pageData;
-	const toSave = {
-		title,
-		description,
-		imageUrl,
-		lat,
-		lng,
-		statement,
-		supportingImageUrl,
-		ts: +new Date(),
-		review: submitData,
-	};
-
-	const currentItems = getReviews();
-	const lastItem = currentItems.length
-		? currentItems[currentItems.length - 1]
-		: null;
-	const isSameReview = lastItem && lastItem.imageUrl === imageUrl;
-	if (isSameReview) {
-		// update the result
-		currentItems[currentItems.length - 1] = toSave;
-	} else {
-		// push the new result
-		currentItems.push(toSave);
-	}
-	storeReviewHistory(currentItems);
-};
-
-document.addEventListener("WFPAllRevHooked", () =>
-	saveReview(nSubCtrl.pageData, false)
-);
-document.addEventListener("WFPAnsCtrlHooked", () => {
-	const {
-		submitForm,
-		skipToNext,
-		showLowQualityModal,
-		markDuplicate,
-	} = ansCtrl;
-
-	ansCtrl.submitForm = function () {
-		// This only works for accepts
-		saveReview(nSubCtrl.pageData, ansCtrl.formData);
-		submitForm();
-	};
-
-	ansCtrl.showLowQualityModal = function () {
-		showLowQualityModal();
-		setTimeout(() => {
-			const ansCtrl2Elem = document.getElementById("low-quality-modal");
-			const ansCtrl2 = angular.element(ansCtrl2Elem).scope().answerCtrl2;
-			const oldConfirm = ansCtrl2.confirmLowQuality;
-			ansCtrl2.confirmLowQuality = function () {
-				saveReview(nSubCtrl.pageData, {
-					...ansCtrl2.formData,
-					review: {
-						...ansCtrl2.formData.review,
-						comment: ansCtrl2.rejectComment,
-					},
-				});
-				oldConfirm();
-			};
-		}, 10);
-	};
-
-	ansCtrl.markDuplicate = function (id) {
-		markDuplicate(id);
-		setTimeout(() => {
-			const ansCtrl2Elem = document.querySelector(
-				".modal-content > [ng-controller]"
-			);
-			const ansCtrl2 = angular.element(ansCtrl2Elem).scope().answerCtrl2;
-			const confirmDuplicate = ansCtrl2.confirmDuplicate;
-			ansCtrl2.confirmDuplicate = function () {
-				var customFormData = ansCtrl2.formData;
-				customFormData.duplicate = true; //This is because we want to store before we actually let Wayfarer itself set this to true
-				saveReview(nSubCtrl.pageData, {
-					...customFormData,
-					duplicateOf: id,
-				}); // duplicateOf is not marked in vm or formData
-				confirmDuplicate();
-			};
-		}, 10);
-	};
-
-	ansCtrl.skipToNext = function () {
-		saveReview(nSubCtrl.pageData, "skipped");
-		skipToNext();
-	};
-});
