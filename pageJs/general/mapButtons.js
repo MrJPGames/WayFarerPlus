@@ -1,7 +1,5 @@
 var customMapContainer;
 
-console.log("test");
-
 function getMapDropdown(lat, lng, title){
 	//Create main dropdown menu ("button")
 	var mainButton = document.createElement("div");
