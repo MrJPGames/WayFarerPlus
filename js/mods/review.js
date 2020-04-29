@@ -7,8 +7,10 @@ function modReviewPage(settings){
 	newCss.setAttribute("href", chrome.extension.getURL("assets/review.css"));
 	document.getElementsByTagName("head")[0].appendChild(newCss);
 
-	if (settings["profRecordReviews"])
+	if (settings["profRecordReviews"]) {
+		addPageJS("libs/jquery.js");
 		addPageJS("profile/recordReviews.js");
+	}
 	if (settings["revExpireTimer"] || settings["revSubmitTimer"] > 0)
 		addPageJS("review/timerMods.js");
 	if (settings["revCardView"] === "compact")
