@@ -13,7 +13,7 @@ function addTranslationButtons(){
             translateButton.setAttribute("target", "_BLANK");
 		translateButton.setAttribute("class", "translateButton");
 		translateButton.setAttribute("style", style);
-		translateButton.href = "https://translate.google.com/?sl=auto&q=" + encodeURI(elems[i].innerText);
+		translateButton.href = "https://translate.google.com/?sl=auto&q=" + encodeURIComponent(elems[i].innerText);
 
 		allText += elems[i].innerText + "\n\n";
 
@@ -30,7 +30,7 @@ function addTranslationButtons(){
             translateButton.setAttribute("target", "_BLANK");
 		translateButton.setAttribute("class", "translateButton");
 		translateButton.setAttribute("style", style);
-		translateButton.href = "https://translate.google.com/?sl=auto&q=" + encodeURI(elem.innerText);
+		translateButton.href = "https://translate.google.com/?sl=auto&q=" + encodeURIComponent(elem.innerText);
 
 		allText += elem.innerText + "\n\n";
 
@@ -50,7 +50,7 @@ function addTranslationButtons(){
 			translateButton.setAttribute("target", "_BLANK");
 		translateButton.setAttribute("class", "translateButton");
 		translateButton.setAttribute("style", "display: inline; color: black;");
-		translateButton.href = "https://translate.google.com/?sl=auto&q=" + encodeURI(allText);
+		translateButton.href = "https://translate.google.com/?sl=auto&q=" + encodeURIComponent(allText);
 
 		var translateText = document.createElement("span");
 		translateText.innerText = "Translate all";
