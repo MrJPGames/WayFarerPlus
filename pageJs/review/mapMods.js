@@ -299,4 +299,13 @@ function makeMapsBigger(){
 	accuracyMapElem.style.height = "100%";
 }
 
+function applyMapOptions(options){
+	if (nSubCtrl.reviewType === "NEW"){
+		nSubCtrl.map.setOptions(options);
+		nSubCtrl.map2.setOptions(options);
+	}
+	if (nSubCtrl.reviewType === "EDIT")
+		nSubCtrl.locationEditsMap.setOptions(options);
+}
+
 document.addEventListener("WFPAllRevHooked", setupMapMods);
