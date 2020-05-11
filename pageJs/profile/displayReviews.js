@@ -625,7 +625,7 @@ function mainLoad() {
 		$("#date-range").daterangepicker(
 			{
 				showDropdowns: true,
-				timePicker: true,
+				timePicker: false,
 				timePicker24Hour: true,
 				autoApply: true,
 				ranges: {
@@ -653,6 +653,7 @@ function mainLoad() {
 			(start, end) => {
 				startDate = start;
 				endDate = end;
+				window.endDate = end;
 				debouncedDraw();
 			}
 		);

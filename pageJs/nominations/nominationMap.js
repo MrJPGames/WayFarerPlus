@@ -73,7 +73,6 @@ function createElements() {
 	collapsibleInput.id = "collapsed-map";
 	collapsibleInput.setAttribute("class", "toggle");
 	collapsibleInput.type = "checkbox";
-	collapsibleInput.checked = true;
 
 	const collapsibleLabel = document.createElement("label");
 	collapsibleLabel.setAttribute("class", "lbl-toggle");
