@@ -1,7 +1,6 @@
 function modHeader(settings){
-	var newScript = document.createElement("script");
-	newScript.src = chrome.extension.getURL("pageJs/header.js");
-	document.getElementsByTagName("head")[0].appendChild(newScript);
+	if (settings["headProgress"])
+		addPageJS("header/upgradeProgress.js",true);
 
-	console.log("[WayFarer+] Header mod loaded!");
+	console.log("[WayFarer+] Header injection successful!");
 }

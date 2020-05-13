@@ -7,9 +7,13 @@ function getData(){
 		else
 			init(data);
 	});
-}
+};
 
 function init(settings){
+	if (settings["useMods"] == false){
+		return;
+		//Do not apply any mods
+	}
 	if (settings["darkMode"] == true){
 		applyPublicStyle();
 	}
@@ -35,5 +39,17 @@ function init(settings){
 
 		//Always
 		modHeader(settings);
+		modAll(settings);
 	});
+}
+
+//Helper functions
+function addPageJS(file, defer = false){
+	var newScript = document.createElement("script");
+	newScript.src = chrome.extension.getURL("pageJs/" + file);
+	if (defer){
+		newScript.setAttribute("defer", "");
+	}
+	newScript.setAttribute("type", "text/javascript");
+	document.getElementsByTagName("head")[0].appendChild(newScript);
 }

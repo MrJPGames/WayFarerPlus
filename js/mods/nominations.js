@@ -1,28 +1,46 @@
 function modNominationPage(settings){
-	var newScript = document.createElement("script");
-	newScript.src = chrome.extension.getURL("pageJs/libs/S2.js");
-	document.getElementsByTagName("head")[0].appendChild(newScript);
-
-	var newScript = document.createElement("script");
-	newScript.src = chrome.extension.getURL("pageJs/nominations.js");
-	document.getElementsByTagName("head")[0].appendChild(newScript);
-
 	var newCss = document.createElement("link");
 	newCss.setAttribute("rel", "stylesheet");
 	newCss.setAttribute("href", chrome.extension.getURL("assets/nominations.css"));
 	document.getElementsByTagName("head")[0].appendChild(newCss);
 
-	console.log("[WayFarer+] Nominations page mod loaded!");
+	console.log("[WayFarer+] Nominations page injection successful!");
 
 	//In separate function for future readability if more mods are added
-	if (settings["nomStreetView"])
-		addStreetView();
-	if (settings["nomStats"])
+	if (settings["nomStats"]){
 		addStats();
-	if (settings["nomIntelButton"])
-        addIntelButton();
-    if (settings["nomGoogleMaps"])
-        addGoogleMapsButton();
+		addPageJS("nominations/statsWidget.js");
+	}
+
+	if (settings["nomNotify"]){
+		addPageJS("nominations/notify.js");
+	}
+
+	if (settings["nominationMap"]) {
+		addPageJS("libs/markerclusterer.js");
+		addPageJS("nominations/nominationMap.js");
+	}
+
+	if (settings["nomStreetView"]){
+		addStreetView();
+		addPageJS("nominations/streetView.js");
+	}
+    if (settings["nomAccessDistCircle"] || settings["nomLowestDistCircle"] || settings["ctrlessZoom"] || settings["nomS2Cell"] !== -1 || settings["nomSecondS2Cell"] !== -1){
+		addPageJS("general/mapMods.js");
+    	addPageJS("nominations/mapMods.js");
+    }
+    if (settings["nomOpenIn"]){
+		addPageJS("general/mapButtons.js");
+    	addPageJS("nominations/mapButtons.js");
+	}
+	if (settings["nomExportButtons"]){
+		addPageJS("nominations/exportButtons.js");
+	}
+	if (settings["nomEditAid"]){
+		addPageJS("nominations/editAid.js");
+	}
+    if (settings["accPoGo"] && settings["accIngress"] && settings["nomStats"])
+        addNomTypeButtons();
 
 	//Observe for changes to create a custom onclick event for any nomination div
 	var observer = new MutationObserver(function (mutations) {
@@ -32,7 +50,7 @@ function modNominationPage(settings){
 	        }
 	        var nodes = mutation.addedNodes;
 	        nodes.forEach(function(node,i){
-	        	if (node.className == "nomination card ng-scope" || node.className == "nomination card ng-scope --selected"){
+	        	if (node.className === "nomination card ng-scope" || node.className === "nomination card ng-scope --selected"){
 	        		node.setAttribute("onclick", "selectNomination();");
 	        	}
 	        });
@@ -44,29 +62,46 @@ function modNominationPage(settings){
 	    subtree: true,
 			queries: [{element: "#map"}]
 	});
+
+	if (settings["nomS2Cell"] !== -1 || settings["nomSecondS2Cell"] !== -1)
+		addPageJS("libs/S2.js");
+	
+	addPageJS("nominations/main.js", true);
 }
 
-function addIntelButton(){
-    addMapButton("https://intel.ingress.com/intel?z=17&pll=",
-                 "Open in Intel", "IIButton");
-}
+function addNomTypeButtons(){
+	//Adds buttons for users with both Ingress and PoGo acc to mark which nomination was made where
+	var titleElem = document.getElementsByClassName("nomination-title")[0];
+	var nomTypeElem = document.createElement("div");
+	var inputPoGo = document.createElement("input");
+	inputPoGo.type = "radio";
+	inputPoGo.value = "pogo";
+	inputPoGo.id = "pogo";
+	inputPoGo.name = "nomType";
+	inputPoGo.setAttribute("onclick", "setNomType(this.id);");
+	var inputIngress = document.createElement("input");
+	inputIngress.type = "radio";
+	inputIngress.value = "ingress";
+	inputIngress.id = "ingress";
+	inputIngress.name = "nomType";
+	inputIngress.setAttribute("onclick", "setNomType(this.id);");
+	var labelPoGo = document.createElement("label");
+	labelPoGo.for = "pogo";
+	labelPoGo.innerText = "Pokémon Go";
+	var labelIngress = document.createElement("label");
+	labelIngress.for = "ingress";
+	labelIngress.innerText = "Ingress";
 
-function addGoogleMapsButton(){
-    addMapButton("https://maps.google.com/maps?q=",
-                 "Open in Google Maps", "gMapButton");
-}
+	inputPoGo.style.marginLeft = "10pt";
+	inputIngress.style.marginLeft = "10pt";
 
-function addMapButton(mapUrl, text, buttonID){
-    var mapElem = document.getElementById("map");
+	nomTypeElem.innerText = "Nominated using: ";
+	nomTypeElem.appendChild(inputPoGo);
+	nomTypeElem.appendChild(labelPoGo);
+	nomTypeElem.appendChild(inputIngress);
+	nomTypeElem.appendChild(labelIngress);
 
-    var button = document.createElement("a");
-    button.setAttribute("class", "customMapButton");
-    button.setAttribute("target", "_BLANK");
-    button.setAttribute("id", buttonID);
-    button.href = mapUrl;
-    button.innerText = text;
-
-    mapElem.parentNode.insertBefore(button, mapElem.nextSibling);
+	titleElem.parentNode.insertBefore(nomTypeElem, titleElem.nextSibling);
 }
 
 function addStreetView(){
@@ -92,11 +127,13 @@ function addStats(){
 	//Create required HTML (Content is written from the pageJS as NominationController access is required!)
 	var container = document.createElement("div");
 	container.setAttribute("class", "wrap-collabsible");
+	container.id = "statsWidget";
 
 	var collapsibleInput = document.createElement("input");
 	collapsibleInput.id = "collapsible";
 	collapsibleInput.setAttribute("class", "toggle");
 	collapsibleInput.type = "checkbox";
+	collapsibleInput.setAttribute("onclick", "loadIfUnloaded()");
 
 	var collapsibleLabel = document.createElement("label");
 	collapsibleLabel.setAttribute("class", "lbl-toggle");

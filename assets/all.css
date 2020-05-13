@@ -1,0 +1,13 @@
+.floatMessage{
+    position: fixed;
+    bottom: 1em;
+    right: 1em;
+    padding: 1em;
+    background-color: #3e8e41DD;
+    color: white;
+    border-radius: 0.5em;
+}
+
+.floatMessage h3{
+    margin-top: 0;
+}

@@ -66,8 +66,22 @@ function applyPublicStyle(){
     .dropdown #simple-dropdown {color: white; background: #0F0F0F;}
     .dropdown .dropdown-menu li {background: #0F0F0F; color: white;}
     .dropdown .dropdown-menu li:hover {background: #090909;}
-
-	`;
+	.known-information__title>div {color: white;}
+	.known-information__description>div {color: white;}
+	.categories-display-result span:not(:first-child)::before {color: white !important;}
+	.hamburger {filter: invert();}
+	.nom-edit-input__text-field {background-color: inherit !important;}
+	.container {background: black !important;}
+	.supporting-statement-central-field, .title-description-central-field {background: black !important;}
+	.table-striped>tbody>tr:nth-of-type(odd) {background-color:black !important;}
+	.table-striped>tbody>tr:nth-of-type(even) {background-color:#222 !important;}
+	.table-responsive {color: white !important;}
+	#review-history .panel-body, #review-history .scores, #review-history .scores tr {background-color: black !important; }
+	.row-input input { background-color: black !important; }
+	tr.success{color: black !important;}
+	div.dts div.dataTables_scrollBody {background: repeating-linear-gradient(45deg, #000, #222 10px, #555 10px, #888 20px) !important;}
+	#help-section-content h3 b{color: #FFF !important;}
+	#submit-abuse a {color: rgba(255,255,255,.8) !important;}`;
 
 
 
