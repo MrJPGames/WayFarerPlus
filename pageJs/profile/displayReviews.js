@@ -1,23 +1,48 @@
-(function () {
-    //Because the storage format was updated we need to check (at least for quite some time) whether someone has
-    //updated and in case they have convert the old storage system to the new system!
-    (function(){
-        if (localStorage.wfpSaved !== undefined){
-            //User used an older function and hasn't updated yet, let's do so!
-            storeReviewHistory(JSON.parse(localStorage.wfpSaved));
-            localStorage.wfpSaveBackup = localStorage.wfpSaved;
-            localStorage.removeItem("wfpSaved");
+document.addEventListener("WFPPCtrlHooked", function deferLegacyCode() {
+    if (window.jQuery !== undefined) {
+        mainLoad();
+    } else {
+        setTimeout(deferLegacyCode, 500);
+    }
+});
+
+function mainLoad() {
+    const emptyArray = Array(5).fill(0);
+    function getStarRating(score) {
+        return `<span style="white-space:nowrap">${emptyArray
+        .map((_, i) =>
+            i + 1 <= score
+                ? `<span class="glyphicon glyphicon-star star-gray"></span>`
+                : `<span class="glyphicon glyphicon-star-empty star-gray"></span>`
+        )
+        .join("")}</span>`;
+    }
+
+    function clearLocalStorage() {
+        const confirmation = confirm(
+            "This will delete all your review history! Are you sure?"
+        );
+        if (confirmation) {
+            removeReviewHistory();
+            window.location.reload();
         }
-    })();
+    };
 
-    function setOption(option_name, value) {
-	  var obj= {};
-	  obj[option_name] = value;
+    const debounce = (callback, time) => {
+        let interval;
+        return (...args) => {
+            clearTimeout(interval);
+            interval = setTimeout(() => {
+                interval = null;
+                callback(...args);
+            }, time);
+        };
+    };
 
-		chrome.storage.local.set(obj, function() {
-		    console.log('[Wayfarer+] Setting \"' + option_name + '\" set to \"' + value + '\"');
-		});
-	}
+
+    const infoWindow = new google.maps.InfoWindow({
+        content: "Loading...",
+    });
 
     String.prototype.replaceAll = function (search, replacement) {
         var target = this;
@@ -81,107 +106,6 @@
         return mainButton;
     }
 
-    function storeReviewHistory(data){
-        var userID = (document.getElementById("upgrades-profile-icon").getElementsByTagName("image")[0].href.baseVal).substr(37);
-        localStorage["wfpSaved" + userID] = JSON.stringify(data);
-    }
-
-    function getReviewHistory(){
-        var userID = (document.getElementById("upgrades-profile-icon").getElementsByTagName("image")[0].href.baseVal).substr(37);
-        var ret = localStorage["wfpSaved" + userID];
-        if (ret === undefined || ret === null){
-            return [];
-        }else{
-            return JSON.parse(ret);
-        }
-    }
-
-    function removeReviewHistory(){
-        var userID = (document.getElementById("upgrades-profile-icon").getElementsByTagName("image")[0].href.baseVal).substr(37);
-        localStorage.removeItem("wfpSaved" + userID);
-    }
-
-    const debounce = (callback, time) => {
-        let interval;
-        return (...args) => {
-            clearTimeout(interval);
-            interval = setTimeout(() => {
-                interval = null;
-                callback(...args);
-            }, time);
-        };
-    };
-
-    const emptyArray = Array(5).fill(0);
-    function getStarRating(score) {
-        return `<span style="white-space:nowrap">${emptyArray
-        .map((_, i) =>
-            i + 1 <= score
-                ? `<span class="glyphicon glyphicon-star star-gray"></span>`
-                : `<span class="glyphicon glyphicon-star-empty star-gray"></span>`
-        )
-        .join("")}</span>`;
-    }
-    const infoWindow = new google.maps.InfoWindow({
-        content: "Loading...",
-    });
-
-    const getReviews = () => {
-        const currentItems = getReviewHistory();
-        return currentItems;
-    };
-
-    const clearLocalStorage = () => {
-        const confirmation = confirm(
-            "This will delete all your review history! Are you sure?"
-        );
-        if (confirmation) {
-            removeReviewHistory();
-            window.location.reload();
-        }
-    };
-
-    const saveReview = (pageData, submitData) => {
-        if (nSubCtrl.reviewType !== "NEW") {
-            console.log("Not a new review. Skipping the save.");
-            return;
-        }
-
-        const {
-            title,
-            description,
-            imageUrl,
-            lat,
-            lng,
-            statement,
-            supportingImageUrl,
-        } = pageData;
-        const toSave = {
-            title,
-            description,
-            imageUrl,
-            lat,
-            lng,
-            statement,
-            supportingImageUrl,
-            ts: +new Date(),
-            review: submitData,
-        };
-
-        const currentItems = getReviews();
-        const lastItem = currentItems.length
-            ? currentItems[currentItems.length - 1]
-            : null;
-        const isSameReview = lastItem && lastItem.imageUrl === imageUrl;
-        if (isSameReview) {
-            // update the result
-            currentItems[currentItems.length - 1] = toSave;
-        } else {
-            // push the new result
-            currentItems.push(toSave);
-        }
-        storeReviewHistory(currentItems);
-    };
 
     const dateSettings = {
         day: "numeric",
@@ -223,53 +147,35 @@
         return gmap;
     };
 
-    const addS2 = (map, lat, lng, lvl, colCode = '#00FF00') => {
-        const cell = window.S2.S2Cell.FromLatLng({lat: lat, lng: lng}, lvl);
-
-        const cellCorners = cell.getCornerLatLngs();
-        cellCorners[4] = cellCorners[0]; //Loop it
-
-        const polyline = new google.maps.Polyline({
-            path: cellCorners,
-            geodesic: true,
-            fillColor: 'grey',
-            fillOpacity: 0.2,
-            strokeColor: colCode,
-            strokeOpacity: 1.0,
-            strokeWeight: 1,
-            map: map
-        });
-    };
-
     const check_map_bounds_ready = (map) => {
         if (! map || map.getBounds() === undefined) {
             return false;
         } else {
-        	return true;
+            return true;
         }  
     };
 
     function until(conditionFunction, map) {
 
         const poll = resolve => {
-        	if(conditionFunction(map)) resolve();
-        	else setTimeout(_ => poll(resolve), 400);
+            if(conditionFunction(map)) resolve();
+            else setTimeout(_ => poll(resolve), 400);
       }
 
       return new Promise(poll);
     }
 
     function updateGrid(map) {
-    	polyLines.forEach((line) => {
-    		line.setMap(null)
-    	});
+        polyLines.forEach((line) => {
+            line.setMap(null)
+        });
 
-    	return drawCellGrid(map);
+        return drawCellGrid(map);
     }
 
     async function drawCellGrid(map) {
-    	await until(check_map_bounds_ready, map);
-    	const bounds = map.getBounds();
+        await until(check_map_bounds_ready, map);
+        const bounds = map.getBounds();
         
         const seenCells = {};
         const drawCellAndNeighbors = function (cell) {
@@ -597,43 +503,43 @@
             <div class="row row-input">
                 <div class="col-xs-3">
                     <div class="input-group">
-                    	<label class="input-group-addon" for="search">Search</label>
-                    	<input id="search" type="text" autocomplete="off" class="form-control">
+                        <label class="input-group-addon" for="search">Search</label>
+                        <input id="search" type="text" autocomplete="off" class="form-control">
                     </div>
                 </div>
                 <div class="col-xs-3">
-                  	<div class="input-group">
-	                  	<label class="input-group-addon" for="date-range">Start Date</label>
-	                    <input id="date-range" type="text" class="form-control">
-	                </div>
+                    <div class="input-group">
+                        <label class="input-group-addon" for="date-range">Start Date</label>
+                        <input id="date-range" type="text" class="form-control">
+                    </div>
                 </div>
                 <div class="col-xs-3">
-		            <div class="input-group">
-						<label>S2 Cell Level:</label>
-						<select id="gridCellSize">
-							<option value="-1">Off</option>
-							<option value="6">L6</option>
-							<option value="7">L7</option>
-							<option value="8">L8</option>
-							<option value="9">L9</option>
-							<option value="10">L10</option>
-							<option value="11">L11</option>
-							<option value="12">L12</option>
-							<option value="13">EX Cell (L13)</option>
-							<option value="14">Gym Cell (L14)</option>
-							<option value="15">L15</option>
-							<option value="16">L16</option>
-							<option value="17">Pok&eacute;stop Cell (L17)</option>
-							<option value="18">L18</option>
-						</select>
-					</div>
-				</div>
-				<div class="col-xs-2">
-					<div class="input-group">
-						<label for="gridCellColor">Grid color: </label>
-						<input type="color" id="gridCellColor">
-					</div>
-				</div>
+                    <div class="input-group">
+                        <label>S2 Cell Level:</label>
+                        <select id="gridCellSize">
+                            <option value="-1">Off</option>
+                            <option value="6">L6</option>
+                            <option value="7">L7</option>
+                            <option value="8">L8</option>
+                            <option value="9">L9</option>
+                            <option value="10">L10</option>
+                            <option value="11">L11</option>
+                            <option value="12">L12</option>
+                            <option value="13">EX Cell (L13)</option>
+                            <option value="14">Gym Cell (L14)</option>
+                            <option value="15">L15</option>
+                            <option value="16">L16</option>
+                            <option value="17">Pok&eacute;stop Cell (L17)</option>
+                            <option value="18">L18</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-xs-2">
+                    <div class="input-group">
+                        <label for="gridCellColor">Grid color: </label>
+                        <input type="color" id="gridCellColor">
+                    </div>
+                </div>
             </div>
             <div id="reviewed-map" style="height:600px"></div>
             <div class="table-responsive">
@@ -647,29 +553,27 @@
         const mapElement = document.getElementById("reviewed-map");
         const map = buildMap(mapElement);
 
-        // add setting for grid level and use that instead of hardcoded 6
-        // will need to adjust drawing to handle zoom level not fitting grid setting
         polyLines = [];
         drawCellGrid(map);
 
         map.addListener('dragend', () => {
-        	updateGrid(map);
+            updateGrid(map);
         });
 
         map.addListener('zoom_changed', () => {
-        	updateGrid(map);
+            updateGrid(map);
         });
 
         colorPickerElement = document.querySelector("#gridCellColor");
         colorPickerElement.value = settings["profGridColor"];
         colorPickerElement.addEventListener('change', () => {
-        	updateGrid(map);
+            updateGrid(map);
         }, false);
 
         gridSizeElement = document.querySelector("#gridCellSize");
-		gridSizeElement.value = settings["profGridSize"];
+        gridSizeElement.value = settings["profGridSize"];
         gridSizeElement.addEventListener('change', () => {
-        	updateGrid(map);
+            updateGrid(map);
         }, false);
 
         const cluster = new MarkerClusterer(map, [], {
@@ -864,7 +768,7 @@
         $("#date-range").daterangepicker(
             {
                 showDropdowns: true,
-                timePicker: true,
+                timePicker: false,
                 timePicker24Hour: true,
                 autoApply: true,
                 ranges: {
@@ -892,6 +796,7 @@
             (start, end) => {
                 startDate = start;
                 endDate = end;
+                window.endDate = end;
                 debouncedDraw();
             }
         );
@@ -971,66 +876,5 @@
         });
     };
 
-    document.addEventListener("WFPAllRevHooked", () =>
-        saveReview(nSubCtrl.pageData, false)
-    );
-    document.addEventListener("WFPPCtrlHooked", showEvaluated);
-    document.addEventListener("WFPAnsCtrlHooked", () => {
-        const {
-            submitForm,
-            skipToNext,
-            showLowQualityModal,
-            markDuplicate,
-        } = ansCtrl;
-
-        ansCtrl.submitForm = function () {
-            // This only works for accepts
-            saveReview(nSubCtrl.pageData, ansCtrl.formData);
-            submitForm();
-        };
-
-        ansCtrl.showLowQualityModal = function () {
-            showLowQualityModal();
-            setTimeout(() => {
-                const ansCtrl2Elem = document.getElementById("low-quality-modal");
-                const ansCtrl2 = angular.element(ansCtrl2Elem).scope().answerCtrl2;
-                const oldConfirm = ansCtrl2.confirmLowQuality;
-                ansCtrl2.confirmLowQuality = function () {
-                    saveReview(nSubCtrl.pageData, {
-                        ...ansCtrl2.formData,
-                        review: {
-                            ...ansCtrl2.formData.review,
-                            comment: ansCtrl2.rejectComment,
-                        },
-                    });
-                    oldConfirm();
-                };
-            }, 10);
-        };
-
-        ansCtrl.markDuplicate = function (id) {
-            markDuplicate(id);
-            setTimeout(() => {
-                const ansCtrl2Elem = document.querySelector(
-                    ".modal-content > [ng-controller]"
-                );
-                const ansCtrl2 = angular.element(ansCtrl2Elem).scope().answerCtrl2;
-                const confirmDuplicate = ansCtrl2.confirmDuplicate;
-                ansCtrl2.confirmDuplicate = function () {
-                    var customFormData = ansCtrl2.formData;
-                    customFormData.duplicate = true; //This is because we want to store before we actually let Wayfarer itself set this to true
-                    saveReview(nSubCtrl.pageData, {
-                        ...customFormData,
-                        duplicateOf: id,
-                    }); // duplicateOf is not marked in vm or formData
-                    confirmDuplicate();
-                };
-            }, 10);
-        };
-
-        ansCtrl.skipToNext = function () {
-            saveReview(nSubCtrl.pageData, "skipped");
-            skipToNext();
-        };
-    });
-})();
+    showEvaluated();
+}

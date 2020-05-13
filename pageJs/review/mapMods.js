@@ -2,44 +2,44 @@
 var lowDistCircle, longDistCirle;
 
 function setupMapMods(){
+	var lat = nSubCtrl.pageData.lat;
+	var lng = nSubCtrl.pageData.lng;
 	if (settings["revPreciseMarkers"])
 		addPreciseMarkers();
 	if (settings["revLowestDistCircle"]){
-		addLowestDistCircle(nSubCtrl.map);
-		addLowestDistCircle(nSubCtrl.map2, true);
+		addLowestDistCircle(nSubCtrl.map, lat, lng);
+		lowDistCircle = addLowestDistCircle(nSubCtrl.map2, lat, lng);
 			hookLowestDistLocEdit();
 	}
 	if (settings["revAccessDistCircle"]){
-		addAccessDistCircle(nSubCtrl.map);
-		addAccessDistCircle(nSubCtrl.map2, true);
+		addAccessDistCircle(nSubCtrl.map, lat, lng);
+		longDistCirle = addAccessDistCircle(nSubCtrl.map2, lat, lng);
 			hookLongDistLocEdit();
 	}
 	if (settings["revMinDistCircle"]){
 		hookMinDistCircle();
 	}
-	if (settings["revLowestDistCircle"] || settings["revAccessDistCircle"] || settings["revMap2ZoomLevel"] != -1)
+	if (settings["revLowestDistCircle"] || settings["revAccessDistCircle"] || settings["revMap2ZoomLevel"] !== -1)
 		hookResetMapFuncs();
 
-	if (settings["revS2Cell"] != -1){
+	if (settings["revS2Cell"] !== -1){
+
+		addS2(nSubCtrl.map, settings["revS2Cell"], "#00FF00", lat, lng);
+		addS2(nSubCtrl.map2, settings["revS2Cell"], "#00FF00", lat, lng);
+		if (ansCtrl.needsLocationEdit)
+			addS2(nSubCtrl.locationEditsMap, settings["revS2Cell"], "#00FF00", lat, lng);
+	}
+	if (settings["revSecondS2Cell"] !== -1){
 		var lat = nSubCtrl.pageData.lat;
 		var lng = nSubCtrl.pageData.lng;
 
-		addS2(nSubCtrl.map, lat, lng, settings["revS2Cell"]);
-		addS2(nSubCtrl.map2, lat, lng, settings["revS2Cell"]);
+		addS2(nSubCtrl.map, settings["revSecondS2Cell"], "#E47252", lat, lng);
+		addS2(nSubCtrl.map2, settings["revSecondS2Cell"], "#E47252", lat, lng);
 		if (ansCtrl.needsLocationEdit)
-			addS2(nSubCtrl.locationEditsMap, lat, lng, settings["revS2Cell"]);
-	}
-	if (settings["revSecondS2Cell"] != -1){
-		var lat = nSubCtrl.pageData.lat;
-		var lng = nSubCtrl.pageData.lng;
-
-		addS2(nSubCtrl.map, lat, lng, settings["revSecondS2Cell"], "#E47252");
-		addS2(nSubCtrl.map2, lat, lng, settings["revSecondS2Cell"], "#E47252");
-		if (ansCtrl.needsLocationEdit)
-			addS2(nSubCtrl.locationEditsMap, lat, lng, settings["revSecondS2Cell"], "#E47252");
+			addS2(nSubCtrl.locationEditsMap, settings["revSecondS2Cell"], "#E47252", lat, lng);
 	}
 
-	if (settings["revSecondS2Cell"] != -1 || settings["revS2Cell"] != -1){
+	if (settings["revSecondS2Cell"] !== -1 || settings["revS2Cell"] !== -1){
 		hookS2LocEdit();
 	}
 
@@ -186,19 +186,21 @@ function zoomMap2(){
 }
 
 function hookResetMapFuncs(){
+	var lat =  nSubCtrl.pageData.lat;
+	var lng = nSubCtrl.pageData.lng;
 	let originalResetStreetView = nSubCtrl.resetStreetView;
     nSubCtrl.resetStreetView = function() {
 		originalResetStreetView()
 		if (settings["revLowestDistCircle"])
-			addLowestDistCircle(nSubCtrl.map2, true);
+			lowDistCircle = addLowestDistCircle(nSubCtrl.map2, lat, lng);
 		if (settings["revAccessDistCircle"])
-			addAccessDistCircle(nSubCtrl.map2, true);
-		if (settings["revMap2ZoomLevel"] != -1)
+			longDistCirle = addAccessDistCircle(nSubCtrl.map2, lat, lng);
+		if (settings["revMap2ZoomLevel"] !== -1)
 			zoomMap2();
-		if (settings["revS2Cell"] != -1)
-			addS2(nSubCtrl.map2, nSubCtrl.pageData.lat, nSubCtrl.pageData.lng, settings["revS2Cell"]);
-		if (settings["revSecondS2Cell"] != -1)
-			addS2(nSubCtrl.map2, nSubCtrl.pageData.lat, nSubCtrl.pageData.lng, settings["revSecondS2Cell"], "#E47252");
+		if (settings["revS2Cell"] !== -1)
+			addS2(nSubCtrl.map2, settings["revS2Cell"], "#00FF00", lat, lng);
+		if (settings["revSecondS2Cell"] !== -1)
+			addS2(nSubCtrl.map2, settings["revSecondS2Cell"], "#E47252", lat, lng);
 		if (settings["revTransparentMarker"])
 			makeMarkersTransparent();
     }
@@ -208,7 +210,7 @@ function addOrigLocation(gMap){
 	function setEditMarkersIcon(editMarkers) {
 		var oPos = new google.maps.LatLng(nSubCtrl.pageData.lat, nSubCtrl.pageData.lng);
 		for (var i = 0; i < editMarkers.length; i++) {
-			if (editMarkers[i].position.lat() == oPos.lat() && editMarkers[i].position.lng() == oPos.lng()) {
+			if (editMarkers[i].position.lat() === oPos.lat() && editMarkers[i].position.lng() === oPos.lng()) {
 				editMarkers[i].setIcon(extURL + "assets/custom_map-spot.svg");
 			}
 		}
@@ -232,25 +234,6 @@ function addOrigLocation(gMap){
 	}
 }
 
-
-function addS2(map, lat, lng, lvl, colCode = '#00FF00'){
-    var cell = window.S2.S2Cell.FromLatLng({lat: lat, lng: lng}, lvl);
-
-    var cellCorners = cell.getCornerLatLngs();
-    cellCorners[4] = cellCorners[0]; //Loop it
-
-    var polyline = new google.maps.Polyline({
-        path: cellCorners,
-        geodesic: true,
-        fillColor: 'grey',
-        fillOpacity: 0.2,
-        strokeColor: colCode,
-        strokeOpacity: 1.0,
-        strokeWeight: 1,
-        map: map
-    });
-}
-
 function hookS2LocEdit(){
 	if (nSubDS.getNewLocationMarker() == undefined || nSubDS.getNewLocationMarker().position ==  null){
 		setTimeout(hookS2LocEdit, 200);
@@ -258,44 +241,20 @@ function hookS2LocEdit(){
 	}
 	google.maps.event.addListener(nSubDS.getNewLocationMarker(), 'dragend', function () {
 		var pos = nSubDS.getNewLocationMarker().position;
-		if (settings["revS2Cell"] != -1)
-			addS2(nSubCtrl.map2, pos.lat(), pos.lng(), settings["revS2Cell"]);
-		if (settings["revSecondS2Cell"] != -1)
-			addS2(nSubCtrl.map2, pos.lat(), pos.lng(), settings["revSecondS2Cell"]);
+		if (settings["revS2Cell"] !== -1)
+			addS2(nSubCtrl.map2, settings["revS2Cell"], "#00FF00",pos.lat(), pos.lng());
+		if (settings["revSecondS2Cell"] !== -1)
+			addS2(nSubCtrl.map2, settings["revSecondS2Cell"], "#E47252",pos.lat(), pos.lng());
 	});
 }
 
 function mapsRemoveCtrlToZoom(){
-	var options = {
-		scrollwheel: true,
-		gestureHandling: 'greedy'
-	};
-	applyMapOptions(options);
-}
-
-function applyMapOptions(options){
-	if (nSubCtrl.reviewType == "NEW"){
-		nSubCtrl.map.setOptions(options);
-		nSubCtrl.map2.setOptions(options);
+	if (nSubCtrl.reviewType === "NEW"){
+		mapRemoveCtrlZoom(nSubCtrl.map);
+		mapRemoveCtrlZoom(nSubCtrl.map2);
 	}
-	if (nSubCtrl.reviewType == "EDIT")
-		nSubCtrl.locationEditsMap.setOptions(options);
-}
-
-function addLowestDistCircle(gMap, hook = false){ 
-	var latLng = new google.maps.LatLng(nSubCtrl.pageData.lat, nSubCtrl.pageData.lng);
-	var c = new google.maps.Circle({
-        map: gMap,
-        center: latLng,
-        radius: 20,
-        strokeColor: 'red',
-        fillColor: 'red',
-        strokeOpacity: 0.8,
-        strokeWeight: 1,
-        fillOpacity: 0.2
-  	});
-	if (hook)
-		lowDistCircle = c;
+	if (nSubCtrl.reviewType === "EDIT")
+		mapRemoveCtrlZoom(nSubCtrl.locationEditsMap);
 }
 
 function hookLowestDistLocEdit(){
@@ -306,22 +265,6 @@ function hookLowestDistLocEdit(){
 	google.maps.event.addListener(nSubDS.getNewLocationMarker(), 'dragend', function () {
     	lowDistCircle.setCenter(nSubDS.getNewLocationMarker().position)
     });
-}
-
-
-function addAccessDistCircle(gMap, hook = false){
-	var latLng = new google.maps.LatLng(nSubCtrl.pageData.lat, nSubCtrl.pageData.lng);
-	var c = new google.maps.Circle({
-        map: gMap,
-        center: latLng,
-        radius: 40,
-        strokeColor: 'green',
-        strokeOpacity: 1,
-        strokeWeight: 2,
-        fillOpacity: 0
-  	});
-  	if (hook)
-  		longDistCirle = c;
 }
 
 function hookLongDistLocEdit(){
@@ -339,18 +282,7 @@ function hookMinDistCircle(){
 		setTimeout(hookMinDistCircle, 500);
 		return;
 	}
-	console.log("TEEEEEEEEEEEST");
-	var latLng = new google.maps.LatLng(nSubCtrl.pageData.lat, nSubCtrl.pageData.lng);
-	var c = new google.maps.Circle({
-		map: nSubCtrl.map2,
-		center: latLng,
-		radius: 2, //This is prone to change with wayfarer updates!
-		strokeColor: 'red',
-		fillColor: 'red',
-		strokeOpacity: 0.8,
-		strokeWeight: 1,
-		fillOpacity: 0.5
-	});
+	addMinDistCircle(nSubCtrl.map2, nSubCtrl.pageData.lat, nSubCtrl.pageData.lng);
 }
 
 function makeMapsBigger(){
@@ -365,6 +297,15 @@ function makeMapsBigger(){
 
 	duplicateMapElem.style.height = "500px";
 	accuracyMapElem.style.height = "100%";
+}
+
+function applyMapOptions(options){
+	if (nSubCtrl.reviewType === "NEW"){
+		nSubCtrl.map.setOptions(options);
+		nSubCtrl.map2.setOptions(options);
+	}
+	if (nSubCtrl.reviewType === "EDIT")
+		nSubCtrl.locationEditsMap.setOptions(options);
 }
 
 document.addEventListener("WFPAllRevHooked", setupMapMods);

@@ -50,5 +50,6 @@ function addPageJS(file, defer = false){
 	if (defer){
 		newScript.setAttribute("defer", "");
 	}
+	newScript.setAttribute("type", "text/javascript");
 	document.getElementsByTagName("head")[0].appendChild(newScript);
 }

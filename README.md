@@ -20,6 +20,18 @@ Other browser support?
 
 Changelog
 ---
+1.14.3:
+- Recon badge progress can now be seen on profile, you'll need to configure your account settings in order for this change to take effect.
+- Filtering nominations will now filter them on the Nominations map too!
+- A character count for description and supporting statements are now available during a nomination edit
+- A 2m circle can now be activated for the nominations page
+- Behind the scenes improvements
+
+1.14.2:
+- WayFarer+ settings can now be exported, imported or reset to default values.
+- For users affected by very long loading times, you can now enable a notification sound in settings that will notify you when a nomination has loaded
+- By default a small circle will appear when moving a nomination, this will indicate the area where wayfarer won't allow you to move it to, as it's too close to the original location
+
 1.14.1:
 - A translate all button has been added. This button will translate all three fields at the same time!
 - Nomination data export now includes a account specific UID

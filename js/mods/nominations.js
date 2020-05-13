@@ -25,14 +25,19 @@ function modNominationPage(settings){
 		addStreetView();
 		addPageJS("nominations/streetView.js");
 	}
-    if (settings["nomAccessDistCircle"] || settings["nomLowestDistCircle"] || settings["ctrlessZoom"] || settings["nomS2Cell"] != -1 || settings["nomSecondS2Cell"] != -1){
+    if (settings["nomAccessDistCircle"] || settings["nomLowestDistCircle"] || settings["ctrlessZoom"] || settings["nomS2Cell"] !== -1 || settings["nomSecondS2Cell"] !== -1){
+		addPageJS("general/mapMods.js");
     	addPageJS("nominations/mapMods.js");
     }
     if (settings["nomOpenIn"]){
+		addPageJS("general/mapButtons.js");
     	addPageJS("nominations/mapButtons.js");
 	}
 	if (settings["nomExportButtons"]){
 		addPageJS("nominations/exportButtons.js");
+	}
+	if (settings["nomEditAid"]){
+		addPageJS("nominations/editAid.js");
 	}
     if (settings["accPoGo"] && settings["accIngress"] && settings["nomStats"])
         addNomTypeButtons();
@@ -45,7 +50,7 @@ function modNominationPage(settings){
 	        }
 	        var nodes = mutation.addedNodes;
 	        nodes.forEach(function(node,i){
-	        	if (node.className == "nomination card ng-scope" || node.className == "nomination card ng-scope --selected"){
+	        	if (node.className === "nomination card ng-scope" || node.className === "nomination card ng-scope --selected"){
 	        		node.setAttribute("onclick", "selectNomination();");
 	        	}
 	        });
@@ -58,7 +63,7 @@ function modNominationPage(settings){
 			queries: [{element: "#map"}]
 	});
 
-	if (settings["nomS2Cell"] != -1 || settings["nomSecondS2Cell"] != -1)
+	if (settings["nomS2Cell"] !== -1 || settings["nomSecondS2Cell"] !== -1)
 		addPageJS("libs/S2.js");
 	
 	addPageJS("nominations/main.js", true);
