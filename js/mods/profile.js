@@ -25,6 +25,7 @@ function modProfilePage(settings){
 	}
 
 	addPageJS("profile/main.js", true);
+	addPageJS("libs/S2.js");
 	
 	console.log("[WayFarer+] Profile page injection successful!");
 }

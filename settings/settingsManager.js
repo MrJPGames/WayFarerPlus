@@ -80,7 +80,10 @@ function setDefaults() {
 			case 24:
 				setOption("revLoadNotify", false);
 				setOption("revMinDistCircle", true);
+				setOption("profGridColor", "#00FF00");
+				setOption("profGridSize", 6);
 				setOption("options_set", settingsVersion);
+			
 		}
 	});
 }
