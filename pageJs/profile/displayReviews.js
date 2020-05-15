@@ -169,7 +169,6 @@ function mainLoad() {
         polyLines.forEach((line) => {
             line.setMap(null)
         });
-
         return drawCellGrid(map);
     }
 
@@ -201,10 +200,12 @@ function mainLoad() {
                         map: map
                     });
                     polyLines.push(polyline);
+                }
 
-                    // and recurse to our neighbors
-                    const neighbors = cell.getNeighbors();
-                    for (let i = 0; i < neighbors.length; i++) {
+                // and recurse to our neighbors
+                const neighbors = cell.getNeighbors();
+                for (let i = 0; i < neighbors.length; i++) {
+                    if (isCellOnScreen(bounds, neighbors[i])) {
                         drawCellAndNeighbors(neighbors[i]);
                     }
                 }
@@ -235,7 +236,7 @@ function mainLoad() {
         const c2 = new google.maps.LatLng(corners[1].lat, corners[1].lng);
         const c3 = new google.maps.LatLng(corners[2].lat, corners[2].lng)
         const c4 = new google.maps.LatLng(corners[3].lat, corners[3].lng);
-        const cellBounds = new google.maps.LatLngBounds(c1, c2).extend(c2).extend(c3);
+        const cellBounds = new google.maps.LatLngBounds(c1, c2).extend(c3).extend(c4);
         return cellBounds.intersects(mapBounds);
     };
 
@@ -554,6 +555,7 @@ function mainLoad() {
         const map = buildMap(mapElement);
 
         polyLines = [];
+
         drawCellGrid(map);
 
         map.addListener('dragend', () => {
