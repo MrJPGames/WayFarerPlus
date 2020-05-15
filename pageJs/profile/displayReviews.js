@@ -567,7 +567,11 @@ function mainLoad() {
         });
 
         colorPickerElement = document.querySelector("#gridCellColor");
-        colorPickerElement.value = settings["profGridColor"];
+        let colorValue = settings["profGridColor"];
+        if (colorValue.charAt(0) != "#") {
+            colorValue = "#" + colorValue;
+        }
+        colorPickerElement.value = colorValue;
         colorPickerElement.addEventListener('change', () => {
             updateGrid(map);
         }, false);
