@@ -175,49 +175,52 @@ function mainLoad() {
     async function drawCellGrid(map) {
         await until(check_map_bounds_ready, map);
         const bounds = map.getBounds();
-        
+
         const seenCells = {};
-        const drawCellAndNeighbors = function (cell) {
-            const cellStr = cell.toString();
+        const cellsToDraw = [];
 
-            if (!seenCells[cellStr]) {
-                // cell not visited - flag it as visited now
-                seenCells[cellStr] = true;
+        const drawCell = function (cell) {
+            const cellCorners = cell.getCornerLatLngs();
+            cellCorners[4] = cellCorners[0]; //Loop it
 
-                if (isCellOnScreen(bounds, cell)) {
-                    // on screen - draw it
-                    const cellCorners = cell.getCornerLatLngs();
-                    cellCorners[4] = cellCorners[0]; //Loop it
-
-                    const polyline = new google.maps.Polyline({
-                        path: cellCorners,
-                        geodesic: true,
-                        fillColor: 'grey',
-                        fillOpacity: 0.0,
-                        strokeColor: colorPickerElement.value,
-                        strokeOpacity: 0.8,
-                        strokeWeight: 1,
-                        map: map
-                    });
-                    polyLines.push(polyline);
-                }
-
-                // and recurse to our neighbors
-                const neighbors = cell.getNeighbors();
-                for (let i = 0; i < neighbors.length; i++) {
-                    if (isCellOnScreen(bounds, neighbors[i])) {
-                        drawCellAndNeighbors(neighbors[i]);
-                    }
-                }
-            }
+            const polyline = new google.maps.Polyline({
+                path: cellCorners,
+                geodesic: true,
+                fillColor: 'grey',
+                fillOpacity: 0.0,
+                strokeColor: colorPickerElement.value,
+                strokeOpacity: 0.8,
+                strokeWeight: 1,
+                map: map
+            });
+            polyLines.push(polyline);
         };
 
         const gridLevel = gridSizeElement.value;
         if (gridLevel >= 6 && gridLevel < (map.getZoom() + 2)) {
             const latLng = map.getCenter()
             const cell = S2.S2Cell.FromLatLng(getLatLngPoint(latLng), gridLevel);
-            drawCellAndNeighbors(cell);
+            cellsToDraw.push(cell);
+            seenCells[cell.toString()] = true;
+
+            let curCell;
+            while (cellsToDraw.length > 0) {
+                curCell = cellsToDraw.pop();
+                const neighbors = curCell.getNeighbors();
+
+                for (let n = 0; n < neighbors.length; n++) {
+                    const nStr = neighbors[n].toString();
+                    if (!seenCells[nStr]) {
+                        seenCells[nStr] = true;
+                        if (isCellOnScreen(bounds, neighbors[n])) {
+                            cellsToDraw.push(neighbors[n]);
+                        }
+                    }
+                }
+
+                drawCell(curCell);
             }
+        }
     };
 
     const getLatLngPoint = (data) => {
@@ -231,13 +234,12 @@ function mainLoad() {
 
     const isCellOnScreen = (mapBounds, cell) => {
         const corners = cell.getCornerLatLngs();
-
-        const c1 = new google.maps.LatLng(corners[0].lat, corners[0].lng);
-        const c2 = new google.maps.LatLng(corners[1].lat, corners[1].lng);
-        const c3 = new google.maps.LatLng(corners[2].lat, corners[2].lng)
-        const c4 = new google.maps.LatLng(corners[3].lat, corners[3].lng);
-        const cellBounds = new google.maps.LatLngBounds(c1, c2).extend(c3).extend(c4);
-        return cellBounds.intersects(mapBounds);
+        for (let i = 0; i < corners.length; i++) {
+            if (mapBounds.intersects(new google.maps.LatLngBounds(corners[i]))) {
+                return true;
+            }
+        }
+        return false;
     };
 
     const formatAsGeojson = (reviews) => {
