@@ -8,10 +8,8 @@ function initEditAid(){
 
 		var modalElem = document.getElementById('nom-edit-container');
 		var textFields = modalElem.getElementsByTagName("textarea");
-		console.log(textFields);
 		for (var i = 0; i < textFields.length; i++){
 			var textField = textFields[i];
-			console.log(textField.value);
 			var infoElem = document.createElement("span");
 			var l = '?';
 			if (i === 0){

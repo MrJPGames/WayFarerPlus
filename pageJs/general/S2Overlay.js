@@ -23,7 +23,6 @@ class S2Overlay{
 		this.polyLines.forEach((line) => {
 			line.setMap(null)
 		});
-		console.log(gridLevel, col, secondGridLevel, secondCol);
 		let ret = this.drawCellGrid(map, gridLevel, col);
 		if (secondGridLevel !== null){
 			this.drawCellGrid(map, secondGridLevel, secondCol, 2);
@@ -32,7 +31,6 @@ class S2Overlay{
 	}
 
 	async drawCellGrid(map, gridLevel, col, thickness = 1) {
-		console.log(gridLevel, col);
 		await this.until(this.check_map_bounds_ready, map);
 		const bounds = map.getBounds();
 
