@@ -63,8 +63,10 @@ function modNominationPage(settings){
 			queries: [{element: "#map"}]
 	});
 
-	if (settings["nomS2Cell"] !== -1 || settings["nomSecondS2Cell"] !== -1)
+	if (settings["nomS2Cell"] !== -1 || settings["nomSecondS2Cell"] !== -1) {
 		addPageJS("libs/S2.js");
+		addPageJS("general/S2Overlay.js");
+	}
 	
 	addPageJS("nominations/main.js", true);
 }

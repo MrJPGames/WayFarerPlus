@@ -1,6 +1,8 @@
 function modReviewPage(settings){
-	if (settings["revS2Cell"] != -1 || settings["revSecondS2Cell"] != -1)
+	if (settings["revS2Cell"] != -1 || settings["revSecondS2Cell"] != -1) {
 		addPageJS("libs/S2.js");
+		addPageJS("general/S2Overlay.js");
+	}
 
 	var newCss = document.createElement("link");
 	newCss.setAttribute("rel", "stylesheet");

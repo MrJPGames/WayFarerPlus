@@ -147,101 +147,6 @@ function mainLoad() {
         return gmap;
     };
 
-    const check_map_bounds_ready = (map) => {
-        if (! map || map.getBounds() === undefined) {
-            return false;
-        } else {
-            return true;
-        }  
-    };
-
-    function until(conditionFunction, map) {
-
-        const poll = resolve => {
-            if(conditionFunction(map)) resolve();
-            else setTimeout(_ => poll(resolve), 400);
-      }
-
-      return new Promise(poll);
-    }
-
-    function updateGrid(map) {
-        polyLines.forEach((line) => {
-            line.setMap(null)
-        });
-        return drawCellGrid(map);
-    }
-
-    async function drawCellGrid(map) {
-        await until(check_map_bounds_ready, map);
-        const bounds = map.getBounds();
-
-        const seenCells = {};
-        const cellsToDraw = [];
-
-        const drawCell = function (cell) {
-            const cellCorners = cell.getCornerLatLngs();
-            cellCorners[4] = cellCorners[0]; //Loop it
-
-            const polyline = new google.maps.Polyline({
-                path: cellCorners,
-                geodesic: true,
-                fillColor: 'grey',
-                fillOpacity: 0.0,
-                strokeColor: colorPickerElement.value,
-                strokeOpacity: 0.8,
-                strokeWeight: 1,
-                map: map
-            });
-            polyLines.push(polyline);
-        };
-
-        const gridLevel = gridSizeElement.value;
-        if (gridLevel >= 6 && gridLevel < (map.getZoom() + 2)) {
-            const latLng = map.getCenter()
-            const cell = S2.S2Cell.FromLatLng(getLatLngPoint(latLng), gridLevel);
-            cellsToDraw.push(cell);
-            seenCells[cell.toString()] = true;
-
-            let curCell;
-            while (cellsToDraw.length > 0) {
-                curCell = cellsToDraw.pop();
-                const neighbors = curCell.getNeighbors();
-
-                for (let n = 0; n < neighbors.length; n++) {
-                    const nStr = neighbors[n].toString();
-                    if (!seenCells[nStr]) {
-                        seenCells[nStr] = true;
-                        if (isCellOnScreen(bounds, neighbors[n])) {
-                            cellsToDraw.push(neighbors[n]);
-                        }
-                    }
-                }
-
-                drawCell(curCell);
-            }
-        }
-    };
-
-    const getLatLngPoint = (data) => {
-        const result = {
-            lat: typeof data.lat == 'function' ? data.lat() : data.lat,
-            lng: typeof data.lng == 'function' ? data.lng() : data.lng
-        };
-
-        return result;
-    };
-
-    const isCellOnScreen = (mapBounds, cell) => {
-        const corners = cell.getCornerLatLngs();
-        for (let i = 0; i < corners.length; i++) {
-            if (mapBounds.intersects(new google.maps.LatLngBounds(corners[i]))) {
-                return true;
-            }
-        }
-        return false;
-    };
-
     const formatAsGeojson = (reviews) => {
         return {
             type: "FeatureCollection",
@@ -556,33 +461,33 @@ function mainLoad() {
         const mapElement = document.getElementById("reviewed-map");
         const map = buildMap(mapElement);
 
-        polyLines = [];
+        const cellOverlay = new S2Overlay();
 
-        drawCellGrid(map);
-
-        map.addListener('dragend', () => {
-            updateGrid(map);
-        });
-
-        map.addListener('zoom_changed', () => {
-            updateGrid(map);
-        });
-
-        colorPickerElement = document.querySelector("#gridCellColor");
+        let colorPickerElement = document.getElementById("gridCellColor");
         let colorValue = settings["profGridColor"];
-        if (colorValue.charAt(0) != "#") {
+        if (colorValue.charAt(0) !== "#") {
             colorValue = "#" + colorValue;
         }
         colorPickerElement.value = colorValue;
         colorPickerElement.addEventListener('change', () => {
-            updateGrid(map);
+            cellOverlay.updateGrid(map, gridSizeElement.value, colorPickerElement.value);
         }, false);
 
-        gridSizeElement = document.querySelector("#gridCellSize");
+        let gridSizeElement = document.getElementById("gridCellSize");
         gridSizeElement.value = settings["profGridSize"];
         gridSizeElement.addEventListener('change', () => {
-            updateGrid(map);
+            cellOverlay.updateGrid(map, gridSizeElement.value, colorPickerElement.value);
         }, false);
+
+        cellOverlay.drawCellGrid(map, gridSizeElement.value, colorPickerElement.value);
+
+        map.addListener('dragend', () => {
+            cellOverlay.updateGrid(map, gridSizeElement.value, colorPickerElement.value);
+        });
+
+        map.addListener('zoom_changed', () => {
+            cellOverlay.updateGrid(map, gridSizeElement.value, colorPickerElement.value);
+        });
 
         const cluster = new MarkerClusterer(map, [], {
             imagePath:

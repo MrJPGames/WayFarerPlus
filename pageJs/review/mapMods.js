@@ -22,25 +22,12 @@ function setupMapMods(){
 	if (settings["revLowestDistCircle"] || settings["revAccessDistCircle"] || settings["revMap2ZoomLevel"] !== -1)
 		hookResetMapFuncs();
 
-	if (settings["revS2Cell"] !== -1){
+	if (settings["revS2Cell"] !== -1 || settings["revS2Cell"] !== -1){
 
-		addS2(nSubCtrl.map, settings["revS2Cell"], "#00FF00", lat, lng);
-		addS2(nSubCtrl.map2, settings["revS2Cell"], "#00FF00", lat, lng);
+		addS2Overlay(nSubCtrl.map, settings["revS2Cell"], "#00FF00", settings["revSecondS2Cell"], "#E47252");
+		addS2Overlay(nSubCtrl.map2, settings["revS2Cell"], "#00FF00", settings["revSecondS2Cell"], "#E47252");
 		if (ansCtrl.needsLocationEdit)
-			addS2(nSubCtrl.locationEditsMap, settings["revS2Cell"], "#00FF00", lat, lng);
-	}
-	if (settings["revSecondS2Cell"] !== -1){
-		var lat = nSubCtrl.pageData.lat;
-		var lng = nSubCtrl.pageData.lng;
-
-		addS2(nSubCtrl.map, settings["revSecondS2Cell"], "#E47252", lat, lng);
-		addS2(nSubCtrl.map2, settings["revSecondS2Cell"], "#E47252", lat, lng);
-		if (ansCtrl.needsLocationEdit)
-			addS2(nSubCtrl.locationEditsMap, settings["revSecondS2Cell"], "#E47252", lat, lng);
-	}
-
-	if (settings["revSecondS2Cell"] !== -1 || settings["revS2Cell"] !== -1){
-		hookS2LocEdit();
+			addS2Overlay(nSubCtrl.locationEditsMap, settings["revS2Cell"], "#00FF00", settings["revSecondS2Cell"], "#E47252");
 	}
 
     if (settings["revEditOrigLoc"] && ansCtrl.needsLocationEdit && !settings["revPreciseMarkers"])
@@ -232,20 +219,6 @@ function addOrigLocation(gMap){
 		}
 		addMarkerListner(editMarkers[i]);
 	}
-}
-
-function hookS2LocEdit(){
-	if (nSubDS.getNewLocationMarker() == undefined || nSubDS.getNewLocationMarker().position ==  null){
-		setTimeout(hookS2LocEdit, 200);
-		return;
-	}
-	google.maps.event.addListener(nSubDS.getNewLocationMarker(), 'dragend', function () {
-		var pos = nSubDS.getNewLocationMarker().position;
-		if (settings["revS2Cell"] !== -1)
-			addS2(nSubCtrl.map2, settings["revS2Cell"], "#00FF00",pos.lat(), pos.lng());
-		if (settings["revSecondS2Cell"] !== -1)
-			addS2(nSubCtrl.map2, settings["revSecondS2Cell"], "#E47252",pos.lat(), pos.lng());
-	});
 }
 
 function mapsRemoveCtrlToZoom(){

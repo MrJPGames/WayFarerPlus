@@ -60,7 +60,12 @@ function showChangelog(version){
 							- A character count for description and supporting statements are now available during a\n\
 							nomination edit\n\
 							- A 2m circle can now be activated for the nominations page\n\
-							- Behind the scenes improvements";
+							- Behind the scenes improvements\n\n";
+		case 26:
+			changelogStr += "1.14.4:\n\
+							- Review History S2 cell overlay was added. (Thanks to tehstone!)\n\
+							- Review and nomination maps that had S2 cells now also use the\n\
+							new cell overlay!";
 		default:
 			break;
 	}
