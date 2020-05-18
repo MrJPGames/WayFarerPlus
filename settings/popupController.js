@@ -80,9 +80,13 @@ function init(settings){
 			if (inputs[i].getAttribute("id") == "accIngress")
 				document.getElementById("ingressExtra").style.display = inputs[i].checked ? "block" : "none";
 			inputs[i].onclick = function(e){changeBoolSetting(e.srcElement)};
-		}else if (inputs[i].getAttribute("type") == "number"){
+		} else if (inputs[i].getAttribute("type") == "number"){
 			inputs[i].value = settings[inputs[i].id];
 			inputs[i].onchange = function(e){changeNumberSetting(e.srcElement)};
+		}
+		else if (inputs[i].getAttribute("type") == "text"){
+			inputs[i].value = settings[inputs[i].id];
+			inputs[i].onchange = function(e){changeSelectSetting(e.srcElement)};
 		}
 	};
 

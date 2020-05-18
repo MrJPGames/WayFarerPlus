@@ -84,7 +84,11 @@ function setDefaults() {
 				setOption("accLowIngress", false);
 				setOption("nomEditAid", true);
 				setOption("nomMinDistCircle", false);
+			case 26:
+				setOption("profGridColor", "#00FF00");
+				setOption("profGridSize", 6);
 				setOption("options_set", settingsVersion);
+			
 		}
 	});
 }
