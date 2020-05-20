@@ -8,6 +8,21 @@ function initTimerMods(){
 		lockSubmitButton();
 		hookSubmitReadyFunction();
 		hookLowQualityModalOpen();
+		hookDuplicateModalOpen();
+	}
+}
+
+function hookDuplicateModalOpen(){
+	var origFunc = markDuplicatePressed;
+	markDuplicatePressed = function (guid){
+		origFunc(guid);
+		setTimeout(function(){
+			//Only make changes if the timer hasn't already ran out (as it's useless at that point, and will cause minor visual bugs)
+			var tDiff = nSubCtrl.pageData.expires - Date.now();
+			if (tDiff/1000 >= 1200-parseInt(settings["revSubmitTimer"])) {
+				markSubmitButtons();
+			}
+		}, 10);
 	}
 }
 
@@ -55,12 +70,15 @@ function hookSubmitReadyFunction(){
 
 function markSubmitButtons(){
 	var buttons = document.getElementsByClassName("button-primary");
+	console.log(buttons);
 	for (var i = 0; i < buttons.length; i++){
-		if (buttons[i].innerText == "SUBMIT"){
+		if (buttons[i].innerText.toUpperCase() === "SUBMIT"){
+			console.log(buttons[i]);
 			buttons[i].setAttribute("wfpLock", "on");
 			var disableRule = buttons[i].getAttribute("ng-disabled");
 			buttons[i].setAttribute("ng-disabled-temp", disableRule);
 			buttons[i].setAttribute("ng-disabled", "");
+			buttons[i].disabled = true;
 			buttons[i].style.color = "#666";
 		}
 	}
@@ -83,6 +101,8 @@ function lockSubmitButton(){
 					var ansCtrl2Elem = document.getElementById("low-quality-modal");
 					var ansCtrl2 = angular.element(ansCtrl2Elem).scope().answerCtrl2;
 					buttons[i].disabled = !(ansCtrl2.readyToSubmitSpam());
+				}else{
+					buttons[i].disabled = false;
 				}
 			}
 		}

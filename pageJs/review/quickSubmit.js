@@ -43,11 +43,13 @@ function hookDupeModal(){
 		origFunc(guid);
 		setTimeout(function (){
 			var button = createQuickDuplicateButton();
-			button.disabled = false;
 			var modalContent = document.getElementsByClassName("modal-content")[0];
 			var submitButton = modalContent.getElementsByClassName("button-primary")[0];
+			button.disabled = submitButton.disabled;
 			var submitButtonParent = submitButton.parentNode;
 			submitButtonParent.insertBefore(button, submitButton);
+
+			createDupeObserver(button);
 		}, 10);
 	}
 }
@@ -66,6 +68,25 @@ function createRejectObserver(button){
 	            updateSpecificButton(button, mutation.target.disabled);
 	        }
 	    }
+	};
+	const observer = new MutationObserver(callback);
+	observer.observe(subButton, config);
+}
+
+function createDupeObserver(button){
+	//Used to keep disabled/enabled-ness of button in sync with official submit buttons
+	const subButtons = document.getElementsByClassName("modal-body")[0].getElementsByClassName("button-primary");
+	const subButton = subButtons[subButtons.length-1]; //Take last elem
+
+	//We only care about attribute updates
+	const config = { attributes: true, childList: false, subtree: false };
+
+	const callback = function(mutationsList, observer) {
+		for(let mutation of mutationsList) {
+			if (mutation.type === 'attributes' && mutation.attributeName === 'disabled') {
+				updateSpecificButton(button, mutation.target.disabled);
+			}
+		}
 	};
 	const observer = new MutationObserver(callback);
 	observer.observe(subButton, config);
