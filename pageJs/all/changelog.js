@@ -65,7 +65,8 @@ function showChangelog(version){
 			changelogStr += "1.14.4:\n\
 							- Review History S2 cell overlay was added. (Thanks to tehstone!)\n\
 							- Review and nomination maps that had S2 cells now also use the\n\
-							new cell overlay!";
+							new cell overlay!\n\
+							- Submitting duplicates can now also be locked with the review lock timer.";
 		default:
 			break;
 	}
