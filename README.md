@@ -20,6 +20,10 @@ Other browser support?
 
 Changelog
 ---
+1.14.4:
+- Added S2 cell overlay to Review History (Thanks to tehstone!)
+- Review and nomination maps now have map covering S2 cell overlays (Thanks to tehstone's reivew history code!)
+
 1.14.3:
 - Recon badge progress can now be seen on profile, you'll need to configure your account settings in order for this change to take effect.
 - Filtering nominations will now filter them on the Nominations map too!

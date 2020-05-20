@@ -8,6 +8,7 @@ function modProfilePage(settings){
 		addPageJS("profile/extendedStats.js");
 
 	if (settings["profRecordReviews"]) {
+		addPageJS("general/S2Overlay.js");
 		addPageJS("general/reviewHistory.js");
 		addPageJS("libs/jquery.js");
 		const newCss = document.createElement("link");
@@ -26,6 +27,7 @@ function modProfilePage(settings){
 	}
 
 	addPageJS("profile/main.js", true);
+	addPageJS("libs/S2.js");
 	
 	console.log("[WayFarer+] Profile page injection successful!");
 }

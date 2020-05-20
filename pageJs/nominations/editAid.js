@@ -2,12 +2,14 @@ function initEditAid(){
 	var oldSEMFunc = nomCtrl.showEditModal;
 	nomCtrl.showEditModal = function(){
 		oldSEMFunc();
+		while (document.getElementsByClassName("textLengthCounter").length !== 0){
+			document.getElementsByClassName("textLengthCounter")[0].remove();
+		}
+
 		var modalElem = document.getElementById('nom-edit-container');
 		var textFields = modalElem.getElementsByTagName("textarea");
-		console.log(textFields);
 		for (var i = 0; i < textFields.length; i++){
 			var textField = textFields[i];
-			console.log(textField.value);
 			var infoElem = document.createElement("span");
 			var l = '?';
 			if (i === 0){
@@ -18,6 +20,7 @@ function initEditAid(){
 			}
 			infoElem.innerText = "(" + l + " Characters)";
 			infoElem.style = "margin-left: 1rem;";
+			infoElem.setAttribute("class", "textLengthCounter");
 			var title = textField.parentElement.children[0];
 			title.appendChild(infoElem);
 
