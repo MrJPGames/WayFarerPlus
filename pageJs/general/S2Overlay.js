@@ -1,8 +1,10 @@
 class S2Overlay{
-	polyLines = [];
+	constructor() {
+		this.polyLines = [];
+	}
 
 
-	check_map_bounds_ready = (map) => {
+	check_map_bounds_ready(map){
 		if (!map || map.getBounds === undefined || map.getBounds() === undefined) {
 			return false;
 		} else {
