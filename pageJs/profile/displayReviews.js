@@ -7,6 +7,8 @@ document.addEventListener("WFPPCtrlHooked", function deferLegacyCode() {
 });
 
 function mainLoad() {
+    var selectedUID;
+
     const emptyArray = Array(5).fill(0);
     function getStarRating(score) {
         return `<span style="white-space:nowrap">${emptyArray
@@ -23,7 +25,7 @@ function mainLoad() {
             "This will delete all your review history! Are you sure?"
         );
         if (confirmation) {
-            removeReviewHistory();
+            removeReviewHistory(selectedUID);
             window.location.reload();
         }
     };
@@ -248,10 +250,10 @@ function mainLoad() {
 
         toggleAccepted() {
             this.review.accepted = !this.review.accepted;
-            const localStorageReviews = getReviews();
+            const localStorageReviews = getReviews(selectedUID);
             const localStorageReview = localStorageReviews[this.index];
             localStorageReview.accepted = !localStorageReview.accepted;
-            storeReviewHistory(localStorageReviews);
+            storeReviewHistory(localStorageReviews, selectedUID);
         }
 
         renderScore(type) {
@@ -397,17 +399,17 @@ function mainLoad() {
 
     const getMarkers = (reviews) => reviews.map((review) => review.marker);
 
-    const showEvaluated = () => {
-        const localstorageReviews = getReviews();
+    function showEvaluated(){
+        const localstorageReviews = getReviews(selectedUID);
+
+        console.log(selectedUID);
 
         if (!localstorageReviews.length) return;
 
-        const profileStats = document.getElementById("profile-main-contain");
+        const profileStats = document.getElementById("review-history-container");
         profileStats.insertAdjacentHTML(
             "beforeend",
             `
-        <div class="container">
-            <h3>Review History</h3>
             <div class="row row-input">
                 <div class="col-xs-3">
                     <div class="input-group">
@@ -453,8 +455,7 @@ function mainLoad() {
             <div class="table-responsive">
                 <table class="table table-striped table-condensed" id="review-history">
                 </table>
-            </div>
-        </div>`
+            </div>`
         );
 
         const $reviewHistory = $("#review-history");
@@ -789,5 +790,46 @@ function mainLoad() {
         });
     };
 
-    showEvaluated();
+    function createUIDMenu(){
+        var reviewHistoryTitle = document.createElement("h3");
+        reviewHistoryTitle.innerText = "Review History";
+        var reviewHistoryContainer = document.createElement("div");
+        reviewHistoryContainer.id = "review-history-container";
+
+        var select = document.createElement("select");
+        var option = document.createElement("option");
+        option.text = "Choose account UID";
+        option.disabled = true;
+        option.selected = true;
+        select.add(option);
+        var accountCount = 0;
+        var lastAccountUID;
+        for (var key in localStorage){
+            if (key.startsWith("wfpSaved")){
+                var option = document.createElement("option");
+                option.text = key.substr(8);
+                select.add(option);
+                accountCount++;
+                lastAccountUID = key.substr(8);
+            }
+        }
+        select.onchange = function (e){
+            console.log(e.path[0].value);
+            selectedUID = e.path[0].value;
+            var revContainer = document.getElementById("review-history-container");
+            revContainer.innerText = "";
+            showEvaluated();
+        };
+
+        document.getElementById("content-container").appendChild(reviewHistoryTitle);
+        if (accountCount > 1) {
+            document.getElementById("content-container").appendChild(select);
+            document.getElementById("content-container").appendChild(reviewHistoryContainer);
+        }else if (accountCount !== 0){
+            document.getElementById("content-container").appendChild(reviewHistoryContainer);
+            selectedUID = lastAccountUID;
+            showEvaluated();
+        }
+    }
+    createUIDMenu();
 }
