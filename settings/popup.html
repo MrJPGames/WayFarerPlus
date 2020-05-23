@@ -122,6 +122,10 @@
 						</select>
 					</div><br/>
 					<div class="switch">
+						<label for="revS2Color" >S2 Cell color:</label>
+						<input type="text" class="colorPicker" id="revS2Color" />
+					</div><br/>
+					<div class="switch">
 						<label>Additional S2 Cell Level:</label>
 						<select id="revSecondS2Cell">
 							<option value="-1">Off</option>
@@ -134,6 +138,10 @@
 							<option value="19">L19</option>
 						</select>
 					</div><br/>
+					<div class="switch">
+						<label for="revS2SecondColor" >Additional S2 cell color:</label>
+						<input type="text" class="colorPicker" id="revS2SecondColor" />
+					</div><br>
 					<div class="switch">
 						<input type="checkbox" class="switch__input" id="revLowestDistCircle" />
 						<label for="revLowestDistCircle" class="switch__label">20m circle on maps</label>
@@ -238,6 +246,10 @@
 						</select>
 					</div><br/>
 					<div class="switch">
+						<label for="nomS2Color" >S2 Cell color:</label>
+						<input type="text" class="colorPicker" id="nomS2Color" />
+					</div><br/>
+					<div class="switch">
 						<label>Additional S2 Cell Level:</label>
 						<select id="nomSecondS2Cell">
 							<option value="-1">Off</option>
@@ -249,6 +261,10 @@
 							<option value="18">L18</option>
 							<option value="19">L19</option>
 						</select>
+					</div><br/>
+					<div class="switch">
+						<label for="nomS2SecondColor" >Additional S2 Cell color:</label>
+						<input type="text" class="colorPicker" id="nomS2SecondColor" />
 					</div><br/>
 					<div class="switch">
 						<input type="checkbox" class="switch__input" id="nomMinDistCircle" />
@@ -293,8 +309,7 @@
 						<img title="Approximation works based on upgrade stats. If you've gotten agreements that did not count towards your upgrades this option will not work for you! Facts only will be less informative but always accurate." src="../assets/help.svg"/>
 					</div>
 					<h2>Review history map:</h2>
-					<div>
-						<div class="switch">
+					<div class="switch">
 						<label>S2 Cell Level:</label>
 						<select id="profGridSize">
 							<option value="-1">Off</option>
@@ -313,10 +328,9 @@
 							<option value="18">L18</option>
 						</select>
 					</div><br/>
-						<div class="switch">
-								<label for="profGridColor" >Cell color:</label>
-								<input type="text" id="profGridColor" />
-						</div>
+					<div class="switch">
+						<label for="profGridColor" >Cell color:</label>
+						<input type="text" class="colorPicker" id="profGridColor" />
 					</div>
 				</div>
 			</div>

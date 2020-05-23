@@ -29,11 +29,11 @@ function applyMapMods(){
 
     //S2 cell
     if (settings["nomS2Cell"] !== -1 || settings["nomSecondS2Cell"] !== -1){
-        addS2Overlay(nomCtrl.map, settings["nomS2Cell"], "#00FF00", settings["nomSecondS2Cell"], "#E47252");
+        addS2Overlay(nomCtrl.map, settings["nomS2Cell"], settings["nomS2Color"], settings["nomSecondS2Cell"], settings["nomS2SecondColor"]);
 
         //SVMap is exported by the nomStreetView mod when active
         if (SVMap !== undefined){
-            addS2Overlay(SVMap, settings["nomS2Cell"], "#00FF00", settings["nomSecondS2Cell"], "#E47252");
+            addS2Overlay(SVMap, settings["nomS2Cell"], settings["nomS2Color"], settings["nomSecondS2Cell"], settings["nomS2SecondColor"]);
         }
     }
 }

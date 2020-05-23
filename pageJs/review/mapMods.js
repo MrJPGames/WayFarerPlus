@@ -24,10 +24,10 @@ function setupMapMods(){
 
 	if (settings["revS2Cell"] !== -1 || settings["revS2Cell"] !== -1){
 
-		addS2Overlay(nSubCtrl.map, settings["revS2Cell"], "#00FF00", settings["revSecondS2Cell"], "#E47252");
-		addS2Overlay(nSubCtrl.map2, settings["revS2Cell"], "#00FF00", settings["revSecondS2Cell"], "#E47252");
+		addS2Overlay(nSubCtrl.map, settings["revS2Cell"], settings["revS2Color"], settings["revSecondS2Cell"], settings["revS2SecondColor"]);
+		addS2Overlay(nSubCtrl.map2, settings["revS2Cell"], settings["revS2Color"], settings["revSecondS2Cell"], settings["revS2SecondColor"]);
 		if (ansCtrl.needsLocationEdit)
-			addS2Overlay(nSubCtrl.locationEditsMap, settings["revS2Cell"], "#00FF00", settings["revSecondS2Cell"], "#E47252");
+			addS2Overlay(nSubCtrl.locationEditsMap, settings["revS2Cell"], settings["revS2Color"], settings["revSecondS2Cell"], settings["revS2SecondColor"]);
 	}
 
     if (settings["revEditOrigLoc"] && ansCtrl.needsLocationEdit && !settings["revPreciseMarkers"])
@@ -184,10 +184,8 @@ function hookResetMapFuncs(){
 			longDistCirle = addAccessDistCircle(nSubCtrl.map2, lat, lng);
 		if (settings["revMap2ZoomLevel"] !== -1)
 			zoomMap2();
-		if (settings["revS2Cell"] !== -1)
-			addS2(nSubCtrl.map2, settings["revS2Cell"], "#00FF00", lat, lng);
-		if (settings["revSecondS2Cell"] !== -1)
-			addS2(nSubCtrl.map2, settings["revSecondS2Cell"], "#E47252", lat, lng);
+		if (settings["revS2Cell"] !== -1 || settings["revSecondS2Cell"])
+			addS2Overlay(nSubCtrl.map2, settings["revS2Cell"], settings["revS2Color"], settings["revSecondS2Cell"], settings["revS2SecondColor"]);
 		if (settings["revTransparentMarker"])
 			makeMarkersTransparent();
     }
