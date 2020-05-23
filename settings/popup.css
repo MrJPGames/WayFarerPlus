@@ -127,6 +127,14 @@ select, input[type="number"]{
   transition: all 0.25s ease-out;
 }
 
+.lbl-toggle-text{
+  padding: 0 !important;
+  background: none !important;
+  text-transform: none !important;
+  text-align: left !important;
+  font-family: inherit !important;;
+}
+
 .lbl-toggle:hover {
   color: lightgrey;
 }

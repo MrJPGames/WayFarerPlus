@@ -95,6 +95,14 @@ function setDefaults() {
 				setOption("nomS2Color", "#00FF00");
 				setOption("nomS2SecondColor", "#E47252");
 				setOption("revDupeMapZoomLevel", -1);
+				setOption("nomFilterApproved", true);
+				setOption("nomFilterRejected", true);
+				setOption("nomFilterUpgraded", true);
+				setOption("nomFilterNextUpgrade", true);
+				setOption("nomFilterNominated", true);
+				setOption("nomFilterInVoting", true);
+				setOption("nomFilterWithdrawn", true);
+				setOption("nomFilterDuplicate", true);
 				setOption("options_set", settingsVersion);
 		}
 	});
