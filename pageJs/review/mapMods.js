@@ -34,8 +34,10 @@ function setupMapMods(){
     	addOrigLocation(nSubCtrl.locationEditsMap);
 	if (settings["ctrlessZoom"])
 		mapsRemoveCtrlToZoom();
-	if (settings["revMap2ZoomLevel"] != -1)
+	if (settings["revMap2ZoomLevel"] !== -1)
 		zoomMap2();
+	if (settings["revDupeMapZoomLevel"] !== -1)
+		zoomDupeMap();
 	if (settings["revTransparentMarker"])
 		makeMarkersTransparent();
 	if (settings["revBigMaps"])
@@ -170,6 +172,29 @@ function makeMarkersTransparent(){
 function zoomMap2(){
 	var newZoomLevel = parseInt(settings["revMap2ZoomLevel"]);
 	nSubCtrl.map2.setZoom(newZoomLevel);
+}
+
+function zoomDupeMap(){
+	//Wait for load to finish (then the idle event is triggered)
+	google.maps.event.addListenerOnce(
+		nSubCtrl.map,
+		"idle",
+		function(){ //On event set zoom level
+			//This is to hide the quite jarring animation Google Maps API V3 forcefully plays (make it invisible until "load" is done once more)
+			var mapContainer = document.getElementById("map");
+			google.maps.event.addListenerOnce(
+				nSubCtrl.map,
+				"idle",
+				function () {
+					mapContainer.style.visibility = "";
+				}
+			);
+			mapContainer.style.visibility = "hidden";
+			//Change the zoom level
+			var newZoomLevel = parseInt(settings["revDupeMapZoomLevel"]);
+			nSubCtrl.map.setZoom(newZoomLevel);
+		}
+	);
 }
 
 function hookResetMapFuncs(){

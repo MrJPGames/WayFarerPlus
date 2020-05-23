@@ -94,6 +94,7 @@ function setDefaults() {
 				setOption("revS2SecondColor", "#E47252");
 				setOption("nomS2Color", "#00FF00");
 				setOption("nomS2SecondColor", "#E47252");
+				setOption("revDupeMapZoomLevel", -1);
 				setOption("options_set", settingsVersion);
 		}
 	});
