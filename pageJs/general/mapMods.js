@@ -72,9 +72,8 @@ function addS2Highlight(map, lvl, colCode, lat, lng){
 		geodesic: true,
 		fillColor: '#000',
 		fillOpacity: 0.2,
-		strokeColor: colCode,
-		strokeOpacity: 1.0,
-		strokeWeight: 1,
+		strokeOpacity: 0,
+		strokeWeight: 0,
 		map: map
 	});
 	return polyline;

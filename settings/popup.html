@@ -98,6 +98,12 @@
 						<label for="revDescLink" class="switch__label">Description links to Google search</label>
 						<img title="Normally the description cannot be clicked to search for it's contents on Google unlike the title, this option enables that feature for the description as well." src="../assets/help.svg"/>
 					</div>
+					<div class="switch">
+						<input type="checkbox" class="switch__input" id="revAutoSelectDupe" />
+						<label for="revAutoSelectDupe" class="switch__label">Auto-select first possible duplicate</label>
+						<img title="Makes it easier to mark duplicates as the first in the list is usually the duplicate if it is a duplicate." src="../assets/help.svg"/>
+					</div>
+					
 					<h2>Map modifications:</h2>
 					<div class="switch">
 						<input type="checkbox" class="switch__input" id="revEditOrigLoc" />
@@ -120,6 +126,11 @@
 							<option value="18">L18</option>
 							<option value="19">L19</option>
 						</select>
+					</div><br/>
+					<div class="switch">
+						<input type="checkbox" class="switch__input" id="revHighlightCell" />
+						<label for="revHighlightCell" class="switch__label">Highlight S2 Cell</label>
+						<img title="Highlights the cell the current nomination you are reviewing is. The highlight uses the regular S2 cell level (not the addition S2 cell level)" src="../assets/help.svg"/>
 					</div><br/>
 					<div class="switch">
 						<label for="revS2Color" >S2 Cell color:</label>
@@ -191,11 +202,6 @@
 						<img title="Makes the location marker of a submission translucent. Helpful if the Wayspot is being obstructed by said marker. Fully disappears on hover." src="../assets/help.svg"/>
 					</div>
 					<div class="switch">
-						<input type="checkbox" class="switch__input" id="revAutoSelectDupe" />
-						<label for="revAutoSelectDupe" class="switch__label">Auto-select first possible duplicate</label>
-						<img title="Makes it easier to mark duplicates as the first in the list is usually the duplicate if it is a duplicate." src="../assets/help.svg"/>
-					</div>
-					<div class="switch">
 						<input type="checkbox" class="switch__input" id="rev3DMap" />
 						<label for="rev3DMap" class="switch__label">Use 3D satellite</label>
 						<img title="Makes maps on review page bigger." src="../assets/help.svg"/>
@@ -253,6 +259,11 @@
 							<option value="18">L18</option>
 							<option value="19">L19</option>
 						</select>
+					</div><br/>
+					<div class="switch">
+						<input type="checkbox" class="switch__input" id="nomHighlightCell" />
+						<label for="nomHighlightCell" class="switch__label">Highlight S2 Cell</label>
+						<img title="Highlights the cell the current nomination you are viewing is. The highlight uses the regular S2 cell level (not the addition S2 cell level)" src="../assets/help.svg"/>
 					</div><br/>
 					<div class="switch">
 						<label for="nomS2Color" >S2 Cell color:</label>
