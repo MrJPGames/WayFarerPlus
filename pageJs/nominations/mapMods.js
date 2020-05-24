@@ -7,19 +7,19 @@ function applyMapMods(){
     if (settings["nomLowestDistCircle"]){
         addLowestDistCircle(nomCtrl.map, lat, lng);
         //SVMap is exported by the nomStreetView mod when active
-        if (SVMap !== undefined)
+        if (typeof SVMap !== 'undefined')
             addLowestDistCircle(SVMap, lat, lng);
     }
     if (settings["nomAccessDistCircle"]){
         addAccessDistCircle(nomCtrl.map, lat, lng);
         //SVMap is exported by the nomStreetView mod when active
-        if (SVMap !== undefined)
+        if (typeof SVMap !== 'undefined')
             addAccessDistCircle(SVMap, lat, lng);
     }
     if (settings["nomMinDistCircle"]){
         addMinDistCircle(nomCtrl.map, lat, lng);
         //SVMap is exported by the nomStreetView mod when active
-        if (SVMap !== undefined)
+        if (typeof SVMap !== 'undefined')
             addMinDistCircle(SVMap, lat, lng);
     }
 
@@ -35,7 +35,7 @@ function applyMapMods(){
         }
 
         //SVMap is exported by the nomStreetView mod when active
-        if (SVMap !== undefined){
+        if (typeof SVMap !== 'undefined'){
             addS2Overlay(SVMap, settings["nomS2Cell"], settings["nomS2Color"], settings["nomSecondS2Cell"], settings["nomS2SecondColor"]);
             if (settings["nomHighlightCell"]){
                 addS2Highlight(SVMap, settings["nomS2Cell"], settings["nomS2Color"], nomCtrl.currentNomination.lat, nomCtrl.currentNomination.lng);
@@ -47,9 +47,10 @@ function applyMapMods(){
 }
 
 function mapsRemoveCtrlToZoom(){
+    console.log("rem");
     mapRemoveCtrlZoom(nomCtrl.map);
     //SVMap is exported by the nomStreetView mod when active
-    if (SVMap !== undefined)
+    if (typeof SVMap !== 'undefined')
         mapRemoveCtrlZoom(SVMap);
 }
 
