@@ -103,6 +103,8 @@ function setDefaults() {
 				setOption("nomFilterInVoting", true);
 				setOption("nomFilterWithdrawn", true);
 				setOption("nomFilterDuplicate", true);
+				setOption("revHighlightCell", true);
+				setOption("nomHighlightCell", true);
 				setOption("options_set", settingsVersion);
 		}
 	});

@@ -23,11 +23,18 @@ function setupMapMods(){
 		hookResetMapFuncs();
 
 	if (settings["revS2Cell"] !== -1 || settings["revS2Cell"] !== -1){
-
 		addS2Overlay(nSubCtrl.map, settings["revS2Cell"], settings["revS2Color"], settings["revSecondS2Cell"], settings["revS2SecondColor"]);
 		addS2Overlay(nSubCtrl.map2, settings["revS2Cell"], settings["revS2Color"], settings["revSecondS2Cell"], settings["revS2SecondColor"]);
-		if (ansCtrl.needsLocationEdit)
+		if (settings["revHighlightCell"]) {
+			addS2Highlight(nSubCtrl.map, settings["revS2Cell"], settings["revS2Color"], nSubCtrl.pageData.lat, nSubCtrl.pageData.lng);
+			addS2Highlight(nSubCtrl.map2, settings["revS2Cell"], settings["revS2Color"], nSubCtrl.pageData.lat, nSubCtrl.pageData.lng);
+		}
+		if (ansCtrl.needsLocationEdit) {
 			addS2Overlay(nSubCtrl.locationEditsMap, settings["revS2Cell"], settings["revS2Color"], settings["revSecondS2Cell"], settings["revS2SecondColor"]);
+			if (settings["revHighlightCell"]) {
+				addS2Highlight(nSubCtrl.locationEditsMap, settings["revS2Cell"], settings["revS2Color"], nSubCtrl.pageData.lat, nSubCtrl.pageData.lng);
+			}
+		}
 	}
 
     if (settings["revEditOrigLoc"] && ansCtrl.needsLocationEdit && !settings["revPreciseMarkers"])
@@ -209,8 +216,11 @@ function hookResetMapFuncs(){
 			longDistCirle = addAccessDistCircle(nSubCtrl.map2, lat, lng);
 		if (settings["revMap2ZoomLevel"] !== -1)
 			zoomMap2();
-		if (settings["revS2Cell"] !== -1 || settings["revSecondS2Cell"])
+		if (settings["revS2Cell"] !== -1 || settings["revSecondS2Cell"]) {
 			addS2Overlay(nSubCtrl.map2, settings["revS2Cell"], settings["revS2Color"], settings["revSecondS2Cell"], settings["revS2SecondColor"]);
+			if (settings["revHighlightCell"])
+				addS2Highlight(nSubCtrl.map2, settings["revS2Cell"], settings["revS2Color"], nSubCtrl.pageData.lat, nSubCtrl.pageData.lng);
+		}
 		if (settings["revTransparentMarker"])
 			makeMarkersTransparent();
     }

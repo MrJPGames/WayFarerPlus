@@ -121,7 +121,7 @@ function addS2Overlay(map, gridLevel, smallCol, secondGridLevel, bigCol){
 	overlay.drawCellGrid(map, smallGridLevel, smallCol);
 	overlay.drawCellGrid(map, bigGridLevel, bigCol, 2);
 
-	map.addListener('bounds_changed', () => {
+	map.addListener('idle', () => {
 		overlay.updateGrid(map, smallGridLevel, smallCol, bigGridLevel, bigCol);
 	});
 }

@@ -61,6 +61,25 @@ function addS2(map, lvl, colCode, lat, lng){
 	return polyline;
 }
 
+function addS2Highlight(map, lvl, colCode, lat, lng){
+	var cell = window.S2.S2Cell.FromLatLng({lat: lat, lng: lng}, lvl);
+
+	var cellCorners = cell.getCornerLatLngs();
+	cellCorners[4] = cellCorners[0]; //Loop it
+
+	var polyline = new google.maps.Polygon({
+		path: cellCorners,
+		geodesic: true,
+		fillColor: '#000',
+		fillOpacity: 0.2,
+		strokeColor: colCode,
+		strokeOpacity: 1.0,
+		strokeWeight: 1,
+		map: map
+	});
+	return polyline;
+}
+
 function mapRemoveCtrlZoom(gMap){
 	var options = {
 		scrollwheel: true,
