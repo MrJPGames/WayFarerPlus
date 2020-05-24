@@ -15,18 +15,6 @@ if (window.localStorage.getItem("wfpVersion") === null){
 function showChangelog(version){
 	var changelogStr = "";
 	switch(version){
-		case 20:
-			changelogStr += "1.12.4:\n\
-							- An additional S2 cell level can be enabled\n\
-							  at the same time.\n\n";
-		case 21:
-			changelogStr += "1.13:\n\
-							- Major Review History update by mariomc:\n\
-							-> Search by title/date\n\
-							-> Filtered exports are now possible!\n\
-							-> Marking a review as 'accepted' no longer refreshes the page\n\
-							-> Details can be viewed inline with the table\n\
-							-> GeoJSON now has colour-coding\n\n";
 		case 22:
 			changelogStr += "1.14:\n\
 							- Nomination notifications (ONLY when on nominations page!) notifies\n\
@@ -66,7 +54,17 @@ function showChangelog(version){
 							- Review History S2 cell overlay was added. (Thanks to tehstone!)\n\
 							- Review and nomination maps that had S2 cells now also use the\n\
 							new cell overlay!\n\
-							- Submitting duplicates can now also be locked with the review lock timer.";
+							- Submitting duplicates can now also be locked with the review lock timer.\n\n";
+		case 27:
+			changelogStr += "1.14.5:\n" +
+				"- You can now switch between multiple review histories if you want. Reviews histories are based on account UUIDs.\n" +
+				"These were recently changed so this change will allow you to view the old history. \n" +
+				"- All S2 grids can now have custom colours!\n" +
+				"- On the nomination page if you have the nominations map enabled it will now also have an S2 grid.\n" +
+				"- You can now set a custom default zoom level for the duplicates map\n" +
+				"- When using S2 grids, the current S2 cell of a Waypoint will be highlighted\n" +
+				"- S2 Grid should work better on lower end hardware\n" +
+				"- You can configure a default filter for your nominations to be automatically applied";
 		default:
 			break;
 	}
