@@ -819,10 +819,11 @@ function mainLoad() {
             var revContainer = document.getElementById("review-history-container");
             revContainer.innerText = "";
             showEvaluated();
+            e.path[0].scrollIntoView();
         };
 
         document.getElementById("content-container").appendChild(reviewHistoryTitle);
-        if (accountCount > 1) {
+        if (accountCount >= 1) {
             document.getElementById("content-container").appendChild(select);
             document.getElementById("content-container").appendChild(reviewHistoryContainer);
         }else if (accountCount !== 0){
