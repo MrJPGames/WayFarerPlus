@@ -1,8 +1,10 @@
 class S2Overlay{
-	polyLines = [];
+	constructor() {
+		this.polyLines = [];
+	}
 
 
-	check_map_bounds_ready = (map) => {
+	check_map_bounds_ready(map){
 		if (!map || map.getBounds === undefined || map.getBounds() === undefined) {
 			return false;
 		} else {
@@ -102,24 +104,28 @@ class S2Overlay{
 	};
 }
 
-function addS2Overlay(map, gridLevel, smallCol, secondGridLevel, bigCol){
+function addS2Overlay(map, gridLevel, col, secondGridLevel, secondCol){
 	let overlay = new S2Overlay();
 
 	//To make sure bigger cells are always drawn on top of smaller cells regardless of user config order
 	//If they are equal draw order doesn't matter
-	let smallGridLevel, bigGridLevel;
+	let smallGridLevel, bigGridLevel, smallCol, bigCol;
 	if (gridLevel > secondGridLevel){ //eg. L14 cells are bigger than L15 cells
 		smallGridLevel = gridLevel;
+		smallCol = col;
 		bigGridLevel = secondGridLevel;
+		bigCol = secondCol;
 	}else{
 		smallGridLevel = secondGridLevel;
+		smallCol = secondCol;
 		bigGridLevel = gridLevel;
+		bigCol = col;
 	}
 
 	overlay.drawCellGrid(map, smallGridLevel, smallCol);
 	overlay.drawCellGrid(map, bigGridLevel, bigCol, 2);
 
-	map.addListener('bounds_changed', () => {
+	map.addListener('idle', () => {
 		overlay.updateGrid(map, smallGridLevel, smallCol, bigGridLevel, bigCol);
 	});
 }

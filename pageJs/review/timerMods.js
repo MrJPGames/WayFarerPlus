@@ -70,10 +70,8 @@ function hookSubmitReadyFunction(){
 
 function markSubmitButtons(){
 	var buttons = document.getElementsByClassName("button-primary");
-	console.log(buttons);
 	for (var i = 0; i < buttons.length; i++){
 		if (buttons[i].innerText.toUpperCase() === "SUBMIT"){
-			console.log(buttons[i]);
 			buttons[i].setAttribute("wfpLock", "on");
 			var disableRule = buttons[i].getAttribute("ng-disabled");
 			buttons[i].setAttribute("ng-disabled-temp", disableRule);

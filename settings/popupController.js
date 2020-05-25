@@ -253,6 +253,9 @@ document.getElementById("settingsReset").onclick = function(){
 
 //Current workaround. Firefox does not work with color picker in popup so we only use it for chrome...
 if (window.chrome !== undefined && /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor)){
-	var elem = document.getElementById("profGridColor");
-	elem.type = "color";
+	var elems = document.getElementsByClassName("colorPicker");
+	console.log(elems);
+	for (let i = 0; i < elems.length; i++) {
+		elems[i].type = "color";
+	}
 }

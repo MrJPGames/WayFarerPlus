@@ -23,19 +23,28 @@ function setupMapMods(){
 		hookResetMapFuncs();
 
 	if (settings["revS2Cell"] !== -1 || settings["revS2Cell"] !== -1){
-
-		addS2Overlay(nSubCtrl.map, settings["revS2Cell"], "#00FF00", settings["revSecondS2Cell"], "#E47252");
-		addS2Overlay(nSubCtrl.map2, settings["revS2Cell"], "#00FF00", settings["revSecondS2Cell"], "#E47252");
-		if (ansCtrl.needsLocationEdit)
-			addS2Overlay(nSubCtrl.locationEditsMap, settings["revS2Cell"], "#00FF00", settings["revSecondS2Cell"], "#E47252");
+		addS2Overlay(nSubCtrl.map, settings["revS2Cell"], settings["revS2Color"], settings["revSecondS2Cell"], settings["revS2SecondColor"]);
+		addS2Overlay(nSubCtrl.map2, settings["revS2Cell"], settings["revS2Color"], settings["revSecondS2Cell"], settings["revS2SecondColor"]);
+		if (settings["revHighlightCell"]) {
+			addS2Highlight(nSubCtrl.map, settings["revS2Cell"], settings["revS2Color"], nSubCtrl.pageData.lat, nSubCtrl.pageData.lng);
+			addS2Highlight(nSubCtrl.map2, settings["revS2Cell"], settings["revS2Color"], nSubCtrl.pageData.lat, nSubCtrl.pageData.lng);
+		}
+		if (ansCtrl.needsLocationEdit) {
+			addS2Overlay(nSubCtrl.locationEditsMap, settings["revS2Cell"], settings["revS2Color"], settings["revSecondS2Cell"], settings["revS2SecondColor"]);
+			if (settings["revHighlightCell"]) {
+				addS2Highlight(nSubCtrl.locationEditsMap, settings["revS2Cell"], settings["revS2Color"], nSubCtrl.pageData.lat, nSubCtrl.pageData.lng);
+			}
+		}
 	}
 
     if (settings["revEditOrigLoc"] && ansCtrl.needsLocationEdit && !settings["revPreciseMarkers"])
     	addOrigLocation(nSubCtrl.locationEditsMap);
 	if (settings["ctrlessZoom"])
 		mapsRemoveCtrlToZoom();
-	if (settings["revMap2ZoomLevel"] != -1)
+	if (settings["revMap2ZoomLevel"] !== -1)
 		zoomMap2();
+	if (settings["revDupeMapZoomLevel"] !== -1)
+		zoomDupeMap();
 	if (settings["revTransparentMarker"])
 		makeMarkersTransparent();
 	if (settings["revBigMaps"])
@@ -172,6 +181,29 @@ function zoomMap2(){
 	nSubCtrl.map2.setZoom(newZoomLevel);
 }
 
+function zoomDupeMap(){
+	//Wait for load to finish (then the idle event is triggered)
+	google.maps.event.addListenerOnce(
+		nSubCtrl.map,
+		"idle",
+		function(){ //On event set zoom level
+			//This is to hide the quite jarring animation Google Maps API V3 forcefully plays (make it invisible until "load" is done once more)
+			var mapContainer = document.getElementById("map");
+			google.maps.event.addListenerOnce(
+				nSubCtrl.map,
+				"idle",
+				function () {
+					mapContainer.style.visibility = "";
+				}
+			);
+			mapContainer.style.visibility = "hidden";
+			//Change the zoom level
+			var newZoomLevel = parseInt(settings["revDupeMapZoomLevel"]);
+			nSubCtrl.map.setZoom(newZoomLevel);
+		}
+	);
+}
+
 function hookResetMapFuncs(){
 	var lat =  nSubCtrl.pageData.lat;
 	var lng = nSubCtrl.pageData.lng;
@@ -184,10 +216,11 @@ function hookResetMapFuncs(){
 			longDistCirle = addAccessDistCircle(nSubCtrl.map2, lat, lng);
 		if (settings["revMap2ZoomLevel"] !== -1)
 			zoomMap2();
-		if (settings["revS2Cell"] !== -1)
-			addS2(nSubCtrl.map2, settings["revS2Cell"], "#00FF00", lat, lng);
-		if (settings["revSecondS2Cell"] !== -1)
-			addS2(nSubCtrl.map2, settings["revSecondS2Cell"], "#E47252", lat, lng);
+		if (settings["revS2Cell"] !== -1 || settings["revSecondS2Cell"]) {
+			addS2Overlay(nSubCtrl.map2, settings["revS2Cell"], settings["revS2Color"], settings["revSecondS2Cell"], settings["revS2SecondColor"]);
+			if (settings["revHighlightCell"])
+				addS2Highlight(nSubCtrl.map2, settings["revS2Cell"], settings["revS2Color"], nSubCtrl.pageData.lat, nSubCtrl.pageData.lng);
+		}
 		if (settings["revTransparentMarker"])
 			makeMarkersTransparent();
     }

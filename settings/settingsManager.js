@@ -1,5 +1,5 @@
 //Sets up default settings on first launch or upgrade
-var settingsVersion = 27;
+var settingsVersion = 28;
 
 var defaultMapSettings = '[{"title":"Google Maps","url":"https://maps.google.com/maps?q=%lat%,%lng%"},{"title":"Ingress Intel","url":"https://intel.ingress.com/intel?ll=%lat%,%lng%&z=18"},{"title":"OSM","url":"https://www.openstreetmap.org/?mlat=%lat%&mlon=%lng%#map=18/%lat%/%lng%"}]';
 
@@ -87,6 +87,24 @@ function setDefaults() {
 			case 26:
 				setOption("profGridColor", "#00FF00");
 				setOption("profGridSize", 6);
+			case 27:
+				setOption("revOldS2", false);
+				setOption("nomOldS2", false);
+				setOption("revS2Color", "#00FF00");
+				setOption("revS2SecondColor", "#E47252");
+				setOption("nomS2Color", "#00FF00");
+				setOption("nomS2SecondColor", "#E47252");
+				setOption("revDupeMapZoomLevel", -1);
+				setOption("nomFilterApproved", true);
+				setOption("nomFilterRejected", true);
+				setOption("nomFilterUpgraded", true);
+				setOption("nomFilterNextUpgrade", true);
+				setOption("nomFilterNominated", true);
+				setOption("nomFilterInVoting", true);
+				setOption("nomFilterWithdrawn", true);
+				setOption("nomFilterDuplicate", true);
+				setOption("revHighlightCell", true);
+				setOption("nomHighlightCell", true);
 				setOption("options_set", settingsVersion);
 		}
 	});
