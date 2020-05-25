@@ -814,12 +814,12 @@ function mainLoad() {
             }
         }
         select.onchange = function (e){
-            console.log(e.path[0].value);
-            selectedUID = e.path[0].value;
+            console.log(e);
+            selectedUID = e.target.value;
             var revContainer = document.getElementById("review-history-container");
             revContainer.innerText = "";
             showEvaluated();
-            e.path[0].scrollIntoView();
+            document.getElementById("content-container").scrollTo(0,1000);
         };
 
         document.getElementById("content-container").appendChild(reviewHistoryTitle);
