@@ -819,7 +819,8 @@ function mainLoad() {
             var revContainer = document.getElementById("review-history-container");
             revContainer.innerText = "";
             showEvaluated();
-            document.getElementById("content-container").scrollTo(0,1000);
+            var topPos = e.target.offsetTop;
+            document.getElementById("content-container").scrollTop = topPos;
         };
 
         document.getElementById("content-container").appendChild(reviewHistoryTitle);
