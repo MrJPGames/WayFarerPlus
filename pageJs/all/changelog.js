@@ -64,7 +64,13 @@ function showChangelog(version){
 				"- You can now set a custom default zoom level for the duplicates map\n" +
 				"- When using S2 grids, the current S2 cell of a Waypoint will be highlighted\n" +
 				"- S2 Grid should work better on lower end hardware\n" +
-				"- You can configure a default filter for your nominations to be automatically applied";
+				"- You can configure a default filter for your nominations to be automatically applied\n\n";
+		case 28:
+			changelogStr += "1.14.6:\n" +
+				"- Give friendly names to your review histories. Making it easier to tell them apart.\n" +
+				"- Report abuse straight from the review page!\n" +
+				"-> Be sure to configure your email in WF+ settings.\n" +
+				"-> Before reporting abuse familiarise yourself with what is classified as abuse by Niantic!";
 		default:
 			break;
 	}
