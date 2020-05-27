@@ -827,10 +827,10 @@ function mainLoad() {
         if (accountCount >= 1) {
             document.getElementById("content-container").appendChild(select);
             document.getElementById("content-container").appendChild(reviewHistoryContainer);
-        }else if (accountCount !== 0){
-            document.getElementById("content-container").appendChild(reviewHistoryContainer);
-            selectedUID = lastAccountUID;
-            showEvaluated();
+        }else if (accountCount === 0){
+            var noHistoryElem = document.createElement("h4");
+            noHistoryElem.innerText = "No review history...";
+            document.getElementById("content-container").appendChild(noHistoryElem);
         }
     }
     createUIDMenu();
