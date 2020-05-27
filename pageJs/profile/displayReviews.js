@@ -402,8 +402,6 @@ function mainLoad() {
     function showEvaluated(){
         const localstorageReviews = getReviews(selectedUID);
 
-        console.log(selectedUID);
-
         if (!localstorageReviews.length) return;
 
         const profileStats = document.getElementById("review-history-container");
@@ -451,12 +449,33 @@ function mainLoad() {
                     </div>
                 </div>
             </div>
+            <div class="row row-input">
+                <div class="col-xs-3">
+                    <div class="input-group">
+                        <label class="input-group-addon" for="friendlyName">Friendly name: </label>
+                        <input class="form-control" type="text" id="friendlyName">
+                    </div>
+                </div>
+                <button id="setFriendlyName">Set</button>
+            </div>
             <div id="reviewed-map" style="height:600px"></div>
             <div class="table-responsive">
                 <table class="table table-striped table-condensed" id="review-history">
                 </table>
             </div>`
         );
+
+        //Init friendly name
+        var fName = JSON.parse(localStorage.wfpUIDNames)[selectedUID];
+        var friendlyNameInput = document.getElementById("friendlyName");
+        friendlyNameInput.value = fName;
+
+        var setFriendlyNameButton = document.getElementById("setFriendlyName");
+        setFriendlyNameButton.onclick = function(){
+            var UIDNames = JSON.parse(localStorage.wfpUIDNames);
+            UIDNames[selectedUID] = friendlyNameInput.value;
+            localStorage.wfpUIDNames = JSON.stringify(UIDNames);
+        };
 
         const $reviewHistory = $("#review-history");
         const mapElement = document.getElementById("reviewed-map");
@@ -791,6 +810,11 @@ function mainLoad() {
     };
 
     function createUIDMenu(){
+        if (typeof localStorage["wfpUIDNames"] === 'undefined'){
+            localStorage["wfpUIDNames"] = "{}";
+        }
+
+
         var reviewHistoryTitle = document.createElement("h3");
         reviewHistoryTitle.innerText = "Review History";
         var reviewHistoryContainer = document.createElement("div");
@@ -804,15 +828,26 @@ function mainLoad() {
         select.add(option);
         var accountCount = 0;
         var lastAccountUID;
+
+        var localUIDNames = JSON.parse(localStorage.wfpUIDNames);
         for (var key in localStorage){
             if (key.startsWith("wfpSaved")){
+                var uid = key.substr(8);
+                if (typeof localUIDNames[uid] === 'undefined'){
+                    localUIDNames[uid] = uid;
+                }
+                var fName = localUIDNames[uid];
+
                 var option = document.createElement("option");
-                option.text = key.substr(8);
+                option.text = fName;
+                option.value = uid;
                 select.add(option);
                 accountCount++;
-                lastAccountUID = key.substr(8);
+                lastAccountUID = uid;
             }
         }
+        localStorage.wfpUIDNames = JSON.stringify(localUIDNames);
+
         select.onchange = function (e){
             console.log(e);
             selectedUID = e.target.value;
