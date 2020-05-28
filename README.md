@@ -20,6 +20,19 @@ Other browser support?
 
 Changelog
 ---
+1.14.5:
+- You can now switch between multiple review histories if you want. Reviews histories are based on account UUIDs. These were recently changed so this change will allow you to view the old history. 
+- All S2 grids can now have custom colours!
+- On the nomination page if you have the nominations map enabled it will now also have an S2 grid.
+- You can now set a custom default zoom level for the duplicates map
+- When using S2 grids, the current S2 cell of a Waypoint will be highlighted
+- S2 Grid should work better on lower end hardware
+- You can configure a default filter for your nominations to be automatically applied
+
+1.14.4:
+- Added S2 cell overlay to Review History (Thanks to tehstone!)
+- Review and nomination maps now have map covering S2 cell overlays (Thanks to tehstone's reivew history code!)
+
 1.14.3:
 - Recon badge progress can now be seen on profile, you'll need to configure your account settings in order for this change to take effect.
 - Filtering nominations will now filter them on the Nominations map too!

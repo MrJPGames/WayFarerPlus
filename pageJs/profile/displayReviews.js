@@ -7,6 +7,8 @@ document.addEventListener("WFPPCtrlHooked", function deferLegacyCode() {
 });
 
 function mainLoad() {
+    var selectedUID;
+
     const emptyArray = Array(5).fill(0);
     function getStarRating(score) {
         return `<span style="white-space:nowrap">${emptyArray
@@ -23,7 +25,7 @@ function mainLoad() {
             "This will delete all your review history! Are you sure?"
         );
         if (confirmation) {
-            removeReviewHistory();
+            removeReviewHistory(selectedUID);
             window.location.reload();
         }
     };
@@ -147,101 +149,6 @@ function mainLoad() {
         return gmap;
     };
 
-    const check_map_bounds_ready = (map) => {
-        if (! map || map.getBounds() === undefined) {
-            return false;
-        } else {
-            return true;
-        }  
-    };
-
-    function until(conditionFunction, map) {
-
-        const poll = resolve => {
-            if(conditionFunction(map)) resolve();
-            else setTimeout(_ => poll(resolve), 400);
-      }
-
-      return new Promise(poll);
-    }
-
-    function updateGrid(map) {
-        polyLines.forEach((line) => {
-            line.setMap(null)
-        });
-        return drawCellGrid(map);
-    }
-
-    async function drawCellGrid(map) {
-        await until(check_map_bounds_ready, map);
-        const bounds = map.getBounds();
-
-        const seenCells = {};
-        const cellsToDraw = [];
-
-        const drawCell = function (cell) {
-            const cellCorners = cell.getCornerLatLngs();
-            cellCorners[4] = cellCorners[0]; //Loop it
-
-            const polyline = new google.maps.Polyline({
-                path: cellCorners,
-                geodesic: true,
-                fillColor: 'grey',
-                fillOpacity: 0.0,
-                strokeColor: colorPickerElement.value,
-                strokeOpacity: 0.8,
-                strokeWeight: 1,
-                map: map
-            });
-            polyLines.push(polyline);
-        };
-
-        const gridLevel = gridSizeElement.value;
-        if (gridLevel >= 6 && gridLevel < (map.getZoom() + 2)) {
-            const latLng = map.getCenter()
-            const cell = S2.S2Cell.FromLatLng(getLatLngPoint(latLng), gridLevel);
-            cellsToDraw.push(cell);
-            seenCells[cell.toString()] = true;
-
-            let curCell;
-            while (cellsToDraw.length > 0) {
-                curCell = cellsToDraw.pop();
-                const neighbors = curCell.getNeighbors();
-
-                for (let n = 0; n < neighbors.length; n++) {
-                    const nStr = neighbors[n].toString();
-                    if (!seenCells[nStr]) {
-                        seenCells[nStr] = true;
-                        if (isCellOnScreen(bounds, neighbors[n])) {
-                            cellsToDraw.push(neighbors[n]);
-                        }
-                    }
-                }
-
-                drawCell(curCell);
-            }
-        }
-    };
-
-    const getLatLngPoint = (data) => {
-        const result = {
-            lat: typeof data.lat == 'function' ? data.lat() : data.lat,
-            lng: typeof data.lng == 'function' ? data.lng() : data.lng
-        };
-
-        return result;
-    };
-
-    const isCellOnScreen = (mapBounds, cell) => {
-        const corners = cell.getCornerLatLngs();
-        for (let i = 0; i < corners.length; i++) {
-            if (mapBounds.intersects(new google.maps.LatLngBounds(corners[i]))) {
-                return true;
-            }
-        }
-        return false;
-    };
-
     const formatAsGeojson = (reviews) => {
         return {
             type: "FeatureCollection",
@@ -343,10 +250,10 @@ function mainLoad() {
 
         toggleAccepted() {
             this.review.accepted = !this.review.accepted;
-            const localStorageReviews = getReviews();
+            const localStorageReviews = getReviews(selectedUID);
             const localStorageReview = localStorageReviews[this.index];
             localStorageReview.accepted = !localStorageReview.accepted;
-            storeReviewHistory(localStorageReviews);
+            storeReviewHistory(localStorageReviews, selectedUID);
         }
 
         renderScore(type) {
@@ -492,17 +399,17 @@ function mainLoad() {
 
     const getMarkers = (reviews) => reviews.map((review) => review.marker);
 
-    const showEvaluated = () => {
-        const localstorageReviews = getReviews();
+    function showEvaluated(){
+        const localstorageReviews = getReviews(selectedUID);
+
+        console.log(selectedUID);
 
         if (!localstorageReviews.length) return;
 
-        const profileStats = document.getElementById("profile-main-contain");
+        const profileStats = document.getElementById("review-history-container");
         profileStats.insertAdjacentHTML(
             "beforeend",
             `
-        <div class="container">
-            <h3>Review History</h3>
             <div class="row row-input">
                 <div class="col-xs-3">
                     <div class="input-group">
@@ -548,41 +455,40 @@ function mainLoad() {
             <div class="table-responsive">
                 <table class="table table-striped table-condensed" id="review-history">
                 </table>
-            </div>
-        </div>`
+            </div>`
         );
 
         const $reviewHistory = $("#review-history");
         const mapElement = document.getElementById("reviewed-map");
         const map = buildMap(mapElement);
 
-        polyLines = [];
+        const cellOverlay = new S2Overlay();
 
-        drawCellGrid(map);
-
-        map.addListener('dragend', () => {
-            updateGrid(map);
-        });
-
-        map.addListener('zoom_changed', () => {
-            updateGrid(map);
-        });
-
-        colorPickerElement = document.querySelector("#gridCellColor");
+        let colorPickerElement = document.getElementById("gridCellColor");
         let colorValue = settings["profGridColor"];
-        if (colorValue.charAt(0) != "#") {
+        if (colorValue.charAt(0) !== "#") {
             colorValue = "#" + colorValue;
         }
         colorPickerElement.value = colorValue;
         colorPickerElement.addEventListener('change', () => {
-            updateGrid(map);
+            cellOverlay.updateGrid(map, gridSizeElement.value, colorPickerElement.value);
         }, false);
 
-        gridSizeElement = document.querySelector("#gridCellSize");
+        let gridSizeElement = document.getElementById("gridCellSize");
         gridSizeElement.value = settings["profGridSize"];
         gridSizeElement.addEventListener('change', () => {
-            updateGrid(map);
+            cellOverlay.updateGrid(map, gridSizeElement.value, colorPickerElement.value);
         }, false);
+
+        cellOverlay.drawCellGrid(map, gridSizeElement.value, colorPickerElement.value);
+
+        map.addListener('dragend', () => {
+            cellOverlay.updateGrid(map, gridSizeElement.value, colorPickerElement.value);
+        });
+
+        map.addListener('zoom_changed', () => {
+            cellOverlay.updateGrid(map, gridSizeElement.value, colorPickerElement.value);
+        });
 
         const cluster = new MarkerClusterer(map, [], {
             imagePath:
@@ -884,5 +790,48 @@ function mainLoad() {
         });
     };
 
-    showEvaluated();
+    function createUIDMenu(){
+        var reviewHistoryTitle = document.createElement("h3");
+        reviewHistoryTitle.innerText = "Review History";
+        var reviewHistoryContainer = document.createElement("div");
+        reviewHistoryContainer.id = "review-history-container";
+
+        var select = document.createElement("select");
+        var option = document.createElement("option");
+        option.text = "Choose account UID";
+        option.disabled = true;
+        option.selected = true;
+        select.add(option);
+        var accountCount = 0;
+        var lastAccountUID;
+        for (var key in localStorage){
+            if (key.startsWith("wfpSaved")){
+                var option = document.createElement("option");
+                option.text = key.substr(8);
+                select.add(option);
+                accountCount++;
+                lastAccountUID = key.substr(8);
+            }
+        }
+        select.onchange = function (e){
+            console.log(e);
+            selectedUID = e.target.value;
+            var revContainer = document.getElementById("review-history-container");
+            revContainer.innerText = "";
+            showEvaluated();
+            var topPos = e.target.offsetTop;
+            document.getElementById("content-container").scrollTop = topPos;
+        };
+
+        document.getElementById("content-container").appendChild(reviewHistoryTitle);
+        if (accountCount >= 1) {
+            document.getElementById("content-container").appendChild(select);
+            document.getElementById("content-container").appendChild(reviewHistoryContainer);
+        }else if (accountCount !== 0){
+            document.getElementById("content-container").appendChild(reviewHistoryContainer);
+            selectedUID = lastAccountUID;
+            showEvaluated();
+        }
+    }
+    createUIDMenu();
 }

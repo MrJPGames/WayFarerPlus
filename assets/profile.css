@@ -23,6 +23,10 @@
     z-index: 9001;
 }
 
+#review-history-container{
+    min-height: 200px;
+}
+
 .dropdown-content a {
     color: black;
     padding: 12px 16px;

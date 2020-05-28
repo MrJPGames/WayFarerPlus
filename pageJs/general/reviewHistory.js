@@ -12,8 +12,14 @@ let localStorageFailed = false;
 	}
 })();
 
-function storeReviewHistory(data, edit){
-	const userID = (document.getElementById("upgrades-profile-icon").getElementsByTagName("image")[0].href.baseVal).substr(37);
+function storeReviewHistory(data, customUID = null, edit = false){
+	let userID;
+	if (customUID === null) {
+		userID = (document.getElementById("upgrades-profile-icon").getElementsByTagName("image")[0].href.baseVal).substr(37);
+	} else{
+		userID = customUID;
+	}
+
 	if (edit) {
 		safeLocalStorageAssign("wfpSaved_edits" + userID, JSON.stringify(data));
 	} else {
@@ -21,8 +27,14 @@ function storeReviewHistory(data, edit){
 	}
 }
 
-function getReviewHistory(edit){
-	const userID = (document.getElementById("upgrades-profile-icon").getElementsByTagName("image")[0].href.baseVal).substr(37);
+function getReviewHistory(customUID = null, edit = false){
+	let userID;
+	if (customUID === null) {
+		userID = (document.getElementById("upgrades-profile-icon").getElementsByTagName("image")[0].href.baseVal).substr(37);
+	} else{
+		userID = customUID;
+	}
+
 	let ret = "";
 	if (edit) {
 		ret = localStorage["wfpSaved_edits" + userID];
@@ -31,13 +43,18 @@ function getReviewHistory(edit){
 	}
 	if (ret === undefined || ret === null){
 		return [];
-	}else{
+	} else{
 		return JSON.parse(ret);
 	}
 }
 
-function removeReviewHistory(edit){
-	const userID = (document.getElementById("upgrades-profile-icon").getElementsByTagName("image")[0].href.baseVal).substr(37);
+function removeReviewHistory(customUID, edit = false){
+	let userID;
+	if (customUID === null) {
+		userID = (document.getElementById("upgrades-profile-icon").getElementsByTagName("image")[0].href.baseVal).substr(37);
+	} else{
+		userID = customUID;
+	}
 	if (edit) {
 		localStorage.removeItem("wfpSaved_edits" + userID);
 	} else {
@@ -82,6 +99,6 @@ function safeLocalStorageAssign(key, value){
 	}
 }
 
-function getReviews(edit) {
-	return getReviewHistory(edit);
+function getReviews(customUID = null, edit = false) {
+	return getReviewHistory(customUID);
 };

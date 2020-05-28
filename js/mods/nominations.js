@@ -63,8 +63,13 @@ function modNominationPage(settings){
 			queries: [{element: "#map"}]
 	});
 
-	if (settings["nomS2Cell"] !== -1 || settings["nomSecondS2Cell"] !== -1)
+	if (settings["nomS2Cell"] !== -1 || settings["nomSecondS2Cell"] !== -1) {
 		addPageJS("libs/S2.js");
+		addPageJS("general/S2Overlay.js");
+	}
+
+	//You can always filter, regardless of settings (though some settings cause no change)
+	addPageJS("nominations/autoFilter.js");
 	
 	addPageJS("nominations/main.js", true);
 }
