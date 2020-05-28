@@ -1,6 +1,6 @@
 //Code used to handle saving and retrieving of review history data
 
-var localStorageFailed = false;
+let localStorageFailed = false;
 //Because the storage format was updated we need to check (at least for quite some time) whether someone has
 //updated and in case they have convert the old storage system to the new system!
 (function(){
@@ -12,14 +12,23 @@ var localStorageFailed = false;
 	}
 })();
 
-function storeReviewHistory(data){
-	var userID = (document.getElementById("upgrades-profile-icon").getElementsByTagName("image")[0].href.baseVal).substr(37);
-	safeLocalStorageAssign("wfpSaved" + userID, JSON.stringify(data));
+function storeReviewHistory(data, edit){
+	const userID = (document.getElementById("upgrades-profile-icon").getElementsByTagName("image")[0].href.baseVal).substr(37);
+	if (edit) {
+		safeLocalStorageAssign("wfpSaved_edits" + userID, JSON.stringify(data));
+	} else {
+		safeLocalStorageAssign("wfpSaved" + userID, JSON.stringify(data));
+	}
 }
 
-function getReviewHistory(){
-	var userID = (document.getElementById("upgrades-profile-icon").getElementsByTagName("image")[0].href.baseVal).substr(37);
-	var ret = localStorage["wfpSaved" + userID];
+function getReviewHistory(edit){
+	const userID = (document.getElementById("upgrades-profile-icon").getElementsByTagName("image")[0].href.baseVal).substr(37);
+	let ret = "";
+	if (edit) {
+		ret = localStorage["wfpSaved_edits" + userID];
+	} else {
+		ret = localStorage["wfpSaved" + userID];
+	}
 	if (ret === undefined || ret === null){
 		return [];
 	}else{
@@ -27,9 +36,13 @@ function getReviewHistory(){
 	}
 }
 
-function removeReviewHistory(){
-	var userID = (document.getElementById("upgrades-profile-icon").getElementsByTagName("image")[0].href.baseVal).substr(37);
-	localStorage.removeItem("wfpSaved" + userID);
+function removeReviewHistory(edit){
+	const userID = (document.getElementById("upgrades-profile-icon").getElementsByTagName("image")[0].href.baseVal).substr(37);
+	if (edit) {
+		localStorage.removeItem("wfpSaved_edits" + userID);
+	} else {
+		localStorage.removeItem("wfpSaved" + userID);
+	}
 }
 
 function safeLocalStorageAssign(key, value){
@@ -69,7 +82,6 @@ function safeLocalStorageAssign(key, value){
 	}
 }
 
-function getReviews() {
-	const currentItems = getReviewHistory();
-	return currentItems;
+function getReviews(edit) {
+	return getReviewHistory(edit);
 };
