@@ -12,13 +12,23 @@ var localStorageFailed = false;
 	}
 })();
 
-function storeReviewHistory(data){
-	var userID = (document.getElementById("upgrades-profile-icon").getElementsByTagName("image")[0].href.baseVal).substr(37);
+function storeReviewHistory(data, customUID = null){
+	var userID;
+	if (customUID === null) {
+		userID = (document.getElementById("upgrades-profile-icon").getElementsByTagName("image")[0].href.baseVal).substr(37);
+	}else{
+		 userID = customUID;
+	}
 	safeLocalStorageAssign("wfpSaved" + userID, JSON.stringify(data));
 }
 
-function getReviewHistory(){
-	var userID = (document.getElementById("upgrades-profile-icon").getElementsByTagName("image")[0].href.baseVal).substr(37);
+function getReviewHistory(customUID = null){
+	var userID;
+	if (customUID === null) {
+		userID = (document.getElementById("upgrades-profile-icon").getElementsByTagName("image")[0].href.baseVal).substr(37);
+	}else{
+		userID = customUID;
+	}
 	var ret = localStorage["wfpSaved" + userID];
 	if (ret === undefined || ret === null){
 		return [];
@@ -27,8 +37,14 @@ function getReviewHistory(){
 	}
 }
 
-function removeReviewHistory(){
-	var userID = (document.getElementById("upgrades-profile-icon").getElementsByTagName("image")[0].href.baseVal).substr(37);
+function removeReviewHistory(customUID){
+	var userID;
+	if (customUID === null) {
+		userID = (document.getElementById("upgrades-profile-icon").getElementsByTagName("image")[0].href.baseVal).substr(37);
+	}else{
+		userID = customUID;
+	}
+	sa
 	localStorage.removeItem("wfpSaved" + userID);
 }
 
@@ -69,7 +85,7 @@ function safeLocalStorageAssign(key, value){
 	}
 }
 
-function getReviews() {
-	const currentItems = getReviewHistory();
+function getReviews(customUID = null) {
+	const currentItems = getReviewHistory(customUID);
 	return currentItems;
 };

@@ -63,6 +63,9 @@ function updateMap(nominationList){
 	});
 
 	nominationMap.fitBounds(bounds);
+
+
+	addS2Overlay(nominationMap, settings["nomS2Cell"], settings["nomS2Color"], settings["nomSecondS2Cell"], settings["nomS2SecondColor"]);
 }
 
 function createElements() {
