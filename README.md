@@ -20,6 +20,11 @@ Other browser support?
 
 Changelog
 ---
+1.14.6:
+- Give friendly names to your review histories. Making it easier to tell them apart.\n" +
+				"- Report abuse straight from the review page!\n" +
+				"-> Be sure to configure your email in WF+ settings.\n" +
+				"-> Before reporting abuse familiarise yourself with what is classified as abuse by Niantic!
 1.14.5:
 - You can now switch between multiple review histories if you want. Reviews histories are based on account UUIDs. These were recently changed so this change will allow you to view the old history. 
 - All S2 grids can now have custom colours!
