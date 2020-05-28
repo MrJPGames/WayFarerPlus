@@ -1,11 +1,13 @@
 ///Review History
 
 const saveReview = (pageData, submitData) => {
-	if (nSubCtrl.reviewType !== "NEW") {
-		console.log("Not a new review. Skipping the save.");
-		return;
-	}
+	let toSave = {};
 
+
+	let edit = false;
+	if (nSubCtrl.reviewType !== "NEW") {
+		edit = true;
+	} else {
 	const {
 		title,
 		description,
@@ -15,7 +17,8 @@ const saveReview = (pageData, submitData) => {
 		statement,
 		supportingImageUrl,
 	} = pageData;
-	const toSave = {
+
+	toSave = {
 		title,
 		description,
 		imageUrl,
@@ -26,8 +29,10 @@ const saveReview = (pageData, submitData) => {
 		ts: +new Date(),
 		review: submitData,
 	};
+	}
 
-	const currentItems = getReviews();
+	const currentItems = getReviews(edit);
+
 	const lastItem = currentItems.length
 		? currentItems[currentItems.length - 1]
 		: null;
@@ -39,7 +44,7 @@ const saveReview = (pageData, submitData) => {
 		// push the new result
 		currentItems.push(toSave);
 	}
-	storeReviewHistory(currentItems);
+	storeReviewHistory(currentItems, edit);
 };
 
 document.addEventListener("WFPAllRevHooked", () =>
