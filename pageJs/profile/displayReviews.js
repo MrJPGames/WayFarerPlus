@@ -474,7 +474,11 @@ function mainLoad() {
         setFriendlyNameButton.onclick = function(){
             var UIDNames = JSON.parse(localStorage.wfpUIDNames);
             UIDNames[selectedUID] = friendlyNameInput.value;
-            localStorage.wfpUIDNames = JSON.stringify(UIDNames);
+            try {
+                localStorage.wfpUIDNames = JSON.stringify(UIDNames);
+            }catch{
+                alert("Setting friendly names can only be done when there is available local storage. Please remove your review history to make more space!");
+            }
         };
 
         const $reviewHistory = $("#review-history");
@@ -554,6 +558,16 @@ function mainLoad() {
                         const geoJson = formatAsGeojson(filteredReviews);
                         $.fn.dataTable.fileSave(
                             new Blob([JSON.stringify(geoJson)]),
+                            "reviews.json"
+                        );
+                    },
+                },
+                {
+                    text: "Export as RAW json",
+                    action: (_ev, data) => {
+                        const reviews = localstorageReviews;
+                        $.fn.dataTable.fileSave(
+                            new Blob([JSON.stringify(reviews)]),
                             "reviews.json"
                         );
                     },
@@ -846,7 +860,12 @@ function mainLoad() {
                 lastAccountUID = uid;
             }
         }
-        localStorage.wfpUIDNames = JSON.stringify(localUIDNames);
+        try {
+            localStorage.wfpUIDNames = JSON.stringify(localUIDNames);
+        }catch{
+            console.log("UID system failed");
+            alert("Local storage is full. Please remove your review histories to make more space!\n\nIf you want to keep your records you should export the data first!");
+        }
 
         select.onchange = function (e){
             console.log(e);
