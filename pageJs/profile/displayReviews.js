@@ -823,11 +823,10 @@ function mainLoad() {
         });
     };
 
-    function createUIDMenu(){
+    function createMenu(){
         if (typeof localStorage["wfpUIDNames"] === 'undefined'){
             localStorage["wfpUIDNames"] = "{}";
         }
-
 
         var reviewHistoryTitle = document.createElement("h3");
         reviewHistoryTitle.innerText = "Review History";
@@ -886,6 +885,43 @@ function mainLoad() {
             noHistoryElem.innerText = "No review history...";
             document.getElementById("content-container").appendChild(noHistoryElem);
         }
+
+        //Import option:
+        var importButton = document.createElement("input");
+        importButton.setAttribute("type", "file");
+        importButton.setAttribute("accept", "json");
+        importButton.id = "reviewHistoryImporter";
+        var importButtonLabel = document.createElement("label");
+        importButtonLabel.innerText = "Import Review History (RAW json)";
+        importButtonLabel.setAttribute("for", "reviewHistoryImporter");
+        importButtonLabel.setAttribute("class", "button-secondary");
+        document.getElementById("content-container").insertBefore(importButtonLabel, document.getElementById("review-history-container"));
+        document.getElementById("content-container").insertBefore(importButton, importButtonLabel);
+        importButton.oninput = function(elem){
+            var URI = elem.target;
+            var reader = new FileReader();
+            reader.onload = function(){
+                var importData = JSON.parse(reader.result);
+                if (typeof importData[0].title !== "undefined") {
+                    var newUID = prompt("Please enter a unique name for this review history");
+                    if (newUID !== "" && typeof localStorage["wfpSaved" + newUID] === "undefined") {
+                        try {
+                            localStorage["wfpSaved" + newUID] = JSON.stringify(importData);
+                            alert("Import successful!");
+                            window.location.reload();
+                        } catch {
+                            alert("Too little space in local storage. Make more space by removing other histories first!");
+                        }
+                    }else{
+                        alert("Empty or already used name, please set a different name!");
+                    }
+                }else{
+                    alert("File could not be recognized as review history!");
+                }
+            };
+            reader.readAsText(URI.files[0]);
+            importButton.value="";
+        };
     }
-    createUIDMenu();
+    createMenu();
 }

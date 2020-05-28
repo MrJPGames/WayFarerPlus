@@ -46,3 +46,11 @@
 .dropdown:hover .dropbtn {
     background-color: #3e8e41;
 }
+
+#reviewHistoryImporter{
+    display: none;
+}
+
+.button-secondary{
+    margin-left: 1em;
+}
