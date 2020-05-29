@@ -1,9 +1,6 @@
 ///Review History
 
 const saveReview = (nSubCtrl, submitCtrl) => {
-	console.log(submitCtrl);
-	console.log(submitCtrl.formData);
-	//prompt();
 	let toSave = {};
 
 	let edit = false;
@@ -34,6 +31,14 @@ const saveReview = (nSubCtrl, submitCtrl) => {
 			description = submitCtrl.selectedDescriptionDisplay;
 		}
 
+		let selLat = lat;
+		let selLng = lng;
+		if (nSubCtrl.selectedEditLocationLatLng) {
+			const selectedLocationSplit = nSubCtrl.selectedEditLocationLatLng.split(',');
+			selLat = selectedLocationSplit[0];
+			selLng = selectedLocationSplit[1];
+		}
+
 		toSave = {
 			title: title,
 			titleEdits,
@@ -42,7 +47,8 @@ const saveReview = (nSubCtrl, submitCtrl) => {
 			imageUrl,
 			lat,
 			lng,
-			selectedLocation: nSubCtrl.selectedEditLocationLatLng,
+			selectedLat: selLat,
+			selectedLng: selLng,
 			locationEdits,
 			statement,
 			ts: +new Date(),
