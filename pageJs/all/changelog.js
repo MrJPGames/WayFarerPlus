@@ -70,7 +70,11 @@ function showChangelog(version){
 				"- Give friendly names to your review histories. Making it easier to tell them apart.\n" +
 				"- Report abuse straight from the review page!\n" +
 				"-> Be sure to configure your email in WF+ settings.\n" +
-				"-> Before reporting abuse familiarise yourself with what is classified as abuse by Niantic!";
+				"-> Before reporting abuse familiarise yourself with what is classified as abuse by Niantic!\n\n";
+		case 29:
+			changelogStr += "1.14.7:\n" +
+				"- RAW review history export added\n" +
+				"- Import of RAW review history added";
 		default:
 			break;
 	}
