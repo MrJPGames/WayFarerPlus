@@ -14,8 +14,8 @@ function mainLoad() {
         return `<span style="white-space:nowrap">${emptyArray
         .map((_, i) =>
             i + 1 <= score
-                ? `<span class="glyphicon glyphicon-star star-gray"></span>`
-                : `<span class="glyphicon glyphicon-star-empty star-gray"></span>`
+                ? `<span class="glyphicon glyphicon-star"></span>`
+                : `<span class="glyphicon glyphicon-star-empty"></span>`
         )
         .join("")}</span>`;
     }
@@ -28,7 +28,7 @@ function mainLoad() {
             removeReviewHistory(selectedUID);
             window.location.reload();
         }
-    };
+    }
 
     const debounce = (callback, time) => {
         let interval;
