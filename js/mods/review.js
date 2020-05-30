@@ -39,6 +39,8 @@ function modReviewPage(settings){
 		addPageJS("review/autoRetry.js");
 	if (settings["revLoadNotify"])
 		addPageJS("review/loadNotify.js");
+	if (settings["revReportAbuse"])
+		addPageJS("review/reportAbuse.js");
 	
 	addPageJS("review/main.js", true);
 

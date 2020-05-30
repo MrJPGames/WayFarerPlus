@@ -44,7 +44,6 @@ function removeReviewHistory(customUID){
 	}else{
 		userID = customUID;
 	}
-	sa
 	localStorage.removeItem("wfpSaved" + userID);
 }
 

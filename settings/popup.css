@@ -18,7 +18,7 @@ img{
     margin-left: 0.5em;
 }
 
-select, input[type="number"]{
+select, input{
     padding: 1pt;
     font-size: 20px;
     border-radius: 2pt;

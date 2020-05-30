@@ -14,8 +14,8 @@ function mainLoad() {
         return `<span style="white-space:nowrap">${emptyArray
         .map((_, i) =>
             i + 1 <= score
-                ? `<span class="glyphicon glyphicon-star star-gray"></span>`
-                : `<span class="glyphicon glyphicon-star-empty star-gray"></span>`
+                ? `<span class="glyphicon glyphicon-star"></span>`
+                : `<span class="glyphicon glyphicon-star-empty"></span>`
         )
         .join("")}</span>`;
     }
@@ -28,7 +28,7 @@ function mainLoad() {
             removeReviewHistory(selectedUID);
             window.location.reload();
         }
-    };
+    }
 
     const debounce = (callback, time) => {
         let interval;
@@ -402,8 +402,6 @@ function mainLoad() {
     function showEvaluated(){
         const localstorageReviews = getReviews(selectedUID);
 
-        console.log(selectedUID);
-
         if (!localstorageReviews.length) return;
 
         const profileStats = document.getElementById("review-history-container");
@@ -451,12 +449,37 @@ function mainLoad() {
                     </div>
                 </div>
             </div>
+            <div class="row row-input">
+                <div class="col-xs-3">
+                    <div class="input-group">
+                        <label class="input-group-addon" for="friendlyName">Friendly name: </label>
+                        <input class="form-control" type="text" id="friendlyName">
+                    </div>
+                </div>
+                <button id="setFriendlyName">Set</button>
+            </div>
             <div id="reviewed-map" style="height:600px"></div>
             <div class="table-responsive">
                 <table class="table table-striped table-condensed" id="review-history">
                 </table>
             </div>`
         );
+
+        //Init friendly name
+        var fName = JSON.parse(localStorage.wfpUIDNames)[selectedUID];
+        var friendlyNameInput = document.getElementById("friendlyName");
+        friendlyNameInput.value = fName;
+
+        var setFriendlyNameButton = document.getElementById("setFriendlyName");
+        setFriendlyNameButton.onclick = function(){
+            var UIDNames = JSON.parse(localStorage.wfpUIDNames);
+            UIDNames[selectedUID] = friendlyNameInput.value;
+            try {
+                localStorage.wfpUIDNames = JSON.stringify(UIDNames);
+            }catch{
+                alert("Setting friendly names can only be done when there is available local storage. Please remove your review history to make more space!");
+            }
+        };
 
         const $reviewHistory = $("#review-history");
         const mapElement = document.getElementById("reviewed-map");
@@ -535,6 +558,16 @@ function mainLoad() {
                         const geoJson = formatAsGeojson(filteredReviews);
                         $.fn.dataTable.fileSave(
                             new Blob([JSON.stringify(geoJson)]),
+                            "reviews.json"
+                        );
+                    },
+                },
+                {
+                    text: "Export as RAW json",
+                    action: (_ev, data) => {
+                        const reviews = localstorageReviews;
+                        $.fn.dataTable.fileSave(
+                            new Blob([JSON.stringify(reviews)]),
                             "reviews.json"
                         );
                     },
@@ -790,7 +823,11 @@ function mainLoad() {
         });
     };
 
-    function createUIDMenu(){
+    function createMenu(){
+        if (typeof localStorage["wfpUIDNames"] === 'undefined'){
+            localStorage["wfpUIDNames"] = "{}";
+        }
+
         var reviewHistoryTitle = document.createElement("h3");
         reviewHistoryTitle.innerText = "Review History";
         var reviewHistoryContainer = document.createElement("div");
@@ -804,15 +841,31 @@ function mainLoad() {
         select.add(option);
         var accountCount = 0;
         var lastAccountUID;
+
+        var localUIDNames = JSON.parse(localStorage.wfpUIDNames);
         for (var key in localStorage){
             if (key.startsWith("wfpSaved")){
+                var uid = key.substr(8);
+                if (typeof localUIDNames[uid] === 'undefined'){
+                    localUIDNames[uid] = uid;
+                }
+                var fName = localUIDNames[uid];
+
                 var option = document.createElement("option");
-                option.text = key.substr(8);
+                option.text = fName;
+                option.value = uid;
                 select.add(option);
                 accountCount++;
-                lastAccountUID = key.substr(8);
+                lastAccountUID = uid;
             }
         }
+        try {
+            localStorage.wfpUIDNames = JSON.stringify(localUIDNames);
+        }catch{
+            console.log("UID system failed");
+            alert("Local storage is full. Please remove your review histories to make more space!\n\nIf you want to keep your records you should export the data first!");
+        }
+
         select.onchange = function (e){
             console.log(e);
             selectedUID = e.target.value;
@@ -827,11 +880,48 @@ function mainLoad() {
         if (accountCount >= 1) {
             document.getElementById("content-container").appendChild(select);
             document.getElementById("content-container").appendChild(reviewHistoryContainer);
-        }else if (accountCount !== 0){
-            document.getElementById("content-container").appendChild(reviewHistoryContainer);
-            selectedUID = lastAccountUID;
-            showEvaluated();
+        }else if (accountCount === 0){
+            var noHistoryElem = document.createElement("h4");
+            noHistoryElem.innerText = "No review history...";
+            document.getElementById("content-container").appendChild(noHistoryElem);
         }
+
+        //Import option:
+        var importButton = document.createElement("input");
+        importButton.setAttribute("type", "file");
+        importButton.setAttribute("accept", "json");
+        importButton.id = "reviewHistoryImporter";
+        var importButtonLabel = document.createElement("label");
+        importButtonLabel.innerText = "Import Review History (RAW json)";
+        importButtonLabel.setAttribute("for", "reviewHistoryImporter");
+        importButtonLabel.setAttribute("class", "button-secondary");
+        document.getElementById("content-container").insertBefore(importButtonLabel, document.getElementById("review-history-container"));
+        document.getElementById("content-container").insertBefore(importButton, importButtonLabel);
+        importButton.oninput = function(elem){
+            var URI = elem.target;
+            var reader = new FileReader();
+            reader.onload = function(){
+                var importData = JSON.parse(reader.result);
+                if (typeof importData[0].title !== "undefined") {
+                    var newUID = prompt("Please enter a unique name for this review history");
+                    if (newUID !== "" && typeof localStorage["wfpSaved" + newUID] === "undefined") {
+                        try {
+                            localStorage["wfpSaved" + newUID] = JSON.stringify(importData);
+                            alert("Import successful!");
+                            window.location.reload();
+                        } catch {
+                            alert("Too little space in local storage. Make more space by removing other histories first!");
+                        }
+                    }else{
+                        alert("Empty or already used name, please set a different name!");
+                    }
+                }else{
+                    alert("File could not be recognized as review history!");
+                }
+            };
+            reader.readAsText(URI.files[0]);
+            importButton.value="";
+        };
     }
-    createUIDMenu();
+    createMenu();
 }
