@@ -8,7 +8,7 @@ function initReportAbuse(){
 	buttonElem.href = url;
 	buttonElem.target = "_BLANK"; //Does not adhere to keepTab
 	buttonElem.text = "Report abuse";
-	buttonElem.setAttribute("class","button-secondary");
+	buttonElem.setAttribute("style","color: #AAA;");
 	buttonElem.onclick = function(){
 		if (typeof localStorage.wfpAbuseWarn === 'undefined'){
 			alert("Make sure you understand what Niantic defines as abuse before reporting!\n\nDepending on the nomination a 1* rating might be better.");
