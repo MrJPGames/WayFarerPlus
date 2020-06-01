@@ -43,6 +43,7 @@ function modReviewPage(settings){
 		addPageJS("review/reportAbuse.js");
 	
 	addPageJS("review/main.js", true);
+	addPageJS("review/imageLinks.js", true);
 
 	console.log("[WayFarer+] Review page injection successful!");
 }
