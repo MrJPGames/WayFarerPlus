@@ -41,9 +41,10 @@ function modReviewPage(settings){
 		addPageJS("review/loadNotify.js");
 	if (settings["revReportAbuse"])
 		addPageJS("review/reportAbuse.js");
+	if (settings["revImageLinks"])
+		addPageJS("review/imageLinks.js");
 	
 	addPageJS("review/main.js", true);
-	addPageJS("review/imageLinks.js", true);
 
 	console.log("[WayFarer+] Review page injection successful!");
 }
