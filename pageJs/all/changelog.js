@@ -74,7 +74,11 @@ function showChangelog(version){
 		case 29:
 			changelogStr += "1.14.7:\n" +
 				"- RAW review history export added\n" +
-				"- Import of RAW review history added";
+				"- Import of RAW review history added\n\n";
+		case 30:
+			changelogStr += "1.14.8:\n" +
+				"- \"Quick full-size image open button\" can be added to the review page from review settings\n" +
+				"(Thanks to AlterTobi for this feature!)";
 		default:
 			break;
 	}

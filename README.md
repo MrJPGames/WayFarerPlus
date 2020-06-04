@@ -20,6 +20,10 @@ Other browser support?
 
 Changelog
 ---
+1.14.8
+- "Quick full-size image open button" can be added to the review page from review settings
+(Thanks to AlterTobi for this feature!)
+				
 1.14.7:
 - RAW review history export added
 - Import of RAW review history added
