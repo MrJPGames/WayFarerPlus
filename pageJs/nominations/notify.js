@@ -48,16 +48,18 @@
 	function createNotification(message){
 		var notification = document.createElement("div");
 		notification.setAttribute("class", "wfpNotification");
+		notification.onclick = function(){
+			notification.remove();
+		};
 
 		var content = document.createElement("p");
 		content.innerText = message;
 
+		//Purely aesthetic (The whole div closes the notification)
 		var closeButton = document.createElement("div");
 		closeButton.innerText = "X";
 		closeButton.setAttribute("class", "wfpNotifyCloseButton");
-		closeButton.onclick = function(){
-			notification.remove();
-		};
+		closeButton.setAttribute("style", "cursor: pointer;");
 
 		notification.appendChild(closeButton);
 		notification.appendChild(content);
