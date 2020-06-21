@@ -54,3 +54,8 @@
 .button-secondary{
     margin-left: 1em;
 }
+
+.intelImage{
+    filter: invert();
+    width: 24px;
+}
