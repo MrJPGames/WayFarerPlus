@@ -294,7 +294,7 @@ function mainLoad() {
       ${getIntelLink(
                 lat,
                 lng,
-                `<img src="https://intel.ingress.com/favicon.ico" />`
+                `<img class="intelImage" src="https://ingress.com/assets/img/favicon-32x32.png" />`
             )}
       <span class="text-center toggle" data-index="${index}" style="cursor:pointer;" title="Toggle Accepted">✅</span>
       `;
