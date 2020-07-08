@@ -33,8 +33,6 @@ function modReviewPage(settings){
 		addPageJS("review/keyboardCtrl.js");
 	if (settings["revPresets"])
 		addPageJS("review/presets.js");
-	if (settings["revQuickSubmit"])
-		addPageJS("review/quickSubmit.js");
 	if (settings["revAutoRetry"])
 		addPageJS("review/autoRetry.js");
 	if (settings["revLoadNotify"])

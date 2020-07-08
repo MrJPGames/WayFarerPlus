@@ -43,7 +43,6 @@ function setDefaults() {
 				setOption("profExtendedStats", "aprox");
 				setOption("revTransparentMarker", true);
 				setOption("revSubmitTimer", 0);
-				setOption("revQuickSubmit", true);
 			case 11:
 				setOption("revAutoSelectDupe", true);
 			case 12:
