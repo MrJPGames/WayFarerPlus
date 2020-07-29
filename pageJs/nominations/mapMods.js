@@ -47,7 +47,6 @@ function applyMapMods(){
 }
 
 function mapsRemoveCtrlToZoom(){
-    console.log("rem");
     mapRemoveCtrlZoom(nomCtrl.map);
     //SVMap is exported by the nomStreetView mod when active
     if (typeof SVMap !== 'undefined')

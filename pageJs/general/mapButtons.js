@@ -11,8 +11,8 @@ function getMapDropdown(lat, lng, title){
 	var dropdownContainer = document.createElement("div");
 	dropdownContainer.setAttribute("class", "dropdown-content");
 
-	mainButton.appendChild(buttonText);
 	mainButton.appendChild(dropdownContainer);
+	mainButton.appendChild(buttonText);
 
 	var mapElem = document.getElementById("map");
 	mapElem.parentNode.insertBefore(mainButton, mapElem.nextSibling);
@@ -56,7 +56,7 @@ function updateCustomMaps(){
 
 	var customMaps = JSON.parse(settings["customMaps"]);
 
-	for (var i=0; i < customMaps.length; i++){
+	for (var i=customMaps.length-1; i >= 0 ; i--){
 		var title = customMaps[i].title;
 		var link = customMaps[i].url;
 
@@ -92,7 +92,7 @@ String.prototype.replaceAll = function(search, replacement) {
 //NON-SECURE (But good enough for uniqueID on URLs)
 function getStringHash(str){
 	var hash = 0;
-	if (str.length == 0) {
+	if (str.length === 0) {
 		return hash;
 	}
 	for (var i = 0; i < str.length; i++) {
