@@ -41,6 +41,8 @@ function modReviewPage(settings){
 		addPageJS("review/reportAbuse.js");
 	if (settings["revImageLinks"])
 		addPageJS("review/imageLinks.js");
+	if (settings["revSubAndQuit"])
+		addPageJS("review/subAndQuit.js");
 	
 	addPageJS("review/main.js", true);
 

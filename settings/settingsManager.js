@@ -112,6 +112,7 @@ function setDefaults() {
 				setOption("revImageLinks", false);
 			case 31:
 				setOption("revSubmitTimerSound", false);
+				setOption("revSubAndQuit", true);
 				setOption("options_set", settingsVersion);
 		}
 	});
