@@ -60,3 +60,7 @@
     filter: invert();
     width: 24px;
 }
+
+.failure{
+    background-color: #FD9A88 !important;
+}
