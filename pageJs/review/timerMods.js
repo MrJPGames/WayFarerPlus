@@ -1,5 +1,21 @@
 var timeElem;
 
+//Simple Sound object
+function Sound(src) {
+	this.sound = document.createElement("audio");
+	this.sound.src = src;
+	this.sound.setAttribute("preload", "auto");
+	this.sound.setAttribute("controls", "none");
+	this.sound.style.display = "none";
+	document.body.appendChild(this.sound);
+	this.play = function(){
+		this.sound.play();
+	};
+	this.stop = function(){
+		this.sound.pause();
+	};
+}
+
 function initTimerMods(){
 	if (settings["revExpireTimer"])
 		createTimer();
@@ -87,15 +103,15 @@ function lockSubmitButton(){
 	var tDiff = nSubCtrl.pageData.expires - Date.now();
 	if (tDiff/1000 < 1200-parseInt(settings["revSubmitTimer"])){
 		for (var i = 0; i < buttons.length; i++){
-			if(buttons[i].getAttribute("wfpLock") == "on"){
+			if(buttons[i].getAttribute("wfpLock") === "on"){
 				buttons[i].innerText = "SUBMIT";
 				var disableRule = buttons[i].getAttribute("ng-disabled-temp");
 				buttons[i].setAttribute("ng-disabled", disableRule);
 				buttons[i].setAttribute("ng-disabled-temp", "");
 				buttons[i].style.color = "";
-				if (disableRule == "!(!answerCtrl.reviewComplete && answerCtrl.readyToSubmit())") {
+				if (disableRule === "!(!answerCtrl.reviewComplete && answerCtrl.readyToSubmit())") {
 					buttons[i].disabled = !(!ansCtrl.reviewComplete && ansCtrl.readyToSubmit());
-				}else if (disableRule == "!(answerCtrl2.readyToSubmitSpam())") {
+				}else if (disableRule === "!(answerCtrl2.readyToSubmitSpam())") {
 					var ansCtrl2Elem = document.getElementById("low-quality-modal");
 					var ansCtrl2 = angular.element(ansCtrl2Elem).scope().answerCtrl2;
 					buttons[i].disabled = !(ansCtrl2.readyToSubmitSpam());
@@ -104,9 +120,13 @@ function lockSubmitButton(){
 				}
 			}
 		}
+		if (settings["revSubmitTimerSound"]){
+			var sound = new Sound(extURL + "assets/sounds/ping.mp3");
+			sound.play();
+		}
 	}else{
 		for (var i = 0; i < buttons.length; i++){
-			if(buttons[i].getAttribute("wfpLock") == "on"){
+			if(buttons[i].getAttribute("wfpLock") === "on"){
 				var seconds = Math.ceil(tDiff/1000 - (1200-parseInt(settings["revSubmitTimer"])));
 				buttons[i].innerText = seconds + "S";
 			}

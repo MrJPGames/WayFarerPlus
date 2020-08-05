@@ -1,12 +1,12 @@
 //Sets up default settings on first launch or upgrade
-var settingsVersion = 31;
+var settingsVersion = 32;
 
 var defaultMapSettings = '[{"title":"Google Maps","url":"https://maps.google.com/maps?q=%lat%,%lng%"},{"title":"Ingress Intel","url":"https://intel.ingress.com/intel?ll=%lat%,%lng%&z=18"},{"title":"OSM","url":"https://www.openstreetmap.org/?mlat=%lat%&mlon=%lng%#map=18/%lat%/%lng%"}]';
 
 //This is a function because it is used when importing settings (which might be from an older version)
 function setDefaults() {
 	chrome.storage.local.get("options_set", function (data) {
-		var opt_ver = (data["options_set"] != undefined) ? data["options_set"] : 0;
+		var opt_ver = (data["options_set"] !== undefined) ? data["options_set"] : 0;
 		switch (opt_ver) {
 			case 0:
 				setOption("darkMode", false);
@@ -43,7 +43,6 @@ function setDefaults() {
 				setOption("profExtendedStats", "aprox");
 				setOption("revTransparentMarker", true);
 				setOption("revSubmitTimer", 0);
-				setOption("revQuickSubmit", true);
 			case 11:
 				setOption("revAutoSelectDupe", true);
 			case 12:
@@ -111,6 +110,9 @@ function setDefaults() {
 			case 29:
 			case 30:
 				setOption("revImageLinks", false);
+			case 31:
+				setOption("revSubmitTimerSound", false);
+				setOption("revSubAndQuit", true);
 				setOption("options_set", settingsVersion);
 		}
 	});

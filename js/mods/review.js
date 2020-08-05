@@ -33,8 +33,6 @@ function modReviewPage(settings){
 		addPageJS("review/keyboardCtrl.js");
 	if (settings["revPresets"])
 		addPageJS("review/presets.js");
-	if (settings["revQuickSubmit"])
-		addPageJS("review/quickSubmit.js");
 	if (settings["revAutoRetry"])
 		addPageJS("review/autoRetry.js");
 	if (settings["revLoadNotify"])
@@ -43,6 +41,8 @@ function modReviewPage(settings){
 		addPageJS("review/reportAbuse.js");
 	if (settings["revImageLinks"])
 		addPageJS("review/imageLinks.js");
+	if (settings["revSubAndQuit"])
+		addPageJS("review/subAndQuit.js");
 	
 	addPageJS("review/main.js", true);
 

@@ -131,6 +131,7 @@ th, td{
   display: none;
   position: absolute;
   left: -.25em;
+  transform: translateY(-100%);
   border-radius: 5px;
   background-color: #f9f9f9;
   min-width: 160px;

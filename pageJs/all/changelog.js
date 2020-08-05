@@ -78,7 +78,14 @@ function showChangelog(version){
 		case 30:
 			changelogStr += "1.14.8:\n" +
 				"- \"Quick full-size image open button\" can be added to the review page from review settings\n" +
-				"(Thanks to AlterTobi for this feature!)";
+				"(Thanks to AlterTobi for this feature!)\n\n";
+		case 31:
+			changelogStr += "1.14.9:\n" +
+				"- Submit and Home added\n" +
+				"- Review History can now be marked 'Accepted', 'Unknown' or 'Rejected' (instead of just (not) accepted)\n" +
+				"(Please note old markings will not be displayed, but can still be exported to JSON/CSV if not changed)\n" +
+				"- You can now enable a sound notification for when the 'Submit lock button' timer runs out in settings\n" +
+				"- Minor QoL updates";
 		default:
 			break;
 	}
