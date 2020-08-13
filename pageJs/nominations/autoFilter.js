@@ -43,7 +43,8 @@ function addSelectDeselectAll(){
 			selectButton.onclick = function(){
 				var inputs = filterDiv.getElementsByTagName("input");
 				for (var i = 0; i < inputs.length; i++){
-					inputs[i].checked = true;
+					if (!inputs[i].checked)
+						inputs[i].click();
 				}
 			};
 			var deselectButton = document.createElement("button");
@@ -51,7 +52,8 @@ function addSelectDeselectAll(){
 			deselectButton.onclick = function(){
 				var inputs = filterDiv.getElementsByTagName("input");
 				for (var i = 0; i < inputs.length; i++){
-					inputs[i].checked = false;
+					if (inputs[i].checked)
+						inputs[i].click();
 				}
 			};
 
