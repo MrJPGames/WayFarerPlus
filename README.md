@@ -20,7 +20,7 @@ Other browser support?
 
 Changelog
 ---
-1.14.9:\n" +
+1.14.9:
 - Submit and Home added
 - Review History can now be marked 'Accepted', 'Unknown' or 'Rejected' (instead of just (not) accepted)
     - (Please note old markings will not be displayed, but can still be exported to JSON/CSV if not changed)
