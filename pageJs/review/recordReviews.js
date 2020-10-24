@@ -53,10 +53,10 @@ document.addEventListener("WFPAnsCtrlHooked", () => {
 		markDuplicate,
 	} = ansCtrl;
 
-	ansCtrl.submitForm = function () {
+	ansCtrl.submitForm = function (bool) {
 		// This only works for accepts
 		saveReview(nSubCtrl.pageData, ansCtrl.formData);
-		submitForm();
+		submitForm(bool);
 	};
 
 	ansCtrl.showLowQualityModal = function () {
