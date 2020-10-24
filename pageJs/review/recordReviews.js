@@ -1,7 +1,7 @@
 ///Review History
 
 const saveReview = (pageData, submitData) => {
-	if (nSubCtrl.reviewType !== "NEW") {
+	if (ansCtrl.reviewType !== "NEW") {
 		console.log("Not a new review. Skipping the save.");
 		return;
 	}

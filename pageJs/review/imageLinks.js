@@ -15,7 +15,7 @@ function addFullImageButton(elem, url, target, style = ""){
 }
 
 function addFullSizeImageLinks() {
-	if ("NEW" === nSubCtrl.reviewType){
+	if ("NEW" === nSubCtrl.pageData.type){
 		// main image
 		let elem = document.getElementById("photo-card").querySelector("div.card__body");
 		let imageUrl = nSubCtrl.pageData.imageUrl + "=s0";
@@ -29,7 +29,7 @@ function addFullSizeImageLinks() {
 		
 			addFullImageButton(elem,imageUrl,'supportingImage')
 		}
-	} else if ("EDIT" === nSubCtrl.reviewType){
+	} else if ("EDIT" === nSubCtrl.pageData.type){
 		let elem = document.querySelector("div.known-information.known-information__image.clickable");
 		let imageUrl = nSubCtrl.pageData.imageUrl + "=s0";
 		

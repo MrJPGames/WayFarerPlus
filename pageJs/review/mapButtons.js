@@ -1,7 +1,7 @@
 document.addEventListener("WFPNSubCtrlHooked", function() {
     var mainButton = getMapDropdown(nSubCtrl.pageData.lat, nSubCtrl.pageData.lng, nSubCtrl.pageData.title);
     //Add elem to page
-    switch (nSubCtrl.reviewType) {
+    switch (nSubCtrl.pageData.type) {
         case "NEW":
             var cardFooterElems = document.getElementsByClassName("card__footer");
             var cardFooterElem = cardFooterElems[cardFooterElems.length - 1];
@@ -14,4 +14,3 @@ document.addEventListener("WFPNSubCtrlHooked", function() {
             break;
     }
 });
-

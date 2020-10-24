@@ -23,13 +23,16 @@ function setupMapMods(){
 		hookResetMapFuncs();
 
 	if (settings["revS2Cell"] !== "-1" || settings["revSecondS2Cell"] !== "-1"){
-		addS2Overlay(nSubCtrl.map, settings["revS2Cell"], settings["revS2Color"], settings["revSecondS2Cell"], settings["revS2SecondColor"]);
-		addS2Overlay(nSubCtrl.map2, settings["revS2Cell"], settings["revS2Color"], settings["revSecondS2Cell"], settings["revS2SecondColor"]);
-		if (settings["revHighlightCell"]) {
-			addS2Highlight(nSubCtrl.map, settings["revS2Cell"], settings["revS2Color"], nSubCtrl.pageData.lat, nSubCtrl.pageData.lng);
-			addS2Highlight(nSubCtrl.map2, settings["revS2Cell"], settings["revS2Color"], nSubCtrl.pageData.lat, nSubCtrl.pageData.lng);
+		if (nSubCtrl.pageData.type === "NEW") {
+			addS2Overlay(nSubCtrl.map, settings["revS2Cell"], settings["revS2Color"], settings["revSecondS2Cell"], settings["revS2SecondColor"]);
+			addS2Overlay(nSubCtrl.map2, settings["revS2Cell"], settings["revS2Color"], settings["revSecondS2Cell"], settings["revS2SecondColor"]);
+			if (settings["revHighlightCell"]) {
+				addS2Highlight(nSubCtrl.map, settings["revS2Cell"], settings["revS2Color"], nSubCtrl.pageData.lat, nSubCtrl.pageData.lng);
+				addS2Highlight(nSubCtrl.map2, settings["revS2Cell"], settings["revS2Color"], nSubCtrl.pageData.lat, nSubCtrl.pageData.lng);
+			}
 		}
-		if (ansCtrl.needsLocationEdit) {
+
+		if (nSubCtrl.pageData.type === "EDIT") {
 			addS2Overlay(nSubCtrl.locationEditsMap, settings["revS2Cell"], settings["revS2Color"], settings["revSecondS2Cell"], settings["revS2SecondColor"]);
 			if (settings["revHighlightCell"]) {
 				addS2Highlight(nSubCtrl.locationEditsMap, settings["revS2Cell"], settings["revS2Color"], nSubCtrl.pageData.lat, nSubCtrl.pageData.lng);
@@ -37,20 +40,22 @@ function setupMapMods(){
 		}
 	}
 
-    if (settings["revEditOrigLoc"] && ansCtrl.needsLocationEdit && !settings["revPreciseMarkers"])
+    if (settings["revEditOrigLoc"] && nSubCtrl.pageData.type === "EDIT" && ansCtrl.needsLocationEdit && !settings["revPreciseMarkers"])
     	addOrigLocation(nSubCtrl.locationEditsMap);
 	if (settings["ctrlessZoom"])
 		mapsRemoveCtrlToZoom();
-	if (settings["revMap2ZoomLevel"] !== "-1")
-		zoomMap2();
-	if (settings["revDupeMapZoomLevel"] !== "-1")
-		zoomDupeMap();
-	if (settings["revTransparentMarker"])
-		makeMarkersTransparent();
 	if (settings["revBigMaps"])
 		makeMapsBigger();
-	if (settings["rev3DMap"]){
+	if (settings["rev3DMap"])
 		makeMap3D();
+
+	if (nSubCtrl.pageData.type === "NEW") {
+		if (settings["revMap2ZoomLevel"] !== "-1")
+			zoomMap2();
+		if (settings["revDupeMapZoomLevel"] !== "-1")
+			zoomDupeMap();
+		if (settings["revTransparentMarker"])
+			makeMarkersTransparent();
 	}
 }
 
@@ -79,8 +84,13 @@ function addPreciseMarkers(){
 			addMarkerListner(editMarkers[i]);
 		}
 	}else{
-		//Map1 all excluding "main/current" marker 
-		var locationMarkers = nSubCtrl.markers;
+		//Map1 all excluding "main/current" marker
+		var locationMarkers;
+		if (nSubCtrl.pageData.type === "NEW"){
+			locationMarkers = nSubCtrl.markers;
+		}else{
+			locationMarkers = nSubCtrl.allLocationMarkers;
+		}
 	    for (var i = 0; i < locationMarkers.length; i++){
 	        locationMarkers[i].setIcon(extURL + "assets/precise_map-spot.svg");
 	    }
@@ -147,13 +157,16 @@ function addPreciseMarkers(){
 		nSubCtrl.panorama = panorama;
 		nSubCtrl.map2 = map2;
 	}
-	createCustomStreetView();
 
-	var originalResetStreetView = nSubCtrl.resetStreetView;
-	//Hook the reset map2 function
-	nSubCtrl.resetStreetView = function(){
-		originalResetStreetView(); //Restore original internal state
-		createCustomStreetView(); //Change map to our custom map with custom markers!
+	if (nSubCtrl.pageData.type === "NEW") {
+		createCustomStreetView();
+
+		var originalResetStreetView = nSubCtrl.resetStreetView;
+		//Hook the reset map2 function
+		nSubCtrl.resetStreetView = function () {
+			originalResetStreetView(); //Restore original internal state
+			createCustomStreetView(); //Change map to our custom map with custom markers!
+		}
 	}
 }
 
@@ -306,11 +319,11 @@ function makeMapsBigger(){
 }
 
 function applyMapOptions(options){
-	if (nSubCtrl.reviewType === "NEW"){
+	if (nSubCtrl.pageData.type === "NEW"){
 		nSubCtrl.map.setOptions(options);
 		nSubCtrl.map2.setOptions(options);
 	}
-	if (nSubCtrl.reviewType === "EDIT")
+	if (nSubCtrl.pageData.type === "EDIT")
 		nSubCtrl.locationEditsMap.setOptions(options);
 }
 

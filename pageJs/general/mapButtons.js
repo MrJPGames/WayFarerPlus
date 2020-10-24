@@ -3,7 +3,7 @@ var customMapContainer;
 function getMapDropdown(lat, lng, title){
 	//Create main dropdown menu ("button")
 	var mainButton = document.createElement("div");
-	mainButton.setAttribute("class", "dropdown");
+	mainButton.setAttribute("class", "mapsDropdown");
 
 	var buttonText = document.createElement("span");
 	buttonText.innerText = "Open in ...";
@@ -14,7 +14,12 @@ function getMapDropdown(lat, lng, title){
 	mainButton.appendChild(dropdownContainer);
 	mainButton.appendChild(buttonText);
 
-	var mapElem = document.getElementById("map");
+	var mapElem;
+	if (nSubCtrl.pageData.type === "NEW"){
+		mapElem = document.getElementById("map");
+	}else{
+		mapElem = document.getElementById("location-edit-map");
+	}
 	mapElem.parentNode.insertBefore(mainButton, mapElem.nextSibling);
 
 	dropdownContainer.innerHTML = null;

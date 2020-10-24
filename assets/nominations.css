@@ -114,11 +114,11 @@ th, td{
   cursor: pointer;
 }
 
-.dropdown {
+.mapsDropdown {
+  float: left;
   background-color: white;
   border-radius: 5px;
   box-shadow: grey 2px 2px 10px;
-  margin-top: .5em;
   margin-bottom: .5em;
   font-size: 1.1em;
   color: black;

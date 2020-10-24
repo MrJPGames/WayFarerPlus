@@ -1,4 +1,7 @@
 function addTranslationButtons(){
+	if (nSubCtrl.pageData.type === "EDIT")
+		return; //Don't add translation buttons to edit pages (for now)
+
 	var elems = document.getElementsByClassName("title-description");
 
 	var style = "background-image: url(" + extURL + "assets/translate.svg);";

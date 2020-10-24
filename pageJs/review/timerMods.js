@@ -43,8 +43,8 @@ function hookDuplicateModalOpen(){
 }
 
 function hookLowQualityModalOpen(){
-	var orig = ansCtrl.showLowQualityModal;
-	ansCtrl.showLowQualityModal = function(){
+	var orig = nSubCtrl.showLowQualityModal;
+	nSubCtrl.showLowQualityModal = function(){
 		orig();
 		//The modal needs time to load
 		setTimeout(function(){
@@ -60,24 +60,23 @@ function hookLowQualityModalOpen(){
 
 function hookRejectReadyFunction(){
 	var ansCtrl2Elem = document.getElementById("low-quality-modal");
-	var ansCtrl2 = angular.element(ansCtrl2Elem).scope().answerCtrl2;
+	var ansCtrl2 = angular.element(ansCtrl2Elem).scope().$ctrl;
 	var orig = ansCtrl2.readyToSubmitSpam;
-	ansCtrl2.readyToSubmitSpam = function(){
+	ansCtrl2.readyToSubmitSpam = function() {
 		var tDiff = nSubCtrl.pageData.expires - Date.now();
-		if (tDiff/1000 < 1200-parseInt(settings["revSubmitTimer"])){
+		if (tDiff / 1000 < 1200 - parseInt(settings["revSubmitTimer"])) {
 			return orig();
-		}else{
+		} else {
 			return false;
 		}
-	}
+	};
 }
 
 function hookSubmitReadyFunction(){
-	var originalReadyToSubmit = ansCtrl.readyToSubmit;
 	ansCtrl.readyToSubmit = function(){
 		var tDiff = nSubCtrl.pageData.expires - Date.now();
 		if (tDiff/1000 < 1200-parseInt(settings["revSubmitTimer"])){
-			return originalReadyToSubmit();
+			return ansCtrl.isFormDataValid;
 		}else{
 			return false;
 		}
@@ -109,11 +108,11 @@ function lockSubmitButton(){
 				buttons[i].setAttribute("ng-disabled", disableRule);
 				buttons[i].setAttribute("ng-disabled-temp", "");
 				buttons[i].style.color = "";
-				if (disableRule === "!(!answerCtrl.reviewComplete && answerCtrl.readyToSubmit())") {
-					buttons[i].disabled = !(!ansCtrl.reviewComplete && ansCtrl.readyToSubmit());
-				}else if (disableRule === "!(answerCtrl2.readyToSubmitSpam())") {
+				if (disableRule === "!reviewCtrl.isFormDataValid") {
+					buttons[i].disabled = !ansCtrl.isFormDataValid;
+				}else if (disableRule === "!($ctrl.readyToSubmitSpam())") {
 					var ansCtrl2Elem = document.getElementById("low-quality-modal");
-					var ansCtrl2 = angular.element(ansCtrl2Elem).scope().answerCtrl2;
+					var ansCtrl2 = angular.element(ansCtrl2Elem).scope().$ctrl;
 					buttons[i].disabled = !(ansCtrl2.readyToSubmitSpam());
 				}else{
 					buttons[i].disabled = false;
@@ -129,6 +128,7 @@ function lockSubmitButton(){
 			if(buttons[i].getAttribute("wfpLock") === "on"){
 				var seconds = Math.ceil(tDiff/1000 - (1200-parseInt(settings["revSubmitTimer"])));
 				buttons[i].innerText = seconds + "S";
+				buttons[i].disabled = true;
 			}
 		}
 		setTimeout(lockSubmitButton, 1000);

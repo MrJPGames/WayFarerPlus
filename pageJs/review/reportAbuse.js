@@ -1,4 +1,7 @@
 function initReportAbuse(){
+	if (nSubCtrl.pageData.type === "EDIT")
+		return; //Edit has a native abuse modal
+
 	var url = "https://docs.google.com/forms/d/e/1FAIpQLSeXTFKKkhHmapgsLN7VuhKHkT7qWj9bJjH9I2UWPf2qwo20UQ/viewform"+
 		"?entry.1465131479=" + encodeURIComponent(nSubCtrl.pageData.title) +
 		"&entry.1341794294=" + encodeURIComponent(nSubCtrl.pageData.lat + "," + nSubCtrl.pageData.lng) +
