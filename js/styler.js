@@ -28,7 +28,7 @@ function applyPublicStyle(){
 	.switch-label {filter: invert();} 
 	.sidebar .sidebar-item.--selected, .sidebar .sidebar-item:hover {background: #1F1F1F !important; border-left: #20B8E3 5px solid !important;} 
 	.sidebar {background: #0C0C0C !important;} 
-	.star-red-orange, .selected>.star-gray {color: #20B8E3 !important;} 
+	.five-star-rating__button--selected>.five-star-rating__star--gray, .five-star-rating__star--red-orange {color: #20B8E3 !important;} 
 	@keyframes shadow2 {  
 		from,to {background: rgba(255,255,255,.4); filter: blur(4px); } 
         55% {background: rgba(255,255,255,.2); filter: blur(6px); } 
@@ -81,7 +81,10 @@ function applyPublicStyle(){
 	tr.success{color: black !important;}
 	div.dts div.dataTables_scrollBody {background: repeating-linear-gradient(45deg, #000, #222 10px, #555 10px, #888 20px) !important;}
 	#help-section-content h3 b{color: #FFF !important;}
-	#submit-abuse a {color: rgba(255,255,255,.8) !important;}`;
+	#submit-abuse a {color: rgba(255,255,255,.8) !important;}
+	.intelImage{filter: none !important;}
+	
+	`;
 
 
 

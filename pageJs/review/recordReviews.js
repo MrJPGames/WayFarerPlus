@@ -1,7 +1,7 @@
 ///Review History
 
 const saveReview = (pageData, submitData) => {
-	if (nSubCtrl.reviewType !== "NEW") {
+	if (ansCtrl.reviewType !== "NEW") {
 		console.log("Not a new review. Skipping the save.");
 		return;
 	}
@@ -53,10 +53,10 @@ document.addEventListener("WFPAnsCtrlHooked", () => {
 		markDuplicate,
 	} = ansCtrl;
 
-	ansCtrl.submitForm = function () {
+	ansCtrl.submitForm = function (bool) {
 		// This only works for accepts
 		saveReview(nSubCtrl.pageData, ansCtrl.formData);
-		submitForm();
+		submitForm(bool);
 	};
 
 	ansCtrl.showLowQualityModal = function () {

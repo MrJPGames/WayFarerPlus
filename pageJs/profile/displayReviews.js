@@ -248,11 +248,24 @@ function mainLoad() {
             this.marker.setMap(this.map);
         }
 
-        toggleAccepted() {
-            this.review.accepted = !this.review.accepted;
+        markAccepted() {
             const localStorageReviews = getReviews(selectedUID);
             const localStorageReview = localStorageReviews[this.index];
-            localStorageReview.accepted = !localStorageReview.accepted;
+            localStorageReview.accepted = "Accepted";
+            storeReviewHistory(localStorageReviews, selectedUID);
+        }
+
+        markUnkown() {
+            const localStorageReviews = getReviews(selectedUID);
+            const localStorageReview = localStorageReviews[this.index];
+            localStorageReview.accepted = "Unknown"; //This is ugly but also backwards-compatible
+            storeReviewHistory(localStorageReviews, selectedUID);
+        }
+
+        markRejected() {
+            const localStorageReviews = getReviews(selectedUID);
+            const localStorageReview = localStorageReviews[this.index];
+            localStorageReview.accepted = "Rejected";
             storeReviewHistory(localStorageReviews, selectedUID);
         }
 
@@ -294,9 +307,11 @@ function mainLoad() {
       ${getIntelLink(
                 lat,
                 lng,
-                `<img src="https://intel.ingress.com/favicon.ico" />`
+                `<img class="intelImage" src="https://ingress.com/assets/img/favicon-32x32.png" />`
             )}
-      <span class="text-center toggle" data-index="${index}" style="cursor:pointer;" title="Toggle Accepted">✅</span>
+      <span class="text-center toggleAccepted" data-index="${index}" style="cursor:pointer;" title="Mark as Accepted">✅</span>
+      <span class="text-center toggleUnknown" data-index="${index}" style="cursor:pointer;" title="Mark as Unknown Outcome">❔</span>
+      <span class="text-center toggleRejected" data-index="${index}" style="cursor:pointer;" title="Mark as Rejected">❌</span>
       `;
         }
 
@@ -365,10 +380,6 @@ function mainLoad() {
                 ${getDD(
                 "Focus in Map",
                 `<span class="focus-in-map" title="Focus in map" data-index="${index}" style="cursor:pointer" >📍</span>`
-            )}
-                ${getDD(
-                "Toggle Accepted",
-                `<span class="text-center toggle" data-index="${index}" style="cursor:pointer" title="Toggle Accepted">✅</span>`
             )}
               </dl>
               ${renderScores(this.review)}
@@ -533,8 +544,10 @@ function mainLoad() {
             rowCallback: (row, review) => {
                 const accepted = review.review && review.review.accepted;
                 row.classList.remove("success");
-                if (accepted) {
+                if (accepted === "Accepted") {
                     row.classList.add("success");
+                }else if (accepted === "Rejected"){
+                    row.classList.add("failure");
                 }
             },
             data: reviews,
@@ -792,16 +805,49 @@ function mainLoad() {
             }
         });
 
-        $("#content-container").on("click", ".toggle[data-index]", (ev) => {
+        $("#content-container").on("click", ".toggleAccepted[data-index]", (ev) => {
             const { target } = ev;
             const { index } = target.dataset;
             const currentReview = reviews[index];
-            currentReview.toggleAccepted();
+            currentReview.markAccepted();
             const rowElem = ev.currentTarget.parentElement.parentElement;
             if (rowElem.classList.contains("success")){
                 rowElem.classList.remove("success");
             }else{
                 rowElem.classList.add("success");
+                if (rowElem.classList.contains("failure")){
+                    rowElem.classList.remove("failure");
+                }
+            }
+        });
+
+        $("#content-container").on("click", ".toggleRejected[data-index]", (ev) => {
+            const { target } = ev;
+            const { index } = target.dataset;
+            const currentReview = reviews[index];
+            currentReview.markRejected();
+            const rowElem = ev.currentTarget.parentElement.parentElement;
+            if (rowElem.classList.contains("failure")){
+                rowElem.classList.remove("failure");
+            }else{
+                rowElem.classList.add("failure");
+                if (rowElem.classList.contains("success")){
+                    rowElem.classList.remove("success");
+                }
+            }
+        });
+
+        $("#content-container").on("click", ".toggleUnknown[data-index]", (ev) => {
+            const { target } = ev;
+            const { index } = target.dataset;
+            const currentReview = reviews[index];
+            currentReview.markUnkown();
+            const rowElem = ev.currentTarget.parentElement.parentElement;
+            if (rowElem.classList.contains("failure")){
+                rowElem.classList.remove("failure");
+            }
+            if (rowElem.classList.contains("success")){
+                rowElem.classList.remove("success");
             }
         });
 

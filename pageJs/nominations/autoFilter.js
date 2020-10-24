@@ -23,6 +23,44 @@ function autoFilter(){
 		}
 	);
 	nomCtrl.scrollController.reload();
+
+	addSelectDeselectAll();
+}
+
+function addSelectDeselectAll(){
+	var orig = nomCtrl.openOptionsModal;
+	nomCtrl.openOptionsModal = function(){
+		orig();
+
+		setTimeout(function(){
+			var nomOptWindow = document.getElementById("nom-options-modal");
+
+			var filterDiv = nomOptWindow.querySelector("#nom-filter");
+
+
+			var selectButton = document.createElement("button");
+			selectButton.innerText = "Select all";
+			selectButton.onclick = function(){
+				var inputs = filterDiv.getElementsByTagName("input");
+				for (var i = 0; i < inputs.length; i++){
+					if (!inputs[i].checked)
+						inputs[i].click();
+				}
+			};
+			var deselectButton = document.createElement("button");
+			deselectButton.innerText = "Deselect all";
+			deselectButton.onclick = function(){
+				var inputs = filterDiv.getElementsByTagName("input");
+				for (var i = 0; i < inputs.length; i++){
+					if (inputs[i].checked)
+						inputs[i].click();
+				}
+			};
+
+			filterDiv.insertBefore(deselectButton, filterDiv.children[1]);
+			filterDiv.insertBefore(selectButton, filterDiv.children[1]);
+		}, 1); //This 1ms timeout should make it so the scheduler always puts us after the element has been added to the DOM
+	}
 }
 
 

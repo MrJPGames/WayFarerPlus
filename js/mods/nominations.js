@@ -91,10 +91,10 @@ function addNomTypeButtons(){
 	inputIngress.name = "nomType";
 	inputIngress.setAttribute("onclick", "setNomType(this.id);");
 	var labelPoGo = document.createElement("label");
-	labelPoGo.for = "pogo";
+	labelPoGo.setAttribute("for", "pogo");
 	labelPoGo.innerText = "Pokémon Go";
 	var labelIngress = document.createElement("label");
-	labelIngress.for = "ingress";
+	labelIngress.setAttribute("for", "ingress");
 	labelIngress.innerText = "Ingress";
 
 	inputPoGo.style.marginLeft = "10pt";

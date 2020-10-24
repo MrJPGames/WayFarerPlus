@@ -30,7 +30,7 @@
     box-shadow: 1pt 1pt 3pt grey;
 }
 
-.five-stars{
+.five-star-rating{
     border: rgba(0,0,0,0) dashed 2pt;
 }
 
@@ -72,7 +72,7 @@ html {
   cursor: pointer;
 }
 
-.dropdown {
+.mapsDropdown {
   float: left;
   background-color: white;
   border-radius: 5px;
@@ -89,6 +89,7 @@ html {
   display: none;
   position: absolute;
   left: -.25em;
+  transform: translateY(-100%);
   border-radius: 5px;
   background-color: #f9f9f9;
   min-width: 160px;
