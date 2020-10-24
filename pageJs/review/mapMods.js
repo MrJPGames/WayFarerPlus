@@ -40,7 +40,7 @@ function setupMapMods(){
 		}
 	}
 
-    if (settings["revEditOrigLoc"] && nSubCtrl.pageData.type === "EDIT" && ansCtrl.needsLocationEdit && !settings["revPreciseMarkers"])
+    if (settings["revEditOrigLoc"] && nSubCtrl.pageData.type === "EDIT" && nSubCtrl.needsLocationEdit && !settings["revPreciseMarkers"])
     	addOrigLocation(nSubCtrl.locationEditsMap);
 	if (settings["ctrlessZoom"])
 		mapsRemoveCtrlToZoom();
@@ -60,7 +60,7 @@ function setupMapMods(){
 }
 
 function addPreciseMarkers(){
-	if (ansCtrl.needsLocationEdit){		
+	if (nSubCtrl.needsLocationEdit){
 	    var nSubCtrlScope = angular.element(document.getElementById("NewSubmissionController")).scope();
 		var editMarkers = nSubCtrlScope.getAllLocationMarkers();
 		function setEditMarkersIcon(markers) {
