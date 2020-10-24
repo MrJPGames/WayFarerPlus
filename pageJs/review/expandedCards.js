@@ -5,7 +5,7 @@ function removeRedundantDescriptions() {
 }
 
 function setupExpandedCards(){
-    if (nSubCtrl.reviewType != "NEW")
+    if (nSubCtrl.pageData.type !== "NEW")
         return; //Only works for new submissions
     
     //Inject CSS to hide sidebar where convinient for use of this option on medium sized screens
