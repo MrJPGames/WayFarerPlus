@@ -3,7 +3,7 @@
 
   "name": "WayFarer+",
   "description": "Enables you to use NianticLab's Wayfarer in the way you want!",
-  "version": "1.14.9.1",
+  "version": "1.14.10",
 
   "browser_action": {
     "default_icon": "icons/icon48.png",
