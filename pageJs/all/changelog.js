@@ -85,7 +85,12 @@ function showChangelog(version){
 				"- Review History can now be marked 'Accepted', 'Unknown' or 'Rejected' (instead of just (not) accepted)\n" +
 				"(Please note old markings will not be displayed, but can still be exported to JSON/CSV if not changed)\n" +
 				"- You can now enable a sound notification for when the 'Submit lock button' timer runs out in settings\n" +
-				"- Minor QoL updates";
+				"- Minor QoL updates\n\n";
+		case 32:
+			changelogStr += "1.14.10:\n" +
+				"- Compatibility fix with recent Wayfarer (review page) update\n" +
+				"- Removed 'Submit & Quit' as it's a default feature now\n" +
+				"- Fixed minor dark mode issues caused by the latest update";
 		default:
 			break;
 	}

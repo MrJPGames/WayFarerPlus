@@ -19,50 +19,53 @@ function setupKeyboardControl(){
 //This stores the different star entries in order of keyboard flow
 //This is done by hand to make visual customizations not change the order when unintended
 function initStars(){
-	revFields[0] = document.getElementById(divNames.shouldBePortal).getElementsByClassName("five-stars")[0];
-	revFields[1] = document.getElementById(divNames.titleAndDescription).getElementsByClassName("five-stars")[0];
-	revFields[2] = document.getElementById(divNames.historicOrCultural).getElementsByClassName("five-stars")[0];
-	revFields[3] = document.getElementById(divNames.visuallyUnique).getElementsByClassName("five-stars")[0];
-	revFields[4] = document.getElementById(divNames.safeAccess).getElementsByClassName("five-stars")[0];
-	revFields[5] = document.getElementById(divNames.locationAccuracy).getElementsByClassName("five-stars")[0];
+	revFields[0] = document.getElementById(divNames.shouldBePortal).getElementsByClassName("five-star-rating")[0];
+	revFields[1] = document.getElementById(divNames.titleAndDescription).getElementsByClassName("five-star-rating")[0];
+	revFields[2] = document.getElementById(divNames.historicOrCultural).getElementsByClassName("five-star-rating")[0];
+	revFields[3] = document.getElementById(divNames.visuallyUnique).getElementsByClassName("five-star-rating")[0];
+	revFields[4] = document.getElementById(divNames.safeAccess).getElementsByClassName("five-star-rating")[0];
+	revFields[5] = document.getElementById(divNames.locationAccuracy).getElementsByClassName("five-star-rating")[0];
 }
 
 function initKeyboardControls(){
 	//Register to the key press event
 	document.addEventListener('keydown', keyDownEvent);
 
-	initStars();
+	if (nSubCtrl.pageData.type === "NEW") {
+		initStars();
 
-	revFields[0].focus();
-	revFields[0].setAttribute("style", "border-color: #" + colCode + ";");
+		revFields[0].focus();
+		revFields[0].setAttribute("style", "border-color: #" + colCode + ";");
 
-	//Bind to opening and closing of reject modal
-	var openModal = ansCtrl.showLowQualityModal;
-	ansCtrl.showLowQualityModal = function(){
-		inReject = true;
-		openModal();
-		setTimeout(function (){
-			menuPtr = document.getElementById("reject-reason").children[0].children[2]; //Gets <ul> checkedG1
-			//Number the options
-			var i = 0;
-			for (i=0; i < menuPtr.children.length; i++){
-				var elem = menuPtr.children[i];
-				elem.children[1].innerText = (i+1) + ". " + elem.children[1].innerText;
-			}
-		}, 20);
-	}
+		//Bind to opening and closing of reject modal
+		var openModal = nSubCtrl.showLowQualityModal;
+		nSubCtrl.showLowQualityModal = function () {
+			inReject = true;
+			openModal();
+			setTimeout(function () {
+				menuPtr = document.getElementById("reject-reason").children[0].children[2]; //Gets <ul> checkedG1
+				//Number the options
+				var i = 0;
+				for (i = 0; i < menuPtr.children.length; i++) {
+					var elem = menuPtr.children[i];
+					elem.children[1].innerText = (i + 1) + ". " + elem.children[1].innerText;
+				}
 
-	//Hook closing of modal
-	var closeModal = ansCtrl.resetLowQuality;
-	ansCtrl.resetLowQuality = function(){
-		inReject = false;
-		closeModal();
-	}
+				//Hook closing of modal (modal controller only exists AFTER opening modal)
+				var modalAnsCtrl = angular.element(document.getElementById("low-quality-modal")).scope().$ctrl;
+				var closeModal = modalAnsCtrl.resetLowQuality;
+				modalAnsCtrl.resetLowQuality = function () {
+					inReject = false;
+					closeModal();
+				};
+			}, 20);
+		};
 
-	//Create custom duplicate click events (in addition to default behavior to update our local state of things)
-	var duplicateElems = document.getElementById("duplicates-card").getElementsByClassName("filmstrip-image");
-	for (var i=0; i < duplicateElems.length; i++){
-		duplicateElems[i].setAttribute("onclick", "dupePtr = " + i + ";");
+		//Create custom duplicate click events (in addition to default behavior to update our local state of things)
+		var duplicateElems = document.getElementById("duplicates-card").getElementsByClassName("filmstrip-image");
+		for (var i = 0; i < duplicateElems.length; i++) {
+			duplicateElems[i].setAttribute("onclick", "dupePtr = " + i + ";");
+		}
 	}
 }
 
@@ -76,19 +79,21 @@ function keyDownEvent(e){
 			//Stop the enter from creating a new line in the textarea
 			e.preventDefault();
 			var ansCtrl2Elem = document.getElementById("low-quality-modal");
-			var ansCtrl2 = angular.element(ansCtrl2Elem).scope().answerCtrl2;
+			var ansCtrl2 = angular.element(ansCtrl2Elem).scope().$ctrl;
 			ansCtrl2.confirmLowQuality();
 			if (e.ctrlKey){
-				ansCtrl2.reloadPage();
+				window.location.reload(true);
 			}else {
 				ansCtrl.reviewComplete = true;
 			}
 		}
 		return;
 	}
-	if (ansCtrl.reviewComplete){
-		if (e.keyCode === 13) //Enter Key
-			ansCtrl.reloadPage();
+	if (ansCtrl.isFormDataValid){
+		if (e.keyCode === 13) { //Enter Key
+			ansCtrl.submitForm();
+			setTimeout(window.location.reload, 1);
+		}
 		if (e.keyCode === 8) //Backspace
 			window.location.href = "/";
 	}else{
@@ -165,7 +170,8 @@ function keyDownEvent(e){
 					menuPtr = menuPtr.parentNode.parentNode; //Reset menuPtr to main menu
 				}else{
 					//Close modal
-					ansCtrl.resetLowQuality();
+					var modalAnsCtrl = angular.element(document.getElementById("low-quality-modal")).scope().$ctrl;
+					modalAnsCtrl.resetLowQuality();
 				}
 			}
 			var menuPos = -1;
@@ -207,9 +213,9 @@ function keyDownEvent(e){
 }
 
 function setRating(pos, rate){
-	starButtons = revFields[pos].getElementsByClassName("button-star");
+	starButtons = revFields[pos].getElementsByClassName("five-star-rating__button");
 	starButtons[rate].click();
-	if (!(rate == 0 && pos == 0))
+	if (!(rate === 0 && pos === 0))
 		changeRevPos(1);
 }
 

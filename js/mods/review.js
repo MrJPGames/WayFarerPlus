@@ -1,5 +1,5 @@
 function modReviewPage(settings){
-	if (settings["revS2Cell"] != -1 || settings["revSecondS2Cell"] != -1) {
+	if (settings["revS2Cell"] != "-1" || settings["revSecondS2Cell"] != "-1") {
 		addPageJS("libs/S2.js");
 		addPageJS("general/S2Overlay.js");
 	}
@@ -25,7 +25,7 @@ function modReviewPage(settings){
 	}
 	if (settings["revTranslate"] || settings["revTranslateAll"])
 		addPageJS("review/translationButtons.js");
-	if (settings["revLowestDistCircle"] || settings["revAccessDistCircle"] || settings["revMap2ZoomLevel"] || settings["revS2Cell"] != -1 || settings["revSecondS2Cell"] != -1 || settings["revEditOrigLoc"] || settings["ctrlessZoom"] || settings["revMap2ZoomLevel"] != -1 || settings["revBigMaps"] || settings["rev3DMap"]) {
+	if (settings["revLowestDistCircle"] || settings["revAccessDistCircle"] || settings["revMap2ZoomLevel"] || settings["revS2Cell"] != "-1" || settings["revSecondS2Cell"] != "-1" || settings["revEditOrigLoc"] || settings["ctrlessZoom"] || settings["revMap2ZoomLevel"] != "-1" || settings["revBigMaps"] || settings["rev3DMap"]) {
 		addPageJS("general/mapMods.js");
 		addPageJS("review/mapMods.js");
 	}
@@ -40,9 +40,7 @@ function modReviewPage(settings){
 	if (settings["revReportAbuse"])
 		addPageJS("review/reportAbuse.js");
 	if (settings["revImageLinks"])
-		addPageJS("review/imageLinks.js");
-	if (settings["revSubAndQuit"])
-		addPageJS("review/subAndQuit.js");
+		addPageJS("review/imageLinks.js");;
 	
 	addPageJS("review/main.js", true);
 

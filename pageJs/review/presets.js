@@ -1,10 +1,10 @@
 var presetContainer; //Needed in multiple functions
 
 function setupPresets(){
-	if (nSubCtrl.reviewType == "EDIT")
+	if (nSubCtrl.pageData.type === "EDIT")
 		return; //No edit presets obviously!
 	//Init for first run
-	if (localStorage.wfpPresets == undefined){
+	if (localStorage.wfpPresets === undefined){
 		var defaultPresets = [];
 		localStorage.wfpPresets = JSON.stringify(defaultPresets);
 	}
@@ -39,8 +39,8 @@ function addPresetsBar(){
 	addAllPresetButtons();
 	presetBox.appendChild(presetContainer);
 
-	var ansCtrlDiv = document.getElementById("AnswersController");
-	ansCtrlDiv.insertBefore(presetBox, ansCtrlDiv.children[0]);
+	var revCtrlDiv = document.getElementById("ReviewController");
+	revCtrlDiv.insertBefore(presetBox, revCtrlDiv.children[0]);
 }
 
 function addAllPresetButtons(){
@@ -83,19 +83,19 @@ function presetClick(e){
 		if (safeAccess > 0) safeAccess = keepInBounds(parseInt(safeAccess)+randomRange(-1,1));
 	}
 
-	ansCtrl.formData.quality = shouldBePortal;
-	ansCtrl.formData.description = titleAndDescription;
-	ansCtrl.formData.cultural = historicOrCultural;
-	ansCtrl.formData.uniqueness = visuallyUnique;
-	ansCtrl.formData.safety = safeAccess;
-	ansCtrl.formData.location = locationAccuracy;
+	nSubCtrl.formData.quality = shouldBePortal;
+	nSubCtrl.formData.description = titleAndDescription;
+	nSubCtrl.formData.cultural = historicOrCultural;
+	nSubCtrl.formData.uniqueness = visuallyUnique;
+	nSubCtrl.formData.safety = safeAccess;
+	nSubCtrl.formData.location = locationAccuracy;
 
-	if (shouldBePortal > 0) document.getElementById(divNames.shouldBePortal).getElementsByClassName("five-stars")[0].children[shouldBePortal-1].click();
-	if (titleAndDescription > 0) document.getElementById(divNames.titleAndDescription).getElementsByClassName("five-stars")[0].children[titleAndDescription-1].click();
-	if (historicOrCultural > 0) document.getElementById(divNames.historicOrCultural).getElementsByClassName("five-stars")[0].children[historicOrCultural-1].click();
-	if (visuallyUnique > 0) document.getElementById(divNames.visuallyUnique).getElementsByClassName("five-stars")[0].children[visuallyUnique-1].click();
-	if (safeAccess > 0) document.getElementById(divNames.safeAccess).getElementsByClassName("five-stars")[0].children[safeAccess-1].click();
-	if (locationAccuracy > 0) document.getElementById(divNames.locationAccuracy).getElementsByClassName("five-stars")[0].children[locationAccuracy-1].click();
+	if (shouldBePortal > 0) document.getElementById(divNames.shouldBePortal).getElementsByClassName("five-star-rating")[0].children[shouldBePortal-1].click();
+	if (titleAndDescription > 0) document.getElementById(divNames.titleAndDescription).getElementsByClassName("five-star-rating")[0].children[titleAndDescription-1].click();
+	if (historicOrCultural > 0) document.getElementById(divNames.historicOrCultural).getElementsByClassName("five-star-rating")[0].children[historicOrCultural-1].click();
+	if (visuallyUnique > 0) document.getElementById(divNames.visuallyUnique).getElementsByClassName("five-star-rating")[0].children[visuallyUnique-1].click();
+	if (safeAccess > 0) document.getElementById(divNames.safeAccess).getElementsByClassName("five-star-rating")[0].children[safeAccess-1].click();
+	if (locationAccuracy > 0) document.getElementById(divNames.locationAccuracy).getElementsByClassName("five-star-rating")[0].children[locationAccuracy-1].click();
 
 	if (preset.whatIsItPath != undefined){
 		for (var i=0; i < preset.whatIsItPath.length; i++){ //Go through all nodes stored for the path to the final setting (from root to deepest child set)
@@ -159,12 +159,12 @@ function addPreset(){
 	}else{
 		var preset = {};
 		preset.name = presetName;
-		preset.shouldBePortal = ansCtrl.formData.quality;
-		preset.titleAndDescription = ansCtrl.formData.description;
-		preset.historicOrCultural = ansCtrl.formData.cultural;
-		preset.visuallyUnique = ansCtrl.formData.uniqueness;
-		preset.safeAccess = ansCtrl.formData.safety;
-		preset.locationAccuracy = ansCtrl.formData.location;
+		preset.shouldBePortal = nSubCtrl.formData.quality;
+		preset.titleAndDescription = nSubCtrl.formData.description;
+		preset.historicOrCultural = nSubCtrl.formData.cultural;
+		preset.visuallyUnique = nSubCtrl.formData.uniqueness;
+		preset.safeAccess = nSubCtrl.formData.safety;
+		preset.locationAccuracy = nSubCtrl.formData.location;
 		
 		if (whatCtrl.whatNode.id != "0"){
 			var whatIsItPath = [whatCtrl.whatNode.id]; //Init with (and will be end of list/array) the final node ID
