@@ -20,6 +20,12 @@ Other browser support?
 
 Changelog
 ---
+
+1.14.10:
+- Compatibility fix with recent Wayfarer (review page) update
+- Removed 'Submit & Quit' as it's a default feature now
+- Fixed minor dark mode issues caused by the latest update
+
 1.14.9:
 - Submit and Home added
 - Review History can now be marked 'Accepted', 'Unknown' or 'Rejected' (instead of just (not) accepted)
