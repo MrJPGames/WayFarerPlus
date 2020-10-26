@@ -1,7 +1,7 @@
 function initImageMods(){
 	if (settings["revImageLinks"])
 		addFullSizeImageLinks();
-	if (settings["revImageDate"])
+	if (settings["revImageDate"] && nSubCtrl.pageData.type === "NEW")
 		addImageDateLabel(10);
 }
 
