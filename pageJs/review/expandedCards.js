@@ -63,4 +63,4 @@ function setupExpandedCards(){
 	removeRedundantDescriptions();
 }
 
-document.addEventListener("WFPNSubCtrlHooked", setupExpandedCards);
+document.addEventListener("WFPAllRevHooked", setupExpandedCards);
