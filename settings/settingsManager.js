@@ -114,7 +114,6 @@ function setDefaults() {
 				setOption("revSubmitTimerSound", false);
 			case 32:
 			case 33:
-				setOption("revImageDate", true);
 				setOption("options_set", settingsVersion);
 		}
 	});

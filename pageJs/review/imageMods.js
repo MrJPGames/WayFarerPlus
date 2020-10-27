@@ -1,8 +1,6 @@
 function initImageMods(){
 	if (settings["revImageLinks"])
 		addFullSizeImageLinks();
-	if (settings["revImageDate"] && nSubCtrl.pageData.type === "NEW")
-		addImageDateLabel(10);
 }
 
 function addFullImageButton(elem, url, target, style = ""){
@@ -41,27 +39,6 @@ function addFullSizeImageLinks() {
 		let imageUrl = nSubCtrl.pageData.imageUrl + "=s0";
 		
 		addFullImageButton(elem,imageUrl,'mainImage', "position: relative; top: -125px; left: 25px;");
-	}
-}
-
-function addImageDateLabel(attempts){
-	console.log(nSubCtrl.imageDate, attempts);
-	if (attempts <= 0) {
-		return;
-	}
-	if (nSubCtrl.imageDate === "") {
-		setTimeout(function(){
-			addImageDateLabel(attempts-1);
-		}, 10);
-	}else {
-		var adressLabelElem = document.getElementsByClassName("street-address small")[0];
-
-		var dateTextElem = document.createElement("SPAN");
-		dateTextElem.innerText = "Image Date: " + nSubCtrl.imageDate + "?";
-
-		//Add newline and the date label
-		adressLabelElem.appendChild(document.createElement("BR"));
-		adressLabelElem.appendChild(dateTextElem);
 	}
 }
 

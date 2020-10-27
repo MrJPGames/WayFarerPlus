@@ -39,7 +39,7 @@ function modReviewPage(settings){
 		addPageJS("review/loadNotify.js");
 	if (settings["revReportAbuse"])
 		addPageJS("review/reportAbuse.js");
-	if (settings["revImageLinks"] || settings["revImageDate"])
+	if (settings["revImageLinks"])
 		addPageJS("review/imageMods.js");;
 	
 	addPageJS("review/main.js", true);
