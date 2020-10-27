@@ -71,4 +71,4 @@ function setupCompactCard() {
     removeRedundantDescriptions();
 }
 
-document.addEventListener("WFPAllRevHooked", setupCompactCard);
+document.addEventListener("WFPRevPageLoad", setupCompactCard);

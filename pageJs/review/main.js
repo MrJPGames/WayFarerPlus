@@ -11,6 +11,20 @@ function setupPage(){
 	hookAnsCtrl();
 	hookDataService();
 	hookedAll();
+	createPageReadyEvent();
+}
+
+function createPageReadyEvent(){
+	if (hooked < 4 || document.getElementById(divNames.locationAccuracy).getElementsByClassName("five-star-rating")[0] == undefined){
+		setTimeout(createPageReadyEvent, 50);
+	}else{
+		console.log("[WayFarer+] Review page has finished loading!");
+
+		setTimeout(function(){
+			var modEvent = new Event("WFPRevPageLoad");
+        	document.dispatchEvent(modEvent);
+        }, 1);
+	}
 }
 
 function onHooked(){

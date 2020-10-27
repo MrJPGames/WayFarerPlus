@@ -63,4 +63,4 @@ function setupExpandedCards(){
 	removeRedundantDescriptions();
 }
 
-document.addEventListener("WFPAllRevHooked", setupExpandedCards);
+document.addEventListener("WFPRevPageLoad", setupExpandedCards);

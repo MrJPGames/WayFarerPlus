@@ -246,4 +246,4 @@ function selectDuplicateRelative(diff){
 	}
 }
 
-document.addEventListener("WFPAllRevHooked", setupKeyboardControl);
+document.addEventListener("WFPRevPageLoad", setupKeyboardControl);
