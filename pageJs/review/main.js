@@ -15,7 +15,7 @@ function setupPage(){
 }
 
 function createPageReadyEvent(){
-	if (hooked < 4 || document.getElementById(divNames.locationAccuracy).getElementsByClassName("five-star-rating")[0] == undefined){
+	if (hooked < 4 || (nSubCtrl.pageData.type === "NEW" && document.getElementById(divNames.locationAccuracy).getElementsByClassName("five-star-rating")[0] == undefined)){
 		setTimeout(createPageReadyEvent, 50);
 	}else{
 		console.log("[WayFarer+] Review page has finished loading!");
