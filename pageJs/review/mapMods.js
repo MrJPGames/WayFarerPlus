@@ -61,8 +61,7 @@ function setupMapMods(){
 
 function addPreciseMarkers(){
 	if (nSubCtrl.needsLocationEdit){
-	    var nSubCtrlScope = angular.element(document.getElementById("NewSubmissionController")).scope();
-		var editMarkers = nSubCtrlScope.getAllLocationMarkers();
+		var editMarkers = nSubCtrl.allLocationMarkers;
 		function setEditMarkersIcon(markers) {
 			for (var i = 0; i < editMarkers.length; i++) {
 				editMarkers[i].setIcon(extURL + "assets/precise_map-spot.svg");
@@ -75,8 +74,7 @@ function addPreciseMarkers(){
 		for (var i = 0; i< editMarkers.length; i++){
 			function addMarkerListner(m){
 				m.addListener("click", function(){
-					var nSubCtrlScope = angular.element(document.getElementById("NewSubmissionController")).scope();
-					var editMarkers = nSubCtrlScope.getAllLocationMarkers();
+					var editMarkers = nSubCtrl.allLocationMarkers;
 					setEditMarkersIcon(editMarkers);
 					m.setIcon(extURL + "assets/precise_green_map-spot.svg");
 				});
@@ -249,16 +247,14 @@ function addOrigLocation(gMap){
 		}
 	}
 
-	var nSubCtrlScope = angular.element(document.getElementById("NewSubmissionController")).scope();
-	var editMarkers = nSubCtrlScope.getAllLocationMarkers();
+	var editMarkers = nSubCtrl.allLocationMarkers;
 	setEditMarkersIcon(editMarkers);
 
     //Persistent:
 	for (var i = 0; i< editMarkers.length; i++){
 		function addMarkerListner(m){
 			m.addListener("click", function(){
-				var nSubCtrlScope = angular.element(document.getElementById("NewSubmissionController")).scope();
-				var editMarkers = nSubCtrlScope.getAllLocationMarkers();
+				var editMarkers = nSubCtrl.allLocationMarkers;
 				setEditMarkersIcon(editMarkers);
 				m.setIcon("/img/marker-green.svg");
 			});

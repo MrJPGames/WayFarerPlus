@@ -11,6 +11,20 @@ function setupPage(){
 	hookAnsCtrl();
 	hookDataService();
 	hookedAll();
+	createPageReadyEvent();
+}
+
+function createPageReadyEvent(){
+	if (hooked < 4 || (nSubCtrl.pageData.type === "NEW" && document.getElementById(divNames.locationAccuracy).getElementsByClassName("five-star-rating")[0] == undefined)){
+		setTimeout(createPageReadyEvent, 50);
+	}else{
+		console.log("[WayFarer+] Review page has finished loading!");
+
+		setTimeout(function(){
+			var modEvent = new Event("WFPRevPageLoad");
+        	document.dispatchEvent(modEvent);
+        }, 1);
+	}
 }
 
 function onHooked(){
@@ -30,8 +44,10 @@ function hookedAll(){
 	}else{
 		console.log("[WayFarer+] Review has hooked all relevant controllers!");
 
-		var modEvent = new Event("WFPAllRevHooked");
-        document.dispatchEvent(modEvent);
+		setTimeout(function(){
+			var modEvent = new Event("WFPAllRevHooked");
+        	document.dispatchEvent(modEvent);
+        }, 1);
 	}
 }
 
@@ -49,7 +65,7 @@ function hookSubCtrl(){
 
 	var tempNSubCtrl = tempNSubCtrlScope.$ctrl;
 
-	if (tempNSubCtrl === undefined || tempNSubCtrl.pageData === undefined|| tempNSubCtrl.pageData.type === undefined || tempNSubCtrl.pageData.expires === undefined || tempNSubCtrl.loaded === false || tempNSubCtrl.pageData.description === undefined){
+	if (tempNSubCtrl === undefined || tempNSubCtrl.pageData === undefined || tempNSubCtrl.pageData.type === undefined || tempNSubCtrl.pageData.expires === undefined || tempNSubCtrl.loaded === false || tempNSubCtrl.pageData.description === undefined){
 		if (tempNSubCtrl !== undefined && tempNSubCtrl.errorMessage !== "") {
 			autoretry = true;
 			var modEvent = new Event("WFPNSubCtrlError");
@@ -80,7 +96,7 @@ function hookSubCtrl(){
 function hookAnsCtrl(){
 	var tempAnsCtrl = angular.element(document.getElementById("ReviewController")).scope().reviewCtrl;
 
-	if (tempAnsCtrl === undefined){
+	if (tempAnsCtrl === undefined || tempAnsCtrl.isLoading || tempAnsCtrl.pageData === undefined){
 		setTimeout(hookAnsCtrl, 50);
 		return;
 	}else{

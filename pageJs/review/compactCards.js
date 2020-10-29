@@ -71,4 +71,4 @@ function setupCompactCard() {
     removeRedundantDescriptions();
 }
 
-document.addEventListener("WFPNSubCtrlHooked", setupCompactCard);
+document.addEventListener("WFPRevPageLoad", setupCompactCard);
