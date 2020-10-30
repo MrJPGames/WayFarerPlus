@@ -151,11 +151,11 @@ th, td{
   border-radius: 5px;
 }
 
-.dropdown:hover .dropdown-content {
+.mapsDropdown:hover .dropdown-content {
   display: block;
 }
 
-.dropdown:hover .dropbtn {
+.mapsDropdown:hover .dropbtn {
   background-color: #3e8e41;
 }
 

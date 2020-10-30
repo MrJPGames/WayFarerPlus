@@ -82,7 +82,7 @@ function keyDownEvent(e){
 			var ansCtrl2 = angular.element(ansCtrl2Elem).scope().$ctrl;
 			ansCtrl2.confirmLowQuality();
 			if (e.ctrlKey){
-				ansCtrl2.reloadPage();
+				window.location.reload(true);
 			}else {
 				ansCtrl.reviewComplete = true;
 			}
@@ -90,8 +90,10 @@ function keyDownEvent(e){
 		return;
 	}
 	if (ansCtrl.isFormDataValid){
-		if (e.keyCode === 13) //Enter Key
-			ansCtrl.reloadPage();
+		if (e.keyCode === 13) { //Enter Key
+			ansCtrl.submitForm();
+			setTimeout(window.location.reload, 1);
+		}
 		if (e.keyCode === 8) //Backspace
 			window.location.href = "/";
 	}else{
@@ -244,4 +246,4 @@ function selectDuplicateRelative(diff){
 	}
 }
 
-document.addEventListener("WFPAllRevHooked", setupKeyboardControl);
+document.addEventListener("WFPRevPageLoad", setupKeyboardControl);

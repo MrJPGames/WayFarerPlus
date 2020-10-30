@@ -5,7 +5,7 @@ function removeRedundantDescriptions() {
 }
 
 function setupCompactCard() {
-    if (nSubCtrl.reviewType != "NEW")
+    if (nSubCtrl.pageData.type !== "NEW")
         return; //Only works for new submissions
 
     if (!nSubCtrl.hasSupportingImageOrStatement) {
@@ -28,8 +28,8 @@ function setupCompactCard() {
     document.getElementById(divNames.titleAndDescription).getElementsByClassName('card__body')[0].style.paddingTop = "0pt";
     document.getElementById(divNames.titleAndDescription).getElementsByTagName("h1")[0].style.fontSize = "26pt";
     document.getElementById(divNames.titleAndDescription).getElementsByTagName("h4")[1].style.fontSize = "16pt";
-    document.getElementById(divNames.titleAndDescription).getElementsByClassName("five-stars")[0].style.marginBottom = "-1em";
-    document.getElementById(divNames.titleAndDescription).getElementsByClassName("five-stars")[0].style.marginTop = "-0.2em";
+    document.getElementById(divNames.titleAndDescription).getElementsByClassName("five-star-rating")[0].style.marginBottom = "-1em";
+    document.getElementById(divNames.titleAndDescription).getElementsByClassName("five-star-rating")[0].style.marginTop = "-0.2em";
     document.getElementById(divNames.historicOrCultural).classList.add("middle-card");
     document.getElementById(divNames.visuallyUnique).classList.remove("middle-card");
     document.getElementById(divNames.safeAccess).classList.add("middle-card");
@@ -71,4 +71,4 @@ function setupCompactCard() {
     removeRedundantDescriptions();
 }
 
-document.addEventListener("WFPNSubCtrlHooked", setupCompactCard);
+document.addEventListener("WFPRevPageLoad", setupCompactCard);
