@@ -90,12 +90,18 @@ function showChangelog(version){
 			changelogStr += "1.14.10:\n" +
 				"- Compatibility fix with recent Wayfarer (review page) update\n" +
 				"- Removed 'Submit & Quit' as it's a default feature now\n" +
-				"- Fixed minor dark mode issues caused by the latest update";
+				"- Fixed minor dark mode issues caused by the latest update\n\n";
 		case 33:
 			changelogStr += "1.14.11:\n" +
 				"- Bug fixes (inconsistent loading of mods/some broken features)\n" +
 				"- Experimental 'image date' feature, showing the reported date of the image\n" +
-				"used for the submission.";
+				"used for the submission.\n\n";
+		case 34:
+			changelogStr += "1.14.11.3:\n" +
+				"- Bug fixes:\n" + 
+				"-> Record reviews should work properly again\n" + 
+				"-> Photo reviews (might) not cause issues anymore\n" + 
+				"-> Improved overall WF+ extension stability";
 		default:
 			break;
 	}
