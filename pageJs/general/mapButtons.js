@@ -15,7 +15,7 @@ function getMapDropdown(lat, lng, title){
 	mainButton.appendChild(buttonText);
 
 	var mapElem;
-	if (nSubCtrl.pageData.type === "NEW"){
+	if (window.nSubCtrl === undefined || nSubCtrl.pageData.type === "NEW"){
 		mapElem = document.getElementById("map");
 	}else{
 		mapElem = document.getElementById("location-edit-map");
