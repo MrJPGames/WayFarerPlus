@@ -101,7 +101,13 @@ function showChangelog(version){
 				"- Bug fixes:\n" + 
 				"-> Record reviews should work properly again\n" + 
 				"-> Photo reviews (might) not cause issues anymore\n" + 
-				"-> Improved overall WF+ extension stability";
+				"-> Improved overall WF+ extension stability\n\n";
+		case 35:
+			changelogStr += "1.14.12:\n" + 
+				"- Compatibility with Wayferer 3.1\n" + 
+				"-> WF+ Dark mode is tested to work with vanilla 'Light Mode'\n" + 
+				"   so you might encounter issues using both dark modes at the same time.\n" + 
+				"- Fixed issue causing 'Open In' to be unusable.";
 		default:
 			break;
 	}
