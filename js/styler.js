@@ -54,7 +54,7 @@ function applyPublicStyle(){
     .category__display-name {color: white !important;} 
     .category__arrow-element {filter: invert();} 
     #gallery-info-not-title p {background: none !important;} 
-    .nomination-status--queue, .nomination-status--voting { background: #000000; border: #FFF 1px solid; }
+    .nomination-status--queue, .nomination-status--voting { background: #000000; border: #FFF 1px solid; color: white !important; }
     .nomination-status--accepted { background: #00c853; border: #FFF 1px solid; }
     .nomination-status--duplicate, .nomination-status--rejected, .nomination-status--withdrawn { background: #d50000; border: #FFF 1px solid; }
     .nomination-status--upgrade, .nomination-status--next-upgrade { background: #aa00ff; border: #FFF 1px solid; }
@@ -83,7 +83,10 @@ function applyPublicStyle(){
 	#help-section-content h3 b{color: #FFF !important;}
 	#submit-abuse a {color: rgba(255,255,255,.8) !important;}
 	.intelImage{filter: none !important;}
-	
+	.category-breadcrumb span:not(:first-child)::before { color: white !important; }
+	.dropdown #simple-dropdown { border: 1px white solid; }
+	.switch-label:before { background-color: grey !important; }
+	.switch-label:after { background-color: black !important; }
 	`;
 
 
@@ -97,4 +100,9 @@ function applyPublicStyle(){
 	}
 	var insertBefore = (document.body || document.head || document.documentElement).getElementsByTagName("style")[0];
 	(document.body || document.head || document.documentElement).insertBefore(style, insertBefore);
+
+
+	//Remove default "light-theme" to stop interference between the two modes
+	var htmlTag = document.getElementsByTagName("HTML")[0];
+	htmlTag.setAttribute("class", "ng-scope hydrated");
 }
