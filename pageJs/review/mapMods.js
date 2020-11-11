@@ -50,9 +50,9 @@ function setupMapMods(){
 		makeMap3D();
 
 	if (nSubCtrl.pageData.type === "NEW") {
-		if (settings["revMap2ZoomLevel"] !== "-1")
+		if (settings["revMap2ZoomLevel"] != "-1")
 			zoomMap2();
-		if (settings["revDupeMapZoomLevel"] !== "-1")
+		if (settings["revDupeMapZoomLevel"] != "-1")
 			zoomDupeMap();
 		if (settings["revTransparentMarker"])
 			makeMarkersTransparent();
