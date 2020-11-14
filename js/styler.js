@@ -81,6 +81,7 @@ function applyPublicStyle(){
 	tr.success{color: black !important;}
 	div.dts div.dataTables_scrollBody {background: repeating-linear-gradient(45deg, #000, #222 10px, #555 10px, #888 20px) !important;}
 	#help-section-content h3 b{color: #FFF !important;}
+	.radio-btn:checked {background-color: #FFF !important;}
 	#submit-abuse a {color: rgba(255,255,255,.8) !important;}`;
 
 
