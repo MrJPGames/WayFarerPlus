@@ -63,8 +63,13 @@ function modNominationPage(settings){
 			queries: [{element: "#map"}]
 	});
 
-	if (settings["nomS2Cell"] !== -1 || settings["nomSecondS2Cell"] !== -1)
+	if (settings["nomS2Cell"] !== -1 || settings["nomSecondS2Cell"] !== -1) {
 		addPageJS("libs/S2.js");
+		addPageJS("general/S2Overlay.js");
+	}
+
+	//You can always filter, regardless of settings (though some settings cause no change)
+	addPageJS("nominations/autoFilter.js");
 	
 	addPageJS("nominations/main.js", true);
 }
@@ -86,10 +91,10 @@ function addNomTypeButtons(){
 	inputIngress.name = "nomType";
 	inputIngress.setAttribute("onclick", "setNomType(this.id);");
 	var labelPoGo = document.createElement("label");
-	labelPoGo.for = "pogo";
+	labelPoGo.setAttribute("for", "pogo");
 	labelPoGo.innerText = "Pokémon Go";
 	var labelIngress = document.createElement("label");
-	labelIngress.for = "ingress";
+	labelIngress.setAttribute("for", "ingress");
 	labelIngress.innerText = "Ingress";
 
 	inputPoGo.style.marginLeft = "10pt";

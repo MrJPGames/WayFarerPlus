@@ -11,15 +11,30 @@ function setupPage(){
 	hookAnsCtrl();
 	hookDataService();
 	hookedAll();
+	createPageReadyEvent();
+}
+
+function createPageReadyEvent(){
+	if (hooked < 4 || (nSubCtrl.pageData.type === "NEW" && document.getElementById(divNames.locationAccuracy).getElementsByClassName("five-star-rating")[0] == undefined)){
+		setTimeout(createPageReadyEvent, 50);
+	}else{
+		console.log("[WayFarer+] Review page has finished loading!");
+
+		setTimeout(function(){
+			var modEvent = new Event("WFPRevPageLoad");
+        	document.dispatchEvent(modEvent);
+        }, 1);
+	}
 }
 
 function onHooked(){
-	if (settings["revDescLink"])
-		addDescriptionLink();
-	filmStripScroll();
-	if (nSubCtrl.reviewType == "NEW")
-		if (nSubCtrl.pageData.nearbyPortals[0] != undefined)
+	if (nSubCtrl.pageData.type === "NEW") {
+		filmStripScroll();
+		if (nSubCtrl.pageData.nearbyPortals[0] !== undefined)
 			checkNearby();
+		if (settings["revDescLink"])
+			addDescriptionLink();
+	}
 }
 document.addEventListener("WFPAllRevHooked", onHooked);
 
@@ -29,36 +44,49 @@ function hookedAll(){
 	}else{
 		console.log("[WayFarer+] Review has hooked all relevant controllers!");
 
-		var modEvent = new Event("WFPAllRevHooked");
-        document.dispatchEvent(modEvent);
+		setTimeout(function(){
+			var modEvent = new Event("WFPAllRevHooked");
+        	document.dispatchEvent(modEvent);
+        }, 1);
 	}
 }
 
 function hookSubCtrl(){
-	tempNSubCtrl = angular.element(document.getElementById("NewSubmissionController")).scope().subCtrl;
-	tempNSubCtrlScope = angular.element(document.getElementById("NewSubmissionController")).scope();
-	
-	if (tempNSubCtrl == undefined || tempNSubCtrl.pageData == undefined || tempNSubCtrl.pageData.expires == undefined || tempNSubCtrl.loaded == false || tempNSubCtrl.pageData.description == undefined){
-		if (tempNSubCtrl != undefined && tempNSubCtrl.errorMessage != "") {
+	var tempNSubCtrlScope = angular.element(document.getElementById("review-new-component")).scope();
+
+	if (tempNSubCtrlScope === undefined){
+		tempNSubCtrlScope = angular.element(document.getElementsByClassName("edit-container")[0]).scope();
+	}
+
+	if (tempNSubCtrlScope === undefined || tempNSubCtrlScope.$ctrl === undefined){
+		setTimeout(hookSubCtrl, 50);
+		return;
+	}
+
+	var tempNSubCtrl = tempNSubCtrlScope.$ctrl;
+
+	if (tempNSubCtrl === undefined || tempNSubCtrl.pageData === undefined || tempNSubCtrl.pageData.type === undefined || tempNSubCtrl.pageData.expires === undefined || tempNSubCtrl.loaded === false || tempNSubCtrl.pageData.description === undefined){
+		if (tempNSubCtrl !== undefined && tempNSubCtrl.errorMessage !== "") {
 			autoretry = true;
 			var modEvent = new Event("WFPNSubCtrlError");
 			document.dispatchEvent(modEvent);
 		}else {
 			setTimeout(hookSubCtrl, 50);
+			return;
 		}
 	}else{
 		nSubCtrl = tempNSubCtrl;
 		nSubCtrlScope = tempNSubCtrlScope;
 		hooked++;
-		console.log("[WayFarer+] NewSubmissionController was hooked to nSubCtrl");
-		console.log("[WayFarer+] NewSubmissionController's scope was hooked to nSubCtrlScope");
+		console.log("[WayFarer+] ReviewNewController was hooked to nSubCtrl");
+		console.log("[WayFarer+] ReviewNewController's scope was hooked to nSubCtrlScope");
 
 		var modEvent = new Event("WFPNSubCtrlHooked");
         document.dispatchEvent(modEvent);
 
 		//Auto select first possible duplicate
-		if (nSubCtrl.reviewType == "NEW" && nSubCtrl.activePortals.length > 0 && settings["revAutoSelectDupe"])
-			nSubCtrl.displayLivePortal(0);
+		if (nSubCtrl.pageData.type === "NEW" && nSubCtrl.pageData.nearbyPortals.length > 0 && settings["revAutoSelectDupe"])
+			nSubCtrl.displayInfoWindow(0);
 
 		//Only hook what ctrl AFTER sub ctrl
 		hookWhatCtrl();
@@ -66,14 +94,15 @@ function hookSubCtrl(){
 }
 
 function hookAnsCtrl(){
-	tempAnsCtrl = angular.element(document.getElementById("AnswersController")).scope().answerCtrl;
+	var tempAnsCtrl = angular.element(document.getElementById("ReviewController")).scope().reviewCtrl;
 
-	if (tempAnsCtrl == undefined){
+	if (tempAnsCtrl === undefined || tempAnsCtrl.isLoading || tempAnsCtrl.pageData === undefined){
 		setTimeout(hookAnsCtrl, 50);
+		return;
 	}else{
 		ansCtrl = tempAnsCtrl;
 		hooked++;
-		console.log("[WayFarer+] AnswersController was hooked to ansCtrl");
+		console.log("[WayFarer+] ReviewController was hooked to ansCtrl");
 
 		var modEvent = new Event("WFPAnsCtrlHooked");
         document.dispatchEvent(modEvent);
@@ -82,7 +111,7 @@ function hookAnsCtrl(){
 
 function hookWhatCtrl(){
 	var cardId;
-	if (nSubCtrl.reviewType == "EDIT"){
+	if (nSubCtrl.pageData.type == "EDIT"){
 		cardId = "what-is-it-card-edit";
 	}else{
 		cardId = "what-is-it-card-review";
@@ -109,13 +138,13 @@ function hookWhatCtrl(){
 }
 
 function hookDataService(){
-	angular.element(document.getElementsByTagName("html")[0]).injector().invoke(["NewSubmissionDataService", function (nSF) {tempNSubDS = nSF;}]);
+	angular.element(document.getElementsByTagName("html")[0]).injector().invoke(["ReviewResponsesService", function (nSF) {tempNSubDS = nSF;}]);
 	if (tempNSubDS == undefined){
 		setTimeout(hookDataService, 50);
 	}else{
 		nSubDS = tempNSubDS;
 		hooked++;
-		console.log("[WayFarer+] NewSubmissionDataService was hooked to nSubDS");
+		console.log("[WayFarer+] ReviewResponsesService was hooked to nSubDS");
 
 		var modEvent = new Event("WFPNSubDSHooked");
         document.dispatchEvent(modEvent);

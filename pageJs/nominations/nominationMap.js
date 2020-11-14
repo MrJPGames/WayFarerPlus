@@ -63,6 +63,9 @@ function updateMap(nominationList){
 	});
 
 	nominationMap.fitBounds(bounds);
+
+
+	addS2Overlay(nominationMap, settings["nomS2Cell"], settings["nomS2Color"], settings["nomSecondS2Cell"], settings["nomS2SecondColor"]);
 }
 
 function createElements() {
@@ -73,7 +76,6 @@ function createElements() {
 	collapsibleInput.id = "collapsed-map";
 	collapsibleInput.setAttribute("class", "toggle");
 	collapsibleInput.type = "checkbox";
-	collapsibleInput.checked = true;
 
 	const collapsibleLabel = document.createElement("label");
 	collapsibleLabel.setAttribute("class", "lbl-toggle");

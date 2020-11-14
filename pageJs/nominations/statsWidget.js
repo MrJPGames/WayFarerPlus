@@ -30,7 +30,7 @@ function loadStats(){
     if (settings["accPoGo"])
         availableNominations += 7;
 
-    if (localStorage.wfpNominationTypes == undefined){
+    if (localStorage.wfpNominationTypes === undefined){
         localStorage.wfpNominationTypes = JSON.stringify({});
     }
 
@@ -120,7 +120,7 @@ function loadStats(){
 
 
     var currentDay = new Date();
-    if (unlocks != [0,0,0,0,0,0,0,0,0,0,0,0,0,0]){
+    if (unlocks !== [0,0,0,0,0,0,0,0,0,0,0,0,0,0]){
         //Start table and create header
         html += "<table><thead><tr><th>Date (Y-M-D)</th><th># of unlocks</th></tr></thead><tbody>";
 
@@ -140,7 +140,7 @@ function loadStats(){
 
 function updateNomTypeButtons(){
     var nomType = JSON.parse(localStorage.wfpNominationTypes)[nomCtrl.currentNomination.id];
-    if (nomType == undefined){
+    if (nomType === undefined){
         document.getElementById("pogo").checked = false;
         document.getElementById("ingress").checked = false;
     }else if (nomType == "pogo"){

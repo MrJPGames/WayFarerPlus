@@ -1,11 +1,9 @@
 var customMapContainer;
 
-console.log("test");
-
 function getMapDropdown(lat, lng, title){
 	//Create main dropdown menu ("button")
 	var mainButton = document.createElement("div");
-	mainButton.setAttribute("class", "dropdown");
+	mainButton.setAttribute("class", "mapsDropdown");
 
 	var buttonText = document.createElement("span");
 	buttonText.innerText = "Open in ...";
@@ -13,10 +11,15 @@ function getMapDropdown(lat, lng, title){
 	var dropdownContainer = document.createElement("div");
 	dropdownContainer.setAttribute("class", "dropdown-content");
 
-	mainButton.appendChild(buttonText);
 	mainButton.appendChild(dropdownContainer);
+	mainButton.appendChild(buttonText);
 
-	var mapElem = document.getElementById("map");
+	var mapElem;
+	if (window.nSubCtrl === undefined || nSubCtrl.pageData.type === "NEW"){
+		mapElem = document.getElementById("map");
+	}else{
+		mapElem = document.getElementById("location-edit-map");
+	}
 	mapElem.parentNode.insertBefore(mainButton, mapElem.nextSibling);
 
 	dropdownContainer.innerHTML = null;
@@ -58,7 +61,7 @@ function updateCustomMaps(){
 
 	var customMaps = JSON.parse(settings["customMaps"]);
 
-	for (var i=0; i < customMaps.length; i++){
+	for (var i=customMaps.length-1; i >= 0 ; i--){
 		var title = customMaps[i].title;
 		var link = customMaps[i].url;
 
@@ -94,7 +97,7 @@ String.prototype.replaceAll = function(search, replacement) {
 //NON-SECURE (But good enough for uniqueID on URLs)
 function getStringHash(str){
 	var hash = 0;
-	if (str.length == 0) {
+	if (str.length === 0) {
 		return hash;
 	}
 	for (var i = 0; i < str.length; i++) {
