@@ -15,7 +15,7 @@ function init(settings){
 		//Do not apply any mods
 	}
 	if (settings["darkMode"] == true){
-		applyPublicStyle();
+		modDarkMode();
 	}
 
 	document.addEventListener('DOMContentLoaded', function(){

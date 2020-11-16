@@ -1,6 +1,4 @@
-function applyPublicStyle(){
-
-	var cssInject=`body{background:black !important; color: grey !important; } 
+body{background:black !important; color: grey !important; } 
 	h1,h2,h3,h4,h5,h6,h7,h8,h9{color:white !important;} 
 	#gallery-info{background: #0F0F0F !important;} 
 	.niantic-wayfarer-logo img{filter: invert(1) !important;} 
@@ -83,26 +81,9 @@ function applyPublicStyle(){
 	#help-section-content h3 b{color: #FFF !important;}
 	#submit-abuse a {color: rgba(255,255,255,.8) !important;}
 	.intelImage{filter: none !important;}
+	.radio-btn:checked {background-color: #FFF !important;}
 	.category-breadcrumb span:not(:first-child)::before { color: white !important; }
 	.dropdown #simple-dropdown { border: 1px white solid; }
 	.switch-label:before { background-color: grey !important; }
 	.switch-label:after { background-color: black !important; }
-	`;
-
-
-
-	var style=document.createElement('style');
-	style.type='text/css';
-	if(style.styleSheet){
-	    style.styleSheet.cssText=cssInject;
-	}else{
-	    style.appendChild(document.createTextNode(cssInject));
-	}
-	var insertBefore = (document.body || document.head || document.documentElement).getElementsByTagName("style")[0];
-	(document.body || document.head || document.documentElement).insertBefore(style, insertBefore);
-
-
-	//Remove default "light-theme" to stop interference between the two modes
-	var htmlTag = document.getElementsByTagName("HTML")[0];
-	htmlTag.setAttribute("class", "ng-scope hydrated");
-}
+	
