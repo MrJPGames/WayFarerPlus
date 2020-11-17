@@ -25,6 +25,7 @@ input, text-input {color: white !important;}
 .niantic-loader__logo {filter: none !important;} 
 .switch-label {filter: invert();} 
 .sidebar__item--selected, .sidebar__item:focus, .sidebar__item:hover {background: #1F1F1F !important; border-left: #20B8E3 5px solid !important;} 
+.criteria__nav ul .selected { border-left: 3px solid #20B8E3 !important; }
 .sidebar {background: #0C0C0C !important;} 
 .five-star-rating__button--selected>.five-star-rating__star--gray, .five-star-rating__star--red-orange {color: #20B8E3 !important;} 
 @keyframes shadow2 {  
