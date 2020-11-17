@@ -437,6 +437,10 @@ function mainLoad() {
                         <label>S2 Cell Level:</label>
                         <select id="gridCellSize">
                             <option value="-1">Off</option>
+                            <option value="2">L2</option>
+                            <option value="3">L3</option>
+                            <option value="4">L4</option>
+                            <option value="5">L5</option>
                             <option value="6">L6</option>
                             <option value="7">L7</option>
                             <option value="8">L8</option>
