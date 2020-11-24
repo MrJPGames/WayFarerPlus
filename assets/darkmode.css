@@ -87,4 +87,5 @@ div.dts div.dataTables_scrollBody {background: repeating-linear-gradient(45deg, 
 .dropdown #simple-dropdown { border: 1px white solid; }
 .switch-label:before { background-color: grey !important; }
 .switch-label:after { background-color: black !important; }
-	
+.wf-checkbox__checkbox input[type=checkbox] { opacity: 0.75 !important; }
+#nom-options-modal button { color: black; }
