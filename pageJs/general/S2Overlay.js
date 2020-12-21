@@ -41,7 +41,7 @@ class S2Overlay{
 
 
 
-		if (gridLevel >= 6 && gridLevel < (map.getZoom() + 2)) {
+		if (gridLevel >= 2 && gridLevel < (map.getZoom() + 2)) {
 			const latLng = map.getCenter()
 			const cell = S2.S2Cell.FromLatLng(this.getLatLngPoint(latLng), gridLevel);
 			cellsToDraw.push(cell);
