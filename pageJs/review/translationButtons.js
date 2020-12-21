@@ -1,6 +1,8 @@
 function addTranslationButtons(){
-	if (nSubCtrl.pageData.type === "EDIT")
-		return; //Don't add translation buttons to edit pages (for now)
+	if (nSubCtrl.pageData.type === "EDIT") {
+		addEditTranslationButtons();
+		return;
+	}
 
 	var elems = document.getElementsByClassName("title-description");
 
@@ -68,6 +70,25 @@ function addTranslationButtons(){
 		var titleDiv = document.getElementById("descriptionDiv").children[0].children[0];
 		titleDiv.appendChild(translateButton);
 		titleDiv.children[0].setAttribute("style", "display: inline");
+	}
+}
+
+function addEditTranslationButtons(){
+	var elems = document.getElementsByClassName("poi-edit-text");
+
+	var style = "background-image: url(" + extURL + "assets/translate.svg); margin-botton: 0 !important; margin-left: 5pt; display: inline-block;";
+
+	for (var i = 0; i < elems.length; i++){
+		var translateButton = document.createElement("a");
+		if (settings["keepTab"])
+			translateButton.setAttribute("target", "wfpTranslate");
+		else
+			translateButton.setAttribute("target", "_BLANK");
+		translateButton.setAttribute("class", "translateButton");
+		translateButton.setAttribute("style", style);
+		translateButton.href = "https://translate.google.com/?sl=auto&q=" + encodeURIComponent(elems[i].innerText);
+
+		elems[i].appendChild(translateButton);
 	}
 }
 
