@@ -9,12 +9,12 @@ function setupMapMods(){
 	if (settings["revLowestDistCircle"]){
 		addLowestDistCircle(nSubCtrl.map, lat, lng);
 		lowDistCircle = addLowestDistCircle(nSubCtrl.map2, lat, lng);
-			hookLowestDistLocEdit();
+		hookLowestDistLocEdit();
 	}
 	if (settings["revAccessDistCircle"]){
 		addAccessDistCircle(nSubCtrl.map, lat, lng);
 		longDistCirle = addAccessDistCircle(nSubCtrl.map2, lat, lng);
-			hookLongDistLocEdit();
+		hookLongDistLocEdit();
 	}
 	if (settings["revMinDistCircle"]){
 		hookMinDistCircle();
@@ -40,8 +40,8 @@ function setupMapMods(){
 		}
 	}
 
-    if (settings["revEditOrigLoc"] && nSubCtrl.pageData.type === "EDIT" && nSubCtrl.needsLocationEdit && !settings["revPreciseMarkers"])
-    	addOrigLocation(nSubCtrl.locationEditsMap);
+	if (settings["revEditOrigLoc"] && nSubCtrl.pageData.type === "EDIT" && nSubCtrl.needsLocationEdit && !settings["revPreciseMarkers"])
+		addOrigLocation(nSubCtrl.locationEditsMap);
 	if (settings["ctrlessZoom"])
 		mapsRemoveCtrlToZoom();
 	if (settings["revBigMaps"])
@@ -57,6 +57,125 @@ function setupMapMods(){
 		if (settings["revTransparentMarker"])
 			makeMarkersTransparent();
 	}
+
+	if (settings["darkMode"])
+		makeMapDark();
+}
+
+function makeMapDark(){
+	darkMapOptions = {
+		styles: [{
+			elementType: "geometry",
+			stylers: [{
+				color: "#242f3e"
+			}]
+		}, {
+			elementType: "labels.text.stroke",
+			stylers: [{
+				color: "#242f3e"
+			}]
+		}, {
+			elementType: "labels.text.fill",
+			stylers: [{
+				color: "#746855"
+			}]
+		}, {
+			featureType: "administrative.locality",
+			elementType: "labels.text.fill",
+			stylers: [{
+				color: "#d59563"
+			}]
+		}, {
+			featureType: "poi",
+			elementType: "labels.text.fill",
+			stylers: [{
+				color: "#d59563"
+			}]
+		}, {
+			featureType: "poi.park",
+			elementType: "geometry",
+			stylers: [{
+				color: "#263c3f"
+			}]
+		}, {
+			featureType: "poi.park",
+			elementType: "labels.text.fill",
+			stylers: [{
+				color: "#6b9a76"
+			}]
+		}, {
+			featureType: "road",
+			elementType: "geometry",
+			stylers: [{
+				color: "#38414e"
+			}]
+		}, {
+			featureType: "road",
+			elementType: "geometry.stroke",
+			stylers: [{
+				color: "#212a37"
+			}]
+		}, {
+			featureType: "road",
+			elementType: "labels.text.fill",
+			stylers: [{
+				color: "#9ca5b3"
+			}]
+		}, {
+			featureType: "road.highway",
+			elementType: "geometry",
+			stylers: [{
+				color: "#746855"
+			}]
+		}, {
+			featureType: "road.highway",
+			elementType: "geometry.stroke",
+			stylers: [{
+				color: "#1f2835"
+			}]
+		}, {
+			featureType: "road.highway",
+			elementType: "labels.text.fill",
+			stylers: [{
+				color: "#f3d19c"
+			}]
+		}, {
+			featureType: "transit",
+			elementType: "geometry",
+			stylers: [{
+				color: "#2f3948"
+			}]
+		}, {
+			featureType: "transit.station",
+			elementType: "labels.text.fill",
+			stylers: [{
+				color: "#d59563"
+			}]
+		}, {
+			featureType: "water",
+			elementType: "geometry",
+			stylers: [{
+				color: "#17263c"
+			}]
+		}, {
+			featureType: "water",
+			elementType: "labels.text.fill",
+			stylers: [{
+				color: "#515c6d"
+			}]
+		}, {
+			featureType: "water",
+			elementType: "labels.text.stroke",
+			stylers: [{
+				color: "#17263c"
+			}]
+		}]
+	};
+
+	nSubCtrl.map.setOptions(darkMapOptions);
+	if (nSubCtrl.pageData.type === "NEW")
+		nSubCtrl.map2.setOptions(darkMapOptions);
+
 }
 
 function addPreciseMarkers(){
@@ -89,10 +208,10 @@ function addPreciseMarkers(){
 		}else{
 			locationMarkers = nSubCtrl.allLocationMarkers;
 		}
-	    for (var i = 0; i < locationMarkers.length; i++){
-	        locationMarkers[i].setIcon(extURL + "assets/precise_map-spot.svg");
-	    }
-	 }
+		for (var i = 0; i < locationMarkers.length; i++){
+			locationMarkers[i].setIcon(extURL + "assets/precise_map-spot.svg");
+		}
+	}
 
 	//Do map2 (satelite) markers (by recreating the map as we can't hook nicely)
 	function createCustomStreetView() {
@@ -219,7 +338,7 @@ function hookResetMapFuncs(){
 	var lat =  nSubCtrl.pageData.lat;
 	var lng = nSubCtrl.pageData.lng;
 	let originalResetStreetView = nSubCtrl.resetStreetView;
-    nSubCtrl.resetStreetView = function() {
+	nSubCtrl.resetStreetView = function() {
 		originalResetStreetView()
 		if (settings["revLowestDistCircle"])
 			lowDistCircle = addLowestDistCircle(nSubCtrl.map2, lat, lng);
@@ -234,7 +353,7 @@ function hookResetMapFuncs(){
 		}
 		if (settings["revTransparentMarker"])
 			makeMarkersTransparent();
-    }
+	}
 }
 
 function addOrigLocation(gMap){
@@ -250,7 +369,7 @@ function addOrigLocation(gMap){
 	var editMarkers = nSubCtrl.allLocationMarkers;
 	setEditMarkersIcon(editMarkers);
 
-    //Persistent:
+	//Persistent:
 	for (var i = 0; i< editMarkers.length; i++){
 		function addMarkerListner(m){
 			m.addListener("click", function(){
@@ -278,8 +397,8 @@ function hookLowestDistLocEdit(){
 		return;
 	}
 	google.maps.event.addListener(nSubDS.getNewLocationMarker(), 'dragend', function () {
-    	lowDistCircle.setCenter(nSubDS.getNewLocationMarker().position)
-    });
+		lowDistCircle.setCenter(nSubDS.getNewLocationMarker().position)
+	});
 }
 
 function hookLongDistLocEdit(){
@@ -288,8 +407,8 @@ function hookLongDistLocEdit(){
 		return;
 	}
 	google.maps.event.addListener(nSubDS.getNewLocationMarker(), 'dragend', function () {
-    	longDistCirle.setCenter(nSubDS.getNewLocationMarker().position)
-    });
+		longDistCirle.setCenter(nSubDS.getNewLocationMarker().position)
+	});
 }
 
 function hookMinDistCircle(){

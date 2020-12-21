@@ -10,7 +10,7 @@ var menuPtr = null;
 var dupePtr = 0;
 
 function setupKeyboardControl(){
-	if (!settings["darkMode"])
+	if (!settings["darkMode"] || !UtilityService().isDarkModeOn())
 		colCode = "DF471C";
 	initKeyboardControls();
 }

@@ -389,6 +389,10 @@
 						<label>S2 Cell Level:</label>
 						<select id="profGridSize">
 							<option value="-1">Off</option>
+							<option value="2">L2</option>
+							<option value="3">L3</option>
+							<option value="4">L4</option>
+							<option value="5">L5</option>
 							<option value="6">L6</option>
 							<option value="7">L7</option>
 							<option value="8">L8</option>
@@ -471,7 +475,13 @@
 			<div id="settingsExporter" class="settingsButton">Export Settings</div>
 			<div id="settingsReset" class="settingsButton">Reset Settings</div>
 		</div>
-		<a href="/pages/credits.html" target="_BLANK">Credits</a>
+		<form action="https://www.paypal.com/donate" method="post" target="_BLANK">
+			<input type="hidden" name="hosted_button_id" value="CNKKZQPTSJZAY" />
+			<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
+			<img alt="" border="0" src="https://www.paypal.com/en_NL/i/scr/pixel.gif" width="1" height="1" />
+			<a href="https://jaspershuis.ml/donateinfo/" target="_BLANK">Why donate?</a>
+			<a href="/pages/credits.html" target="_BLANK">Credits</a>
+		</form>
 	</div>
 	<script src="settingsManager.js"></script>
 	<script src="popupController.js"></script>
