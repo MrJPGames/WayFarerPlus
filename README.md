@@ -7,9 +7,11 @@ General discussion, GitHubless bug reporting and feature requests: https://t.me/
 
 Documentation and users guide: https://github.com/MrJPGames/WayFarer-/wiki
 
-[![Available for Google Chrome](https://developer.chrome.com/webstore/images/ChromeWebStore_BadgeWBorder_v2_206x58.png)](https://chrome.google.com/webstore/detail/wayfarer%20/fnhddfgebnmokicfdfgcdcdhcmgkeglc)
-[![Available for Firefox](https://addons.cdn.mozilla.net/static/img/addons-buttons/AMO-button_1.png)](https://addons.mozilla.org/en-US/firefox/addon/wayfarerplus/)
-[Available on Opera](https://addons.opera.com/en/extensions/details/wayfarer/)
+[Available for Google Chrome](https://chrome.google.com/webstore/detail/wayfarer%20/fnhddfgebnmokicfdfgcdcdhcmgkeglc)
+
+[Available for Firefox](https://addons.mozilla.org/en-US/firefox/addon/wayfarerplus/)
+
+[Available for Chromium Edge](https://microsoftedge.microsoft.com/addons/detail/wayfarer/ahdoopfbimkachpfcncdmejjleibcmla)
 
 Other browser support?
 - Brave, Vivaldi and other chromium browsers that use the Google Chrome Web Store for installing extensions.
