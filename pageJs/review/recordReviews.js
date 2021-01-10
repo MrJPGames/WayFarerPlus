@@ -26,7 +26,7 @@ const saveReview = (nSubCtrl, submitCtrl) => {
 		if (nSubCtrl.pageData.descriptionEdits.length === 0) {
 			description = nSubCtrl.pageData.description;
 		} else {
-			description = submitCtrl.selectedDescriptionDisplay;
+			description = nSubCtrl.selectedDescriptionDisplay;
 		}
 
 		let selLat = lat;

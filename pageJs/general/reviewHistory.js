@@ -21,7 +21,7 @@ function storeReviewHistory(data, customUID = null, edit = false){
 	}
 
 	if (edit) {
-		safeLocalStorageAssign("wfpSaved_edits" + userID, JSON.stringify(data));
+		safeLocalStorageAssign("wfpSavedEdits_" + userID, JSON.stringify(data));
 	} else {
 		safeLocalStorageAssign("wfpSaved" + userID, JSON.stringify(data));
 	}
@@ -37,7 +37,7 @@ function getReviewHistory(customUID = null, edit = false){
 
 	let ret = "";
 	if (edit) {
-		ret = localStorage["wfpSaved_edits" + userID];
+		ret = localStorage["wfpSavedEdits_" + userID];
 	} else {
 		ret = localStorage["wfpSaved" + userID];
 	}
@@ -56,7 +56,7 @@ function removeReviewHistory(customUID, edit = false){
 		userID = customUID;
 	}
 	if (edit) {
-		localStorage.removeItem("wfpSaved_edits" + userID);
+		localStorage.removeItem("wfpSavedEdits_" + userID);
 	} else {
 		localStorage.removeItem("wfpSaved" + userID);
 	}
