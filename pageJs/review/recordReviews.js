@@ -3,7 +3,7 @@ const saveReview = (nSubCtrl, submitCtrl) => {
 	let toSave = {};
 
 	let edit = false;
-	if (nSubCtrl.reviewType !== "NEW") {
+	if (nSubCtrl.pageData.type === "EDIT") {
 		edit = true;
 		const {
 			titleEdits,
@@ -11,20 +11,19 @@ const saveReview = (nSubCtrl, submitCtrl) => {
 			imageUrl,
 			lat,
 			lng,
-			locationEdits,
-			statement,
+			locationEdits
 		} = nSubCtrl.pageData;
 
 		let title = "";
 		let description = "";
 
-		if (nSubCtrl.pageData.titleEdits.length == 0) {
+		if (nSubCtrl.pageData.titleEdits.length === 0) {
 			title = nSubCtrl.pageData.title;
 		} else {
 			title = submitCtrl.selectedTitleDisplay;
 		}
 
-		if (nSubCtrl.pageData.descriptionEdits.length == 0) {
+		if (nSubCtrl.pageData.descriptionEdits.length === 0) {
 			description = nSubCtrl.pageData.description;
 		} else {
 			description = submitCtrl.selectedDescriptionDisplay;
@@ -39,9 +38,9 @@ const saveReview = (nSubCtrl, submitCtrl) => {
 		}
 
 		toSave = {
-			title: title,
+			selectedTitle: title,
 			titleEdits,
-			description: description,
+			selectedDescription: description,
 			descriptionEdits,
 			imageUrl,
 			lat,
@@ -49,10 +48,9 @@ const saveReview = (nSubCtrl, submitCtrl) => {
 			selectedLat: selLat,
 			selectedLng: selLng,
 			locationEdits,
-			statement,
 			ts: +new Date(),
 		};
-	} else {
+	} else if (nSubCtrl.pageData.type === "NEW"){
 		const {
 			title,
 			description,
@@ -62,7 +60,6 @@ const saveReview = (nSubCtrl, submitCtrl) => {
 			statement,
 			supportingImageUrl,
 		} = nSubCtrl.pageData;
-
 		toSave = {
 			title,
 			description,
@@ -72,17 +69,22 @@ const saveReview = (nSubCtrl, submitCtrl) => {
 			statement,
 			supportingImageUrl,
 			ts: +new Date(),
-			review: submitCtrl.formData,
+			review: submitCtrl,
 		};
+	}else{
+		console.log("[WayFarer+] Cannot store this type of review at this time!");
+		return;
 	}
 
 	const currentItems = getReviews(null, edit);
+
+	console.log(currentItems);
 
 	const lastItem = currentItems.length
 		? currentItems[currentItems.length - 1]
 		: null;
 	
-	const isSameReview = lastItem && lastItem.imageUrl && lastItem.imageUrl === toSave.imageUrl;
+	const isSameReview = lastItem && lastItem.imageUrl && lastItem.imageUrl === toSave.imageUrl || false;
 	if (isSameReview) {
 		// update the result
 		currentItems[currentItems.length - 1] = toSave;
@@ -94,16 +96,9 @@ const saveReview = (nSubCtrl, submitCtrl) => {
 };
 
 document.addEventListener("WFPAllRevHooked", () =>
-	saveReview(nSubCtrl.pageData, false)
+	saveReview(nSubCtrl, false)
 );
 document.addEventListener("WFPAnsCtrlHooked", () => {
-	const {
-		submitForm,
-		skipToNext,
-		showLowQualityModal,
-		markDuplicate,
-	} = ansCtrl;
-
 	const submitForm = ansCtrl.submitForm;
 	const skipToNext = ansCtrl.skipToNext;
 	const showLowQualityModal = nSubCtrl.showLowQualityModal;
@@ -111,7 +106,7 @@ document.addEventListener("WFPAnsCtrlHooked", () => {
 
 	ansCtrl.submitForm = function (bool) {
 		// This only works for accepts
-		saveReview(nSubCtrl.pageData, nSubDS.getReviewSubmissionFormData());
+		saveReview(nSubCtrl, nSubDS.getReviewSubmissionFormData());
 		submitForm(bool);
 	};
 
@@ -142,7 +137,7 @@ document.addEventListener("WFPAnsCtrlHooked", () => {
 			ansCtrl2.confirmDuplicate = function () {
 				var customFormData = ansCtrl2.formData;
 				customFormData.duplicate = true; //This is because we want to store before we actually let Wayfarer itself set this to true
-				saveReview(nSubCtrl.pageData, {
+				saveReview(nSubCtrl, {
 					...nSubDS.getReviewSubmissionFormData()
 				}); // duplicateOf is not marked in vm or formData
 				confirmDuplicate();

@@ -41,7 +41,7 @@ function getReviewHistory(customUID = null, edit = false){
 	} else {
 		ret = localStorage["wfpSaved" + userID];
 	}
-	if (ret === undefined || ret === null){
+	if (ret === undefined || ret === null || ret === ""){
 		return [];
 	} else{
 		return JSON.parse(ret);
@@ -100,5 +100,5 @@ function safeLocalStorageAssign(key, value){
 }
 
 function getReviews(customUID = null, edit = false) {
-	return getReviewHistory(customUID);
+	return getReviewHistory(customUID, edit);
 };

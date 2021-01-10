@@ -80,7 +80,6 @@ function hookSubCtrl(){
 		hooked++;
 		console.log("[WayFarer+] ReviewNewController was hooked to nSubCtrl");
 		console.log("[WayFarer+] ReviewNewController's scope was hooked to nSubCtrlScope");
-
 		var modEvent = new Event("WFPNSubCtrlHooked");
         document.dispatchEvent(modEvent);
 
