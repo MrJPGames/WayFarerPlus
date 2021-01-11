@@ -96,7 +96,7 @@ const saveReview = (nSubCtrl, submitCtrl) => {
 document.addEventListener("WFPAllRevHooked", () =>
 	saveReview(nSubCtrl, false)
 );
-document.addEventListener("WFPAnsCtrlHooked", () => {
+document.addEventListener("WFPAllRevHooked", () => {
 	const submitForm = ansCtrl.submitForm;
 	const skipToNext = ansCtrl.skipToNext;
 	const showLowQualityModal = nSubCtrl.showLowQualityModal;
