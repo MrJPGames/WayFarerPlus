@@ -80,6 +80,7 @@ function showChangelog(version){
 				"- Happy 2021!\n" +
 				"- (The long awaited) edit review history has been added!\n" +
 				"-> If you encounter any bugs, please report them on GitHub!\n" +
+				"-> Thanks to tehstone for helping with this feature!" +
 				"- New option to turn on a session review counter\n" +
 				"-> Useful to see how much you review in one go";
 		default:
