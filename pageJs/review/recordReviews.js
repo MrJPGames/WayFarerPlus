@@ -20,7 +20,7 @@ const saveReview = (nSubCtrl, submitCtrl) => {
 		if (nSubCtrl.pageData.titleEdits.length === 0) {
 			title = nSubCtrl.pageData.title;
 		} else {
-			title = submitCtrl.selectedTitleDisplay;
+			title = nSubCtrl.selectedTitleDisplay;
 		}
 
 		if (nSubCtrl.pageData.descriptionEdits.length === 0) {
@@ -77,8 +77,6 @@ const saveReview = (nSubCtrl, submitCtrl) => {
 	}
 
 	const currentItems = getReviews(null, edit);
-
-	console.log(currentItems);
 
 	const lastItem = currentItems.length
 		? currentItems[currentItems.length - 1]

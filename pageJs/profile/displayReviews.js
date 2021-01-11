@@ -412,7 +412,10 @@ function mainLoad() {
             }
 
             function listLocationOptions(list, selectedVal){
-                return listOptions(list, selectedVal, "value");
+                if (list.length > 1)
+                    return listOptions(list, selectedVal, "value");
+                else
+                    return null;
             }
             const {
                 selectedTitle,
