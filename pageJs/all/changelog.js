@@ -74,7 +74,14 @@ function showChangelog(version){
 				"- WF+ Dark Mode now includes dark-themed maps (same as vanilla dark mode)\n" +
 				"- Wider range of S2 cells can be used on the review history map\n" +
 				"- Edit reviews now also include translation buttons!\n" +
-				"- Donation button added to WF+ settings, for those who feel like donating";
+				"- Donation button added to WF+ settings, for those who feel like donating\n\n";
+		case 37:
+			changelogStr += "2.0:\n" +
+				"- Happy 2021!\n" +
+				"- (The long awaited) edit review history has been added!\n" +
+				"-> If you encounter any bugs, please report them on GitHub!\n" +
+				"- New option to turn on a session review counter\n" +
+				"-> Useful to see how much you review in one go";
 		default:
 			break;
 	}
