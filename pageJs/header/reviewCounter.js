@@ -19,7 +19,11 @@ document.addEventListener("WFPAllRevHooked", () => {
 	const markDuplicate = nSubCtrl.markDuplicate;
 
 	ansCtrl.submitForm = function (bool) {
-		window.sessionStorage["wfpReviewCount"] = parseInt(window.sessionStorage["wfpReviewCount"]) + 1;
+		//Avoid double counting
+		if (window.sessionStorage["wfpPrevRevID"] === undefined || window.sessionStorage["wfpPrevRevID"] !== nSubCtrl.pageData.id) {
+			window.sessionStorage["wfpReviewCount"] = parseInt(window.sessionStorage["wfpReviewCount"]) + 1;
+			window.sessionStorage["wfpPrevRevID"] = nSubCtrl.pageData.id;
+		}
 		submitForm(bool);
 	};
 
@@ -30,7 +34,11 @@ document.addEventListener("WFPAllRevHooked", () => {
 			const ansCtrl2 = angular.element(ansCtrl2Elem).scope().$ctrl;
 			const oldConfirm = ansCtrl2.confirmLowQuality;
 			ansCtrl2.confirmLowQuality = function () {
-				window.sessionStorage["wfpReviewCount"] = parseInt(window.sessionStorage["wfpReviewCount"]) + 1;
+				//Avoid double counting
+				if (window.sessionStorage["wfpPrevRevID"] === undefined || window.sessionStorage["wfpPrevRevID"] !== nSubCtrl.pageData.id) {
+					window.sessionStorage["wfpReviewCount"] = parseInt(window.sessionStorage["wfpReviewCount"]) + 1;
+					window.sessionStorage["wfpPrevRevID"] = nSubCtrl.pageData.id;
+				}
 				oldConfirm();
 			};
 		}, 10);
@@ -45,7 +53,11 @@ document.addEventListener("WFPAllRevHooked", () => {
 			ansCtrl2.confirmDuplicate = function () {
 				var customFormData = ansCtrl2.formData;
 				customFormData.duplicate = true; //This is because we want to store before we actually let Wayfarer itself set this to true
-				window.sessionStorage["wfpReviewCount"] = parseInt(window.sessionStorage["wfpReviewCount"]) + 1;
+				//Avoid double counting
+				if (window.sessionStorage["wfpPrevRevID"] === undefined || window.sessionStorage["wfpPrevRevID"] !== nSubCtrl.pageData.id) {
+					window.sessionStorage["wfpReviewCount"] = parseInt(window.sessionStorage["wfpReviewCount"]) + 1;
+					window.sessionStorage["wfpPrevRevID"] = nSubCtrl.pageData.id;
+				}
 				confirmDuplicate();
 			};
 		}, 10);
