@@ -178,3 +178,8 @@ html {
 .wfpNotifyCloseButton{
     float: right;
 }
+
+/* Vanilla Dark Mode support */
+.theme--dark  .presetBox{
+    color: black;
+}

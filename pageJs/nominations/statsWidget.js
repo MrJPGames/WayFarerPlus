@@ -96,7 +96,7 @@ function loadStats(){
 
     var html = "";
 
-    if (!settings["darkMode"])
+    if (!settings["darkMode"] && !UtilityService().isDarkModeOn())
         html += "<div id='statReload' onclick='loadStats()'><img src='/img/pages/refresh-24px.svg'></div>";
     else
         html += "<div id='statReload' style='filter: invert()' onclick='loadStats()'><img src='/img/pages/refresh-24px.svg'></div>";

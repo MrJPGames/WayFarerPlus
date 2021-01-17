@@ -82,7 +82,6 @@
 }
 
 .collapsible-content .content-inner {
-  color: black;
   border-bottom: 1px solid rgba(0,0,0,1);
   border-left: 1px solid rgba(0,0,0,1);
   border-right: 1px solid rgba(0,0,0,1);
@@ -181,4 +180,12 @@ th, td{
 
 .wfpNotifyCloseButton{
   float: right;
+}
+
+/* Vanilla Dark Mode support */
+.theme--dark .collapsible-content .content-inner {
+  color: white !important;
+  border-bottom: 1px solid white !important;
+  border-left: 1px solid white !important;
+  border-right: 1px solid white !important;
 }

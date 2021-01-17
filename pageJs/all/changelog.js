@@ -15,46 +15,6 @@ if (window.localStorage.getItem("wfpVersion") === null){
 function showChangelog(version){
 	var changelogStr = "";
 	switch(version){
-		case 22:
-			changelogStr += "1.14:\n\
-							- Nomination notifications (ONLY when on nominations page!) notifies\n\
-							  when a nomination goes in voting or gets an upgrade\n\
-							- Nominations can now be exported to CSV and GeoJSON (Thanks to mariomc!)\n\
-							- Review history will be account specific from now on\n\
-							  your current history will be transferred to only 1 account!\n\
-							- Improved keyboard controls (ctr+enter or spacebar to quick submit)\n\
-							- More detailed nomination stats\n\n";
-		case 23:
-			changelogStr += "1.14.1\n\
-							- A translate all button has been added. This button will translate all\n\
-							three fields at the same time!\n\
-							- Nomination data export now includes a account specific UID\n\
-							- UX/UI improvements to Review History\n\
-							- If 2 different S2 cell levels are used they now use different colours\n\
-							- A major issue that broke Review History was fixed!\n\n";
-		case 24:
-			changelogStr += "1.14.2\n\
-							- WayFarer+ settings can now be exported, imported or reset to default values.\n\
-							- For users affected by very long loading times, you can now enable a notification\n\
-							sound in settings that will notify you when a nomination has loaded\n\
-							- By default a small circle will appear when moving a nomination, this will indicate\n\
-							the area where wayfarer won't allow you to move it to, as it's too close to the original\n\
-							location\n\n";
-		case 25:
-			changelogStr += "1.14.3:\n\
-							- Recon badge progress can now be seen on profile, you'll need to configure your account settings\n\
-							in order for this change to take effect.\n\
-							- Filtering nominations will now filter them on the Nominations map too!\n\
-							- A character count for description and supporting statements are now available during a\n\
-							nomination edit\n\
-							- A 2m circle can now be activated for the nominations page\n\
-							- Behind the scenes improvements\n\n";
-		case 26:
-			changelogStr += "1.14.4:\n\
-							- Review History S2 cell overlay was added. (Thanks to tehstone!)\n\
-							- Review and nomination maps that had S2 cells now also use the\n\
-							new cell overlay!\n\
-							- Submitting duplicates can now also be locked with the review lock timer.\n\n";
 		case 27:
 			changelogStr += "1.14.5:\n" +
 				"- You can now switch between multiple review histories if you want. Reviews histories are based on account UUIDs.\n" +
@@ -104,10 +64,25 @@ function showChangelog(version){
 				"-> Improved overall WF+ extension stability\n\n";
 		case 35:
 			changelogStr += "1.14.12:\n" + 
-				"- Compatibility with Wayferer 3.1\n" + 
+				"- Compatibility with Wayfarer 3.1\n" +
 				"-> WF+ Dark mode is tested to work with vanilla 'Light Mode'\n" + 
 				"   so you might encounter issues using both dark modes at the same time.\n" + 
-				"- Fixed issue causing 'Open In' to be unusable.";
+				"- Fixed issue causing 'Open In' to be unusable.\n\n";
+		case 36:
+			changelogStr += "1.15:\n" +
+				"- Better compatibility with vanilla Dark Mode\n" +
+				"- WF+ Dark Mode now includes dark-themed maps (same as vanilla dark mode)\n" +
+				"- Wider range of S2 cells can be used on the review history map\n" +
+				"- Edit reviews now also include translation buttons!\n" +
+				"- Donation button added to WF+ settings, for those who feel like donating\n\n";
+		case 37:
+			changelogStr += "2.0:\n" +
+				"- Happy 2021!\n" +
+				"- (The long awaited) edit review history has been added!\n" +
+				"-> If you encounter any bugs, please report them on GitHub!\n" +
+				"-> Thanks to tehstone for helping with this feature!" +
+				"- New option to turn on a session review counter\n" +
+				"-> Useful to see how much you review in one go";
 		default:
 			break;
 	}

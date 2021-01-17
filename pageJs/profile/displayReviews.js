@@ -169,7 +169,9 @@ function mainLoad() {
         return new Intl.DateTimeFormat("default", dateSettings).format(date);
     };
     const getDD = (term, definition) =>
-        definition ? `<dt>${term}</dt><dd>${definition}</dd>` : "";
+        definition ? `<dt>${term}</dt><dd>${definition}</dd>` : "";;
+    const getLabeledDescriptor = (term, definition) =>
+        `<dt>${term}</dt><dd>${definition}</dd>`;
 
     const getIntelLink = (lat, lng, content) =>
         `<a target="${getTarget(
@@ -234,7 +236,11 @@ function mainLoad() {
 
             this.marker.addListener("click", () => {
                 infoWindow.open(this.gmap, this.marker);
-                infoWindow.setContent(this.buildInfoWindowContent());
+                if (review.review !== undefined) {
+                    infoWindow.setContent(this.buildInfoWindowContent());
+                }else{
+                    infoWindow.setContent(this.buildEditInfoWindowContent());
+                }
             });
         }
 
@@ -389,6 +395,75 @@ function mainLoad() {
     </div>`;
         }
 
+        buildEditInfoWindowContent() {
+            function listOptions(list, selectedVal, valueName = ""){
+                var ret = "";
+                for (var i = 0; i < list.length; i++){
+                    if (list[i][valueName] == selectedVal) {
+                        ret += "<b>" + list[i][valueName] + "</b>";
+                    }else{
+                        ret += list[i][valueName];
+                    }
+                    if (i !== list.length-1){
+                        ret += "</br>";
+                    }
+                }
+                return ret;
+            }
+
+            function listLocationOptions(list, selectedVal){
+                if (list.length > 1)
+                    return listOptions(list, selectedVal, "value");
+                else
+                    return null;
+            }
+            const {
+                selectedTitle,
+                selectedDescription,
+                selectedLat,
+                selectedLng,
+                imageUrl,
+                lat,
+                lng,
+                titleEdits,
+                descriptionEdits,
+                locationEdits,
+                ts,
+            } = this.review;
+            const index = this.index;
+
+            return `<div class="panel panel-default review-details">
+      <div class="panel-heading">${selectedTitle}</div>
+      <div class="panel-body">
+          <div class="row">
+            <div class="col-xs-12 col-sm-4"><a target="${getTarget(
+                "images"
+            )}" href="${imageUrl}=s0"><img style="max-width: 100%; max-height: 300px;" src="${imageUrl}" class="img-responsive" alt="${selectedTitle}"></a></div>
+            <div class="col-xs-12 col-sm-8">
+              <dl class="dl-horizontal">
+                ${getDD("Title options", listOptions(titleEdits, selectedTitle, "value"))}
+                ${getDD("Description options", listOptions(descriptionEdits, selectedDescription, "value"))}
+                ${getDD("Location options", listLocationOptions(locationEdits,  (selectedLat + "," + selectedLng)))}
+                ${getDD(
+                "Original Location",
+                settings["profOpenIn"]
+                    ? getOpenInButton(lat, lng, title).outerHTML
+                    : getIntelLink(lat, lng, `Open in Intel`)
+            )}
+                ${getDD("Review Date", getFormattedDate(ts, true))}
+                ${getDD("Review #", index)}
+                ${getDD(
+                "Focus in Map",
+                `<span class="focus-in-map" title="Focus in map" data-index="${index}" style="cursor:pointer" >📍</span>`
+            )}
+              </dl>
+              ${renderScores(this.review)}
+            </div>
+          </div>
+        </div>
+    </div>`;
+        }
+
         getGeojson() {
             const { lat, lng, review, ...props } = this.review;
             const reviewData = getReviewData(review);
@@ -410,7 +485,7 @@ function mainLoad() {
 
     const getMarkers = (reviews) => reviews.map((review) => review.marker);
 
-    function showEvaluated(){
+    function showEvaluatedReviews(){
         const localstorageReviews = getReviews(selectedUID);
 
         if (!localstorageReviews.length) return;
@@ -437,6 +512,10 @@ function mainLoad() {
                         <label>S2 Cell Level:</label>
                         <select id="gridCellSize">
                             <option value="-1">Off</option>
+                            <option value="2">L2</option>
+                            <option value="3">L3</option>
+                            <option value="4">L4</option>
+                            <option value="5">L5</option>
                             <option value="6">L6</option>
                             <option value="7">L7</option>
                             <option value="8">L8</option>
@@ -867,7 +946,380 @@ function mainLoad() {
             map.setZoom(12);
             map.panTo({ lat: currentReview.review.lat, lng: currentReview.review.lng });
         });
-    };
+    }
+
+    function showEvaluatedEdits(){
+        const localstorageReviews = getReviews(selectedUID);
+
+        if (!localstorageReviews.length) return;
+
+        const profileStats = document.getElementById("review-history-container");
+        profileStats.insertAdjacentHTML(
+            "beforeend",
+            `
+            <div class="row row-input">
+                <div class="col-xs-3">
+                    <div class="input-group">
+                        <label class="input-group-addon" for="search">Search</label>
+                        <input id="search" type="text" autocomplete="off" class="form-control">
+                    </div>
+                </div>
+                <div class="col-xs-3">
+                    <div class="input-group">
+                        <label class="input-group-addon" for="date-range">Start Date</label>
+                        <input id="date-range" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="col-xs-3">
+                    <div class="input-group">
+                        <label>S2 Cell Level:</label>
+                        <select id="gridCellSize">
+                            <option value="-1">Off</option>
+                            <option value="2">L2</option>
+                            <option value="3">L3</option>
+                            <option value="4">L4</option>
+                            <option value="5">L5</option>
+                            <option value="6">L6</option>
+                            <option value="7">L7</option>
+                            <option value="8">L8</option>
+                            <option value="9">L9</option>
+                            <option value="10">L10</option>
+                            <option value="11">L11</option>
+                            <option value="12">L12</option>
+                            <option value="13">EX Cell (L13)</option>
+                            <option value="14">Gym Cell (L14)</option>
+                            <option value="15">L15</option>
+                            <option value="16">L16</option>
+                            <option value="17">Pok&eacute;stop Cell (L17)</option>
+                            <option value="18">L18</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-xs-2">
+                    <div class="input-group">
+                        <label for="gridCellColor">Grid color: </label>
+                        <input type="color" id="gridCellColor">
+                    </div>
+                </div>
+            </div>
+            <div class="row row-input">
+                <div class="col-xs-3">
+                    <div class="input-group">
+                        <label class="input-group-addon" for="friendlyName">Friendly name: </label>
+                        <input class="form-control" type="text" id="friendlyName">
+                    </div>
+                </div>
+                <button id="setFriendlyName">Set</button>
+            </div>
+            <div id="reviewed-map" style="height:600px"></div>
+            <div class="table-responsive">
+                <table class="table table-striped table-condensed" id="review-history">
+                </table>
+            </div>`
+        );
+
+        //Init friendly name
+        var fName = JSON.parse(localStorage.wfpUIDNames)[selectedUID];
+        var friendlyNameInput = document.getElementById("friendlyName");
+        friendlyNameInput.value = fName;
+
+        var setFriendlyNameButton = document.getElementById("setFriendlyName");
+        setFriendlyNameButton.onclick = function(){
+            var UIDNames = JSON.parse(localStorage.wfpUIDNames);
+            UIDNames[selectedUID] = friendlyNameInput.value;
+            try {
+                localStorage.wfpUIDNames = JSON.stringify(UIDNames);
+            }catch{
+                alert("Setting friendly names can only be done when there is available local storage. Please remove your review history to make more space!");
+            }
+        };
+
+        const $reviewHistory = $("#review-history");
+        const mapElement = document.getElementById("reviewed-map");
+        const map = buildMap(mapElement);
+
+        const cellOverlay = new S2Overlay();
+
+        let colorPickerElement = document.getElementById("gridCellColor");
+        let colorValue = settings["profGridColor"];
+        if (colorValue.charAt(0) !== "#") {
+            colorValue = "#" + colorValue;
+        }
+        colorPickerElement.value = colorValue;
+        colorPickerElement.addEventListener('change', () => {
+            cellOverlay.updateGrid(map, gridSizeElement.value, colorPickerElement.value);
+        }, false);
+
+        let gridSizeElement = document.getElementById("gridCellSize");
+        gridSizeElement.value = settings["profGridSize"];
+        gridSizeElement.addEventListener('change', () => {
+            cellOverlay.updateGrid(map, gridSizeElement.value, colorPickerElement.value);
+        }, false);
+
+        cellOverlay.drawCellGrid(map, gridSizeElement.value, colorPickerElement.value);
+
+        map.addListener('dragend', () => {
+            cellOverlay.updateGrid(map, gridSizeElement.value, colorPickerElement.value);
+        });
+
+        map.addListener('zoom_changed', () => {
+            cellOverlay.updateGrid(map, gridSizeElement.value, colorPickerElement.value);
+        });
+
+        const cluster = new MarkerClusterer(map, [], {
+            imagePath:
+                "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m",
+            gridSize: 30,
+            zoomOnClick: true,
+            maxZoom: 10,
+        });
+        const reviews = localstorageReviews.map(
+            (review, index) => new Review({ review, map, index, cluster })
+        );
+        cluster.addMarkers(getMarkers(reviews));
+        cluster.fitMapToMarkers();
+
+        const table = $reviewHistory.DataTable({
+            initComplete: () => {
+                $(document).trigger("resize"); // fix for recalculation of columns
+            },
+            rowCallback: (row, review) => {
+                const accepted = review.review && review.review.accepted;
+                row.classList.remove("success");
+                if (accepted === "Accepted") {
+                    row.classList.add("success");
+                }else if (accepted === "Rejected"){
+                    row.classList.add("failure");
+                }
+            },
+            data: reviews,
+            order: [[0, "desc"]],
+            dom: "rtiB",
+            buttons: [
+                {
+                    extend: "csvHtml5",
+                    title: "CSV",
+                    exportOptions: {
+                        orthogonal: "export",
+                        columns: ":not(:last-child)",
+                    },
+                },
+                {
+                    text: "GeoJSON",
+                    action: (_ev, data) => {
+                        const filteredReviews = data.buttons
+                        .exportData()
+                        .body.map(([index]) => reviews[index]);
+                        const geoJson = formatAsGeojson(filteredReviews);
+                        $.fn.dataTable.fileSave(
+                            new Blob([JSON.stringify(geoJson)]),
+                            "reviews.json"
+                        );
+                    },
+                },
+                {
+                    text: "Export as RAW json",
+                    action: (_ev, data) => {
+                        const reviews = localstorageReviews;
+                        $.fn.dataTable.fileSave(
+                            new Blob([JSON.stringify(reviews)]),
+                            "reviews.json"
+                        );
+                    },
+                },
+                {
+                    text: "Delete History",
+                    action: clearLocalStorage,
+                    className: "btn-danger",
+                },
+            ],
+            deferRender: true,
+            scrollY: 500,
+            scrollCollapse: true,
+            scroller: true,
+            columns: [
+                {
+                    title: "#",
+                    data: "index",
+                    visible: false,
+                },
+                {
+                    title: "Date",
+                    data: "review.ts",
+                    render: (ts, type) => {
+                        if (type === "display") {
+                            return getFormattedDate(ts);
+                        }
+                        return ts;
+                    },
+                },
+                { title: "Title", data: "review.selectedTitle" },
+                { title: "Description", data: "review.selectedDescription", visible: false },
+                // General Score
+                {
+                    title: "Actions",
+                    className: "review-actions",
+                    sortable: false,
+                    render: (_score, _type, review) => {
+                        return review.renderActions();
+                    },
+                },
+            ],
+        });
+
+        $('.dataTables_scrollBody').css('min-height', '500px');
+
+        const debouncedDraw = debounce(() => {
+            table.draw();
+        }, 250);
+
+        $("#search").on("change", debouncedDraw);
+
+        let startDate = moment(reviews[0].review.ts);
+        let endDate = moment();
+        $("#date-range").daterangepicker(
+            {
+                showDropdowns: true,
+                timePicker: false,
+                timePicker24Hour: true,
+                autoApply: true,
+                ranges: {
+                    Today: [moment().startOf("day"), moment()],
+                    Yesterday: [
+                        moment().subtract(1, "days").startOf("day"),
+                        moment().subtract(1, "days").endOf("day"),
+                    ],
+                    "Last 7 Days": [moment().subtract(6, "days"), moment()],
+                    "Last 30 Days": [moment().subtract(29, "days"), moment()],
+                    "This Month": [moment().startOf("month"), moment().endOf("month")],
+                    "Last Month": [
+                        moment().subtract(1, "month").startOf("month"),
+                        moment().subtract(1, "month").endOf("month"),
+                    ],
+                },
+                alwaysShowCalendars: true,
+                startDate,
+                endDate,
+                maxDate: moment(),
+                locale: {
+                    format: "DD/MM/YYYY",
+                },
+            },
+            (start, end) => {
+                startDate = start;
+                endDate = end;
+                window.endDate = end;
+                debouncedDraw();
+            }
+        );
+
+        $.fn.dataTable.ext.search.push((_settings, data, _dataIndex) => {
+            const ts = moment(parseInt(data[1]));
+            return +ts >= +startDate && +ts <= +endDate;
+        });
+
+        $.fn.dataTable.ext.search.push((_settings, data, _dataIndex) => {
+            const searchValue = $("#search").val();
+            return data[2].toLowerCase().indexOf(searchValue.toLowerCase()) > -1;
+        });
+
+        const filterShown = (review) => review.onMap;
+
+        $reviewHistory.on("draw.dt", function () {
+            // Hide all
+            reviews.forEach((review) => review.hideMarker());
+            // Show visible
+            table
+            .rows({ search: "applied" })
+            .data()
+            .each((review) => review.showMarker());
+
+            const shownReviews = reviews.filter(filterShown);
+            cluster.clearMarkers();
+            cluster.addMarkers(getMarkers(shownReviews));
+
+            cluster.fitMapToMarkers();
+        });
+
+        $reviewHistory.on("click", ".review-actions .toggle-details", (ev) => {
+            var tr = $(ev.target).closest("tr");
+            var row = table.row(tr);
+            const review = row.data();
+
+            if (row.child.isShown()) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass("shown");
+            } else {
+                // Open this row
+                row.child(review.buildEditInfoWindowContent()).show();
+                tr.addClass("shown");
+            }
+        });
+
+        $("#content-container").on("click", ".toggleAccepted[data-index]", (ev) => {
+            const { target } = ev;
+            const { index } = target.dataset;
+            const currentReview = reviews[index];
+            currentReview.markAccepted();
+            const rowElem = ev.currentTarget.parentElement.parentElement;
+            if (rowElem.classList.contains("success")){
+                rowElem.classList.remove("success");
+            }else{
+                rowElem.classList.add("success");
+                if (rowElem.classList.contains("failure")){
+                    rowElem.classList.remove("failure");
+                }
+            }
+        });
+
+        $("#content-container").on("click", ".toggleRejected[data-index]", (ev) => {
+            const { target } = ev;
+            const { index } = target.dataset;
+            const currentReview = reviews[index];
+            currentReview.markRejected();
+            const rowElem = ev.currentTarget.parentElement.parentElement;
+            if (rowElem.classList.contains("failure")){
+                rowElem.classList.remove("failure");
+            }else{
+                rowElem.classList.add("failure");
+                if (rowElem.classList.contains("success")){
+                    rowElem.classList.remove("success");
+                }
+            }
+        });
+
+        $("#content-container").on("click", ".toggleUnknown[data-index]", (ev) => {
+            const { target } = ev;
+            const { index } = target.dataset;
+            const currentReview = reviews[index];
+            currentReview.markUnkown();
+            const rowElem = ev.currentTarget.parentElement.parentElement;
+            if (rowElem.classList.contains("failure")){
+                rowElem.classList.remove("failure");
+            }
+            if (rowElem.classList.contains("success")){
+                rowElem.classList.remove("success");
+            }
+        });
+
+        $("#content-container").on("click", ".focus-in-map[data-index]", (ev) => {
+            const { target } = ev;
+            const { index } = target.dataset;
+            const currentReview = reviews[index];
+            const currentMarker = currentReview.marker;
+
+            mapElement.scrollIntoView({
+                behavior: "smooth",
+                block: "end",
+                inline: "nearest",
+            });
+            infoWindow.open(map, currentMarker);
+            infoWindow.setContent(currentReview.buildEditInfoWindowContent());
+            map.setZoom(12);
+            map.panTo({ lat: currentReview.review.lat, lng: currentReview.review.lng });
+        });
+    }
 
     function createMenu(){
         if (typeof localStorage["wfpUIDNames"] === 'undefined'){
@@ -917,7 +1369,11 @@ function mainLoad() {
             selectedUID = e.target.value;
             var revContainer = document.getElementById("review-history-container");
             revContainer.innerText = "";
-            showEvaluated();
+            if (selectedUID.substr(0, 6) === "Edits_"){
+                showEvaluatedEdits();
+            }else{
+                showEvaluatedReviews();
+            }
             var topPos = e.target.offsetTop;
             document.getElementById("content-container").scrollTop = topPos;
         };
