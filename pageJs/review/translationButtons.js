@@ -35,11 +35,11 @@ function addTranslationButtons(){
             translateButton.setAttribute("target", "_BLANK");
 		translateButton.setAttribute("class", "translateButton");
 		translateButton.setAttribute("style", style);
-		translateButton.href = "https://translate.google.com/?sl=auto&q=" + encodeURIComponent(elem.innerText);
+		translateButton.href = "https://translate.google.com/?sl=auto&q=" + (encodeURIComponent(elem.innerText));
 
 		allText += elem.innerText + "\n\n";
 
-		elem.children[0].appendChild(translateButton);
+		elem.appendChild(translateButton);
 	}
 
 	if (settings["revTranslateAll"]){
