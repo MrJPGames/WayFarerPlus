@@ -9,15 +9,9 @@ function URLify(string){
 	return string;
 }
 
-//Scope these functions
-{
-	function init() {
-		if (nSubCtrl.hasSupportingImageOrStatement) {
-			var elem = document.getElementsByClassName("supporting-statement-central-field")[0];
-			elem.children[0].innerHTML = URLify(elem.children[0].innerHTML);
-		}
+document.addEventListener("WFPNSubCtrlHooked", () => {
+	if (nSubCtrl.hasSupportingImageOrStatement) {
+		var elem = document.getElementsByClassName("supporting-statement-central-field")[0];
+		elem.children[0].innerHTML = URLify(elem.children[0].innerHTML);
 	}
-
-
-	document.addEventListener("WFPNSubCtrlHooked", addTranslationButtons);
-}
+});
