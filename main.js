@@ -2,7 +2,7 @@ getData();
 
 function getData(){
 	chrome.storage.local.get(null, function (data){
-		if (data["options_set"] == undefined || data["options_set"] < settingsVersion)
+		if (data["options_set"] === undefined || data["options_set"] < settingsVersion)
 			setTimeout(getData, 20); //Really fast but not instant
 		else
 			init(data);
@@ -10,12 +10,9 @@ function getData(){
 };
 
 function init(settings){
-	if (settings["useMods"] == false){
+	if (settings["useMods"] === false){
 		return;
 		//Do not apply any mods
-	}
-	if (settings["darkMode"] == true){
-		applyPublicStyle();
 	}
 
 	document.addEventListener('DOMContentLoaded', function(){
@@ -50,5 +47,6 @@ function addPageJS(file, defer = false){
 	if (defer){
 		newScript.setAttribute("defer", "");
 	}
+	newScript.setAttribute("type", "text/javascript");
 	document.getElementsByTagName("head")[0].appendChild(newScript);
 }

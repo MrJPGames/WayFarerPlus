@@ -22,7 +22,7 @@
 		</div><br/>
 		<div class="switch">
 			<input type="checkbox" class="switch__input" id="darkMode" />
-			<label for="darkMode" class="switch__label">Dark Mode</label>
+			<label for="darkMode" class="switch__label">WF+ Dark Mode</label>
 		</div><br/>
 		<div class="switch">
 			<input type="checkbox" class="switch__input" id="ctrlessZoom" />
@@ -48,11 +48,6 @@
 						<label for="revKeyboard" class="switch__label">Review using keyboard</label>
 					</div><br/>
 					<div class="switch">
-						<input type="checkbox" class="switch__input" id="revQuickSubmit" />
-						<label for="revQuickSubmit" class="switch__label">Quick submit button</label>
-						<img title="Submit and go to next review in 1 click. The floppy disk ('save') icon with the arrows is the quick submit button." src="../assets/help.svg"/>
-					</div><br/>
-					<div class="switch">
 						<input type="checkbox" class="switch__input" id="revOpenIn" />
 						<label for="revOpenIn" class="switch__label">Open in ...</label>
 						<img title="Adds a button that allows you to view the current location in any of your 'Open in...' maps." src="../assets/help.svg"/>
@@ -75,6 +70,11 @@
 						<input type="number" id="revSubmitTimer" style="width: 4em;"> Seconds
 					</div>
 					<div class="switch">
+						<input type="checkbox" class="switch__input" id="revSubmitTimerSound" />
+						<label for="revSubmitTimerSound" class="switch__label">Play sound upon submit button unlock</label>
+						<img title="If the 'Lock submit button' setting is used this will play a sound when the submit button becomes active." src="../assets/help.svg"/>
+					</div><br/>
+					<div class="switch">
 						<label for="revDelaySubmitFor">Delay submit for: </label>
 						<input type="number" id="revDelaySubmitFor" style="width: 4em;"> Seconds
 					</div>
@@ -85,7 +85,7 @@
 					<div class="switch">
 						<label for="revDelaySubmitVarianceInSeconds">Max variance for delay: </label>
 						<input type="number" id="revDelaySubmitVarianceInSeconds" style="width: 4em;"> Seconds
-					</div>
+					</div><br/>
 					<div class="switch">
 						<input type="checkbox" class="switch__input" id="revAutoRetry" />
 						<label for="revAutoRetry" class="switch__label">Auto-retry for more nominations</label>
@@ -110,6 +110,32 @@
 						<label for="revDescLink" class="switch__label">Description links to Google search</label>
 						<img title="Normally the description cannot be clicked to search for it's contents on Google unlike the title, this option enables that feature for the description as well." src="../assets/help.svg"/>
 					</div>
+					<div class="switch">
+						<input type="checkbox" class="switch__input" id="revReportAbuse" />
+						<label for="revReportAbuse" class="switch__label">Report abuse button</label>
+						<img title="Makes it easier to report abuse." src="../assets/help.svg"/>
+					</div>
+					<div class="switch">
+						<input type="checkbox" class="switch__input" id="revAutoSelectDupe" />
+						<label for="revAutoSelectDupe" class="switch__label">Auto-select first possible duplicate</label>
+						<img title="Makes it easier to mark duplicates as the first in the list is usually the duplicate if it is a duplicate." src="../assets/help.svg"/>
+					</div>
+					<div class="switch">
+						<label for="revReportEmail">Abuse report email: </label>
+						<input type="text" id="revReportEmail" style="width: 12em;">
+						<img title="When reporting abuse using the abuse form this email will be autofilled." src="../assets/help.svg"/>
+					</div>
+					<div class="switch">
+						<input type="checkbox" class="switch__input" id="revImageLinks" />
+						<label for="revImageLinks" class="switch__label">Quick full-size image open button</label>
+						<img title="Open full sized image in a new tab" src="../assets/help.svg"/>
+					</div>
+					<div class="switch">
+						<input type="checkbox" class="switch__input" id="revURLify" />
+						<label for="revURLify" class="switch__label">Make supporting text URLs clickable</label>
+						<img title="Open full sized image in a new tab" src="../assets/help.svg"/>
+					</div>
+
 					<h2>Map modifications:</h2>
 					<div class="switch">
 						<input type="checkbox" class="switch__input" id="revEditOrigLoc" />
@@ -124,6 +150,7 @@
 						<label>S2 Cell Level:</label>
 						<select id="revS2Cell">
 							<option value="-1">Off</option>
+							<option value="13">EX Cell (L13)</option>
 							<option value="14">Gym Cell (L14)</option>
 							<option value="15">L15</option>
 							<option value="16">L16</option>
@@ -133,9 +160,19 @@
 						</select>
 					</div><br/>
 					<div class="switch">
+						<input type="checkbox" class="switch__input" id="revHighlightCell" />
+						<label for="revHighlightCell" class="switch__label">Highlight S2 Cell</label>
+						<img title="Highlights the cell the current nomination you are reviewing is. The highlight uses the regular S2 cell level (not the addition S2 cell level)" src="../assets/help.svg"/>
+					</div><br/>
+					<div class="switch">
+						<label for="revS2Color" >S2 Cell color:</label>
+						<input type="text" class="colorPicker" id="revS2Color" />
+					</div><br/>
+					<div class="switch">
 						<label>Additional S2 Cell Level:</label>
 						<select id="revSecondS2Cell">
 							<option value="-1">Off</option>
+							<option value="13">EX Cell (L13)</option>
 							<option value="14">Gym Cell (L14)</option>
 							<option value="15">L15</option>
 							<option value="16">L16</option>
@@ -144,6 +181,10 @@
 							<option value="19">L19</option>
 						</select>
 					</div><br/>
+					<div class="switch">
+						<label for="revS2SecondColor" >Additional S2 cell color:</label>
+						<input type="text" class="colorPicker" id="revS2SecondColor" />
+					</div><br>
 					<div class="switch">
 						<input type="checkbox" class="switch__input" id="revLowestDistCircle" />
 						<label for="revLowestDistCircle" class="switch__label">20m circle on maps</label>
@@ -179,14 +220,18 @@
 						</select>
 					</div><br/>
 					<div class="switch">
+						<label>Default zoom level "Check for Duplicates" map:</label>
+						<select id="revDupeMapZoomLevel">
+							<option value="10">Zoomed out</option>
+							<option value="-1">Normal</option>
+							<option value="17">Zoomed in</option>
+							<option value="19">Ultra zoomed in</option>
+						</select>
+					</div><br/>
+					<div class="switch">
 						<input type="checkbox" class="switch__input" id="revTransparentMarker" />
 						<label for="revTransparentMarker" class="switch__label">Translucent location marker.</label>
 						<img title="Makes the location marker of a submission translucent. Helpful if the Wayspot is being obstructed by said marker. Fully disappears on hover." src="../assets/help.svg"/>
-					</div>
-					<div class="switch">
-						<input type="checkbox" class="switch__input" id="revAutoSelectDupe" />
-						<label for="revAutoSelectDupe" class="switch__label">Auto-select first possible duplicate</label>
-						<img title="Makes it easier to mark duplicates as the first in the list is usually the duplicate if it is a duplicate." src="../assets/help.svg"/>
 					</div>
 					<div class="switch">
 						<input type="checkbox" class="switch__input" id="rev3DMap" />
@@ -227,12 +272,18 @@
 						<label for="nomStreetView" class="switch__label">StreetView preview</label>
 						<img title="Allows you to see StreetView reviewers will see for your own nominations." src="../assets/help.svg"/>
 					</div><br/>
+					<div class="switch">
+						<input type="checkbox" class="switch__input" id="nomEditAid" />
+						<label for="nomEditAid" class="switch__label">Nomination edit aids</label>
+						<img title="Shows live character counts for the editable fields." src="../assets/help.svg"/>
+					</div><br/>
 
 					<h2>Map modifications:</h2>
 					<div class="switch">
 						<label>S2 Cell Level:</label>
 						<select id="nomS2Cell">
 							<option value="-1">Off</option>
+							<option value="13">EX Cell (L13)</option>
 							<option value="14">Gym Cell (L14)</option>
 							<option value="15">L15</option>
 							<option value="16">L16</option>
@@ -242,9 +293,19 @@
 						</select>
 					</div><br/>
 					<div class="switch">
+						<input type="checkbox" class="switch__input" id="nomHighlightCell" />
+						<label for="nomHighlightCell" class="switch__label">Highlight S2 Cell</label>
+						<img title="Highlights the cell the current nomination you are viewing is. The highlight uses the regular S2 cell level (not the addition S2 cell level)" src="../assets/help.svg"/>
+					</div><br/>
+					<div class="switch">
+						<label for="nomS2Color" >S2 Cell color:</label>
+						<input type="text" class="colorPicker" id="nomS2Color" />
+					</div><br/>
+					<div class="switch">
 						<label>Additional S2 Cell Level:</label>
 						<select id="nomSecondS2Cell">
 							<option value="-1">Off</option>
+							<option value="13">EX Cell (L13)</option>
 							<option value="14">Gym Cell (L14)</option>
 							<option value="15">L15</option>
 							<option value="16">L16</option>
@@ -252,6 +313,15 @@
 							<option value="18">L18</option>
 							<option value="19">L19</option>
 						</select>
+					</div><br/>
+					<div class="switch">
+						<label for="nomS2SecondColor" >Additional S2 Cell color:</label>
+						<input type="text" class="colorPicker" id="nomS2SecondColor" />
+					</div><br/>
+					<div class="switch">
+						<input type="checkbox" class="switch__input" id="nomMinDistCircle" />
+						<label for="nomMinDistCircle" class="switch__label">2m circle on maps</label>
+						<img title="This indicates the area where reviewers won't be able to move the nomination to from it's original location." src="../assets/help.svg"/>
 					</div><br/>
 					<div class="switch">
 						<input type="checkbox" class="switch__input" id="nomLowestDistCircle" />
@@ -263,6 +333,47 @@
 						<label for="nomAccessDistCircle" class="switch__label">40m circle on maps</label>
 						<img title="Shows the area from which agents, wizards and trainers will be able to access the Wayspot" src="../assets/help.svg"/>
 					</div>
+
+
+					<div class="wrap-collabsible">
+						<input id="nomFiletCollaps" class="toggle" type="checkbox">
+						<label class="lbl-toggle lbl-toggle-text" for="nomFiletCollaps">Default nomination filter</label>
+						<div class="collapsible-content">
+							<div class="switch">
+								<input type="checkbox" class="switch__input" id="nomFilterApproved" />
+								<label for="nomFilterApproved" class="switch__label">Approved</label>
+							</div><br/>
+							<div class="switch">
+								<input type="checkbox" class="switch__input" id="nomFilterRejected" />
+								<label for="nomFilterRejected" class="switch__label">Rejected</label>
+							</div><br/>
+							<div class="switch">
+								<input type="checkbox" class="switch__input" id="nomFilterUpgraded" />
+								<label for="nomFilterUpgraded" class="switch__label">Upgraded</label>
+							</div><br/>
+							<div class="switch">
+								<input type="checkbox" class="switch__input" id="nomFilterNextUpgrade" />
+								<label for="nomFilterNextUpgrade" class="switch__label">Next Upgrade</label>
+							</div><br/>
+							<div class="switch">
+								<input type="checkbox" class="switch__input" id="nomFilterNominated" />
+								<label for="nomFilterNominated" class="switch__label">In Queue</label>
+							</div><br/>
+							<div class="switch">
+								<input type="checkbox" class="switch__input" id="nomFilterInVoting" />
+								<label for="nomFilterInVoting" class="switch__label">In Voting</label>
+							</div><br/>
+							<div class="switch">
+								<input type="checkbox" class="switch__input" id="nomFilterWithdrawn" />
+								<label for="nomFilterWithdrawn" class="switch__label">Withdrawn</label>
+							</div><br/>
+							<div class="switch">
+								<input type="checkbox" class="switch__input" id="nomFilterDuplicate" />
+								<label for="nomFilterDuplicate" class="switch__label">Duplicate</label>
+							</div><br/>
+						</div>
+					</div>
+
 				</div>
 			</div>
 		</div>
@@ -290,6 +401,34 @@
 						</select>
 						<img title="Approximation works based on upgrade stats. If you've gotten agreements that did not count towards your upgrades this option will not work for you! Facts only will be less informative but always accurate." src="../assets/help.svg"/>
 					</div>
+					<h2>Review history map:</h2>
+					<div class="switch">
+						<label>S2 Cell Level:</label>
+						<select id="profGridSize">
+							<option value="-1">Off</option>
+							<option value="2">L2</option>
+							<option value="3">L3</option>
+							<option value="4">L4</option>
+							<option value="5">L5</option>
+							<option value="6">L6</option>
+							<option value="7">L7</option>
+							<option value="8">L8</option>
+							<option value="9">L9</option>
+							<option value="10">L10</option>
+							<option value="11">L11</option>
+							<option value="12">L12</option>
+							<option value="13">EX Cell (L13)</option>
+							<option value="14">Gym Cell (L14)</option>
+							<option value="15">L15</option>
+							<option value="16">L16</option>
+							<option value="17">Pok&eacute;stop Cell (L17)</option>
+							<option value="18">L18</option>
+						</select>
+					</div><br/>
+					<div class="switch">
+						<label for="profGridColor" >Cell color:</label>
+						<input type="text" class="colorPicker" id="profGridColor" />
+					</div>
 				</div>
 			</div>
 		</div>
@@ -301,6 +440,10 @@
 					<div class="switch">
 						<input type="checkbox" class="switch__input" id="headProgress" />
 						<label for="headProgress" class="switch__label">Upgrade progress</label>
+					</div><br/>
+					<div class="switch">
+						<input type="checkbox" class="switch__input" id="headRevCounter" />
+						<label for="headRevCounter" class="switch__label">Session Review Counter</label>
 					</div>
 				</div>
 			</div>
@@ -330,11 +473,16 @@
 						<img title="Turn this on if you have a Pokemon Go account that has the ability to Nominate Wayspots" src="../assets/help.svg"/>
 					</div><br/>
 					<div class="switch">
-						<input type="checkbox" class="switch__input" id="accIngress" />
-						<label for="accIngress" class="switch__label">Ingress L10+</label>
+						<input type="checkbox" class="switch__input" id="accLowIngress" />
+						<label for="accLowIngress" class="switch__label">Linked Ingress Account</label>
 						<img title="Turn this on if you have a Ingress account that has the ability to Nominate Wayspots" src="../assets/help.svg"/>
 					</div><br/>
 					<div id="ingressExtra" class="switch">
+						<div class="switch">
+							<input type="checkbox" class="switch__input" id="accIngress" />
+							<label for="accIngress" class="switch__label">Ingress L10+</label>
+							<img title="Turn this on if you have a Ingress account that has the ability to Nominate Wayspots" src="../assets/help.svg"/>
+						</div><br/>
 						<label for="revSubmitTimer">Recon Badge Offset: </label>
 						<input type="number" id="profReconOffset" style="width: 4em;"> Agreements
 						<img title="Some people had their stats reset when OPR became Wayfarer, for those this setting will help correct their Recon Badge stat on the Profile Page when extended profile stats are on" src="../assets/help.svg"/>
@@ -348,7 +496,13 @@
 			<div id="settingsExporter" class="settingsButton">Export Settings</div>
 			<div id="settingsReset" class="settingsButton">Reset Settings</div>
 		</div>
-		<a href="/pages/credits.html" target="_BLANK">Credits</a>
+		<form action="https://www.paypal.com/donate" method="post" target="_BLANK">
+			<input type="hidden" name="hosted_button_id" value="CNKKZQPTSJZAY" />
+			<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
+			<img alt="" border="0" src="https://www.paypal.com/en_NL/i/scr/pixel.gif" width="1" height="1" />
+			<a href="https://jaspershuis.ml/donateinfo/" target="_BLANK">Why donate?</a>
+			<a href="/pages/credits.html" target="_BLANK">Credits</a>
+		</form>
 	</div>
 	<script src="settingsManager.js"></script>
 	<script src="popupController.js"></script>

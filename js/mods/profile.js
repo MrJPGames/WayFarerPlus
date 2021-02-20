@@ -4,10 +4,13 @@ function modProfilePage(settings){
 	newCss.setAttribute("href", chrome.extension.getURL("assets/profile.css"));
 	document.getElementsByTagName("head")[0].appendChild(newCss);
 
-	if (settings["profExtendedStats"] != "off")
+	if (settings["profExtendedStats"] !== "off")
 		addPageJS("profile/extendedStats.js");
 
 	if (settings["profRecordReviews"]) {
+		addPageJS("general/S2Overlay.js");
+		addPageJS("general/reviewHistory.js");
+		addPageJS("libs/jquery.js");
 		const newCss = document.createElement("link");
 		newCss.setAttribute("rel", "stylesheet");
 		newCss.setAttribute("href", chrome.extension.getURL("assets/datatables.css"));
@@ -17,14 +20,14 @@ function modProfilePage(settings){
 		newCss2.setAttribute("href", chrome.extension.getURL("assets/daterangepicker.css"));
 		document.getElementsByTagName("head")[0].appendChild(newCss2);
 		addPageJS("libs/moment.js");
-		addPageJS("libs/jquery.js");
 		addPageJS("libs/datatables.js");
 		addPageJS("libs/markerclusterer.js");
-		setTimeout(() => addPageJS("libs/daterangepicker.js"), 100);
-		addPageJS("profile/recordReviews.js", true);
+		addPageJS("libs/daterangepicker.js", true);
+		addPageJS("profile/displayReviews.js", true);
 	}
 
 	addPageJS("profile/main.js", true);
+	addPageJS("libs/S2.js");
 	
 	console.log("[WayFarer+] Profile page injection successful!");
 }

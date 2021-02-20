@@ -7,9 +7,9 @@ function changeBoolSetting(elem){
 	var value = elem.checked;
 
 	//One time special setting (if more special settings are added in the future a refactor will be needed)
-	if (key == "revPresets" && value == true){
+	if (key === "revPresets" && value === true){
 		turnOnPresets();
-	}else if (key == "accIngress"){
+	}else if (key === "accLowIngress"){
 		document.getElementById("ingressExtra").style.display = value ? "block" : "none";
 		store(key, value);
 	}else{
@@ -58,7 +58,7 @@ getData();
 
 function getData(){
 	chrome.storage.local.get(null, function (data){
-		if (data["options_set"] == undefined || data["options_set"] < settingsVersion)
+		if (data["options_set"] === undefined || data["options_set"] < settingsVersion)
 			setTimeout(getData, 10); //Really fast but not instant
 		else
 			init(data);
@@ -71,18 +71,25 @@ function init(settings){
 	var inputs = document.getElementsByTagName("input");
 
 	for(var i = 0; i < inputs.length; i++){
-		if ((inputs[i]).getAttribute("type") == "checkbox"){
-			if (inputs[i].getAttribute("class") == "toggle")
+		if ((inputs[i]).getAttribute("type") === "checkbox"){
+			if (inputs[i].getAttribute("class") === "toggle")
 				continue; //This is the input for opening and closing submenus!
 			if (settings[inputs[i].id]){
 				inputs[i].checked = true;
 			}
-			if (inputs[i].getAttribute("id") == "accIngress")
+			if (inputs[i].getAttribute("id") === "accIngress")
 				document.getElementById("ingressExtra").style.display = inputs[i].checked ? "block" : "none";
 			inputs[i].onclick = function(e){changeBoolSetting(e.srcElement)};
-		}else if (inputs[i].getAttribute("type") == "number"){
+		} else if (inputs[i].getAttribute("type") === "number"){
 			inputs[i].value = settings[inputs[i].id];
 			inputs[i].onchange = function(e){changeNumberSetting(e.srcElement)};
+		}
+		else if (inputs[i].getAttribute("type") === "text"){
+			inputs[i].value = settings[inputs[i].id];
+			inputs[i].onchange = function(e){changeSelectSetting(e.srcElement)};
+		}else if (inputs[i].getAttribute("type") === "color"){
+			inputs[i].value = settings[inputs[i].id];
+			inputs[i].onchange = function(e){changeSelectSetting(e.srcElement)};
 		}
 	};
 
@@ -241,5 +248,14 @@ document.getElementById("settingsReset").onclick = function(){
 		store("options_set", 0);
 		setDefaults();
 		window.location.reload();
+	}
+};
+
+//Current workaround. Firefox does not work with color picker in popup so we only use it for chrome...
+if (window.chrome !== undefined && /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor)){
+	var elems = document.getElementsByClassName("colorPicker");
+	console.log(elems);
+	for (let i = 0; i < elems.length; i++) {
+		elems[i].type = "color";
 	}
 }

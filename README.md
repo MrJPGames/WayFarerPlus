@@ -20,6 +20,58 @@ Other browser support?
 
 Changelog
 ---
+
+1.14.10:
+- Compatibility fix with recent Wayfarer (review page) update
+- Removed 'Submit & Quit' as it's a default feature now
+- Fixed minor dark mode issues caused by the latest update
+
+1.14.9:
+- Submit and Home added
+- Review History can now be marked 'Accepted', 'Unknown' or 'Rejected' (instead of just (not) accepted)
+    - (Please note old markings will not be displayed, but can still be exported to JSON/CSV if not changed)
+- You can now enable a sound notification for when the 'Submit lock button' timer runs out in settings
+- Minor QoL updates
+				
+1.14.8
+- "Quick full-size image open button" can be added to the review page from review settings
+(Thanks to AlterTobi for this feature!)
+				
+1.14.7:
+- RAW review history export added
+- Import of RAW review history added
+
+1.14.6:
+- Give friendly names to your review histories. Making it easier to tell them apart.
+- Report abuse straight from the review page!
+    - Be sure to configure your email in WF+ settings.
+    - Before reporting abuse familiarise yourself with what is classified as abuse by Niantic!
+
+1.14.5:
+- You can now switch between multiple review histories if you want. Reviews histories are based on account UUIDs. These were recently changed so this change will allow you to view the old history. 
+- All S2 grids can now have custom colours!
+- On the nomination page if you have the nominations map enabled it will now also have an S2 grid.
+- You can now set a custom default zoom level for the duplicates map
+- When using S2 grids, the current S2 cell of a Waypoint will be highlighted
+- S2 Grid should work better on lower end hardware
+- You can configure a default filter for your nominations to be automatically applied
+
+1.14.4:
+- Added S2 cell overlay to Review History (Thanks to tehstone!)
+- Review and nomination maps now have map covering S2 cell overlays (Thanks to tehstone's reivew history code!)
+
+1.14.3:
+- Recon badge progress can now be seen on profile, you'll need to configure your account settings in order for this change to take effect.
+- Filtering nominations will now filter them on the Nominations map too!
+- A character count for description and supporting statements are now available during a nomination edit
+- A 2m circle can now be activated for the nominations page
+- Behind the scenes improvements
+
+1.14.2:
+- WayFarer+ settings can now be exported, imported or reset to default values.
+- For users affected by very long loading times, you can now enable a notification sound in settings that will notify you when a nomination has loaded
+- By default a small circle will appear when moving a nomination, this will indicate the area where wayfarer won't allow you to move it to, as it's too close to the original location
+
 1.14.1:
 - A translate all button has been added. This button will translate all three fields at the same time!
 - Nomination data export now includes a account specific UID

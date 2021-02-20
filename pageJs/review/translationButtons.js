@@ -1,4 +1,9 @@
 function addTranslationButtons(){
+	if (nSubCtrl.pageData.type === "EDIT") {
+		addEditTranslationButtons();
+		return;
+	}
+
 	var elems = document.getElementsByClassName("title-description");
 
 	var style = "background-image: url(" + extURL + "assets/translate.svg);";
@@ -13,7 +18,7 @@ function addTranslationButtons(){
             translateButton.setAttribute("target", "_BLANK");
 		translateButton.setAttribute("class", "translateButton");
 		translateButton.setAttribute("style", style);
-		translateButton.href = "https://translate.google.com/?sl=auto&q=" + encodeURI(elems[i].innerText);
+		translateButton.href = "https://translate.google.com/?sl=auto&q=" + encodeURIComponent(elems[i].innerText);
 
 		allText += elems[i].innerText + "\n\n";
 
@@ -30,11 +35,11 @@ function addTranslationButtons(){
             translateButton.setAttribute("target", "_BLANK");
 		translateButton.setAttribute("class", "translateButton");
 		translateButton.setAttribute("style", style);
-		translateButton.href = "https://translate.google.com/?sl=auto&q=" + encodeURI(elem.innerText);
+		translateButton.href = "https://translate.google.com/?sl=auto&q=" + (encodeURIComponent(elem.innerText));
 
 		allText += elem.innerText + "\n\n";
 
-		elem.children[0].appendChild(translateButton);
+		elem.appendChild(translateButton);
 	}
 
 	if (settings["revTranslateAll"]){
@@ -50,7 +55,7 @@ function addTranslationButtons(){
 			translateButton.setAttribute("target", "_BLANK");
 		translateButton.setAttribute("class", "translateButton");
 		translateButton.setAttribute("style", "display: inline; color: black;");
-		translateButton.href = "https://translate.google.com/?sl=auto&q=" + encodeURI(allText);
+		translateButton.href = "https://translate.google.com/?sl=auto&q=" + encodeURIComponent(allText);
 
 		var translateText = document.createElement("span");
 		translateText.innerText = "Translate all";
@@ -65,6 +70,25 @@ function addTranslationButtons(){
 		var titleDiv = document.getElementById("descriptionDiv").children[0].children[0];
 		titleDiv.appendChild(translateButton);
 		titleDiv.children[0].setAttribute("style", "display: inline");
+	}
+}
+
+function addEditTranslationButtons(){
+	var elems = document.getElementsByClassName("poi-edit-text");
+
+	var style = "background-image: url(" + extURL + "assets/translate.svg); margin-botton: 0 !important; margin-left: 5pt; display: inline-block;";
+
+	for (var i = 0; i < elems.length; i++){
+		var translateButton = document.createElement("a");
+		if (settings["keepTab"])
+			translateButton.setAttribute("target", "wfpTranslate");
+		else
+			translateButton.setAttribute("target", "_BLANK");
+		translateButton.setAttribute("class", "translateButton");
+		translateButton.setAttribute("style", style);
+		translateButton.href = "https://translate.google.com/?sl=auto&q=" + encodeURIComponent(elems[i].innerText);
+
+		elems[i].appendChild(translateButton);
 	}
 }
 

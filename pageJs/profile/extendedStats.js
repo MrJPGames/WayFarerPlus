@@ -2,7 +2,11 @@ function addExtendedStats(){
 	//Get data from page before modifying it
 	var profileStats = document.getElementById("profile-stats");
 	var reviewTotal = parseInt(profileStats.children[0].children[0].children[1].innerText);
-	var normalAgreements = parseInt(profileStats.children[1].children[1].children[1].innerText) + parseInt(profileStats.children[1].children[2].children[1].innerText) + parseInt(profileStats.children[1].children[3].children[1].innerText);
+	var acceptedAgreements = parseInt(profileStats.children[1].children[1].children[1].innerText);
+	var rejectedAgreements = parseInt(profileStats.children[1].children[2].children[1].innerText);
+	var duplicateAgreements = parseInt(profileStats.children[1].children[3].children[1].innerText);
+	var normalAgreements =  acceptedAgreements + rejectedAgreements + duplicateAgreements;
+
 
 	//Segment for "Processed _and_ Agreement stat"
 	var agreementTotal = (pCtrl.rewards.total + pCtrl.rewards.available) * pCtrl.rewards.interval + pCtrl.rewards.progress;
@@ -25,11 +29,10 @@ function addExtendedStats(){
 	var agreeElem = document.createElement("span");
 	agreeElem.innerText = " Agreement";
 	agreementStatLeft.appendChild(agreeElem);
-	if (settings["profExtendedStats"] == "aprox")
+	if (settings["profExtendedStats"] === "aprox")
 		agreementStatRight.innerText = agreementTotal + " (" + Math.round(agreementTotal/reviewTotal*100) + "%)";
 	else
 		agreementStatRight.innerText = normalAgreements + " (" + Math.round(normalAgreements/reviewTotal*100) + "%)";
-
 
 
 	agreementStatElem.appendChild(agreementStatLeft);
@@ -37,10 +40,9 @@ function addExtendedStats(){
 
 	profileStats.children[1].insertBefore(agreementStatElem, profileStats.children[1].children[1]);
 
-	if (settings["profExtendedStats"] == "aprox"){
-		//Segment for "Other Agreements"
-		var otherAgreements = agreementTotal - normalAgreements;
-
+	var otherAgreements = agreementTotal - normalAgreements;
+	if (settings["profExtendedStats"] === "aprox"){
+		//Segment for "Other Agreements" display
 		var otherAgreementsElem = document.createElement("h4");
 
 		var otherAgreementStatLeft = document.createElement("span");
@@ -58,7 +60,7 @@ function addExtendedStats(){
 	}
 
 	//if Ingress agent add recon badge progress to page:
-	if (settings["accIngress"]){
+	if (settings["accLowIngress"] || settings["accIngress"]){
 		//For this segment we want to add the recon badge offset to normalAgreements
 		normalAgreements += settings["profReconOffset"];
 		const reconBadges = [ [0, 'None'], [100, 'Bronze'], [750, 'Silver'], [2500, 'Gold'], [5000, 'Platinum'], [10000, 'Onyx'] ];
@@ -122,5 +124,44 @@ function addExtendedStats(){
 			profileStats.children[0].appendChild(offsetAgreementElem);
 		}
 	}
+
+	var exportData;
+	if (settings["profExtendedStats"] === "aprox") {
+		exportData = {
+			"current_rating": document.getElementsByClassName("rating-bar__segment--active")[0].innerText,
+			"total_nominations": reviewTotal,
+			"total_agreements": agreementTotal,
+			"accepted": acceptedAgreements,
+			"rejected": rejectedAgreements,
+			"duplicates": duplicateAgreements,
+			"other": otherAgreements,
+			"upgrades_available": pCtrl.rewards.available,
+			"upgrades_redeemed": pCtrl.rewards.total,
+			"current_progress": pCtrl.rewards.progress,
+			"extended_type": "aprox"
+		};
+	}else{
+		exportData = {
+			"current_rating": document.getElementsByClassName("rating-bar__segment--active")[0].innerText,
+			"total_nominations": reviewTotal,
+			"total_agreements": normalAgreements,
+			"accepted": acceptedAgreements,
+			"rejected": rejectedAgreements,
+			"duplicates": duplicateAgreements,
+			"other": 0,
+			"upgrades_available": pCtrl.rewards.available,
+			"upgrades_redeemed": pCtrl.rewards.total,
+			"current_progress": pCtrl.rewards.progress,
+			"extended_type": "facts"
+		};
+	}
+	var copyElem = document.createElement("a");
+	copyElem.innerText = "Copy rating stats to clipboard";
+
+	copyElem.onclick = function() {
+		navigator.clipboard.writeText(JSON.stringify(exportData));
+	}
+
+	document.getElementById("performance").parentElement.appendChild(copyElem);
 }
 document.addEventListener("WFPPCtrlHooked", addExtendedStats);

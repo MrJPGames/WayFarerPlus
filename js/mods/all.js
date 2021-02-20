@@ -5,6 +5,7 @@ function modAll(settings){
 	document.getElementsByTagName("head")[0].appendChild(newCss);
 
 	addPageJS("all/changelog.js");
+	addPageJS("all/darkMode.js");
 
 	console.log("[WayFarer+] Global script initiated!");
 }

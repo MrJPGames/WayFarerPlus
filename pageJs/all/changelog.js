@@ -15,50 +15,74 @@ if (window.localStorage.getItem("wfpVersion") === null){
 function showChangelog(version){
 	var changelogStr = "";
 	switch(version){
-		case 19:
-			changelogStr += "1.12.3:\n\
-							- On-site changelogs!\n\
-							- Improvements to Review History display\n\
-							- Option to turn on Open In for Review History\n\
-							- Lock submit timer now works for rejections\n\
-							- Minor improvements to settings UX\n\n";
-		case 20:
-			changelogStr += "1.12.4:\n\
-							- An additional S2 cell level can be enabled\n\
-							  at the same time.\n\n";
-		case 21:
-			changelogStr += "1.13:\n\
-							- Major Review History update by mariomc:\n\
-							-> Search by title/date\n\
-							-> Filtered exports are now possible!\n\
-							-> Marking a review as 'accepted' no longer refreshes the page\n\
-							-> Details can be viewed inline with the table\n\
-							-> GeoJSON now has colour-coding\n\n";
-		case 22:
-			changelogStr += "1.14:\n\
-							- Nomination notifications (ONLY when on nominations page!) notifies\n\
-							  when a nomination goes in voting or gets an upgrade\n\
-							- Nominations can now be exported to CSV and GeoJSON (Thanks to mariomc!)\n\
-							- Review history will be account specific from now on\n\
-							  your current history will be transferred to only 1 account!\n\
-							- Improved keyboard controls (ctr+enter or spacebar to quick submit)\n\
-							- More detailed nomination stats\n\n";
-		case 23:
-			changelogStr += "1.14.1\n\
-							- A translate all button has been added. This button will translate all\n\
-							three fields at the same time!\n\
-							- Nomination data export now includes a account specific UID\n\
-							- UX/UI improvements to Review History\n\
-							- If 2 different S2 cell levels are used they now use different colours\n\
-							- A major issue that broke Review History was fixed!\n\n";
-		case 24:
-			changelogStr += "1.14.2\n\
-							- WayFarer+ settings can now be exported, imported or reset to default values.\n\
-							- For users affected by very long loading times, you can now enable a notification\n\
-							sound in settings that will notify you when a nomination has loaded\n\
-							- By default a small circle will appear when moving a nomination, this will indicate\n\
-							the area where wayfarer won't allow you to move it to, as it's too close to the original\n\
-							location";
+		case 27:
+			changelogStr += "1.14.5:\n" +
+				"- You can now switch between multiple review histories if you want. Reviews histories are based on account UUIDs.\n" +
+				"These were recently changed so this change will allow you to view the old history. \n" +
+				"- All S2 grids can now have custom colours!\n" +
+				"- On the nomination page if you have the nominations map enabled it will now also have an S2 grid.\n" +
+				"- You can now set a custom default zoom level for the duplicates map\n" +
+				"- When using S2 grids, the current S2 cell of a Waypoint will be highlighted\n" +
+				"- S2 Grid should work better on lower end hardware\n" +
+				"- You can configure a default filter for your nominations to be automatically applied\n\n";
+		case 28:
+			changelogStr += "1.14.6:\n" +
+				"- Give friendly names to your review histories. Making it easier to tell them apart.\n" +
+				"- Report abuse straight from the review page!\n" +
+				"-> Be sure to configure your email in WF+ settings.\n" +
+				"-> Before reporting abuse familiarise yourself with what is classified as abuse by Niantic!\n\n";
+		case 29:
+			changelogStr += "1.14.7:\n" +
+				"- RAW review history export added\n" +
+				"- Import of RAW review history added\n\n";
+		case 30:
+			changelogStr += "1.14.8:\n" +
+				"- \"Quick full-size image open button\" can be added to the review page from review settings\n" +
+				"(Thanks to AlterTobi for this feature!)\n\n";
+		case 31:
+			changelogStr += "1.14.9:\n" +
+				"- Submit and Home added\n" +
+				"- Review History can now be marked 'Accepted', 'Unknown' or 'Rejected' (instead of just (not) accepted)\n" +
+				"(Please note old markings will not be displayed, but can still be exported to JSON/CSV if not changed)\n" +
+				"- You can now enable a sound notification for when the 'Submit lock button' timer runs out in settings\n" +
+				"- Minor QoL updates\n\n";
+		case 32:
+			changelogStr += "1.14.10:\n" +
+				"- Compatibility fix with recent Wayfarer (review page) update\n" +
+				"- Removed 'Submit & Quit' as it's a default feature now\n" +
+				"- Fixed minor dark mode issues caused by the latest update\n\n";
+		case 33:
+			changelogStr += "1.14.11:\n" +
+				"- Bug fixes (inconsistent loading of mods/some broken features)\n" +
+				"- Experimental 'image date' feature, showing the reported date of the image\n" +
+				"used for the submission.\n\n";
+		case 34:
+			changelogStr += "1.14.11.3:\n" +
+				"- Bug fixes:\n" + 
+				"-> Record reviews should work properly again\n" + 
+				"-> Photo reviews (might) not cause issues anymore\n" + 
+				"-> Improved overall WF+ extension stability\n\n";
+		case 35:
+			changelogStr += "1.14.12:\n" + 
+				"- Compatibility with Wayfarer 3.1\n" +
+				"-> WF+ Dark mode is tested to work with vanilla 'Light Mode'\n" + 
+				"   so you might encounter issues using both dark modes at the same time.\n" + 
+				"- Fixed issue causing 'Open In' to be unusable.\n\n";
+		case 36:
+			changelogStr += "1.15:\n" +
+				"- Better compatibility with vanilla Dark Mode\n" +
+				"- WF+ Dark Mode now includes dark-themed maps (same as vanilla dark mode)\n" +
+				"- Wider range of S2 cells can be used on the review history map\n" +
+				"- Edit reviews now also include translation buttons!\n" +
+				"- Donation button added to WF+ settings, for those who feel like donating\n\n";
+		case 37:
+			changelogStr += "2.0:\n" +
+				"- Happy 2021!\n" +
+				"- (The long awaited) edit review history has been added!\n" +
+				"-> If you encounter any bugs, please report them on GitHub!\n" +
+				"-> Thanks to tehstone for helping with this feature!" +
+				"- New option to turn on a session review counter\n" +
+				"-> Useful to see how much you review in one go";
 		default:
 			break;
 	}
