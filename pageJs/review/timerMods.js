@@ -1,4 +1,6 @@
-var timeElem;
+var timeElem, headerTimer;
+let delaySubmitTimeout;
+let delaySubmitTiming = 0;
 
 function initTimerMods(){
 	if (settings["revExpireTimer"])
@@ -8,6 +10,53 @@ function initTimerMods(){
 		lockSubmitButton();
 		hookSubmitReadyFunction();
 		hookLowQualityModalOpen();
+	}
+	if(settings["revDelaySubmitFor"] > 0) {
+		hookAutoSubmitLowQualityModalOpen();
+		hookAutoSubmitReadyFunction();
+	}
+}
+
+function getWaitTime() {
+	const ms = (time) => (parseInt(time, 10) * 1000) || 0;
+	const MAX_REVIEW_DURATION_IN_MS = ms(settings['revDelaySubmitMaxDurationInSeconds']);
+	const MAX_VARIANCE_IN_MS = ms(settings["revDelaySubmitVarianceInSeconds"]);
+	const variance = Math.floor(Math.random() * MAX_VARIANCE_IN_MS);
+	const waitTimeInMs = ms(settings["revDelaySubmitFor"]) + variance - MAX_REVIEW_DURATION_IN_MS;
+	return nSubCtrl.pageData.expires - Date.now() + waitTimeInMs;
+}
+
+function monkeyPatchAndWait(fn, context) {
+	return function(...args){
+		const timing = getWaitTime();
+		delaySubmitTiming = timing;
+		clearTimeout(delaySubmitTimeout);
+		if (timing <= 0){
+			return orig.apply(context, args);
+		} else {
+			console.log("Waiting for submit for %f ms", timing);
+			delaySubmitTimeout = setTimeout(() => {
+				orig.apply(context, args);
+				delaySubmitTiming = 0;
+			}, timing);
+		}
+	}.bind(context);
+}
+
+function hookAutoSubmitReadyFunction(){
+	ansCtrl.submitForm = monkeyPatchAndWait(ansCtrl.submitForm, this);
+}
+
+function hookLowQualityModalOpen(){
+	var orig = ansCtrl.showLowQualityModal;
+	ansCtrl.showLowQualityModal = function(){
+		orig();
+		//The modal needs time to load
+		setTimeout(function(){
+			const ansCtrl2Elem = document.getElementById("low-quality-modal");
+			const ansCtrl2 = angular.element(ansCtrl2Elem).scope().answerCtrl2;
+			ansCtrl2.confirmLowQuality = monkeyPatchAndWait(ansCtrl.confirmLowQuality, this);
+		}, 10);
 	}
 }
 
@@ -99,7 +148,7 @@ function lockSubmitButton(){
 
 function createTimer(){
 	var header = document.getElementsByClassName("niantic-wayfarer-logo")[0];
-	var headerTimer = document.createElement("div");
+	headerTimer = document.createElement("div");
 	headerTimer.innerText = "Time remaining: ";
 	headerTimer.setAttribute("style", "display: inline-block; margin-left: 5em;");
 	headerTimer.setAttribute("class", "revExprTimer");
@@ -113,6 +162,11 @@ function createTimer(){
 
 function updateTimer(){
 	var tDiff = nSubCtrl.pageData.expires - Date.now();
+
+	if ( delaySubmitTiming > 0 ) {
+		tDiff = delaySubmitTiming;
+		headerTimer.innerText = "Submit in ... ";
+	}
 
 	if (tDiff > 0){
 		var tDiffMin = Math.floor(tDiff/1000/60);
