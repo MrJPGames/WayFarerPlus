@@ -77,14 +77,17 @@
 					<div class="switch">
 						<label for="revDelaySubmitFor">Delay submit for: </label>
 						<input type="number" id="revDelaySubmitFor" style="width: 4em;"> Seconds
+						<img title="Delays action of submit buttons to a minumum # of seconds from initial review time. Does not work with Lock Submit." src="../assets/help.svg"/>
 					</div>
 					<div class="switch">
-						<label for="revDelaySubmitMaxDurationInSeconds">Max nomination time: </label>
-						<input type="number" id="revDelaySubmitMaxDurationInSeconds" style="width: 4em;"> Seconds
-					</div>
-					<div class="switch">
-						<label for="revDelaySubmitVarianceInSeconds">Max variance for delay: </label>
+						<label for="revDelaySubmitVarianceInSeconds">Delay Submit - Max variance: </label>
 						<input type="number" id="revDelaySubmitVarianceInSeconds" style="width: 4em;"> Seconds
+						<img title="Maximum random buffer of added seconds for the above delay" src="../assets/help.svg"/>
+					</div>
+					<div class="switch">
+						<label for="revDelaySubmitMaxDurationInSeconds">Delay Submit - Max nomination time: </label>
+						<input type="number" id="revDelaySubmitMaxDurationInSeconds" style="width: 4em;"> Seconds
+						<img title="Maximum amount of seconds a nomination can be evaluated for. Defaults to 1200s (20m)." src="../assets/help.svg"/>
 					</div><br/>
 					<div class="switch">
 						<input type="checkbox" class="switch__input" id="revAutoRetry" />
