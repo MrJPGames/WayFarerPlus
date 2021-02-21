@@ -82,7 +82,13 @@ function showChangelog(version){
 				"-> If you encounter any bugs, please report them on GitHub!\n" +
 				"-> Thanks to tehstone for helping with this feature!" +
 				"- New option to turn on a session review counter\n" +
-				"-> Useful to see how much you review in one go";
+				"-> Useful to see how much you review in one go\n\n";
+		case 38:
+			changelogStr += "2.0.2:\n" +
+				"- Profile stats can be exported easily from the profile page\n\n" +
+				"2.1:\n" +
+				"- URLs are now clickable in supporting statements (can be turned off)\n" +
+				"- Nomination notifications are now also shown when a decision is reached";
 		default:
 			break;
 	}

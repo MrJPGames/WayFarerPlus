@@ -24,7 +24,7 @@
 					createNotification(`${nom.title} went into voting!`);
 				}else if (historicalData.upgraded === false && nom.upgraded === true){
 					createNotification(`${nom.title} was upgraded!`)
-				}else if ((historicalData.status !== "ACCEPTED" && historicalData.status !== "REJECTED" && historicalData.status !== "DUPLICATE"){
+				}else if (historicalData.status !== "ACCEPTED" && historicalData.status !== "REJECTED" && historicalData.status !== "DUPLICATE"){
 					if (nom.status === "ACCEPTED") {
 						createNotification(`${nom.title} was accepted!`);
 					}else if(nom.status === "REJECTED"){
