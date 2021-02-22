@@ -1,5 +1,5 @@
 //Sets up default settings on first launch or upgrade
-var settingsVersion = 38;
+var settingsVersion = 39;
 
 var defaultMapSettings = '[{"title":"Google Maps","url":"https://maps.google.com/maps?q=%lat%,%lng%"},{"title":"Ingress Intel","url":"https://intel.ingress.com/intel?ll=%lat%,%lng%&z=18"},{"title":"OSM","url":"https://www.openstreetmap.org/?mlat=%lat%&mlon=%lng%#map=18/%lat%/%lng%"}]';
 
@@ -119,6 +119,8 @@ function setDefaults() {
 			case 36:
 			case 37:
 				setOption("headRevCounter", false);
+			case 38:
+				setOption("revURLify", true);
 				setOption("options_set", settingsVersion);
 		}
 	});
