@@ -124,7 +124,6 @@ function setDefaults() {
 				setOption("options_set", settingsVersion);
 			case 39:
 				setOption("revDelaySubmitFor", 0);
-				setOption("revDelaySubmitMaxDurationInSeconds", 1200);
 				setOption("revDelaySubmitVarianceInSeconds", 5);
 		}
 	});

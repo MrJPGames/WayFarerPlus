@@ -59,7 +59,7 @@ function hookDuplicateModalOpen(){
 
 function getDelayTime() {
 	const ms = (time) => (parseInt(time, 10) * 1000) || 0;
-	const MAX_REVIEW_DURATION_IN_MS = ms(settings['revDelaySubmitMaxDurationInSeconds']);
+	const MAX_REVIEW_DURATION_IN_MS = 1200000; // 20 minutes (maximum)
 	const MAX_VARIANCE_IN_MS = ms(settings["revDelaySubmitVarianceInSeconds"]);
 	const variance = Math.floor(Math.random() * MAX_VARIANCE_IN_MS);
 	const waitTimeInMs = ms(settings["revDelaySubmitFor"]) + variance - MAX_REVIEW_DURATION_IN_MS;
