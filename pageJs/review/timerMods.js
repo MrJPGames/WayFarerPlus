@@ -78,7 +78,7 @@ function monkeyPatchAndWait(fn, context) {
 			console.log("[WayFarer+] Delaying submit until ", new Date(delayTime));
 			delaySubmitTiming = delayTime;
 			markSubmitButtons();
-			delaySubmitTimeout = setTimeout(() => {
+			delaySubmitTimeout = setTimeout(function() {
 				fn.apply(context, args);
 			}, delta);
 		}
@@ -103,7 +103,16 @@ function hookDelaySubmitLowQualityModalOpen(){
 }
 
 function hookDelaySubmitDuplicateModalFunction(){
-	markDuplicatePressed = monkeyPatchAndWait(markDuplicatePressed, this);
+	const markDuplicate = nSubCtrl.markDuplicate;
+	nSubCtrl.markDuplicate = function (id) {
+		markDuplicate(id);
+		setTimeout(function() {
+			const ansCtrl2Elem = document.getElementsByClassName("modal-content")[0].children[0];
+			const ansCtrl2 = angular.element(ansCtrl2Elem).scope().$ctrl;
+			const ok = ansCtrl2.ok;
+			ansCtrl2.ok = monkeyPatchAndWait(ok, this);
+		}, 10);
+	};
 }
 
 function hookLowQualityModalOpen(){
