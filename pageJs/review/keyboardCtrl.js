@@ -149,10 +149,10 @@ function keyDownEvent(e){
 			if (e.keyCode === 8){ //Backspace
 				ansCtrl2.resetDuplicate();
 			}else if (e.keyCode === 32 || (e.keyCode === 13 && e.ctrlKey) ){ //Space bar or ctrl+enter
-				ansCtrl2.confirmDuplicate();
+				ansCtrl2.ok();
 				ansCtrl2.reloadPage();
 			}else if (e.keyCode === 13){
-				ansCtrl2.confirmDuplicate();
+				ansCtrl2.ok();
 				ansCtrl.reviewComplete = true;
 			}
 		}else{

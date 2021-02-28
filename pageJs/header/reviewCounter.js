@@ -49,8 +49,8 @@ document.addEventListener("WFPAllRevHooked", () => {
 		setTimeout(() => {
 			const ansCtrl2Elem = document.getElementsByClassName("modal-content")[0].children[0];
 			const ansCtrl2 = angular.element(ansCtrl2Elem).scope().$ctrl;
-			const confirmDuplicate = ansCtrl2.confirmDuplicate;
-			ansCtrl2.confirmDuplicate = function () {
+			const ok = ansCtrl2.ok;
+			ansCtrl2.ok = function () {
 				var customFormData = ansCtrl2.formData;
 				customFormData.duplicate = true; //This is because we want to store before we actually let Wayfarer itself set this to true
 				//Avoid double counting
@@ -58,7 +58,7 @@ document.addEventListener("WFPAllRevHooked", () => {
 					window.sessionStorage["wfpReviewCount"] = parseInt(window.sessionStorage["wfpReviewCount"]) + 1;
 					window.sessionStorage["wfpPrevRevID"] = nSubCtrl.pageData.id;
 				}
-				confirmDuplicate();
+				ok();
 			};
 		}, 10);
 	};
