@@ -51,8 +51,6 @@ document.addEventListener("WFPAllRevHooked", () => {
 			const ansCtrl2 = angular.element(ansCtrl2Elem).scope().$ctrl;
 			const ok = ansCtrl2.ok;
 			ansCtrl2.ok = function () {
-				var customFormData = ansCtrl2.formData;
-				customFormData.duplicate = true; //This is because we want to store before we actually let Wayfarer itself set this to true
 				//Avoid double counting
 				if (window.sessionStorage["wfpPrevRevID"] === undefined || window.sessionStorage["wfpPrevRevID"] !== nSubCtrl.pageData.id) {
 					window.sessionStorage["wfpReviewCount"] = parseInt(window.sessionStorage["wfpReviewCount"]) + 1;
