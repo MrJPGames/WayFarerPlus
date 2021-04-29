@@ -176,9 +176,14 @@ function filmStripScroll(){
 }
 
 
-function checkNearby(){
-	var d = distance(nSubCtrl.pageData.lat, nSubCtrl.pageData.lng, nSubCtrl.pageData.nearbyPortals[0].lat, nSubCtrl.pageData.nearbyPortals[0].lng);
-	if (d < 20){
+function checkDistance(wayspot) {
+	return distance(nSubCtrl.pageData.lat, nSubCtrl.pageData.lng, wayspot.lat, wayspot.lng) < 20;
+} 
+
+function checkNearby(){	
+	var isTooClose = nSubCtrl.pageData.nearbyPortals.some(checkDistance);
+	
+	if (isTooClose){
 		console.log("[WayFarer+] WARNING: Portal nomination too close, will not go live in any current Niantic game!");
 
 		if (settings["revTooCloseWarn"]){
