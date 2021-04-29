@@ -15,7 +15,7 @@ function setupPage(){
 }
 
 function createPageReadyEvent(){
-	if (hooked < 4 || (nSubCtrl.pageData.type === "NEW" && document.getElementById(divNames.locationAccuracy).getElementsByClassName("five-star-rating")[0] == undefined)){
+	if (hooked < 4 || (nSubCtrl.pageData.type === "NEW" && document.getElementById(divNames.locationAccuracy).getElementsByClassName("five-star-rating")[0] === undefined)){
 		setTimeout(createPageReadyEvent, 50);
 	}else{
 		console.log("[WayFarer+] Review page has finished loading!");
@@ -110,19 +110,19 @@ function hookAnsCtrl(){
 
 function hookWhatCtrl(){
 	var cardId;
-	if (nSubCtrl.pageData.type == "EDIT"){
+	if (nSubCtrl.pageData.type === "EDIT"){
 		cardId = "what-is-it-card-edit";
 	}else{
 		cardId = "what-is-it-card-review";
 	}
-	if (document.getElementById(cardId) == undefined){
+	if (document.getElementById(cardId) === undefined){
 		setTimeout(hookWhatCtrl, 50);
 		return;
 	}
 	tempWhatCtrl = angular.element(document.getElementById(cardId).children[0]).scope().whatCtrl;
 	tempWhatCtrlScope = angular.element(document.getElementById(cardId).children[0]).scope();
 
-	if (tempWhatCtrl == undefined){
+	if (tempWhatCtrl === undefined){
 		setTimeout(hookWhatCtrl, 50);
 	}else{
 		whatCtrl = tempWhatCtrl;
@@ -138,7 +138,7 @@ function hookWhatCtrl(){
 
 function hookDataService(){
 	angular.element(document.getElementsByTagName("html")[0]).injector().invoke(["ReviewResponsesService", function (nSF) {tempNSubDS = nSF;}]);
-	if (tempNSubDS == undefined){
+	if (tempNSubDS === undefined){
 		setTimeout(hookDataService, 50);
 	}else{
 		nSubDS = tempNSubDS;
@@ -199,7 +199,7 @@ function checkNearby(){
 
 //Helper functions
 function distance(lat1, lon1, lat2, lon2) {
-	if ((lat1 == lat2) && (lon1 == lon2)) {
+	if ((lat1 === lat2) && (lon1 === lon2)) {
 		return 0;
 	}
 	else {
