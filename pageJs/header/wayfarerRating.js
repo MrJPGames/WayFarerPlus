@@ -3,13 +3,11 @@ function GetWayfarerRating() {
         window.profilerequest.addEventListener("load", function(evt){
             if (window.profilerequest.status == 200) {
                 window.rating = window.profilerequest.response.body.getElementsByClassName('rating-bar__segment--active')[0].innerText;
-                InjectRatingIntoHeader();
             }
             else{
                 console.log("Couldn't load profile!")
             }
         }, false);
-
         window.profilerequest.open('GET', 'profile', true)
         window.profilerequest.responseType = "document"
         window.profilerequest.send();
@@ -24,3 +22,11 @@ function InjectRatingIntoHeader() {
         document.body.children[0].children[2].insertBefore(ratingelement,profilepic)
 }
 GetWayfarerRating();
+window.profilerequest.addEventListener("load", function(evt){
+            if (window.profilerequest.status == 200) {
+                InjectRatingIntoHeader();
+            }
+            else{
+                console.log("Couldn't load profile!")
+            }
+        }, false);
