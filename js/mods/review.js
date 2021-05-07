@@ -13,7 +13,7 @@ function modReviewPage(settings){
 		addPageJS("general/reviewHistory.js");
 		addPageJS("review/recordReviews.js");
 	}
-	if (settings["revExpireTimer"] || settings["revSubmitTimer"] > 0)
+	if (settings["revExpireTimer"] || settings["revSubmitTimer"] > 0 || settings["revDelaySubmitFor"] > 0)
 		addPageJS("review/timerMods.js");
 	if (settings["revCardView"] === "compact")
 		addPageJS("review/compactCards.js");
