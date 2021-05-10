@@ -16,7 +16,7 @@ function InjectRatingIntoHeader() {
         var ratingelement = document.createElement('section');
         ratingelement.innerText = window.rating;
         ratingelement.className = 'rating-bar__segment rating-bar__segment--active'
-        ratingelement.style = 'border-radius:20px 20px 20px 20px; text-transform:capitalize; margin-right:10px;'
+        ratingelement.style = 'border-radius:20px 20px 20px 20px; text-transform:capitalize; margin-right:10px; background-color:' + document.getElementById('headWayfarerRatingColor').value + ";"
         ratingelement.title = window.profilerequest.response.body.getElementsByClassName('rating-bar__segment--active')[0].getAttribute('uib-tooltip')
         var profilepic = document.getElementsByClassName('inner-container')[1].children[0]
         document.body.children[0].children[2].insertBefore(ratingelement,profilepic)
