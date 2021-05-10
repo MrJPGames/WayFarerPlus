@@ -120,7 +120,8 @@ function setDefaults() {
 			case 37:
 				setOption("headRevCounter", false);
 				setOption("headWayfarerRating", false);
-				setOption("headWayfarerRatingColor", "#B7B4E0");
+				setOption("headWayfarerRatingBGColor", "#B7B4E0");
+				setOption("headWayfarerRatingTextColor", "#000000");
 			case 38:
 				setOption("revURLify", true);
 				setOption("options_set", settingsVersion);
