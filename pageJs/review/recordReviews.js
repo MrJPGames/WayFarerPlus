@@ -131,14 +131,16 @@ document.addEventListener("WFPAllRevHooked", () => {
 		setTimeout(() => {
 			const ansCtrl2Elem = document.getElementsByClassName("modal-content")[0].children[0];
 			const ansCtrl2 = angular.element(ansCtrl2Elem).scope().$ctrl;
-			const confirmDuplicate = ansCtrl2.confirmDuplicate;
-			ansCtrl2.confirmDuplicate = function () {
-				var customFormData = ansCtrl2.formData;
-				customFormData.duplicate = true; //This is because we want to store before we actually let Wayfarer itself set this to true
+			const ok = ansCtrl2.ok;
+			ansCtrl2.ok = function () {
 				saveReview(nSubCtrl, {
-					...nSubDS.getReviewSubmissionFormData()
+					review: {
+						...nSubDS.getReviewSubmissionFormData(),
+						duplicate: true,
+						duplicateOf: id
+					}
 				}); // duplicateOf is not marked in vm or formData
-				confirmDuplicate();
+				ok();
 			};
 		}, 10);
 	};
