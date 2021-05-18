@@ -1,12 +1,13 @@
 //Function by Zuhair Taha on CodePen
 function URLify(string){
+	newStr = string;
 	const urls = string.match(/((http(s?):\/\/)[\-\w@:%_\+.~#?,&\/\/=]+)/g);
 	if (urls) {
 		urls.forEach(function (url) {
-			string = string.replace(url, '<a target="_blank" href="' + url + '">' + url + "</a>");
+			newStr = newStr.replace(url, '<a target="_blank" href="' + url + '">' + url + "</a>");
 		});
 	}
-	return string;
+	return newStr;
 }
 
 document.addEventListener("WFPNSubCtrlHooked", () => {

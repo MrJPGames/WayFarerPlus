@@ -7,7 +7,7 @@ function getData(){
 		else
 			init(data);
 	});
-};
+}
 
 function init(settings){
 	if (settings["useMods"] === false){
@@ -18,7 +18,7 @@ function init(settings){
 	document.addEventListener('DOMContentLoaded', function(){
 		var head = document.getElementsByTagName("head")[0];
 		var setInject = document.createElement("script");
-		setInject.innerText = "var settings = " + JSON.stringify(settings) + "; var extURL = \"" + chrome.extension.getURL("") + "\";";
+		setInject.innerText = "var settings = " + JSON.stringify(settings) + "; var extURL = \"" + chrome.runtime.getURL("") + "\";";
 		head.appendChild(setInject);
 
 		switch (window.location.pathname){

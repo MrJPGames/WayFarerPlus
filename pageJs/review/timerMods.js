@@ -1,4 +1,6 @@
-var timeElem;
+var timeElem, headerTimer;
+let delaySubmitTimeout;
+let delaySubmitTiming = 0;
 
 //Simple Sound object
 function Sound(src) {
@@ -18,13 +20,26 @@ function Sound(src) {
 
 function initTimerMods(){
 	if (settings["revExpireTimer"])
-		createTimer();
+		createTimer("Time remaining: ");
 	if (settings["revSubmitTimer"] > 0){
 		markSubmitButtons();
 		lockSubmitButton();
 		hookSubmitReadyFunction();
 		hookLowQualityModalOpen();
 		hookDuplicateModalOpen();
+	}
+
+	if(settings["revDelaySubmitFor"] > 0) {
+		if (settings["revSubmitTimer"] === 0){
+			if (!settings["revExpireTimer"]) {
+				createTimer("");
+			}
+			hookDelaySubmitLowQualityModalOpen();
+			hookDelaySubmitDuplicateModalFunction();
+			hookDelaySubmitReadyFunction();
+		} else {
+			console.log("[WayFarer+] Delay Submit does not work with Submit Timer. Disable the Timer to use Delay.");
+		}
 	}
 }
 
@@ -40,6 +55,64 @@ function hookDuplicateModalOpen(){
 			}
 		}, 10);
 	}
+}
+
+function getDelayTime() {
+	const ms = (time) => (parseInt(time, 10) * 1000) || 0;
+	const MAX_REVIEW_DURATION_IN_MS = 1200000; // 20 minutes (maximum)
+	const MAX_VARIANCE_IN_MS = ms(settings["revDelaySubmitVarianceInSeconds"]);
+	const variance = Math.floor(Math.random() * MAX_VARIANCE_IN_MS);
+	const waitTimeInMs = ms(settings["revDelaySubmitFor"]) + variance - MAX_REVIEW_DURATION_IN_MS;
+	return nSubCtrl.pageData.expires + waitTimeInMs;
+}
+
+function monkeyPatchAndWait(fn, context) {
+	return function(...args){
+		const delayTime = getDelayTime();
+		const now = Date.now();
+		const delta = delayTime - now;
+		clearTimeout(delaySubmitTimeout);
+		if (delta <= 0){
+			return fn.apply(context, args);
+		} else {
+			console.log("[WayFarer+] Delaying submit until ", new Date(delayTime));
+			delaySubmitTiming = delayTime;
+			markSubmitButtons();
+			delaySubmitTimeout = setTimeout(function() {
+				fn.apply(context, args);
+			}, delta);
+		}
+	}.bind(context);
+}
+
+function hookDelaySubmitReadyFunction(){
+	ansCtrl.submitForm = monkeyPatchAndWait(ansCtrl.submitForm, this);
+}
+
+function hookDelaySubmitLowQualityModalOpen(){
+	var orig = ansCtrl.showLowQualityModal;
+	ansCtrl.showLowQualityModal = function(){
+		orig();
+		//The modal needs time to load
+		setTimeout(function(){
+			const ansCtrl2Elem = document.getElementById("low-quality-modal");
+			const ansCtrl2 = angular.element(ansCtrl2Elem).scope().answerCtrl2;
+			ansCtrl2.confirmLowQuality = monkeyPatchAndWait(ansCtrl.confirmLowQuality, this);
+		}, 10);
+	}
+}
+
+function hookDelaySubmitDuplicateModalFunction(){
+	const markDuplicate = nSubCtrl.markDuplicate;
+	nSubCtrl.markDuplicate = function (id) {
+		markDuplicate(id);
+		setTimeout(function() {
+			const ansCtrl2Elem = document.getElementsByClassName("modal-content")[0].children[0];
+			const ansCtrl2 = angular.element(ansCtrl2Elem).scope().$ctrl;
+			const ok = ansCtrl2.ok;
+			ansCtrl2.ok = monkeyPatchAndWait(ok, this);
+		}, 10);
+	};
 }
 
 function hookLowQualityModalOpen(){
@@ -135,31 +208,44 @@ function lockSubmitButton(){
 	}
 }
 
-function createTimer(){
+function createTimer(message){
 	var header = document.getElementsByClassName("niantic-wayfarer-logo")[0];
-	var headerTimer = document.createElement("div");
-	headerTimer.innerText = "Time remaining: ";
-	headerTimer.setAttribute("style", "display: inline-block; margin-left: 5em;");
-	headerTimer.setAttribute("class", "revExprTimer");
+	var headerTimerWrapper = document.createElement("div");
+	headerTimer = document.createElement("span");
+	headerTimer.innerText = message;
+	headerTimerWrapper.appendChild(headerTimer);
+	headerTimerWrapper.setAttribute("style", "display: inline-block; margin-left: 5em;");
+	headerTimerWrapper.setAttribute("class", "revExprTimer");
 	timeElem = document.createElement("div");
 	timeElem.innerText = "??:??";
 	timeElem.style.display = "inline-block";
-	headerTimer.appendChild(timeElem);
-	header.parentNode.appendChild(headerTimer);
+	headerTimerWrapper.appendChild(timeElem);
+	header.parentNode.appendChild(headerTimerWrapper);
 	updateTimer();
 }
 
 function updateTimer(){
-	var tDiff = nSubCtrl.pageData.expires - Date.now();
+	const hasDelayActive = delaySubmitTiming > 0;
+	const hasExpireTimer = settings["revExpireTimer"];
+	const hasDelayFeature = settings["revDelaySubmitFor"] > 0;
+	const now = Date.now();
+	const tDiff = (hasDelayActive ? delaySubmitTiming : nSubCtrl.pageData.expires) - now;
 
 	if (tDiff > 0){
-		var tDiffMin = Math.floor(tDiff/1000/60);
-		var tDiffSec = Math.ceil(tDiff/1000 - 60*tDiffMin);
-
-		timeElem.innerText = pad(tDiffMin,2) + ":" + pad(tDiffSec,2);
-		//Retrigger function in 1 second
-		setTimeout(updateTimer, 1000);
-	}else{
+		if (hasExpireTimer || hasDelayFeature) {
+			if (hasExpireTimer || hasDelayActive) {
+				var tDiffMin = Math.floor(tDiff/1000/60);
+				var tDiffSec = Math.ceil(tDiff/1000 - 60*tDiffMin);
+				timeElem.innerText = pad(tDiffMin,2) + ":" + pad(tDiffSec,2);
+				headerTimer.innerText = hasDelayActive ? "Countdown: " : "Time remaining: ";
+			} else {
+				timeElem.innerText = '';
+				headerTimer.innerText = '';
+			}
+			//Retrigger function in 1 second
+			setTimeout(updateTimer, 1000);
+		}
+	} else {
 		timeElem.innerText = "EXPIRED!";
 		timeElem.setAttribute("style", "color: red;");
 	}
