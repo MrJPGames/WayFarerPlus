@@ -89,6 +89,12 @@ function showChangelog(version){
 				"2.1:\n" +
 				"- URLs are now clickable in supporting statements (can be turned off)\n" +
 				"- Nomination notifications are now also shown when a decision is reached";
+		case 39:
+			changelogStr += "2.2:\n" +
+				"- Submit delay: An alternative to \"Submit Timer\"!\n" +
+				"-> Complete your review and hit submit, the review will be submitted\n" +
+				"automatically based on your timing settings!\n" +
+				"Huge thanks to @mariomc for creating this feature!";
 		default:
 			break;
 	}
