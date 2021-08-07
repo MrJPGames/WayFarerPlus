@@ -9,7 +9,7 @@ function addExtendedStats(){
 
 
 	//Segment for "Processed _and_ Agreement stat"
-	var agreementTotal = (pCtrl.rewards.total + pCtrl.rewards.available) * pCtrl.rewards.interval + pCtrl.rewards.progress;
+	var agreementTotal = (pCtrl.profile.total + pCtrl.profile.available) * pCtrl.profile.interval + pCtrl.profile.progress;
 
 	var agreementStatElem = document.createElement("h4");
 
@@ -135,9 +135,9 @@ function addExtendedStats(){
 			"rejected": rejectedAgreements,
 			"duplicates": duplicateAgreements,
 			"other": otherAgreements,
-			"upgrades_available": pCtrl.rewards.available,
-			"upgrades_redeemed": pCtrl.rewards.total,
-			"current_progress": pCtrl.rewards.progress,
+			"upgrades_available": pCtrl.profile.available,
+			"upgrades_redeemed": pCtrl.profile.total,
+			"current_progress": pCtrl.profile.progress,
 			"extended_type": "aprox"
 		};
 	}else{
@@ -149,9 +149,9 @@ function addExtendedStats(){
 			"rejected": rejectedAgreements,
 			"duplicates": duplicateAgreements,
 			"other": 0,
-			"upgrades_available": pCtrl.rewards.available,
-			"upgrades_redeemed": pCtrl.rewards.total,
-			"current_progress": pCtrl.rewards.progress,
+			"upgrades_available": pCtrl.profile.available,
+			"upgrades_redeemed": pCtrl.profile.total,
+			"current_progress": pCtrl.profile.progress,
 			"extended_type": "facts"
 		};
 	}
