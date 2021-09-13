@@ -1,20 +1,9 @@
 # WayFarer+
-A Chromium extension to add more functionality to NianticLab's Wayfarer
+Used to be a Chromium extension to add more functionality to NianticLab's Wayfarer. Officially discontinued as of 9/9/21.
 
-Adds a set of custom tools for Wayfarer that make reviewing and monitoring your nominations easier!
+Check out these alternatives:<br>
+https://github.com/MrJPGames/WayFarer-Toolkit - Adds ability to add userscripts to modify behaviour<br>
+https://github.com/mariomc/WayfarerPlusUltra - Aims to be a more direct replacement for WayFarer+
 
-General discussion, GitHubless bug reporting and feature requests: https://t.me/joinchat/B1ceWQ5xy3wT03gjkq0Few
 
-Documentation and users guide: https://github.com/MrJPGames/WayFarer-/wiki
-
-[Available for Google Chrome](https://chrome.google.com/webstore/detail/wayfarer%20/fnhddfgebnmokicfdfgcdcdhcmgkeglc)
-
-[Available for Firefox](https://addons.mozilla.org/en-US/firefox/addon/wayfarerplus/)
-
-[Available for Chromium Edge](https://microsoftedge.microsoft.com/addons/detail/wayfarer/ahdoopfbimkachpfcncdmejjleibcmla)
-
-Other browser support?
-- Brave, Vivaldi and other chromium browsers that use the Google Chrome Web Store for installing extensions.
-- Opera's review process is VERY slow. To be sure you're running a more recent version install via the Google Chrome Web Store instead using "Add to Opera"! [More info](https://addons.opera.com/en/extensions/details/install-chrome-extensions/)
-- Firefox for Android, is technically supported, but I do not test for compatibility.
-- Safari is unsupported.
+Aside from that WF+ modification code can to some degree be repurposed for use with WF-Toolkit, though a understanding of Javascript, and some basic understanding of Angular are required.
